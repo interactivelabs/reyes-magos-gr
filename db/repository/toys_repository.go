@@ -38,3 +38,15 @@ func (r ToysRepository) UpdateToy(toy model.Toy) error {
 
 	return nil
 }
+
+func (r ToysRepository) DeleteToy(toyID int64) error {
+	stmt, err := r.DB.Prepare("UPDATE toys SET deleted = 1 WHERE toy_id = ?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(toyID)
+	if err != nil {
+		return err
+	}
+	return nil
+}

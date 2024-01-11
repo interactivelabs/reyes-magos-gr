@@ -8,6 +8,8 @@ import (
 	"reyes-magos-gr/handlers"
 	"reyes-magos-gr/middleware"
 
+	"github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -48,6 +50,17 @@ func main() {
 	}
 	e.POST("/api/toys", toyHandler.CreateToyApiHandler)
 	e.PUT("/api/toys", toyHandler.UpdateToyApiHandler)
+
+	// API ADMIN ENDPOINTS
+	r := e.Group("/admin")
+	// Configure middleware with the custom claims type
+	config := echojwt.Config{
+		NewClaimsFunc: func(c echo.Context) jwt.Claims {
+			return new(jwtCustomClaims)
+		},
+		SigningKey: []byte("secret"),
+	}
+	r.Use(echojwt.WithConfig(config))
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

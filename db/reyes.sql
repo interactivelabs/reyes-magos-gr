@@ -8,7 +8,8 @@ create table toys
     age_max    integer not null,
     image1     TEXT,
     image2     TEXT,
-    source_url TEXT
+    source_url TEXT,
+    deleted integer default 0
 );
 
 create table volunteers
@@ -26,7 +27,8 @@ create table volunteers
     city         TEXT    not null,
     province     TEXT,
     zip_code     TEXT    not null,
-    secret       TEXT    not null
+    secret       TEXT    not null,
+    deleted integer default 0
 );
 
 create table codes
@@ -37,9 +39,9 @@ create table codes
     code       TEXT              not null,
     expiration TEXT              not null,
     used       integer default 0 not null,
-    cancelled  integer default 0
+    cancelled  integer default 0,
+    deleted integer default 0
 );
-
 
 create table orders
 (
@@ -57,5 +59,6 @@ create table orders
             references codes,
     order_date   TEXT    not null,
     shipped      integer default 0 not null,
-    shipped_date TEXT
+    shipped_date TEXT,
+    deleted integer default 0
 );
