@@ -8,17 +8,11 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// jwtCustomClaims are custom claims extending default ones.
-// See https://github.com/golang-jwt/jwt for more examples
-type jwtCustomClaims struct {
-	Name  string `json:"name"`
-	Admin bool   `json:"admin"`
-	jwt.RegisteredClaims
-}
+type LoginHandler struct{}
 
-func login(c echo.Context) error {
-	username := c.FormValue("username")
-	password := c.FormValue("password")
+func (h LoginHandler) UserLoginHandler(ctx echo.Context) error {
+	username := ctx.FormValue("username")
+	password := ctx.FormValue("password")
 
 	// Throws unauthorized error
 	if username != "jon" || password != "shhh!" {
@@ -26,7 +20,7 @@ func login(c echo.Context) error {
 	}
 
 	// Set custom claims
-	claims := &jwtCustomClaims{
+	claims := &JwtCustomClaims{
 		"Luis",
 		true,
 		jwt.RegisteredClaims{
@@ -43,7 +37,7 @@ func login(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, echo.Map{
+	return ctx.JSON(http.StatusOK, echo.Map{
 		"token": t,
 	})
 }

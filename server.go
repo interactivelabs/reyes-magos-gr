@@ -8,7 +8,8 @@ import (
 	"reyes-magos-gr/handlers"
 	"reyes-magos-gr/middleware"
 
-	"github.com/golang-jwt/jwt"
+	echojwt "github.com/labstack/echo-jwt/v4"
+
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	_ "github.com/mattn/go-sqlite3"
@@ -42,25 +43,29 @@ func main() {
 	}
 	e.GET("/redeem", redeemHandler.RedeemViewHandler)
 
+	loginHandler := api.LoginHandler{}
+	// Login route
+	e.POST("/login", loginHandler.UserLoginHandler)
+
 	e.Static("/public", "public")
 
-	// API ENDPOINTS
+	// PUBLIC API ENDPOINTS
 	toyHandler := api.ToyHandler{
 		ToysRepository: toysRepository,
 	}
-	e.POST("/api/toys", toyHandler.CreateToyApiHandler)
-	e.PUT("/api/toys", toyHandler.UpdateToyApiHandler)
 
 	// API ADMIN ENDPOINTS
 	r := e.Group("/admin")
 	// Configure middleware with the custom claims type
 	config := echojwt.Config{
 		NewClaimsFunc: func(c echo.Context) jwt.Claims {
-			return new(jwtCustomClaims)
+			return new(api.JwtCustomClaims)
 		},
 		SigningKey: []byte("secret"),
 	}
 	r.Use(echojwt.WithConfig(config))
+	r.POST("/api/toys", toyHandler.CreateToyApiHandler)
+	r.PUT("/api/toys", toyHandler.UpdateToyApiHandler)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
