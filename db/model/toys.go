@@ -8,4 +8,5 @@ type Toy struct {
 	Image1    string `json:"image1"`
 	Image2    string `json:"image2"`
 	SourceURL string `json:"source_url"`
+	Deleted   int64  `json:"deleted"`
 }

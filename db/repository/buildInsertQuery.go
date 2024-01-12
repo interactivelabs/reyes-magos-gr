@@ -6,15 +6,14 @@ import (
 	"strings"
 )
 
-func buildUpdateQuery(model interface{}, tableName string, idFieldName string) (string, []interface{}, error) {
+func buildInsertQuery(model interface{}, tableName string) (string, []interface{}, error) {
 	val := reflect.ValueOf(model)
 	typeOfModel := val.Type()
 
 	var query strings.Builder
-	query.WriteString(fmt.Sprintf("UPDATE %s SET ", tableName))
+	query.WriteString(fmt.Sprintf("INSERT INTO %s (", tableName))
 
 	params := []interface{}{}
-	var idField reflect.Value
 	for i := 0; i < val.NumField(); i++ {
 		field := val.Field(i)
 		if !field.IsZero() {
@@ -22,11 +21,7 @@ func buildUpdateQuery(model interface{}, tableName string, idFieldName string) (
 			if jsonTag == "" {
 				jsonTag = strings.ToLower(typeOfModel.Field(i).Name)
 			}
-			if jsonTag == idFieldName {
-				idField = field
-				continue
-			}
-			query.WriteString(fmt.Sprintf("%s = ?, ", jsonTag))
+			query.WriteString(fmt.Sprintf("%s, ", jsonTag))
 			params = append(params, field.Interface())
 		}
 	}
@@ -35,12 +30,19 @@ func buildUpdateQuery(model interface{}, tableName string, idFieldName string) (
 	queryStr := query.String()
 	queryStr = queryStr[:len(queryStr)-2]
 
-	if !idField.IsValid() {
-		return "", nil, fmt.Errorf("id field %s not found in struct", idFieldName)
+	// Empty the value of the query builder
+	query.Reset()
+	query.WriteString(") VALUES (")
+
+	for range params {
+		query.WriteString("?, ")
 	}
 
-	queryStr += fmt.Sprintf(" WHERE %s = ?", strings.ToLower(idFieldName))
-	params = append(params, idField.Interface())
+	// Remove the last comma and space
+	queryStr += query.String()
+	queryStr = queryStr[:len(queryStr)-2]
+
+	queryStr += ")"
 
 	return queryStr, params, nil
 }

@@ -6,4 +6,5 @@ type Code struct {
 	Expiration string `json:"expiration"`
 	Used       int64  `json:"used"`
 	Cancelled  int64  `json:"cancelled"`
+	Deleted    int64  `json:"deleted"`
 }

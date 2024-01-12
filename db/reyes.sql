@@ -43,6 +43,9 @@ create table codes
     deleted integer default 0
 );
 
+create unique index codes_code_uindex
+    on codes (code);
+
 create table orders
 (
     order_id     integer not null

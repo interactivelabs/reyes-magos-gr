@@ -29,9 +29,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Initialize Repositories
-	toysRepository := repository.ToysRepository{
-		DB: db,
+	// CREATE HANDLERS INSTANCES
+	toyHandler := api.ToyHandler{
+		ToysRepository: repository.ToysRepository{
+			DB: db,
+		},
+	}
+	codeHandler := api.CodeHandler{
+		CodesRepository: repository.CodesRepository{
+			DB: db,
+		},
 	}
 
 	// HTML VIEWS
@@ -50,9 +57,6 @@ func main() {
 	e.Static("/public", "public")
 
 	// PUBLIC API ENDPOINTS
-	toyHandler := api.ToyHandler{
-		ToysRepository: toysRepository,
-	}
 
 	// API ADMIN ENDPOINTS
 	r := e.Group("/admin")
@@ -64,8 +68,10 @@ func main() {
 		SigningKey: []byte("secret"),
 	}
 	r.Use(echojwt.WithConfig(config))
-	r.POST("/api/toys", toyHandler.CreateToyApiHandler)
-	r.PUT("/api/toys", toyHandler.UpdateToyApiHandler)
+	r.POST("/api/toy", toyHandler.CreateToyApiHandler)
+	r.PUT("/api/toy", toyHandler.UpdateToyApiHandler)
+	r.POST("/api/code", codeHandler.CreateCodeApiHandler)
+	r.POST("/api/code/batch", codeHandler.CreateCodeBatchApiHandler)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

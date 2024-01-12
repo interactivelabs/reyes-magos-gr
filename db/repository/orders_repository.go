@@ -5,12 +5,12 @@ import (
 	"reyes-magos-gr/db/model"
 )
 
-type ToysRepository struct {
+type OrdersRepository struct {
 	DB *sql.DB
 }
 
-func (r ToysRepository) CreateToy(toy model.Toy) (int64, error) {
-	queryStr, params, err := buildInsertQuery(toy, "toys")
+func (r OrdersRepository) CreateOrder(order model.Order) (int64, error) {
+	queryStr, params, err := buildInsertQuery(order, "orders")
 	if err != nil {
 		return 0, err
 	}
@@ -22,8 +22,8 @@ func (r ToysRepository) CreateToy(toy model.Toy) (int64, error) {
 	return res.LastInsertId()
 }
 
-func (r ToysRepository) UpdateToy(toy model.Toy) error {
-	queryStr, params, err := buildUpdateQuery(toy, "toys", "toy_id")
+func (r OrdersRepository) UpdateOrder(order model.Order) error {
+	queryStr, params, err := buildUpdateQuery(order, "orders", "order_id")
 	if err != nil {
 		return err
 	}
@@ -35,8 +35,8 @@ func (r ToysRepository) UpdateToy(toy model.Toy) error {
 	return nil
 }
 
-func (r ToysRepository) DeleteToy(toyID int64) error {
-	queryStr, params, err := buildDeleteQuery(toyID, "toys", "toy_id")
+func (r OrdersRepository) DeleteOrder(orderID int64) error {
+	queryStr, params, err := buildDeleteQuery(orderID, "orders", "order_id")
 	if err != nil {
 		return err
 	}

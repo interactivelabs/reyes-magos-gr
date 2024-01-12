@@ -8,6 +8,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// jwtCustomClaims are custom claims extending default ones.
+// See https://github.com/golang-jwt/jwt for more examples
+type JwtCustomClaims struct {
+	Name  string `json:"name"`
+	Admin bool   `json:"admin"`
+	jwt.RegisteredClaims
+}
+
 type LoginHandler struct{}
 
 func (h LoginHandler) UserLoginHandler(ctx echo.Context) error {

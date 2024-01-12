@@ -11,11 +11,11 @@ import (
 
 type CreaetToyRequest struct {
 	ToyName   string `json:"toy_name" validate:"required"`
-	AgeMin    int64  `json:"age_min" validate:"required min=1,max=16"`
-	AgeMax    int64  `json:"age_max" validate:"required max=16"`
-	Image1    string `json:"image1" validate:"required url"`
-	Image2    string `json:"image2" validate:"required url"`
-	SourceURL string `json:"source_url" validate:"required url"`
+	AgeMin    int64  `json:"age_min" validate:"required,min=1,max=16"`
+	AgeMax    int64  `json:"age_max" validate:"required,max=16"`
+	Image1    string `json:"image1" validate:"required,url"`
+	Image2    string `json:"image2" validate:"required,url"`
+	SourceURL string `json:"source_url" validate:"required,url"`
 }
 
 type ToyHandler struct {
