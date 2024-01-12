@@ -73,5 +73,8 @@ func main() {
 	r.POST("/api/code", codeHandler.CreateCodeApiHandler)
 	r.POST("/api/code/batch", codeHandler.CreateCodeBatchApiHandler)
 
+	// ADMIN VIEWS
+	r.GET("/codes", handlers.CodesHandler{}.CodesViewHandler)
+
 	e.Logger.Fatal(e.Start(":1323"))
 }

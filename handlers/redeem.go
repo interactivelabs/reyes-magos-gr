@@ -2,7 +2,8 @@ package handlers
 
 import (
 	"database/sql"
-	"reyes-magos-gr/components/redeem"
+
+	redeem "reyes-magos-gr/components/redeem"
 
 	"github.com/labstack/echo/v4"
 )
@@ -12,5 +13,5 @@ type RedeemHandler struct {
 }
 
 func (h RedeemHandler) RedeemViewHandler(ctx echo.Context) error {
-	return render(ctx, redeem.Main())
+	return render(ctx, redeem.Redeem())
 }
