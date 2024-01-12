@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -22,8 +23,11 @@ func (h LoginHandler) UserLoginHandler(ctx echo.Context) error {
 	username := ctx.FormValue("username")
 	password := ctx.FormValue("password")
 
-	// Throws unauthorized error
-	if username != "jon" || password != "shhh!" {
+	// Read values from environment variables
+	validUsername := os.Getenv("REYES_USERNAME")
+	validPassword := os.Getenv("REYES_PASSWORD")
+
+	if username != validUsername || password != validPassword {
 		return echo.ErrUnauthorized
 	}
 
