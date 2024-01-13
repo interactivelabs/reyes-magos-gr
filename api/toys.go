@@ -4,12 +4,13 @@ import (
 	"net/http"
 	"reyes-magos-gr/db/model"
 	"reyes-magos-gr/db/repository"
+	"strconv"
 
 	"github.com/dranikpg/dto-mapper"
 	"github.com/labstack/echo/v4"
 )
 
-type CreaetToyRequest struct {
+type CreateToyRequest struct {
 	ToyName   string `json:"toy_name" validate:"required"`
 	AgeMin    int64  `json:"age_min" validate:"required,min=1,max=16"`
 	AgeMax    int64  `json:"age_max" validate:"required,max=16"`
@@ -23,7 +24,7 @@ type ToyHandler struct {
 }
 
 func (h ToyHandler) CreateToyApiHandler(ctx echo.Context) error {
-	tr := new(CreaetToyRequest)
+	tr := new(CreateToyRequest)
 	if err := ctx.Bind(tr); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
@@ -70,4 +71,22 @@ func (h ToyHandler) UpdateToyApiHandler(ctx echo.Context) error {
 	}
 
 	return ctx.JSON(http.StatusOK, toy.ToyID)
+}
+
+type DeleteToyRequest struct {
+}
+
+func (h ToyHandler) DeleteToyApiHandler(ctx echo.Context) error {
+	toyIDStr := ctx.Param("toy_id")
+	toyID, err := strconv.ParseInt(toyIDStr, 10, 64)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid toy ID")
+	}
+
+	err = h.ToysRepository.DeleteToy(toyID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return ctx.JSON(http.StatusOK, toyID)
 }

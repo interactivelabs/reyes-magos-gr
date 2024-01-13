@@ -29,19 +29,30 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// CREATE REPOSITORY INSTANCES
+	codesRepository := repository.CodesRepository{
+		DB: db,
+	}
+
 	// CREATE HANDLERS INSTANCES
 	toyHandler := api.ToyHandler{
 		ToysRepository: repository.ToysRepository{
 			DB: db,
 		},
 	}
-	codeHandler := api.CodeHandler{
-		CodesRepository: repository.CodesRepository{
+	volunteerHandler := api.VolunteerHandler{
+		VolunteersRepository: repository.VolunteersRepository{
 			DB: db,
 		},
 	}
+	codeHandler := api.CodeHandler{
+		CodesRepository: codesRepository,
+	}
 
 	// HTML VIEWS
+	codesHTMLHander := handlers.CodesHandler{
+		CodesRepository: codesRepository,
+	}
 	homeHandler := handlers.HomeHandler{}
 	e.GET("/", homeHandler.HomeViewHandler)
 
@@ -68,13 +79,20 @@ func main() {
 		SigningKey: []byte("secret"),
 	}
 	r.Use(echojwt.WithConfig(config))
+
 	r.POST("/api/toy", toyHandler.CreateToyApiHandler)
 	r.PUT("/api/toy", toyHandler.UpdateToyApiHandler)
+	r.DELETE("/api/toy/:toy_id", toyHandler.DeleteToyApiHandler)
+
+	r.POST("/api/volunteer", volunteerHandler.CreateVolunteerApiHandler)
+	r.PUT("/api/volunteer", volunteerHandler.UpdateVolunteerApiHandler)
+	r.DELETE("/api/volunteer/:volunteer_id", volunteerHandler.DeleteVolunteerApiHandler)
+
 	r.POST("/api/code", codeHandler.CreateCodeApiHandler)
 	r.POST("/api/code/batch", codeHandler.CreateCodeBatchApiHandler)
 
 	// ADMIN VIEWS
-	r.GET("/codes", handlers.CodesHandler{}.CodesViewHandler)
+	r.GET("/codes", codesHTMLHander.CodesViewHandler)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

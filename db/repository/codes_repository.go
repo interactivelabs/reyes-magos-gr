@@ -59,3 +59,23 @@ func (r CodesRepository) DeleteCode(codeID int64) error {
 	}
 	return nil
 }
+
+func (r CodesRepository) GetActiveCodes() ([]model.Code, error) {
+	rows, err := r.DB.Query("SELECT * FROM codes WHERE used = 0 AND cancelled = 0 AND deleted = 0 AND date(expiration) > date('now') ORDER BY expiration ASC")
+	if err != nil {
+		return []model.Code{}, err
+	}
+	defer rows.Close()
+
+	var codes []model.Code
+	for rows.Next() {
+		var code model.Code
+		err := rows.Scan(&code.CodeID, &code.Code, &code.Expiration, &code.Used, &code.Cancelled, &code.Deleted)
+		if err != nil {
+			return []model.Code{}, err
+		}
+		codes = append(codes, code)
+	}
+
+	return codes, nil
+}

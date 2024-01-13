@@ -1,12 +1,18 @@
 package pages
 
 import "reyes-magos-gr/components"
+import "reyes-magos-gr/db/model"
 
-templ Codes() {
+templ Codes(codes []model.Code) {
 	@layout.Base() {
 		<div>
 			<h1>Codes</h1>
 			<p>Available Codes</p>
+			<ul>
+				for _, code := range codes {
+					<li>{ code.Code }</li>
+				}
+			</ul>
 		</div>
 	}
 }
