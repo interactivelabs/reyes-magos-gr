@@ -13,15 +13,16 @@ import (
 type CreateVolunteerRequest struct {
 	Name     string `json:"name" validate:"required"`
 	Email    string `json:"email" validate:"required"`
-	Phone    string `json:"phone" validate:"required"`
+	Phone    string `json:"phone"`
 	Address  string `json:"address" validate:"required"`
-	Address2 string `json:"address2" validate:"required"`
+	Address2 string `json:"address2"`
 	Country  string `json:"country" validate:"required"`
 	State    string `json:"state" validate:"required"`
 	City     string `json:"city" validate:"required"`
-	Province string `json:"province" validate:"required"`
+	Province string `json:"province"`
 	ZipCode  string `json:"zip_code" validate:"required"`
 	Secret   string `json:"secret" validate:"required"`
+	Passcode string `json:"passcode" validate:"required,number"`
 }
 
 type VolunteerHandler struct {
@@ -61,6 +62,7 @@ type UpdateVolunteerRequest struct {
 	Province    string `json:"province"`
 	ZipCode     string `json:"zip_code"`
 	Secret      string `json:"secret"`
+	Passcode    string `json:"passcode" validate:"omitempty,number"`
 }
 
 func (h VolunteerHandler) UpdateVolunteerApiHandler(ctx echo.Context) error {

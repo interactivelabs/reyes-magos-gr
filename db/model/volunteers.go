@@ -13,5 +13,6 @@ type Volunteer struct {
 	Province    string `json:"province"`
 	ZipCode     string `json:"zip_code"`
 	Secret      string `json:"secret"`
+	Passcode    string `json:"passcode"`
 	Deleted     int64  `json:"deleted"`
 }

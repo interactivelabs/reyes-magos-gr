@@ -1,13 +1,22 @@
 package layout
 
+import "reyes-magos-gr/components/shared"
+
 templ Base() {
-	<html class="bg-slate-100">
+	<html lang="en" class="bg-slate-100">
 		<head>
 			<title>Reyes Magos - V1</title>
 			<link rel="stylesheet" href="/public/css/main.css"/>
+			<meta charSet="utf-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			<meta name="description" content="Site for toy distribution"/>
 		</head>
 		<body>
-			{ children... }
+			@shared.Nav()
+			<main>
+				{ children... }
+			</main>
+			@shared.Footer()
 		</body>
 	</html>
 }

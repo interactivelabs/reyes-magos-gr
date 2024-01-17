@@ -34,6 +34,10 @@ func main() {
 		DB: db,
 	}
 
+	volunteersRepository := repository.VolunteersRepository{
+		DB: db,
+	}
+
 	// CREATE HANDLERS INSTANCES
 	toyHandler := api.ToyHandler{
 		ToysRepository: repository.ToysRepository{
@@ -51,8 +55,10 @@ func main() {
 
 	// HTML VIEWS
 	codesHTMLHander := handlers.CodesHandler{
-		CodesRepository: codesRepository,
+		CodesRepository:      codesRepository,
+		VolunteersRepository: volunteersRepository,
 	}
+
 	homeHandler := handlers.HomeHandler{}
 	e.GET("/", homeHandler.HomeViewHandler)
 

@@ -28,6 +28,7 @@ create table volunteers
     province     TEXT,
     zip_code     TEXT    not null,
     secret       TEXT    not null,
+    passcode     integer not null,
     deleted integer default 0
 );
 
@@ -45,6 +46,20 @@ create table codes
 
 create unique index codes_code_uindex
     on codes (code);
+
+create table volunteer_codes
+(
+    volunteer_code_id integer           not null
+        constraint volunteer_codes_pk
+            primary key autoincrement,
+    volunteer_id      integer           not null
+        constraint volunteer_codes_volunteers_volunteer_id_fk
+            references volunteers,
+    code_id           integer           not null
+        constraint volunteer_codes_codes_code_id_fk
+            references codes,
+    deleted           integer default 0 not null
+);
 
 create table orders
 (

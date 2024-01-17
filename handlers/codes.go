@@ -8,7 +8,8 @@ import (
 )
 
 type CodesHandler struct {
-	CodesRepository repository.CodesRepository
+	CodesRepository      repository.CodesRepository
+	VolunteersRepository repository.VolunteersRepository
 }
 
 func (h CodesHandler) CodesViewHandler(ctx echo.Context) error {
@@ -17,5 +18,10 @@ func (h CodesHandler) CodesViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(500, err.Error())
 	}
 
-	return render(ctx, codes.Codes(activeCodes))
+	activeVolunteers, err := h.VolunteersRepository.GetActiveVolunteers()
+	if err != nil {
+		return echo.NewHTTPError(500, err.Error())
+	}
+
+	return render(ctx, codes.Codes(activeCodes, activeVolunteers))
 }
