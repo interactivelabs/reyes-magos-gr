@@ -98,5 +98,5 @@ func main() {
 	// ADMIN VIEWS
 	r.GET("/codes", codesHTMLHander.CodesViewHandler)
 
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start("localhost:8000"))
 }

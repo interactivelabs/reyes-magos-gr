@@ -26,3 +26,6 @@ go.work
 
 # Air temp folder
 tmp
+
+# Node_modules for the build process only
+node_modules
