@@ -62,9 +62,7 @@ func main() {
 	homeHandler := handlers.HomeHandler{}
 	e.GET("/", homeHandler.HomeViewHandler)
 
-	redeemHandler := handlers.RedeemHandler{
-		DB: db,
-	}
+	redeemHandler := handlers.RedeemHandler{}
 	e.GET("/redeem", redeemHandler.RedeemViewHandler)
 
 	loginHandler := api.LoginHandler{}

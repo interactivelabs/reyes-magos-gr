@@ -3,13 +3,15 @@ package layout
 import "reyes-magos-gr/components/shared"
 
 templ Base() {
+	<!DOCTYPE html>
 	<html lang="en" class="bg-slate-100">
 		<head>
-			<title>Reyes Magos - V1</title>
-			<link rel="stylesheet" href="/public/css/main.css"/>
 			<meta charSet="utf-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
 			<meta name="description" content="Site for toy distribution"/>
+			<title>Reyes Magos - V1</title>
+			<link rel="icon" type="image/x-icon" href="/public/img/favicon.ico"/>
+			<link rel="stylesheet" href="/public/css/main.css"/>
 		</head>
 		<body>
 			@shared.Nav()
@@ -18,5 +20,6 @@ templ Base() {
 			</main>
 			@shared.Footer()
 		</body>
+		<script type="module" src="/public/js/main.js"></script>
 	</html>
 }
