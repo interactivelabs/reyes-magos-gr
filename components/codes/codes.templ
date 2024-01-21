@@ -13,7 +13,7 @@ func formatDate(date string) (string, error) {
 	return fmtDate.Format("January 2, 2006"), nil
 }
 
-templ Codes(codes []model.Code, volunteers []model.Volunteer) {
+templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers []model.Volunteer) {
 	@layout.Base() {
 		<div class="w-full">
 			<div class="relative w-full">
@@ -21,50 +21,63 @@ templ Codes(codes []model.Code, volunteers []model.Volunteer) {
 					<h1 class="text-2xl">Available Codes</h1>
 				</div>
 				<div class="flex justify-around">
-					<div>
-						<h2 class="text-xl">Un assigned</h2>
-						<div>
-							<label for="volunteerID" class="block text-sm font-medium leading-6 text-gray-900">Volunteer</label>
-							<select id="volunteerID" name="volunteerID" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
-								for _, volunteer := range volunteers {
-									<option value={ templ.EscapeString(fmt.Sprint(volunteer.VolunteerID)) }>{ volunteer.Name } - { volunteer.Email }</option>
-								}
-							</select>
-						</div>
-						<table class="w-full caption-bottom text-sm">
-							<thead class="[&_tr]:border-b">
-								<tr class="border-b transition-colors hover:bg-muted/50">
-									<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]">
-										Assign
-									</th>
-									<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]">
-										Code
-									</th>
-									<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-										Expiration
-									</th>
-								</tr>
-							</thead>
-							<tbody class="[&_tr:last-child]:border-0">
-								for _, code := range codes {
+					<div class="pb-6">
+						<form method="post" action="/admin/codes/assign">
+							<h2 class="text-xl text-center py-6">Un assigned</h2>
+							<div class="py-4">
+								<label for="volunteer_id" class="block text-sm font-medium leading-6 text-gray-900">Volunteer</label>
+								<select id="volunteer_id" name="volunteer_id" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+									for _, volunteer := range volunteers {
+										<option value={ templ.EscapeString(fmt.Sprint(volunteer.VolunteerID)) }>{ volunteer.Name } - { volunteer.Email }</option>
+									}
+								</select>
+							</div>
+							<table class="w-full caption-bottom text-sm">
+								<thead class="[&_tr]:border-b">
 									<tr class="border-b transition-colors hover:bg-muted/50">
-										<td class="p-4 align-middle">
-											<input class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" type="checkbox" value={ templ.EscapeString(fmt.Sprint(code.CodeID)) } name="code_ids"/>
-										</td>
-										<td class="p-4 align-middle font-medium">{ code.Code }</td>
-										<td class="p-4 align-middle">{ formatDate(code.Expiration) }</td>
+										<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]">
+											Assign
+										</th>
+										<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]">
+											Code
+										</th>
+										<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+											Expiration
+										</th>
 									</tr>
-								}
-							</tbody>
-						</table>
+								</thead>
+								<tbody class="[&_tr:last-child]:border-0">
+									for _, code := range codes {
+										<tr class="border-b transition-colors hover:bg-muted/50">
+											<td class="p-4 align-middle">
+												<input class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" type="checkbox" value={ templ.EscapeString(fmt.Sprint(code.CodeID)) } name="code_ids"/>
+											</td>
+											<td class="p-4 align-middle font-medium">{ code.Code }</td>
+											<td class="p-4 align-middle">{ formatDate(code.Expiration) }</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+							<div class="flex justify-center py-6">
+								<button
+									type="submit"
+									class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+								>
+									Assign
+								</button>
+							</div>
+						</form>
 					</div>
-					<div>
-						<h2 class="text-xl">Assigned Not Used</h2>
+					<div class="pb-6">
+						<h2 class="text-xl text-center py-6">Assigned Not Used</h2>
 						<table class="w-full caption-bottom text-sm">
 							<thead class="[&_tr]:border-b">
 								<tr class="border-b transition-colors hover:bg-muted/50">
 									<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]">
-										Assign
+										Remove
+									</th>
+									<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]">
+										Volunteer
 									</th>
 									<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]">
 										Code
@@ -75,13 +88,14 @@ templ Codes(codes []model.Code, volunteers []model.Volunteer) {
 								</tr>
 							</thead>
 							<tbody class="[&_tr:last-child]:border-0">
-								for _, code := range codes {
+								for _, code := range volunteerCodes {
 									<tr class="border-b transition-colors hover:bg-muted/50">
 										<td class="p-4 align-middle">
-											<input class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" type="checkbox" value={ templ.EscapeString(fmt.Sprint(code.CodeID)) } name="code_ids"/>
+											<input class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" type="checkbox" value={ templ.EscapeString(fmt.Sprint(code.VolunteerCodeID)) } name="code_ids"/>
 										</td>
-										<td class="p-4 align-middle font-medium">{ code.Code }</td>
-										<td class="p-4 align-middle">{ formatDate(code.Expiration) }</td>
+										<td class="p-4 align-middle font-medium">{ code.Volunteer.Name }</td>
+										<td class="p-4 align-middle font-medium">{ code.Code.Code }</td>
+										<td class="p-4 align-middle">{ formatDate(code.Code.Expiration) }</td>
 									</tr>
 								}
 							</tbody>

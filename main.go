@@ -38,6 +38,10 @@ func main() {
 		DB: db,
 	}
 
+	volunteersCodesRepository := repository.VolunteerCodesRepository{
+		DB: db,
+	}
+
 	// CREATE HANDLERS INSTANCES
 	toyHandler := api.ToyHandler{
 		ToysRepository: repository.ToysRepository{
@@ -55,8 +59,9 @@ func main() {
 
 	// HTML VIEWS
 	codesHTMLHander := handlers.CodesHandler{
-		CodesRepository:      codesRepository,
-		VolunteersRepository: volunteersRepository,
+		CodesRepository:          codesRepository,
+		VolunteersRepository:     volunteersRepository,
+		VolunteerCodesRepository: volunteersCodesRepository,
 	}
 
 	homeHandler := handlers.HomeHandler{}
@@ -97,6 +102,7 @@ func main() {
 
 	// ADMIN VIEWS
 	r.GET("/codes", codesHTMLHander.CodesViewHandler)
+	r.POST("/codes/assign", codesHTMLHander.AssignCodesHandler)
 
 	e.Logger.Fatal(e.Start("localhost:8000"))
 }
