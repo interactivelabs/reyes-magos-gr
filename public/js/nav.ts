@@ -1,4 +1,4 @@
-const initNav = () => {
+export default function initNav() {
   const mobileMenuContainer = document.getElementById("mobile-menu-container");
   const mobileMenuButton = document.getElementById("mobile-menu-button");
   const mobileMenuButtonIconClosed = document.getElementById(
@@ -47,6 +47,4 @@ const initNav = () => {
     closeIfOutsideClick(adminMenuDropdown, adminMenuButton, event);
     closeIfOutsideClick(mobileMenuContainer, mobileMenuButton, event);
   });
-};
-
-export default initNav;
+}

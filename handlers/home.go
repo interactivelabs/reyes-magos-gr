@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	home "reyes-magos-gr/components/home"
+	home "reyes-magos-gr/views/home"
 
 	"github.com/labstack/echo/v4"
 )

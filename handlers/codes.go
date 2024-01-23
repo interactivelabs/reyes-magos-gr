@@ -2,10 +2,12 @@ package handlers
 
 import (
 	"net/http"
-	codes "reyes-magos-gr/components/codes"
 	"reyes-magos-gr/db/model"
 	"reyes-magos-gr/db/repository"
+	"reyes-magos-gr/services"
+	codes "reyes-magos-gr/views/codes"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 )
 
@@ -13,6 +15,7 @@ type CodesHandler struct {
 	CodesRepository          repository.CodesRepository
 	VolunteersRepository     repository.VolunteersRepository
 	VolunteerCodesRepository repository.VolunteerCodesRepository
+	CodesService             services.CodesService
 }
 
 func (h CodesHandler) CodesViewHandler(ctx echo.Context) error {
@@ -31,7 +34,10 @@ func (h CodesHandler) CodesViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(500, err.Error())
 	}
 
-	return render(ctx, codes.Codes(activeCodes, allVolunteersCodes, activeVolunteers))
+	user := ctx.Get("user").(*jwt.Token)
+	isAdmin := user.Claims.(jwt.MapClaims)["Admin"].(bool)
+
+	return render(ctx, codes.Codes(isAdmin, activeCodes, allVolunteersCodes, activeVolunteers))
 }
 
 type AssignCodesRequest struct {
@@ -57,6 +63,59 @@ func (h CodesHandler) AssignCodesHandler(ctx echo.Context) error {
 		if err != nil {
 			return echo.NewHTTPError(500, err.Error())
 		}
+	}
+
+	return ctx.Redirect(303, "/admin/codes")
+}
+
+type RemoveCodesRequest struct {
+	VolunteerCodeIDs []int64 `form:"volunteer_code_ids" validate:"required"`
+	CodeIDs          []int64 `form:"code_ids" validate:"required"`
+}
+
+func (h CodesHandler) RemoveCodesHandler(ctx echo.Context) error {
+	acr := new(RemoveCodesRequest)
+	if err := ctx.Bind(acr); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	if err := ctx.Validate(acr); err != nil {
+		return err
+	}
+
+	for _, volunteerCodeID := range acr.VolunteerCodeIDs {
+
+		err := h.VolunteerCodesRepository.DeleteVolunteerCode(volunteerCodeID)
+		if err != nil {
+			return echo.NewHTTPError(500, err.Error())
+		}
+	}
+
+	for _, codeID := range acr.CodeIDs {
+		err := h.CodesRepository.DeleteCode(codeID)
+		if err != nil {
+			return echo.NewHTTPError(500, err.Error())
+		}
+	}
+
+	return ctx.Redirect(303, "/admin/codes")
+}
+
+type CreateCodesRequest struct {
+	Count int64 `form:"count" validate:"required,min=1,max=100"`
+}
+
+func (h CodesHandler) CreateCodesHandler(ctx echo.Context) error {
+	acr := new(CreateCodesRequest)
+	if err := ctx.Bind(acr); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	if err := ctx.Validate(acr); err != nil {
+		return err
+	}
+
+	_, err := h.CodesService.CreateCodeBatch(acr.Count)
+	if err != nil {
+		return echo.NewHTTPError(500, err.Error())
 	}
 
 	return ctx.Redirect(303, "/admin/codes")

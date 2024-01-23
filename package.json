@@ -4,10 +4,10 @@
   "description": "App for distributing toys",
   "scripts": {
     "build:css": "tailwindcss -i ./public/css/input.css -o ./public/css/main.css --minify",
-    "build:js": "esbuild public/js/app.ts  --outfile=public/js/main.js --bundle --format=esm --minify",
+    "build:js": "esbuild public/js/app.ts public/js/admin.ts  --outdir=public/js --bundle --format=esm --minify",
     "build": "npm run build:css && npm run build:js",
     "dev:css": "tailwindcss -i ./public/css/input.css -o ./public/css/main.css --watch",
-    "dev:js": "esbuild public/js/app.ts  --outfile=public/js/main.js --bundle --sourcemap --format=esm --watch",
+    "dev:js": "esbuild public/js/app.ts public/js/admin.ts  --outdir=public/js --bundle --sourcemap --format=esm --watch",
     "dev": "npm run dev:css & npm run dev:js"
   },
   "repository": {

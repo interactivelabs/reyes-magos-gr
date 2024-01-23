@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	redeem "reyes-magos-gr/components/redeem"
+	redeem "reyes-magos-gr/views/redeem"
 
 	"github.com/labstack/echo/v4"
 )

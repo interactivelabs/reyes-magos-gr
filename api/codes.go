@@ -1,18 +1,15 @@
 package api
 
 import (
-	"math/rand"
 	"net/http"
-	"reyes-magos-gr/db/model"
-	"reyes-magos-gr/db/repository"
-	"strings"
-	"time"
+	"reyes-magos-gr/services"
 
+	"github.com/dranikpg/dto-mapper"
 	"github.com/labstack/echo/v4"
 )
 
 type CodeHandler struct {
-	CodesRepository repository.CodesRepository
+	CodesService services.CodesService
 }
 
 type CreateCodeResult struct {
@@ -21,22 +18,15 @@ type CreateCodeResult struct {
 }
 
 func (h CodeHandler) CreateCodeApiHandler(ctx echo.Context) error {
-	code := model.Code{
-		Code:       generateRandomString(6),
-		Expiration: time.Now().AddDate(0, 0, 10).Format("2006-01-02"),
-	}
-
-	_, codeRow, err := h.CodesRepository.CreateCode(code)
+	code, err := h.CodesService.CreateCode()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	result := CreateCodeResult{
-		Code:   codeRow.Code,
-		CodeID: codeRow.CodeID,
-	}
+	var codesResult CreateCodeResult
+	dto.Map(&codesResult, code)
 
-	return ctx.JSON(http.StatusOK, result)
+	return ctx.JSON(http.StatusOK, codesResult)
 }
 
 // new handler to create several codes at once
@@ -57,39 +47,17 @@ func (h CodeHandler) CreateCodeBatchApiHandler(ctx echo.Context) error {
 		return err
 	}
 
-	var codes []CreateCodeResult
-	for i := 0; i < int(cr.Count); i++ {
-		code := model.Code{
-			Code:       generateRandomString(6),
-			Expiration: time.Now().AddDate(0, 0, 10).Format("2006-01-02"),
-		}
-
-		_, codeRow, err := h.CodesRepository.CreateCode(code)
-		if err != nil {
-			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-		}
-
-		result := CreateCodeResult{
-			Code:   codeRow.Code,
-			CodeID: codeRow.CodeID,
-		}
-
-		codes = append(codes, result)
+	codes, err := h.CodesService.CreateCodeBatch(cr.Count)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
+	var codesResult []CreateCodeResult
+	dto.Map(&codesResult, codes)
+
 	result := CreateCodeBatchResult{
-		Codes: codes,
+		Codes: codesResult,
 	}
 
 	return ctx.JSON(http.StatusOK, result)
-}
-
-func generateRandomString(length int) string {
-	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-
-	var sb strings.Builder
-	for i := 0; i < length; i++ {
-		sb.WriteByte(chars[rand.Intn(len(chars))])
-	}
-	return sb.String()
 }

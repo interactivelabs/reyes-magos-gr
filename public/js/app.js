@@ -1,5 +1,5 @@
 // public/js/nav.ts
-var initNav = () => {
+function initNav() {
   const mobileMenuContainer = document.getElementById("mobile-menu-container");
   const mobileMenuButton = document.getElementById("mobile-menu-button");
   const mobileMenuButtonIconClosed = document.getElementById(
@@ -44,9 +44,8 @@ var initNav = () => {
     closeIfOutsideClick(adminMenuDropdown, adminMenuButton, event);
     closeIfOutsideClick(mobileMenuContainer, mobileMenuButton, event);
   });
-};
-var nav_default = initNav;
+}
 
 // public/js/app.ts
-nav_default();
-//# sourceMappingURL=main.js.map
+initNav();
+//# sourceMappingURL=app.js.map

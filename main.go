@@ -7,6 +7,7 @@ import (
 	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/handlers"
 	"reyes-magos-gr/middleware"
+	"reyes-magos-gr/services"
 
 	echojwt "github.com/labstack/echo-jwt/v4"
 
@@ -42,6 +43,11 @@ func main() {
 		DB: db,
 	}
 
+	// CREATE SERVICES INSTANCES
+	codesService := services.CodesService{
+		CodesRepository: codesRepository,
+	}
+
 	// CREATE HANDLERS INSTANCES
 	toyHandler := api.ToyHandler{
 		ToysRepository: repository.ToysRepository{
@@ -54,7 +60,7 @@ func main() {
 		},
 	}
 	codeHandler := api.CodeHandler{
-		CodesRepository: codesRepository,
+		CodesService: codesService,
 	}
 
 	// HTML VIEWS
@@ -62,6 +68,7 @@ func main() {
 		CodesRepository:          codesRepository,
 		VolunteersRepository:     volunteersRepository,
 		VolunteerCodesRepository: volunteersCodesRepository,
+		CodesService:             codesService,
 	}
 
 	homeHandler := handlers.HomeHandler{}
@@ -103,6 +110,8 @@ func main() {
 	// ADMIN VIEWS
 	r.GET("/codes", codesHTMLHander.CodesViewHandler)
 	r.POST("/codes/assign", codesHTMLHander.AssignCodesHandler)
+	r.POST("/codes/remove", codesHTMLHander.RemoveCodesHandler)
+	r.POST("/codes/create", codesHTMLHander.CreateCodesHandler)
 
 	e.Logger.Fatal(e.Start("localhost:8000"))
 }
