@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"reyes-magos-gr/db/model"
 	"reyes-magos-gr/db/repository"
+	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
 	codes "reyes-magos-gr/views/codes"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 )
 
@@ -34,10 +34,7 @@ func (h CodesHandler) CodesViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(500, err.Error())
 	}
 
-	user := ctx.Get("user").(*jwt.Token)
-	isAdmin := user.Claims.(jwt.MapClaims)["Admin"].(bool)
-
-	return render(ctx, codes.Codes(isAdmin, activeCodes, allVolunteersCodes, activeVolunteers))
+	return lib.Render(ctx, codes.Codes(activeCodes, allVolunteersCodes, activeVolunteers))
 }
 
 type AssignCodesRequest struct {

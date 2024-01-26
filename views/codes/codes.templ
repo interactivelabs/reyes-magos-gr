@@ -13,7 +13,7 @@ func formatDate(date string) (string, error) {
 	return fmtDate.Format("January 2, 2006"), nil
 }
 
-templ Codes(isAdmin bool, codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers []model.Volunteer) {
+templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers []model.Volunteer) {
 	@layout.Base() {
 		<div class="w-full">
 			<div class="relative w-full">
