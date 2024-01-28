@@ -26,6 +26,7 @@ func (h LoginHandler) UserLoginHandler(ctx echo.Context) error {
 	// Read values from environment variables
 	validUsername := os.Getenv("REYES_USERNAME")
 	validPassword := os.Getenv("REYES_PASSWORD")
+	apiSecret := os.Getenv("REYES_API_SECRET")
 
 	if username != validUsername || password != validPassword {
 		return echo.ErrUnauthorized
@@ -44,7 +45,7 @@ func (h LoginHandler) UserLoginHandler(ctx echo.Context) error {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	// Generate encoded token and send it as response.
-	t, err := token.SignedString([]byte("secret"))
+	t, err := token.SignedString([]byte(apiSecret))
 	if err != nil {
 		return err
 	}

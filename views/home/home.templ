@@ -4,9 +4,17 @@ import "reyes-magos-gr/views"
 
 templ Home() {
 	@layout.Base() {
-		<div class="flex justify-center p4">
-			<h1 class="text-xl">Inicio</h1>
-			<p>Bienvenidos</p>
+		<div class="bg-hero-paper relative isolate px-6 pt-14 lg:px-8">
+			<div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+				<div class="text-center">
+					<h1 class="text-4xl font-display font-bold tracking-tight sm:text-6xl">La inocente sonrisa de los niños es el lenguage universal de la bondad</h1>
+					<p class="mt-6 text-lg leading-8 text-brand-orange">En este sitio podras recibir un juguete gratuito para un niño</p>
+					<div class="mt-10 flex items-center justify-center gap-x-6">
+						<a href="#" class="rounded-full border-2 border-brand-orange bg-brand-orange px-5 py-4 text-sm font-semibold text-white shadow-sm hover:bg-transparent hover:text-brand-orange">Recibe un juguete</a>
+						<a href="#" class="text-sm font-semibold leading-6 text-brand-orange">Ver como <span aria-hidden="true">→</span></a>
+					</div>
+				</div>
+			</div>
 		</div>
 	}
 }

@@ -3,16 +3,16 @@ package shared
 import "reyes-magos-gr/lib"
 
 templ Nav() {
-	<header class="bg-slate-900 text-white">
+	<header>
 		<nav class="bg-white shadow">
-			<div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+			<div class="mx-auto max-w-7xl px-2 py-2 sm:px-6 lg:px-8">
 				<div class="relative flex h-16 justify-between">
 					<div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
 						<!-- Mobile menu button -->
 						<button
 							type="button"
 							id="mobile-menu-button"
-							class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+							class="relative inline-flex items-center justify-center rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-orange"
 							aria-controls="mobile-menu"
 							aria-expanded="false"
 						>
@@ -28,13 +28,12 @@ templ Nav() {
 					</div>
 					<div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
 						<div class="flex flex-shrink-0 items-center">
-							<img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company"/>
+							<img class="h-16 w-auto" src="/public/img/logo01_sm.webp" alt="D-L Toys logo"/>
 						</div>
-						<div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-							<!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
-							<a href="/" class="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900">Inicio</a>
-							<a href="#" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Porque?</a>
-							<a href="#" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Voluntarios</a>
+						<div class="hidden sm:ml-6 sm:flex sm:space-x-8 font-medium tracking-wide uppercase">
+							<a href="/" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium hover:border-gray-300">Inicio</a>
+							<a href="#" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium hover:border-gray-300">Porque?</a>
+							<a href="#" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium hover:border-gray-300">Voluntarios</a>
 						</div>
 					</div>
 					if lib.GetIsAdmin(ctx) {
@@ -42,7 +41,7 @@ templ Nav() {
 							<!-- Profile dropdown -->
 							<div class="relative ml-3">
 								<div>
-									<button type="button" id="admin-menu-button" class="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-expanded="false" aria-haspopup="true">
+									<button type="button" id="admin-menu-button" class="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2" aria-expanded="false" aria-haspopup="true">
 										<span class="absolute -inset-1.5"></span>
 										<span class="sr-only">Open admin menu</span>
 										<img class="h-6 w-6 rounded-full" src="/public/img/fingerprint.svg" alt=""/>
@@ -59,9 +58,8 @@ templ Nav() {
 									tabindex="-1"
 									class="hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
 								>
-									<div class="block px-4 py-2 text-sm text-gray-700 border-b-2 text-center">Admin</div>
-									<!-- Active: "bg-gray-100", Not Active: "" -->
-									<a href="/admin/codes" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="admin-menu-item-0">Codes</a>
+									<div class="block px-4 py-2 text-sm border-b-2 text-center">Admin</div>
+									<a href="/admin/codes" class="block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="admin-menu-item-0">Codes</a>
 								</div>
 							</div>
 						</div>
@@ -71,25 +69,26 @@ templ Nav() {
 			<!-- Mobile menu, show/hide based on menu state. -->
 			<div class="sm:hidden hidden" id="mobile-menu-container" role="menu">
 				<div class="space-y-1 pb-4 pt-2">
-					<!-- Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" -->
-					<a href="/" class="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700" role="menuitem">Inicio</a>
-					<a href="#" class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700" role="menuitem">Porque?</a>
-					<a href="#" class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700" role="menuitem">Voluntarios</a>
-					<div class="relative">
-						<div class="absolute inset-0 flex items-center" aria-hidden="true">
-							<div class="w-full border-t border-gray-300"></div>
+					<a href="/" class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50" role="menuitem">Inicio</a>
+					<a href="#" class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50" role="menuitem">Porque?</a>
+					<a href="#" class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50" role="menuitem">Voluntarios</a>
+					if lib.GetIsAdmin(ctx) {
+						<div class="relative">
+							<div class="absolute inset-0 flex items-center" aria-hidden="true">
+								<div class="w-full border-t border-gray-300"></div>
+							</div>
+							<div class="relative flex justify-center">
+								<span class="bg-white px-3 text-base font-semibold leading-6">Admin</span>
+							</div>
 						</div>
-						<div class="relative flex justify-center">
-							<span class="bg-white px-3 text-base font-semibold leading-6 text-gray-900">Admin</span>
-						</div>
-					</div>
-					<a
-						href="/admin/codes"
-						class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
-						role="menuitem"
-					>
-						Codes
-					</a>
+						<a
+							href="/admin/codes"
+							class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50"
+							role="menuitem"
+						>
+							Codes
+						</a>
+					}
 				</div>
 			</div>
 		</nav>

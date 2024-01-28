@@ -16,15 +16,27 @@ const (
 )
 
 func Render(ctx echo.Context, component templ.Component) error {
-	user := ctx.Get("user").(*jwt.Token)
-	isAdmin := false
-	if claims, ok := user.Claims.(*api.JwtCustomClaims); ok {
-		isAdmin = claims.Admin
+	isAdmin := IsAdmin(ctx)
+	c := context.WithValue(ctx.Request().Context(), isAdminKey, isAdmin)
+	return component.Render(c, ctx.Response())
+}
+
+func IsAdmin(ctx echo.Context) bool {
+	user := ctx.Get("user")
+	if user == nil {
+		return false
 	}
 
-	c := context.WithValue(ctx.Request().Context(), isAdminKey, isAdmin)
+	token := user.(*jwt.Token)
+	if token.Claims == nil {
+		return false
+	}
 
-	return component.Render(c, ctx.Response())
+	if claims, ok := token.Claims.(*api.JwtCustomClaims); ok {
+		return claims.Admin
+	}
+
+	return false
 }
 
 func GetIsAdmin(ctx context.Context) bool {
