@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"log"
+	"os"
 	"reyes-magos-gr/api"
 	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/handlers"
@@ -113,5 +114,11 @@ func main() {
 	r.POST("/codes/remove", codesHTMLHander.RemoveCodesHandler)
 	r.POST("/codes/create", codesHTMLHander.CreateCodesHandler)
 
-	e.Logger.Fatal(e.Start("localhost:8000"))
+	var port = "localhost:8080"
+
+	if os.Getenv("PORT") != "" {
+		port = os.Getenv("PORT")
+	}
+
+	e.Logger.Fatal(e.Start(port))
 }
