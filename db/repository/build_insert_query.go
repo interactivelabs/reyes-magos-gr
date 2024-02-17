@@ -13,7 +13,7 @@ func buildInsertQuery(model interface{}, tableName string) (string, []interface{
 	var query strings.Builder
 	query.WriteString(fmt.Sprintf("INSERT INTO %s (", tableName))
 
-	params := []interface{}{}
+	var params []interface{}
 	for i := 0; i < val.NumField(); i++ {
 		field := val.Field(i)
 		if !field.IsZero() {
@@ -26,11 +26,9 @@ func buildInsertQuery(model interface{}, tableName string) (string, []interface{
 		}
 	}
 
-	// Remove the last comma and space
 	queryStr := query.String()
 	queryStr = queryStr[:len(queryStr)-2]
 
-	// Empty the value of the query builder
 	query.Reset()
 	query.WriteString(") VALUES (")
 
@@ -38,10 +36,8 @@ func buildInsertQuery(model interface{}, tableName string) (string, []interface{
 		query.WriteString("?, ")
 	}
 
-	// Remove the last comma and space
 	queryStr += query.String()
 	queryStr = queryStr[:len(queryStr)-2]
-
 	queryStr += ")"
 
 	return queryStr, params, nil

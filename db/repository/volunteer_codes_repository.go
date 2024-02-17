@@ -64,7 +64,9 @@ func (r VolunteerCodesRepository) GetAllVolunteersCodes() ([]model.VolunteerCode
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
 
 	var volunteerCodes []model.VolunteerCode
 	for rows.Next() {

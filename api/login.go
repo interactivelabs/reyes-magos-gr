@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// jwtCustomClaims are custom claims extending default ones.
+// JwtCustomClaims are custom claims extending default ones.
 // See https://github.com/golang-jwt/jwt for more examples
 type JwtCustomClaims struct {
 	Name  string `json:"name"`
@@ -23,7 +23,6 @@ func (h LoginHandler) UserLoginHandler(ctx echo.Context) error {
 	username := ctx.FormValue("username")
 	password := ctx.FormValue("password")
 
-	// Read values from environment variables
 	validUsername := os.Getenv("REYES_USERNAME")
 	validPassword := os.Getenv("REYES_PASSWORD")
 	apiSecret := os.Getenv("REYES_API_SECRET")

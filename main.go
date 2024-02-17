@@ -65,7 +65,7 @@ func main() {
 	}
 
 	// HTML VIEWS
-	codesHTMLHander := handlers.CodesHandler{
+	codesHTMLHandler := handlers.CodesHandler{
 		CodesRepository:          codesRepository,
 		VolunteersRepository:     volunteersRepository,
 		VolunteerCodesRepository: volunteersCodesRepository,
@@ -112,10 +112,10 @@ func main() {
 	r.POST("/api/code/batch", codeHandler.CreateCodeBatchApiHandler)
 
 	// ADMIN VIEWS
-	r.GET("/codes", codesHTMLHander.CodesViewHandler)
-	r.POST("/codes/assign", codesHTMLHander.AssignCodesHandler)
-	r.POST("/codes/remove", codesHTMLHander.RemoveCodesHandler)
-	r.POST("/codes/create", codesHTMLHander.CreateCodesHandler)
+	r.GET("/codes", codesHTMLHandler.CodesViewHandler)
+	r.POST("/codes/assign", codesHTMLHandler.AssignCodesHandler)
+	r.POST("/codes/remove", codesHTMLHandler.RemoveCodesHandler)
+	r.POST("/codes/create", codesHTMLHandler.CreateCodesHandler)
 
 	var port = "localhost:8080"
 

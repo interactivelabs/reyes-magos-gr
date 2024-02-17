@@ -24,12 +24,14 @@ func (h CodeHandler) CreateCodeApiHandler(ctx echo.Context) error {
 	}
 
 	var codesResult CreateCodeResult
-	dto.Map(&codesResult, code)
+	err = dto.Map(&codesResult, code)
+	if err != nil {
+		return err
+	}
 
 	return ctx.JSON(http.StatusOK, codesResult)
 }
 
-// new handler to create several codes at once
 type CreateCodeBatchRequest struct {
 	Count int64 `json:"count" validate:"required,min=1,max=100"`
 }
@@ -53,7 +55,10 @@ func (h CodeHandler) CreateCodeBatchApiHandler(ctx echo.Context) error {
 	}
 
 	var codesResult []CreateCodeResult
-	dto.Map(&codesResult, codes)
+	err = dto.Map(&codesResult, codes)
+	if err != nil {
+		return err
+	}
 
 	result := CreateCodeBatchResult{
 		Codes: codesResult,

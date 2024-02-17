@@ -1,16 +1,16 @@
 create table toys
 (
-    toy_id     integer not null
+    toy_id          integer not null
         constraint toys_pk
             primary key autoincrement,
-    toy_name   TEXT    not null,
-    age_min    integer not null,
-    age_max    integer not null,
-    image1     TEXT,
-    image2     TEXT,
-    source_url TEXT,
+    toy_name        TEXT    not null,
+    age_min         integer not null,
+    age_max         integer not null,
+    image1          TEXT,
+    image2          TEXT,
+    source_url      TEXT,
     toy_description TEXT,
-    deleted integer default 0
+    deleted         integer default 0
 );
 
 create table volunteers
@@ -30,7 +30,7 @@ create table volunteers
     zip_code     TEXT    not null,
     secret       TEXT    not null,
     passcode     integer not null,
-    deleted integer default 0
+    deleted      integer default 0
 );
 
 create table codes
@@ -42,7 +42,7 @@ create table codes
     expiration TEXT              not null,
     used       integer default 0 not null,
     cancelled  integer default 0,
-    deleted integer default 0
+    deleted    integer default 0
 );
 
 create unique index codes_code_uindex
@@ -64,20 +64,20 @@ create table volunteer_codes
 
 create table orders
 (
-    order_id     integer not null
+    order_id     integer           not null
         constraint orders_pk
             primary key autoincrement,
-    toy_id       integer not null
+    toy_id       integer           not null
         constraint orders_toys_fk
             references toys,
-    volunteer_id integer not null
+    volunteer_id integer           not null
         constraint orders_volunteers_fk
             references volunteers,
-    code_id      integer not null
+    code_id      integer           not null
         constraint orders_codes_fk
             references codes,
-    order_date   TEXT    not null,
+    order_date   TEXT              not null,
     shipped      integer default 0 not null,
     shipped_date TEXT,
-    deleted integer default 0
+    deleted      integer default 0
 );

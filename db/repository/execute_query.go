@@ -8,7 +8,9 @@ func executeQuery(db *sql.DB, query string, args ...interface{}) (sql.Result, er
 		return nil, err
 	}
 
-	defer stmt.Close()
+	defer func(stmt *sql.Stmt) {
+		_ = stmt.Close()
+	}(stmt)
 
 	result, err := stmt.Exec(args...)
 	if err != nil {

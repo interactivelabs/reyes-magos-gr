@@ -34,7 +34,10 @@ func (h ToyHandler) CreateToyApiHandler(ctx echo.Context) error {
 	}
 
 	var toy model.Toy
-	dto.Map(&toy, tr)
+	err := dto.Map(&toy, tr)
+	if err != nil {
+		return err
+	}
 
 	toyID, err := h.ToysRepository.CreateToy(toy)
 	if err != nil {
@@ -65,9 +68,12 @@ func (h ToyHandler) UpdateToyApiHandler(ctx echo.Context) error {
 	}
 
 	var toy model.Toy
-	dto.Map(&toy, tr)
+	err := dto.Map(&toy, tr)
+	if err != nil {
+		return err
+	}
 
-	err := h.ToysRepository.UpdateToy(toy)
+	err = h.ToysRepository.UpdateToy(toy)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

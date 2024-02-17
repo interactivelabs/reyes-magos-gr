@@ -39,7 +39,10 @@ func (h VolunteerHandler) CreateVolunteerApiHandler(ctx echo.Context) error {
 	}
 
 	var volunteer model.Volunteer
-	dto.Map(&volunteer, tr)
+	err := dto.Map(&volunteer, tr)
+	if err != nil {
+		return err
+	}
 
 	volunteerID, err := h.VolunteersRepository.CreateVolunteer(volunteer)
 	if err != nil {
@@ -75,9 +78,12 @@ func (h VolunteerHandler) UpdateVolunteerApiHandler(ctx echo.Context) error {
 	}
 
 	var volunteer model.Volunteer
-	dto.Map(&volunteer, tr)
+	err := dto.Map(&volunteer, tr)
+	if err != nil {
+		return err
+	}
 
-	err := h.VolunteersRepository.UpdateVolunteer(volunteer)
+	err = h.VolunteersRepository.UpdateVolunteer(volunteer)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

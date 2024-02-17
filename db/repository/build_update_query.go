@@ -13,7 +13,7 @@ func buildUpdateQuery(model interface{}, tableName string, idFieldName string) (
 	var query strings.Builder
 	query.WriteString(fmt.Sprintf("UPDATE %s SET ", tableName))
 
-	params := []interface{}{}
+	var params []interface{}
 	var idField reflect.Value
 	for i := 0; i < val.NumField(); i++ {
 		field := val.Field(i)
@@ -31,7 +31,6 @@ func buildUpdateQuery(model interface{}, tableName string, idFieldName string) (
 		}
 	}
 
-	// Remove the last comma and space
 	queryStr := query.String()
 	queryStr = queryStr[:len(queryStr)-2]
 

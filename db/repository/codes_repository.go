@@ -75,7 +75,10 @@ func (r CodesRepository) GetActiveCodes() ([]model.Code, error) {
 	if err != nil {
 		return []model.Code{}, err
 	}
-	defer rows.Close()
+
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
 
 	var codes []model.Code
 	for rows.Next() {
@@ -99,7 +102,10 @@ func (r CodesRepository) GetUnassignedCodes() ([]model.Code, error) {
 	if err != nil {
 		return []model.Code{}, err
 	}
-	defer rows.Close()
+
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
 
 	var codes []model.Code
 	for rows.Next() {
