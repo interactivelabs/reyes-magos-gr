@@ -24,6 +24,9 @@ go.work
 .vscode
 *debug*
 
+# JetBrains
+.idea
+
 # Air temp folder
 tmp
 
