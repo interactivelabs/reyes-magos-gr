@@ -9,6 +9,7 @@ create table toys
     image1     TEXT,
     image2     TEXT,
     source_url TEXT,
+    toy_description TEXT,
     deleted integer default 0
 );
 

@@ -78,6 +78,9 @@ func main() {
 	redeemHandler := handlers.RedeemHandler{}
 	e.GET("/redeem", redeemHandler.RedeemViewHandler)
 
+	redeemMultipleHandler := handlers.RedeemMultipleHandler{}
+	e.GET("/redeem_multiple", redeemMultipleHandler.RedeemMultipleViewHandler)
+
 	loginHandler := api.LoginHandler{}
 	// Login route
 	e.POST("/login", loginHandler.UserLoginHandler)
