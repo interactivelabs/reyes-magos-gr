@@ -1,7 +1,7 @@
 {
   "version": 3,
   "sources": ["codes.ts", "admin.ts"],
-  "sourcesContent": ["export default function initCodes() {\n  const form = document.getElementById(\"remove_code_form\");\n\n  form?.addEventListener(\"change\", (e) => {\n    const target = e.target as HTMLInputElement;\n\n    if (target.name === \"volunteer_code_ids\") {\n      const codeCheckbox = target.nextElementSibling as HTMLInputElement;\n      codeCheckbox.checked = target.checked;\n    }\n  });\n}\n", "import initCodes from \"./codes\";\n\ninitCodes();\n"],
-  "mappings": ";AAAe,SAAR,YAA6B;AAClC,QAAM,OAAO,SAAS,eAAe,kBAAkB;AAEvD,QAAM,iBAAiB,UAAU,CAAC,MAAM;AACtC,UAAM,SAAS,EAAE;AAEjB,QAAI,OAAO,SAAS,sBAAsB;AACxC,YAAM,eAAe,OAAO;AAC5B,mBAAa,UAAU,OAAO;AAAA,IAChC;AAAA,EACF,CAAC;AACH;;;ACTA,UAAU;",
+  "sourcesContent": ["export default function initCodes() {\n    const form = document.getElementById(\"remove_code_form\");\n\n    form?.addEventListener(\"change\", (e) => {\n        const target = e.target as HTMLInputElement;\n\n        if (target.name === \"volunteer_code_ids\") {\n            const codeCheckbox = target.nextElementSibling as HTMLInputElement;\n            codeCheckbox.checked = target.checked;\n        }\n    });\n}\n", "import initCodes from \"./codes\";\n\ninitCodes();\n"],
+  "mappings": ";AAAe,SAAR,YAA6B;AAChC,QAAM,OAAO,SAAS,eAAe,kBAAkB;AAEvD,QAAM,iBAAiB,UAAU,CAAC,MAAM;AACpC,UAAM,SAAS,EAAE;AAEjB,QAAI,OAAO,SAAS,sBAAsB;AACtC,YAAM,eAAe,OAAO;AAC5B,mBAAa,UAAU,OAAO;AAAA,IAClC;AAAA,EACJ,CAAC;AACL;;;ACTA,UAAU;",
   "names": []
 }

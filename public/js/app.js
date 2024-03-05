@@ -34,15 +34,15 @@ function initNav() {
     adminMenuDropdown.classList.toggle("hidden");
   };
   adminMenuButton?.addEventListener("click", toggleAdminMenu);
-  const closeIfOutsideClick = (element, elementButton, event) => {
-    var isClickInside = element.contains(event.target) || elementButton.contains(event.target);
+  const closeIfOutsideClick = ({ element, elementButton, event }) => {
+    const isClickInside = element.contains(event.currentTarget) || elementButton.contains(event.currentTarget);
     if (!isClickInside) {
       element.classList.add("hidden");
     }
   };
-  document.addEventListener("click", function(event) {
-    closeIfOutsideClick(adminMenuDropdown, adminMenuButton, event);
-    closeIfOutsideClick(mobileMenuContainer, mobileMenuButton, event);
+  document.addEventListener("click", (event) => {
+    closeIfOutsideClick({ element: adminMenuDropdown, elementButton: adminMenuButton, event });
+    closeIfOutsideClick({ element: mobileMenuContainer, elementButton: mobileMenuButton, event });
   });
 }
 

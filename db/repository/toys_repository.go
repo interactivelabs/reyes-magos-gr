@@ -47,3 +47,29 @@ func (r ToysRepository) DeleteToy(toyID int64) error {
 	}
 	return nil
 }
+
+func (r ToysRepository) GetToys() ([]model.Toy, error) {
+	rows, err := r.DB.Query(`
+		SELECT toy_id, toy_name, COALESCE(toy_description, ''), age_min, age_max, image1, image2, source_url, deleted
+		FROM toys WHERE deleted = 0;
+	`)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
+
+	var toys []model.Toy
+	for rows.Next() {
+		var toy model.Toy
+		err = rows.Scan(&toy.ToyID, &toy.ToyName, &toy.ToyDescription, &toy.AgeMin, &toy.AgeMax, &toy.Image1, &toy.Image2, &toy.SourceURL, &toy.Deleted)
+		if err != nil {
+			return nil, err
+		}
+		toys = append(toys, toy)
+	}
+
+	return toys, nil
+}

@@ -44,6 +44,10 @@ func main() {
 		DB: db,
 	}
 
+	toysRepository := repository.ToysRepository{
+		DB: db,
+	}
+
 	// CREATE SERVICES INSTANCES
 	codesService := services.CodesService{
 		CodesRepository: codesRepository,
@@ -51,15 +55,13 @@ func main() {
 
 	// CREATE HANDLERS INSTANCES
 	toyHandler := api.ToyHandler{
-		ToysRepository: repository.ToysRepository{
-			DB: db,
-		},
+		ToysRepository: toysRepository,
 	}
+
 	volunteerHandler := api.VolunteerHandler{
-		VolunteersRepository: repository.VolunteersRepository{
-			DB: db,
-		},
+		VolunteersRepository: volunteersRepository,
 	}
+
 	codeHandler := api.CodeHandler{
 		CodesService: codesService,
 	}
@@ -75,14 +77,16 @@ func main() {
 	homeHandler := handlers.HomeHandler{}
 	e.GET("/", homeHandler.HomeViewHandler)
 
-	redeemHandler := handlers.RedeemHandler{}
+	redeemHandler := handlers.RedeemHandler{
+		ToysRepository: toysRepository,
+	}
 	e.GET("/redeem", redeemHandler.RedeemViewHandler)
 
 	redeemMultipleHandler := handlers.RedeemMultipleHandler{}
 	e.GET("/redeem_multiple", redeemMultipleHandler.RedeemMultipleViewHandler)
 
-	loginHandler := api.LoginHandler{}
 	// Login route
+	loginHandler := api.LoginHandler{}
 	e.POST("/login", loginHandler.UserLoginHandler)
 
 	e.Static("/public", "public")
@@ -93,7 +97,7 @@ func main() {
 	r := e.Group("/admin")
 	// Configure middleware with the custom claims type
 	config := echojwt.Config{
-		NewClaimsFunc: func(c echo.Context) jwt.Claims {
+		NewClaimsFunc: func(_ echo.Context) jwt.Claims {
 			return new(api.JwtCustomClaims)
 		},
 		SigningKey: []byte("secret"),
