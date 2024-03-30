@@ -36,15 +36,19 @@ func main() {
 		DB: db,
 	}
 
-	volunteersRepository := repository.VolunteersRepository{
+	toysRepository := repository.ToysRepository{
 		DB: db,
 	}
+
+	// ordersRepository := repository.OrdersRepository{
+	// 	DB: db,
+	// }
 
 	volunteersCodesRepository := repository.VolunteerCodesRepository{
 		DB: db,
 	}
 
-	toysRepository := repository.ToysRepository{
+	volunteersRepository := repository.VolunteersRepository{
 		DB: db,
 	}
 
@@ -54,6 +58,8 @@ func main() {
 	}
 
 	// CREATE HANDLERS INSTANCES
+	homeHandler := handlers.HomeHandler{}
+
 	toyHandler := api.ToyHandler{
 		ToysRepository: toysRepository,
 	}
@@ -66,6 +72,16 @@ func main() {
 		CodesService: codesService,
 	}
 
+	redeemHandler := handlers.RedeemHandler{
+		ToysRepository: toysRepository,
+	}
+
+	redeemToyHandler := handlers.RedeemToyHandler{
+		ToysRepository: toysRepository,
+	}
+
+	redeemMultipleHandler := handlers.RedeemMultipleHandler{}
+
 	// HTML VIEWS
 	codesHTMLHandler := handlers.CodesHandler{
 		CodesRepository:          codesRepository,
@@ -74,15 +90,12 @@ func main() {
 		CodesService:             codesService,
 	}
 
-	homeHandler := handlers.HomeHandler{}
 	e.GET("/", homeHandler.HomeViewHandler)
 
-	redeemHandler := handlers.RedeemHandler{
-		ToysRepository: toysRepository,
-	}
 	e.GET("/redeem", redeemHandler.RedeemViewHandler)
 
-	redeemMultipleHandler := handlers.RedeemMultipleHandler{}
+	e.GET("/redeem/:toy_id", redeemToyHandler.RedeemToyViewHandler)
+
 	e.GET("/redeem_multiple", redeemMultipleHandler.RedeemMultipleViewHandler)
 
 	// Login route
