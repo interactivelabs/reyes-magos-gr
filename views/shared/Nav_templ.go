@@ -35,7 +35,7 @@ func Nav() templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><!-- Mobile menu, show/hide based on menu state. --><div class=\"sm:hidden hidden\" id=\"mobile-menu-container\" role=\"menu\"><div class=\"space-y-1 pb-4 pt-2\"><a href=\"/#hero\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">Inicio</a> <a href=\"/#why\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">Porque?</a> <a href=\"/#volunteers\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">Voluntarios</a> ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><!-- Mobile menu, show/hide based on menu state. --><div id=\"mobile-menu-container\" class=\"hidden bg-white absolute w-full z-50\" role=\"menu\"><div class=\"space-y-1 pb-4 pt-2\"><a href=\"/#hero\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">Inicio</a> <a href=\"/#why\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">Porque?</a> <a href=\"/#volunteers\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">Voluntarios</a> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

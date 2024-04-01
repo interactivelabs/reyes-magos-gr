@@ -12,7 +12,7 @@ templ Base() {
 			<title>D&L Toys</title>
 			<link rel="preconnect" href="https://fonts.googleapis.com"/>
 			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-			<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Metrophobic&display=swap" rel="stylesheet"/>
+			<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Metrophobic&display=optional" rel="stylesheet"/>
 			<link rel="icon" type="image/x-icon" href="/public/img/favicon.ico"/>
 			<link rel="stylesheet" href="/public/css/main.css"/>
 		</head>
@@ -23,9 +23,7 @@ templ Base() {
 			</main>
 			@shared.Footer()
 		</body>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js" defer></script>
-		<script type="module" src="/public/js/app.js" defer></script>
+		<script src="https://unpkg.com/htmx.org@1.9.11" fetchpriority="high"></script>
+		<script type="module" src="/public/js/dist/app.js" defer></script>
 	</html>
 }

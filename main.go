@@ -100,7 +100,7 @@ func main() {
 
 	e.GET("/redeem/:toy_id", redeemToyHandler.RedeemToyViewHandler)
 
-	e.GET("/redeem_multiple", redeemMultipleHandler.RedeemMultipleViewHandler)
+	e.GET("/redeem/multiple", redeemMultipleHandler.RedeemMultipleViewHandler)
 
 	e.POST("/orders/create", ordersHandler.CreateOrderViewHandler)
 

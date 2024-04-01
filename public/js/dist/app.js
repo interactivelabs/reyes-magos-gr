@@ -1,4 +1,16 @@
-// public/js/nav.ts
+// public/js/src/shared/nav.ustils.ts
+var closeIfOutsideClick = ({
+  element,
+  elementButton,
+  event
+}) => {
+  const isClickInside = element.contains(event.target) || element === event.target || elementButton.contains(event.target) || elementButton === event.target;
+  if (!isClickInside) {
+    element.classList.add("hidden");
+  }
+};
+
+// public/js/src/app/nav.ts
 function initNav() {
   const mobileMenuContainer = document.getElementById("mobile-menu-container");
   const mobileMenuButton = document.getElementById("mobile-menu-button");
@@ -8,7 +20,8 @@ function initNav() {
   const mobileMenuButtonIconOpen = document.getElementById(
     "mobile-menu-button-icon-open"
   );
-  const toggleMobileMenu = () => {
+  const toggleMobileMenu = (evt) => {
+    evt.stopPropagation();
     if (!mobileMenuContainer)
       return;
     if (mobileMenuContainer.classList.contains("hidden")) {
@@ -21,37 +34,8 @@ function initNav() {
     mobileMenuButtonIconOpen?.classList.toggle("hidden");
   };
   mobileMenuButton?.addEventListener("click", toggleMobileMenu);
-  const adminMenuDropdown = document.getElementById("admin-menu-dropdown");
-  const adminMenuButton = document.getElementById("admin-menu-button");
-  const toggleAdminMenu = () => {
-    if (!adminMenuDropdown)
-      return;
-    if (adminMenuDropdown.classList.contains("hidden")) {
-      adminMenuDropdown.setAttribute("open", "true");
-    } else {
-      adminMenuDropdown.removeAttribute("open");
-    }
-    adminMenuDropdown.classList.toggle("hidden");
-  };
-  adminMenuButton?.addEventListener("click", toggleAdminMenu);
-  const closeIfOutsideClick = ({
-    element,
-    elementButton,
-    event
-  }) => {
-    const isClickInside = element.contains(event.currentTarget) || elementButton.contains(event.currentTarget);
-    if (!isClickInside) {
-      element.classList.add("hidden");
-    }
-  };
   document.addEventListener("click", (event) => {
-    if (adminMenuDropdown && adminMenuButton) {
-      closeIfOutsideClick({
-        element: adminMenuDropdown,
-        elementButton: adminMenuButton,
-        event
-      });
-    }
+    event.stopPropagation();
     if (mobileMenuContainer && mobileMenuButton) {
       closeIfOutsideClick({
         element: mobileMenuContainer,
@@ -62,6 +46,6 @@ function initNav() {
   });
 }
 
-// public/js/app.ts
+// public/js/src/app.ts
 initNav();
 //# sourceMappingURL=app.js.map

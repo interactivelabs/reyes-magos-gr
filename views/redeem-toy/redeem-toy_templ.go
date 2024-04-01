@@ -33,7 +33,7 @@ func RedeemToy(toy model.Toy) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8\"><h1 class=\"text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl\">El juguete que escojiste</h1><form class=\"mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16\" method=\"post\" action=\"/orders/create\"><section aria-labelledby=\"cart-heading\" class=\"lg:col-span-7\"><h2 id=\"cart-heading\" class=\"sr-only\">Juguetes en tu carrito</h2><ul role=\"list\" class=\"divide-y divide-gray-200 border-b border-t border-gray-200\"><li class=\"flex py-6 sm:py-10\"><div class=\"flex-shrink-0\"><img src=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8\"><h1 class=\"text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl\">El juguete que escojiste</h1><div class=\"mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16\"><section aria-labelledby=\"cart-heading\" class=\"lg:col-span-7\"><h2 id=\"cart-heading\" class=\"sr-only\">Juguetes en tu carrito</h2><ul role=\"list\" class=\"divide-y divide-gray-200 border-b border-t border-gray-200\"><li class=\"flex py-6 sm:py-10\"><div class=\"flex-shrink-0\"><img src=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -85,20 +85,20 @@ func RedeemToy(toy model.Toy) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p></div></div><div class=\"mt-4 sm:mt-0 sm:pr-9\"><div class=\"absolute right-0 top-0\"><button type=\"button\" class=\"-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500\" onclick=\"history.back()\"><span class=\"sr-only\">Remove</span> <svg class=\"h-5 w-5\" viewBox=\"0 0 20 20\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z\"></path></svg></button></div></div></div><div class=\"mt-4 flex space-x-2 text-sm text-gray-700\"><svg class=\"h-5 w-5 flex-shrink-0 text-green-500\" viewBox=\"0 0 20 20\" fill=\"currentColor\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z\" clip-rule=\"evenodd\"></path></svg> <span>Disponible</span></div></div></li></ul></section><section aria-labelledby=\"summary-heading\" class=\"mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8\"><label class=\"text-lg leading-6 font-medium text-gray-900\">Codigo</label><div class=\"mt-2\"><input id=\"code\" type=\"code\" name=\"code\" class=\"block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:text-brand-orange sm:text-sm sm:leading-6\" pattern=\"[A-Z1-9]+\" placeholder=\"A1B2C3\" onkeyup=\"this.value = this.value.toUpperCase();\"> <input type=\"hidden\" name=\"toy_id\" value=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p></div></div><div class=\"mt-4 sm:mt-0 sm:pr-9\"><div class=\"absolute right-0 top-0\"><button type=\"button\" class=\"-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500\" onclick=\"history.back()\"><span class=\"sr-only\">Remove</span> <svg class=\"h-5 w-5\" viewBox=\"0 0 20 20\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z\"></path></svg></button></div></div></div><div class=\"mt-4 flex space-x-2 text-sm text-gray-700\"><svg class=\"h-5 w-5 flex-shrink-0 text-green-500\" viewBox=\"0 0 20 20\" fill=\"currentColor\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z\" clip-rule=\"evenodd\"></path></svg> <span>Disponible</span></div></div></li></ul></section><section aria-labelledby=\"summary-heading\" class=\"mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8\"><form hx-post=\"/orders/create\" hx-target=\"this\" hx-swap=\"outerHTML\"><label class=\"text-lg leading-6 font-medium text-gray-900\">Codigo</label><div class=\"mt-2\"><input id=\"code\" type=\"code\" name=\"code\" class=\"block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:text-brand-orange sm:text-sm sm:leading-6\" pattern=\"[A-Z1-9]+\" placeholder=\"A1B2C3\" onkeyup=\"this.value = this.value.toUpperCase();\"> <input type=\"hidden\" name=\"toy_id\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(toy.ToyID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 64, Col: 70}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 65, Col: 71}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"mt-6\"><button type=\"submit\" class=\"rounded-full border-2 border-brand-orange bg-brand-orange px-5 py-4 text-sm font-semibold text-white shadow-sm hover:bg-transparent hover:text-brand-orange\">Ordernar Juguete</button></div></section></form></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"mt-6\"><button type=\"submit\" class=\"rounded-full border-2 border-brand-orange bg-brand-orange px-5 py-4 text-sm font-semibold text-white shadow-sm hover:bg-transparent hover:text-brand-orange\">Ordernar Juguete</button></div></form></section></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

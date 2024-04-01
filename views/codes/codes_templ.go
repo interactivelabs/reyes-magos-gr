@@ -230,7 +230,7 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table><div class=\"flex justify-center py-6\"><button type=\"submit\" class=\"inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none\">Remove</button></div></form></div></div></div></div><script type=\"module\" src=\"/public/js/admin.js\"></script>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table><div class=\"flex justify-center py-6\"><button type=\"submit\" class=\"inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none\">Remove</button></div></form></div></div></div></div><script type=\"module\" src=\"/public/js/dist/admin.js\"></script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
