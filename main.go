@@ -40,9 +40,9 @@ func main() {
 		DB: db,
 	}
 
-	// ordersRepository := repository.OrdersRepository{
-	// 	DB: db,
-	// }
+	ordersRepository := repository.OrdersRepository{
+		DB: db,
+	}
 
 	volunteersCodesRepository := repository.VolunteerCodesRepository{
 		DB: db,
@@ -58,18 +58,14 @@ func main() {
 	}
 
 	// CREATE HANDLERS INSTANCES
-	homeHandler := handlers.HomeHandler{}
-
-	toyHandler := api.ToyHandler{
-		ToysRepository: toysRepository,
-	}
-
-	volunteerHandler := api.VolunteerHandler{
-		VolunteersRepository: volunteersRepository,
-	}
-
 	codeHandler := api.CodeHandler{
 		CodesService: codesService,
+	}
+
+	homeHandler := handlers.HomeHandler{}
+
+	ordersHandler := handlers.OrdersHandler{
+		OrdersRepository: ordersRepository,
 	}
 
 	redeemHandler := handlers.RedeemHandler{
@@ -82,7 +78,15 @@ func main() {
 
 	redeemMultipleHandler := handlers.RedeemMultipleHandler{}
 
-	// HTML VIEWS
+	toyHandler := api.ToyHandler{
+		ToysRepository: toysRepository,
+	}
+
+	volunteerHandler := api.VolunteerHandler{
+		VolunteersRepository: volunteersRepository,
+	}
+
+	// PUBLIC API AND HTML ENDPOINTS
 	codesHTMLHandler := handlers.CodesHandler{
 		CodesRepository:          codesRepository,
 		VolunteersRepository:     volunteersRepository,
@@ -98,22 +102,24 @@ func main() {
 
 	e.GET("/redeem_multiple", redeemMultipleHandler.RedeemMultipleViewHandler)
 
+	e.POST("/orders/create", ordersHandler.CreateOrderViewHandler)
+
 	// Login route
 	loginHandler := api.LoginHandler{}
 	e.POST("/login", loginHandler.UserLoginHandler)
 
+	// Serve static files (css, js, images)
 	e.Static("/public", "public")
-
-	// PUBLIC API ENDPOINTS
 
 	// API ADMIN ENDPOINTS
 	r := e.Group("/admin")
 	// Configure middleware with the custom claims type
+	apiSecret := os.Getenv("REYES_API_SECRET")
 	config := echojwt.Config{
 		NewClaimsFunc: func(_ echo.Context) jwt.Claims {
 			return new(api.JwtCustomClaims)
 		},
-		SigningKey: []byte("secret"),
+		SigningKey: []byte(apiSecret),
 	}
 	r.Use(echojwt.WithConfig(config))
 
