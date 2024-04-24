@@ -49,9 +49,13 @@ func (r VolunteersRepository) DeleteVolunteer(volunteerID int64) error {
 	return nil
 }
 
-func scanVolunteer(row *sql.Row) (model.Volunteer, error) {
+type scanner interface {
+	Scan(dest ...interface{}) error
+}
+
+func scanVolunteer(s scanner) (model.Volunteer, error) {
 	var volunteer model.Volunteer
-	err := row.Scan(
+	err := s.Scan(
 		&volunteer.VolunteerID,
 		&volunteer.Name,
 		&volunteer.Email,
@@ -67,6 +71,7 @@ func scanVolunteer(row *sql.Row) (model.Volunteer, error) {
 		&volunteer.Passcode,
 		&volunteer.Deleted,
 	)
+
 	if err != nil {
 		return volunteer, err
 	}
