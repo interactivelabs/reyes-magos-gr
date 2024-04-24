@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"reyes-magos-gr/db/model"
+	utils "reyes-magos-gr/db/repository/utils"
 )
 
 type OrdersRepository struct {
@@ -10,12 +11,12 @@ type OrdersRepository struct {
 }
 
 func (r OrdersRepository) CreateOrder(order model.Order) (int64, error) {
-	queryStr, params, err := buildInsertQuery(order, "orders")
+	queryStr, params, err := utils.BuildInsertQuery(order, "orders")
 	if err != nil {
 		return 0, err
 	}
 
-	res, err := executeQuery(r.DB, queryStr, params...)
+	res, err := utils.ExecuteQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return 0, err
 	}
@@ -23,12 +24,12 @@ func (r OrdersRepository) CreateOrder(order model.Order) (int64, error) {
 }
 
 func (r OrdersRepository) UpdateOrder(order model.Order) error {
-	queryStr, params, err := buildUpdateQuery(order, "orders", "order_id")
+	queryStr, params, err := utils.BuildUpdateQuery(order, "orders", "order_id")
 	if err != nil {
 		return err
 	}
 
-	_, err = executeQuery(r.DB, queryStr, params...)
+	_, err = utils.ExecuteQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return err
 	}
@@ -36,12 +37,12 @@ func (r OrdersRepository) UpdateOrder(order model.Order) error {
 }
 
 func (r OrdersRepository) DeleteOrder(orderID int64) error {
-	queryStr, params, err := buildDeleteQuery(orderID, "orders", "order_id")
+	queryStr, params, err := utils.BuildDeleteQuery(orderID, "orders", "order_id")
 	if err != nil {
 		return err
 	}
 
-	_, err = executeQuery(r.DB, queryStr, params...)
+	_, err = utils.ExecuteQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return err
 	}

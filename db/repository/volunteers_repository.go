@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"reyes-magos-gr/db/model"
+	utils "reyes-magos-gr/db/repository/utils"
 )
 
 type VolunteersRepository struct {
@@ -10,12 +11,12 @@ type VolunteersRepository struct {
 }
 
 func (r VolunteersRepository) CreateVolunteer(volunteer model.Volunteer) (int64, error) {
-	queryStr, params, err := buildInsertQuery(volunteer, "volunteers")
+	queryStr, params, err := utils.BuildInsertQuery(volunteer, "volunteers")
 	if err != nil {
 		return 0, err
 	}
 
-	res, err := executeQuery(r.DB, queryStr, params...)
+	res, err := utils.ExecuteQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return 0, err
 	}
@@ -23,12 +24,12 @@ func (r VolunteersRepository) CreateVolunteer(volunteer model.Volunteer) (int64,
 }
 
 func (r VolunteersRepository) UpdateVolunteer(volunteer model.Volunteer) error {
-	queryStr, params, err := buildUpdateQuery(volunteer, "volunteers", "volunteer_id")
+	queryStr, params, err := utils.BuildUpdateQuery(volunteer, "volunteers", "volunteer_id")
 	if err != nil {
 		return err
 	}
 
-	_, err = executeQuery(r.DB, queryStr, params...)
+	_, err = utils.ExecuteQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return err
 	}
@@ -36,26 +37,19 @@ func (r VolunteersRepository) UpdateVolunteer(volunteer model.Volunteer) error {
 }
 
 func (r VolunteersRepository) DeleteVolunteer(volunteerID int64) error {
-	queryStr, params, err := buildDeleteQuery(volunteerID, "volunteers", "volunteer_id")
+	queryStr, params, err := utils.BuildDeleteQuery(volunteerID, "volunteers", "volunteer_id")
 	if err != nil {
 		return err
 	}
 
-	_, err = executeQuery(r.DB, queryStr, params...)
+	_, err = utils.ExecuteQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (model.Volunteer, error) {
-	queryStr := `
-		SELECT volunteer_id, name, email, COALESCE(phone, ''), address, COALESCE(address2, ''), country, state, city, COALESCE(province, ''), zip_code, secret, passcode, deleted
-		FROM volunteers
-		WHERE deleted = 0 AND volunteer_id = ?
-	`
-	row := r.DB.QueryRow(queryStr, volunteerID)
-
+func scanVolunteer(row *sql.Row) (model.Volunteer, error) {
 	var volunteer model.Volunteer
 	err := row.Scan(
 		&volunteer.VolunteerID,
@@ -80,6 +74,17 @@ func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (model.Volunte
 	return volunteer, nil
 }
 
+func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (model.Volunteer, error) {
+	queryStr := `
+		SELECT volunteer_id, name, email, COALESCE(phone, ''), address, COALESCE(address2, ''), country, state, city, COALESCE(province, ''), zip_code, secret, passcode, deleted
+		FROM volunteers
+		WHERE deleted = 0 AND volunteer_id = ?
+	`
+	row := r.DB.QueryRow(queryStr, volunteerID)
+
+	return scanVolunteer(row)
+}
+
 func (r VolunteersRepository) GetActiveVolunteers() ([]model.Volunteer, error) {
 	queryStr := `
 		SELECT volunteer_id, name, email, COALESCE(phone, ''), address, COALESCE(address2, ''), country, state, city, COALESCE(province, ''), zip_code, secret, passcode, deleted
@@ -94,23 +99,7 @@ func (r VolunteersRepository) GetActiveVolunteers() ([]model.Volunteer, error) {
 
 	var volunteers []model.Volunteer
 	for rows.Next() {
-		var volunteer model.Volunteer
-		err := rows.Scan(
-			&volunteer.VolunteerID,
-			&volunteer.Name,
-			&volunteer.Email,
-			&volunteer.Phone,
-			&volunteer.Address,
-			&volunteer.Address2,
-			&volunteer.Country,
-			&volunteer.State,
-			&volunteer.City,
-			&volunteer.Province,
-			&volunteer.ZipCode,
-			&volunteer.Secret,
-			&volunteer.Passcode,
-			&volunteer.Deleted,
-		)
+		volunteer, err := scanVolunteer(rows)
 		if err != nil {
 			return nil, err
 		}

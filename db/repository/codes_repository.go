@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"reyes-magos-gr/db/model"
+	utils "reyes-magos-gr/db/repository/utils"
 )
 
 type CodesRepository struct {
@@ -10,12 +11,12 @@ type CodesRepository struct {
 }
 
 func (r CodesRepository) CreateCode(code model.Code) (int64, model.Code, error) {
-	queryStr, params, err := buildInsertQuery(code, "codes")
+	queryStr, params, err := utils.BuildInsertQuery(code, "codes")
 	if err != nil {
 		return 0, model.Code{}, err
 	}
 
-	res, err := executeQuery(r.DB, queryStr, params...)
+	res, err := utils.ExecuteQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return 0, model.Code{}, err
 	}
@@ -35,12 +36,12 @@ func (r CodesRepository) CreateCode(code model.Code) (int64, model.Code, error) 
 }
 
 func (r CodesRepository) UpdateCode(code model.Code) error {
-	queryStr, params, err := buildUpdateQuery(code, "codes", "code_id")
+	queryStr, params, err := utils.BuildUpdateQuery(code, "codes", "code_id")
 	if err != nil {
 		return err
 	}
 
-	_, err = executeQuery(r.DB, queryStr, params...)
+	_, err = utils.ExecuteQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return err
 	}
@@ -48,12 +49,12 @@ func (r CodesRepository) UpdateCode(code model.Code) error {
 }
 
 func (r CodesRepository) DeleteCode(codeID int64) error {
-	queryStr, params, err := buildDeleteQuery(codeID, "codes", "code_id")
+	queryStr, params, err := utils.BuildDeleteQuery(codeID, "codes", "code_id")
 	if err != nil {
 		return err
 	}
 
-	_, err = executeQuery(r.DB, queryStr, params...)
+	_, err = utils.ExecuteQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return err
 	}
