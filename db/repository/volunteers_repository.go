@@ -53,7 +53,7 @@ type scanner interface {
 	Scan(dest ...interface{}) error
 }
 
-func scanVolunteer(s scanner) (model.Volunteer, error) {
+func scanAllVolunteer(s scanner) (model.Volunteer, error) {
 	var volunteer model.Volunteer
 	err := s.Scan(
 		&volunteer.VolunteerID,
@@ -87,7 +87,7 @@ func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (model.Volunte
 	`
 	row := r.DB.QueryRow(queryStr, volunteerID)
 
-	return scanVolunteer(row)
+	return scanAllVolunteer(row)
 }
 
 func (r VolunteersRepository) GetActiveVolunteers() ([]model.Volunteer, error) {
@@ -104,7 +104,7 @@ func (r VolunteersRepository) GetActiveVolunteers() ([]model.Volunteer, error) {
 
 	var volunteers []model.Volunteer
 	for rows.Next() {
-		volunteer, err := scanVolunteer(rows)
+		volunteer, err := scanAllVolunteer(rows)
 		if err != nil {
 			return nil, err
 		}
