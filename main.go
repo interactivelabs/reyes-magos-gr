@@ -44,7 +44,7 @@ func main() {
 		DB: db,
 	}
 
-	volunteersCodesRepository := repository.VolunteerCodesRepository{
+	volunteerCodesRepository := repository.VolunteerCodesRepository{
 		DB: db,
 	}
 
@@ -57,6 +57,12 @@ func main() {
 		CodesRepository: codesRepository,
 	}
 
+	orderService := services.OrdersService{
+		CodesRepository:          codesRepository,
+		OrdersRepository:         ordersRepository,
+		VolunteerCodesRepository: volunteerCodesRepository,
+	}
+
 	// CREATE HANDLERS INSTANCES
 	codeHandler := api.CodeHandler{
 		CodesService: codesService,
@@ -65,10 +71,11 @@ func main() {
 	homeHandler := handlers.HomeHandler{}
 
 	ordersHandler := handlers.OrdersHandler{
-		OrdersRepository: ordersRepository,
+		OrdersService:        orderService,
+		VolunteersRepository: volunteersRepository,
 	}
 
-	redeemHandler := handlers.RedeemHandler{
+	catalogHandler := handlers.CatalogHandler{
 		ToysRepository: toysRepository,
 	}
 
@@ -90,13 +97,13 @@ func main() {
 	codesHTMLHandler := handlers.CodesHandler{
 		CodesRepository:          codesRepository,
 		VolunteersRepository:     volunteersRepository,
-		VolunteerCodesRepository: volunteersCodesRepository,
+		VolunteerCodesRepository: volunteerCodesRepository,
 		CodesService:             codesService,
 	}
 
 	e.GET("/", homeHandler.HomeViewHandler)
 
-	e.GET("/redeem", redeemHandler.RedeemViewHandler)
+	e.GET("/catalog", catalogHandler.CatalogViewHandler)
 
 	e.GET("/redeem/:toy_id", redeemToyHandler.RedeemToyViewHandler)
 

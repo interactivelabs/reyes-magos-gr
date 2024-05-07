@@ -25,7 +25,7 @@ func Footer() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<footer class=\"bg-footer-texture text-white\"><div class=\"mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8\"><nav class=\"-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12\" aria-label=\"Footer\"><div class=\"pb-6\"><a href=\"/#hero\" class=\"text-sm leading-6\">Inicio</a></div><div class=\"pb-6\"><a href=\"/#why\" class=\"text-sm leading-6\">Porque?</a></div><div class=\"pb-6\"><a href=\"/#volunteers\" class=\"text-sm leading-6\">Voluntarios</a></div><div class=\"pb-6\"><a href=\"/redeem_multiple\" class=\"text-sm leading-6\">Juguetes</a></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<footer class=\"bg-footer-texture text-white\"><div class=\"mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8\"><nav class=\"-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12\" aria-label=\"Footer\"><div class=\"pb-6\"><a href=\"/#hero\" class=\"text-sm leading-6\">Inicio</a></div><div class=\"pb-6\"><a href=\"/#why\" class=\"text-sm leading-6\">Porque?</a></div><div class=\"pb-6\"><a href=\"/#volunteers\" class=\"text-sm leading-6\">Voluntarios</a></div><div class=\"pb-6\"><a href=\"/catalog\" class=\"text-sm leading-6\">Juguetes</a></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

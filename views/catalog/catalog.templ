@@ -4,9 +4,9 @@ import "reyes-magos-gr/db/model"
 import "reyes-magos-gr/views"
 import "fmt"
 
-templ Redeem(toys []model.Toy) {
+templ Catalog(toys []model.Toy) {
 	@layout.Base() {
-		<section id="redeem" class="relative isolate px-6 py-20 lg:px-8">
+		<section id="catalog" class="relative isolate px-6 py-20 lg:px-8">
 			<h1 class="text-4xl font-display font-bold tracking-tight text-center">Escoje un juguete</h1>
 			<div class="py-8 grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8">
 				for _, toy := range toys {

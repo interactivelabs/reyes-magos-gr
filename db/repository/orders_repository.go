@@ -48,3 +48,31 @@ func (r OrdersRepository) DeleteOrder(orderID int64) error {
 	}
 	return nil
 }
+
+func (r OrdersRepository) GetOrderByID(orderID int64) (model.Order, error) {
+	row := r.DB.QueryRow(`
+		SELECT *
+		FROM orders
+		WHERE order_id = ?
+	`, orderID)
+	return scanAllOrder(row)
+}
+
+type OrderScanner interface {
+	Scan(dest ...interface{}) error
+}
+
+func scanAllOrder(s OrderScanner) (model.Order, error) {
+	var order model.Order
+	err := s.Scan(
+		&order.OrderID,
+		&order.ToyID,
+		&order.VolunteerID,
+		&order.CodeID,
+		&order.OrderDate,
+		&order.Shipped,
+		&order.ShippedDate,
+		&order.Deleted,
+	)
+	return order, err
+}

@@ -66,12 +66,21 @@ func (r CodesRepository) DeleteCode(codeID int64) error {
 	return nil
 }
 
-func (r CodesRepository) GetCode(codeID int64) (model.Code, error) {
+func (r CodesRepository) GetCodeByID(codeID int64) (model.Code, error) {
 	var row = r.DB.QueryRow(`
 		SELECT *
 		FROM codes
-		WHERE code_id = ?
+		WHERE code_id = ? AND deleted = 0 AND cancelled = 0;
 	`, codeID)
+	return scanAllCode(row)
+}
+
+func (r CodesRepository) GetCode(code string) (model.Code, error) {
+	var row = r.DB.QueryRow(`
+		SELECT *
+		FROM codes
+		WHERE code = ? AND deleted = 0 AND cancelled = 0;
+	`, code)
 	return scanAllCode(row)
 }
 
@@ -103,7 +112,7 @@ func (r CodesRepository) GetActiveCodes() ([]model.Code, error) {
 
 func (r CodesRepository) GetUnassignedCodes() ([]model.Code, error) {
 	rows, err := r.DB.Query(`
-		SELECT *
+		SELECT codes.*
 		FROM codes
 		LEFT JOIN volunteer_codes ON codes.code_id = volunteer_codes.code_id
 		WHERE

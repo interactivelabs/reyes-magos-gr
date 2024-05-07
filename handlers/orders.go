@@ -4,18 +4,20 @@ import (
 	"net/http"
 	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
+	"reyes-magos-gr/services"
 	orders "reyes-magos-gr/views/orders"
 
 	"github.com/labstack/echo/v4"
 )
 
 type OrdersHandler struct {
-	OrdersRepository repository.OrdersRepository
+	OrdersService        services.OrdersService
+	VolunteersRepository repository.VolunteersRepository
 }
 
 type CreateOrderRequest struct {
-	ToyID int64 `form:"toy_id" validate:"required"`
-	Code  int64 `form:"code" validate:"required"`
+	ToyID int64  `form:"toy_id" validate:"required"`
+	Code  string `form:"code" validate:"required"`
 }
 
 func (h OrdersHandler) CreateOrderViewHandler(ctx echo.Context) error {
@@ -27,10 +29,15 @@ func (h OrdersHandler) CreateOrderViewHandler(ctx echo.Context) error {
 		return err
 	}
 
-	// toys, err := h.OrdersRepository.GetOrders()
-	// if err != nil {
-	// 	return echo.NewHTTPError(500, err.Error())
-	// }
+	order, err := h.OrdersService.CreateOrder(acr.ToyID, acr.Code)
+	if err != nil {
+		return echo.NewHTTPError(500, err.Error())
+	}
 
-	return lib.Render(ctx, orders.CreateOrder())
+	volunteer, err := h.VolunteersRepository.GetVolunteerByID(order.VolunteerID)
+	if err != nil {
+		return echo.NewHTTPError(500, err.Error())
+	}
+
+	return lib.Render(ctx, orders.CreateOrder(volunteer.Name))
 }

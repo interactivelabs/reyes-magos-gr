@@ -3,20 +3,20 @@ package handlers
 import (
 	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
-	redeem "reyes-magos-gr/views/redeem"
+	catalog "reyes-magos-gr/views/catalog"
 
 	"github.com/labstack/echo/v4"
 )
 
-type RedeemHandler struct {
+type CatalogHandler struct {
 	ToysRepository repository.ToysRepository
 }
 
-func (h RedeemHandler) RedeemViewHandler(ctx echo.Context) error {
+func (h CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
 	toys, err := h.ToysRepository.GetToys()
 	if err != nil {
 		return echo.NewHTTPError(500, err.Error())
 	}
 
-	return lib.Render(ctx, redeem.Redeem(toys))
+	return lib.Render(ctx, catalog.Catalog(toys))
 }

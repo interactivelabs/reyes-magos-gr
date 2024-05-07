@@ -34,6 +34,7 @@ templ Nav() {
 							<a href="/#hero" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium hover:border-gray-300">Inicio</a>
 							<a href="/#why" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium hover:border-gray-300">Porque?</a>
 							<a href="/#volunteers" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium hover:border-gray-300">Voluntarios</a>
+							<a href="/catalog" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium hover:border-gray-300">Juguetes</a>
 						</div>
 					</div>
 					if lib.GetIsAdmin(ctx) {
@@ -72,6 +73,7 @@ templ Nav() {
 					<a href="/#hero" class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50" role="menuitem">Inicio</a>
 					<a href="/#why" class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50" role="menuitem">Porque?</a>
 					<a href="/#volunteers" class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50" role="menuitem">Voluntarios</a>
+					<a href="/catalog" class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50" role="menuitem">Juguetes</a>
 					if lib.GetIsAdmin(ctx) {
 						<div class="relative">
 							<div class="absolute inset-0 flex items-center" aria-hidden="true">

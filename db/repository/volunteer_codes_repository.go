@@ -99,3 +99,16 @@ func (r VolunteerCodesRepository) GetAllVolunteersCodes() ([]model.VolunteerCode
 	}
 	return volunteerCodes, nil
 }
+
+func (r VolunteerCodesRepository) GetVolunteerIdByCodeId(codeID int64) (int64, error) {
+	var volunteerID int64
+	err := r.DB.QueryRow(`
+		SELECT volunteer_id
+		FROM volunteer_codes
+		WHERE code_id = ? AND deleted = 0;
+	`, codeID).Scan(&volunteerID)
+	if err != nil {
+		return 0, err
+	}
+	return volunteerID, nil
+}
