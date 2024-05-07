@@ -49,11 +49,62 @@ func (r VolunteersRepository) DeleteVolunteer(volunteerID int64) error {
 	return nil
 }
 
-type scanner interface {
+func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (model.Volunteer, error) {
+	row := r.DB.QueryRow(`
+		SELECT `+volunteer_all_fields+`
+		FROM volunteers
+		WHERE deleted = 0 AND volunteer_id = ?
+	`, volunteerID)
+
+	return scanAllVolunteer(row)
+}
+
+func (r VolunteersRepository) GetActiveVolunteers() ([]model.Volunteer, error) {
+	rows, err := r.DB.Query(`
+		SELECT ` + volunteer_all_fields + `
+		FROM volunteers
+		WHERE deleted = 0`)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
+
+	var volunteers []model.Volunteer
+	for rows.Next() {
+		volunteer, err := scanAllVolunteer(rows)
+		if err != nil {
+			return nil, err
+		}
+		volunteers = append(volunteers, volunteer)
+	}
+
+	return volunteers, nil
+}
+
+const volunteer_all_fields string = `
+	volunteer_id,
+	name,
+	email,
+	COALESCE(phone, ''),
+	address,
+	COALESCE(address2, ''),
+	country,
+	state,
+	city,
+	COALESCE(province, ''),
+	zip_code,
+	secret,
+	passcode,
+	deleted`
+
+type VolunteerScanner interface {
 	Scan(dest ...interface{}) error
 }
 
-func scanAllVolunteer(s scanner) (model.Volunteer, error) {
+func scanAllVolunteer(s VolunteerScanner) (model.Volunteer, error) {
 	var volunteer model.Volunteer
 	err := s.Scan(
 		&volunteer.VolunteerID,
@@ -77,39 +128,4 @@ func scanAllVolunteer(s scanner) (model.Volunteer, error) {
 	}
 
 	return volunteer, nil
-}
-
-func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (model.Volunteer, error) {
-	queryStr := `
-		SELECT volunteer_id, name, email, COALESCE(phone, ''), address, COALESCE(address2, ''), country, state, city, COALESCE(province, ''), zip_code, secret, passcode, deleted
-		FROM volunteers
-		WHERE deleted = 0 AND volunteer_id = ?
-	`
-	row := r.DB.QueryRow(queryStr, volunteerID)
-
-	return scanAllVolunteer(row)
-}
-
-func (r VolunteersRepository) GetActiveVolunteers() ([]model.Volunteer, error) {
-	queryStr := `
-		SELECT volunteer_id, name, email, COALESCE(phone, ''), address, COALESCE(address2, ''), country, state, city, COALESCE(province, ''), zip_code, secret, passcode, deleted
-		FROM volunteers
-		WHERE deleted = 0
-	`
-
-	rows, err := r.DB.Query(queryStr)
-	if err != nil {
-		return nil, err
-	}
-
-	var volunteers []model.Volunteer
-	for rows.Next() {
-		volunteer, err := scanAllVolunteer(rows)
-		if err != nil {
-			return nil, err
-		}
-		volunteers = append(volunteers, volunteer)
-	}
-
-	return volunteers, nil
 }

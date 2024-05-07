@@ -53,18 +53,22 @@ func (r VolunteerCodesRepository) GetAllVolunteersCodes() ([]model.VolunteerCode
 	rows, err := r.DB.Query(`
 		SELECT 
 			volunteer_code_id,
-			codes.code_id, codes.code, codes.expiration,
-    	volunteers.volunteer_id, name, email
+			codes.code_id,
+			codes.code,
+			codes.expiration,
+    	volunteers.volunteer_id,
+			name,
+			email
 		FROM codes
 		INNER JOIN volunteer_codes ON codes.code_id = volunteer_codes.code_id
 		INNER JOIN volunteers ON volunteer_codes.volunteer_id = volunteers.volunteer_id
-		WHERE codes.used = 0 AND codes.cancelled = 0 AND codes.deleted = 0 AND date(codes.expiration) > date('now')
-		AND volunteer_codes.deleted = 0 AND volunteers.deleted = 0;
-	`)
-
+		WHERE
+			codes.used = 0 AND codes.cancelled = 0 AND codes.deleted = 0 AND date(codes.expiration) > date('now')
+			AND volunteer_codes.deleted = 0 AND volunteers.deleted = 0;`)
 	if err != nil {
 		return nil, err
 	}
+
 	defer func(rows *sql.Rows) {
 		_ = rows.Close()
 	}(rows)
@@ -74,7 +78,16 @@ func (r VolunteerCodesRepository) GetAllVolunteersCodes() ([]model.VolunteerCode
 		var volunteerCode model.VolunteerCode
 		var volunteer model.Volunteer
 		var code model.Code
-		err := rows.Scan(&volunteerCode.VolunteerCodeID, &code.CodeID, &code.Code, &code.Expiration, &volunteer.VolunteerID, &volunteer.Name, &volunteer.Email)
+		err := rows.Scan(
+			&volunteerCode.VolunteerCodeID,
+			&code.CodeID,
+			&code.Code,
+			&code.Expiration,
+			&volunteer.VolunteerID,
+			&volunteer.Name,
+			&volunteer.Email,
+		)
+
 		if err != nil {
 			return nil, err
 		}

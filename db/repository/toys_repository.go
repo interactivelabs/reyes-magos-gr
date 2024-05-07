@@ -51,9 +51,9 @@ func (r ToysRepository) DeleteToy(toyID int64) error {
 
 func (r ToysRepository) GetToys() ([]model.Toy, error) {
 	rows, err := r.DB.Query(`
-		SELECT toy_id, toy_name, COALESCE(toy_description, ''), age_min, age_max, image1, image2, source_url, deleted
-		FROM toys WHERE deleted = 0;
-	`)
+		SELECT ` + toy_all_fields + `
+		FROM toys
+		WHERE deleted = 0;`)
 	if err != nil {
 		return nil, err
 	}
@@ -65,10 +65,11 @@ func (r ToysRepository) GetToys() ([]model.Toy, error) {
 	var toys []model.Toy
 	for rows.Next() {
 		var toy model.Toy
-		err = rows.Scan(&toy.ToyID, &toy.ToyName, &toy.ToyDescription, &toy.AgeMin, &toy.AgeMax, &toy.Image1, &toy.Image2, &toy.SourceURL, &toy.Deleted)
+		toy, err = scanAllToy(rows)
 		if err != nil {
 			return nil, err
 		}
+
 		toys = append(toys, toy)
 	}
 
@@ -77,17 +78,45 @@ func (r ToysRepository) GetToys() ([]model.Toy, error) {
 
 func (r ToysRepository) GetToyByID(toyID int64) (model.Toy, error) {
 	row := r.DB.QueryRow(`
-		SELECT toy_id, toy_name, COALESCE(toy_description, ''), age_min, age_max, image1, image2, source_url, deleted
-		FROM toys WHERE deleted = 0 AND toy_id = ?;
+		SELECT `+toy_all_fields+`
+		FROM toys
+		WHERE deleted = 0 AND toy_id = ?;
 	`, toyID)
 
-	var toy model.Toy
-
-	err := row.Scan(&toy.ToyID, &toy.ToyName, &toy.ToyDescription, &toy.AgeMin, &toy.AgeMax, &toy.Image1, &toy.Image2, &toy.SourceURL, &toy.Deleted)
-
+	toy, err := scanAllToy(row)
 	if err != nil {
 		return model.Toy{}, err
 	}
 
 	return toy, nil
+}
+
+const toy_all_fields string = `
+	toy_id,
+	toy_name,
+	COALESCE(toy_description, ''),
+	age_min,
+	age_max,
+	image1,
+	image2,
+	source_url,
+	deleted`
+
+type ToyScanner interface {
+	Scan(dest ...interface{}) error
+}
+
+func scanAllToy(s ToyScanner) (model.Toy, error) {
+	var toy model.Toy
+	err := s.Scan(
+		&toy.ToyID,
+		&toy.ToyName,
+		&toy.ToyDescription,
+		&toy.AgeMin,
+		&toy.AgeMax,
+		&toy.Image1,
+		&toy.Image2,
+		&toy.SourceURL,
+		&toy.Deleted)
+	return toy, err
 }
