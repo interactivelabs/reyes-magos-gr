@@ -1,4 +1,4 @@
-import { closeIfOutsideClick } from "../shared/nav.ustils";
+import { closeIfOutsideClick, toggleMenu } from "../shared/nav.ustils";
 
 export default function initNav() {
   const mobileMenuContainer = document.getElementById("mobile-menu-container");
@@ -10,28 +10,26 @@ export default function initNav() {
     "mobile-menu-button-icon-open"
   );
 
-  const toggleMobileMenu = (evt: MouseEvent) => {
-    evt.stopPropagation();
-    if (!mobileMenuContainer) return;
-    if (mobileMenuContainer.classList.contains("hidden")) {
-      mobileMenuContainer.setAttribute("open", "true");
-    } else {
-      mobileMenuContainer.removeAttribute("open");
-    }
-    mobileMenuContainer.classList.toggle("hidden");
+  const toggleMobileMenuButtonIcon = () => {
     mobileMenuButtonIconClosed?.classList.toggle("hidden");
     mobileMenuButtonIconOpen?.classList.toggle("hidden");
   };
 
-  mobileMenuButton?.addEventListener("click", toggleMobileMenu);
+  const toggleMobileMenu = (evt: MouseEvent) => {
+    evt.stopPropagation();
+    toggleMenu(mobileMenuContainer);
+    toggleMobileMenuButtonIcon();
+  };
 
+  mobileMenuButton?.addEventListener("click", toggleMobileMenu);
   document.addEventListener("click", (event) => {
     event.stopPropagation();
     if (mobileMenuContainer && mobileMenuButton) {
       closeIfOutsideClick({
+        event,
         element: mobileMenuContainer,
         elementButton: mobileMenuButton,
-        event: event,
+        onClose: toggleMobileMenuButtonIcon,
       });
     }
   });

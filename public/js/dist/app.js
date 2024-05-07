@@ -2,12 +2,24 @@
 var closeIfOutsideClick = ({
   element,
   elementButton,
-  event
+  event,
+  onClose
 }) => {
   const isClickInside = element.contains(event.target) || element === event.target || elementButton.contains(event.target) || elementButton === event.target;
   if (!isClickInside) {
     element.classList.add("hidden");
+    onClose && onClose();
   }
+};
+var toggleMenu = (menuContainer) => {
+  if (!menuContainer)
+    return;
+  if (menuContainer.classList.contains("hidden")) {
+    menuContainer.setAttribute("open", "true");
+  } else {
+    menuContainer.removeAttribute("open");
+  }
+  menuContainer.classList.toggle("hidden");
 };
 
 // public/js/src/app/nav.ts
@@ -20,27 +32,24 @@ function initNav() {
   const mobileMenuButtonIconOpen = document.getElementById(
     "mobile-menu-button-icon-open"
   );
-  const toggleMobileMenu = (evt) => {
-    evt.stopPropagation();
-    if (!mobileMenuContainer)
-      return;
-    if (mobileMenuContainer.classList.contains("hidden")) {
-      mobileMenuContainer.setAttribute("open", "true");
-    } else {
-      mobileMenuContainer.removeAttribute("open");
-    }
-    mobileMenuContainer.classList.toggle("hidden");
+  const toggleMobileMenuButtonIcon = () => {
     mobileMenuButtonIconClosed?.classList.toggle("hidden");
     mobileMenuButtonIconOpen?.classList.toggle("hidden");
+  };
+  const toggleMobileMenu = (evt) => {
+    evt.stopPropagation();
+    toggleMenu(mobileMenuContainer);
+    toggleMobileMenuButtonIcon();
   };
   mobileMenuButton?.addEventListener("click", toggleMobileMenu);
   document.addEventListener("click", (event) => {
     event.stopPropagation();
     if (mobileMenuContainer && mobileMenuButton) {
       closeIfOutsideClick({
+        event,
         element: mobileMenuContainer,
         elementButton: mobileMenuButton,
-        event
+        onClose: toggleMobileMenuButtonIcon
       });
     }
   });

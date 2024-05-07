@@ -2,12 +2,24 @@
 var closeIfOutsideClick = ({
   element,
   elementButton,
-  event
+  event,
+  onClose
 }) => {
   const isClickInside = element.contains(event.target) || element === event.target || elementButton.contains(event.target) || elementButton === event.target;
   if (!isClickInside) {
     element.classList.add("hidden");
+    onClose && onClose();
   }
+};
+var toggleMenu = (menuContainer) => {
+  if (!menuContainer)
+    return;
+  if (menuContainer.classList.contains("hidden")) {
+    menuContainer.setAttribute("open", "true");
+  } else {
+    menuContainer.removeAttribute("open");
+  }
+  menuContainer.classList.toggle("hidden");
 };
 
 // public/js/src/admin/admin.nav.ts
@@ -16,14 +28,7 @@ function initAdminNav() {
   const adminMenuButton = document.getElementById("admin-menu-button");
   const toggleAdminMenu = (evt) => {
     evt.stopPropagation();
-    if (!adminMenuDropdown)
-      return;
-    if (adminMenuDropdown.classList.contains("hidden")) {
-      adminMenuDropdown.setAttribute("open", "true");
-    } else {
-      adminMenuDropdown.removeAttribute("open");
-    }
-    adminMenuDropdown.classList.toggle("hidden");
+    toggleMenu(adminMenuDropdown);
   };
   adminMenuButton?.addEventListener("click", toggleAdminMenu);
   document.addEventListener("click", (event) => {

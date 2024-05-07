@@ -1,4 +1,4 @@
-import { closeIfOutsideClick } from "../shared/nav.ustils";
+import { closeIfOutsideClick, toggleMenu } from "../shared/nav.ustils";
 
 export default function initAdminNav() {
   const adminMenuDropdown = document.getElementById("admin-menu-dropdown");
@@ -6,13 +6,7 @@ export default function initAdminNav() {
 
   const toggleAdminMenu = (evt: MouseEvent) => {
     evt.stopPropagation();
-    if (!adminMenuDropdown) return;
-    if (adminMenuDropdown.classList.contains("hidden")) {
-      adminMenuDropdown.setAttribute("open", "true");
-    } else {
-      adminMenuDropdown.removeAttribute("open");
-    }
-    adminMenuDropdown.classList.toggle("hidden");
+    toggleMenu(adminMenuDropdown);
   };
 
   adminMenuButton?.addEventListener("click", toggleAdminMenu);
@@ -23,7 +17,7 @@ export default function initAdminNav() {
       closeIfOutsideClick({
         element: adminMenuDropdown,
         elementButton: adminMenuButton,
-        event: event,
+        event,
       });
     }
   });

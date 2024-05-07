@@ -1,12 +1,16 @@
+export interface ICloseIfOutsideClick {
+  element: HTMLElement;
+  elementButton: HTMLElement;
+  event: MouseEvent;
+  onClose?: () => void;
+}
+
 export const closeIfOutsideClick = ({
   element,
   elementButton,
   event,
-}: {
-  element: HTMLElement;
-  elementButton: HTMLElement;
-  event: MouseEvent;
-}) => {
+  onClose,
+}: ICloseIfOutsideClick) => {
   const isClickInside =
     element.contains(event.target as HTMLElement) ||
     element === event.target ||
@@ -14,5 +18,16 @@ export const closeIfOutsideClick = ({
     elementButton === event.target;
   if (!isClickInside) {
     element.classList.add("hidden");
+    onClose && onClose();
   }
+};
+
+export const toggleMenu = (menuContainer: HTMLElement | null) => {
+  if (!menuContainer) return;
+  if (menuContainer.classList.contains("hidden")) {
+    menuContainer.setAttribute("open", "true");
+  } else {
+    menuContainer.removeAttribute("open");
+  }
+  menuContainer.classList.toggle("hidden");
 };

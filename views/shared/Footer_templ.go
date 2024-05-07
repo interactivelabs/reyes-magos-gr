@@ -35,7 +35,7 @@ func Footer() templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</nav><p class=\"mt-10 text-center text-xs leading-5\">&copy; 2020 D&L Toys, Inc. All rights reserved.</p></div></footer>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</nav><p class=\"mt-10 text-center text-xs leading-5\">&copy; 2024 D&L Toys, Inc. All rights reserved.</p></div></footer>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
