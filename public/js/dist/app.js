@@ -12,8 +12,7 @@ var closeIfOutsideClick = ({
   }
 };
 var toggleMenu = (menuContainer) => {
-  if (!menuContainer)
-    return;
+  if (!menuContainer) return;
   if (menuContainer.classList.contains("hidden")) {
     menuContainer.setAttribute("open", "true");
   } else {
