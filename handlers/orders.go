@@ -31,12 +31,12 @@ func (h OrdersHandler) CreateOrderViewHandler(ctx echo.Context) error {
 
 	order, err := h.OrdersService.CreateOrder(acr.ToyID, acr.Code)
 	if err != nil {
-		return echo.NewHTTPError(500, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	volunteer, err := h.VolunteersRepository.GetVolunteerByID(order.VolunteerID)
 	if err != nil {
-		return echo.NewHTTPError(500, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	return lib.Render(ctx, orders.CreateOrder(volunteer.Name))

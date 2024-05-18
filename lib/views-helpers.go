@@ -2,10 +2,8 @@ package lib
 
 import (
 	"context"
-	"reyes-magos-gr/api"
 
 	"github.com/a-h/templ"
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 )
 
@@ -25,15 +23,6 @@ func IsAdmin(ctx echo.Context) bool {
 	user := ctx.Get("user")
 	if user == nil {
 		return false
-	}
-
-	token := user.(*jwt.Token)
-	if token.Claims == nil {
-		return false
-	}
-
-	if claims, ok := token.Claims.(*api.JwtCustomClaims); ok {
-		return claims.Admin
 	}
 
 	return false

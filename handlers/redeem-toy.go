@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"net/http"
 	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
 	redeem "reyes-magos-gr/views/redeem-toy"
@@ -18,7 +19,7 @@ func (h RedeemToyHandler) RedeemToyViewHandler(ctx echo.Context) error {
 	toyID, err := strconv.ParseInt(toyIDStr, 10, 64)
 	toy, err := h.ToysRepository.GetToyByID(toyID)
 	if err != nil {
-		return echo.NewHTTPError(500, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	return lib.Render(ctx, redeem.RedeemToy(toy))

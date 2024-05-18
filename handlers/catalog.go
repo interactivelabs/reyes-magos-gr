@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"net/http"
 	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
 	catalog "reyes-magos-gr/views/catalog"
@@ -15,7 +16,7 @@ type CatalogHandler struct {
 func (h CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
 	toys, err := h.ToysRepository.GetToys()
 	if err != nil {
-		return echo.NewHTTPError(500, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	return lib.Render(ctx, catalog.Catalog(toys))

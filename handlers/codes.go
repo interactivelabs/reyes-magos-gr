@@ -21,17 +21,17 @@ type CodesHandler struct {
 func (h CodesHandler) CodesViewHandler(ctx echo.Context) error {
 	activeCodes, err := h.CodesRepository.GetUnassignedCodes()
 	if err != nil {
-		return echo.NewHTTPError(500, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	activeVolunteers, err := h.VolunteersRepository.GetActiveVolunteers()
 	if err != nil {
-		return echo.NewHTTPError(500, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	allVolunteersCodes, err := h.VolunteerCodesRepository.GetAllVolunteersCodes()
 	if err != nil {
-		return echo.NewHTTPError(500, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	return lib.Render(ctx, codes.Codes(activeCodes, allVolunteersCodes, activeVolunteers))
@@ -58,7 +58,7 @@ func (h CodesHandler) AssignCodesHandler(ctx echo.Context) error {
 		}
 		_, err := h.VolunteerCodesRepository.CreateVolunteerCode(volunteerCode)
 		if err != nil {
-			return echo.NewHTTPError(500, err.Error())
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}
 	}
 
@@ -83,14 +83,14 @@ func (h CodesHandler) RemoveCodesHandler(ctx echo.Context) error {
 
 		err := h.VolunteerCodesRepository.DeleteVolunteerCode(volunteerCodeID)
 		if err != nil {
-			return echo.NewHTTPError(500, err.Error())
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}
 	}
 
 	for _, codeID := range acr.CodeIDs {
 		err := h.CodesRepository.DeleteCode(codeID)
 		if err != nil {
-			return echo.NewHTTPError(500, err.Error())
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}
 	}
 
@@ -112,8 +112,8 @@ func (h CodesHandler) CreateCodesHandler(ctx echo.Context) error {
 
 	_, err := h.CodesService.CreateCodeBatch(acr.Count)
 	if err != nil {
-		return echo.NewHTTPError(500, err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return ctx.Redirect(303, "/admin/codes")
+	return ctx.Redirect(http.StatusTemporaryRedirect, "/admin/codes")
 }
