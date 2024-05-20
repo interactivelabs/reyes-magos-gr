@@ -1,6 +1,9 @@
 package lib
 
 import (
+	"context"
+	"encoding/json"
+
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -40,12 +43,55 @@ func DeleteCookieSession(ctx echo.Context, name string) error {
 	return nil
 }
 
-func GetProfile(ctx echo.Context) (map[string]interface{}, error) {
+func GetSessionProfile(ctx echo.Context) (map[string]interface{}, error) {
 	profileSession, err := session.Get("profile", ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	profile := profileSession.Values["profile"].(map[string]interface{})
-	return profile, nil
+	profile := profileSession.Values["profile"]
+	if profile == nil {
+		return nil, nil
+	}
+
+	var profileMap map[string]interface{}
+	if err := json.Unmarshal([]byte(profile.(string)), &profileMap); err != nil {
+		return nil, err
+	}
+
+	return profileMap, nil
+}
+
+type contextKey string
+
+const (
+	profileKey contextKey = "profile"
+)
+
+type ProfileView struct {
+	IsAdmin  bool
+	nickname string
+	email    string
+	picture  string
+}
+
+func GetProfileView(ctx echo.Context) ProfileView {
+	profile := ProfileView{}
+	sessionProfile, err := GetSessionProfile(ctx)
+	if err != nil || sessionProfile == nil {
+		return profile
+	}
+
+	if sessionProfile["dl_admin"] == "true" {
+		profile.IsAdmin = true
+	}
+
+	return profile
+}
+
+func GetProfile(ctx context.Context) ProfileView {
+	if profile, ok := ctx.Value(profileKey).(ProfileView); ok {
+		return profile
+	}
+	return ProfileView{}
 }

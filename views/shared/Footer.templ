@@ -18,7 +18,7 @@ templ Footer() {
 				<div class="pb-6">
 					<a href="/catalog" class="text-sm leading-6">Juguetes</a>
 				</div>
-				if lib.GetIsAdmin(ctx) {
+				if lib.GetProfile(ctx).IsAdmin {
 					<div class="pb-6">
 						<a href="/admin/codes" class="text-sm leading-6">Codes</a>
 					</div>

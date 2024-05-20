@@ -105,29 +105,29 @@ func main() {
 	e.Static("/public", "public")
 
 	// API ADMIN ENDPOINTS
-	r := e.Group("/admin")
+	ag := e.Group("/admin")
 
-	r.Use(middleware.IsAdmin())
+	ag.Use(middleware.IsAdmin())
 
 	toyHandler := api.ToyHandler{
 		ToysRepository: toysRepository,
 	}
-	r.POST("/api/toy", toyHandler.CreateToyApiHandler)
-	r.PUT("/api/toy", toyHandler.UpdateToyApiHandler)
-	r.DELETE("/api/toy/:toy_id", toyHandler.DeleteToyApiHandler)
+	ag.POST("/api/toy", toyHandler.CreateToyApiHandler)
+	ag.PUT("/api/toy", toyHandler.UpdateToyApiHandler)
+	ag.DELETE("/api/toy/:toy_id", toyHandler.DeleteToyApiHandler)
 
 	volunteerHandler := api.VolunteerHandler{
 		VolunteersRepository: volunteersRepository,
 	}
-	r.POST("/api/volunteer", volunteerHandler.CreateVolunteerApiHandler)
-	r.PUT("/api/volunteer", volunteerHandler.UpdateVolunteerApiHandler)
-	r.DELETE("/api/volunteer/:volunteer_id", volunteerHandler.DeleteVolunteerApiHandler)
+	ag.POST("/api/volunteer", volunteerHandler.CreateVolunteerApiHandler)
+	ag.PUT("/api/volunteer", volunteerHandler.UpdateVolunteerApiHandler)
+	ag.DELETE("/api/volunteer/:volunteer_id", volunteerHandler.DeleteVolunteerApiHandler)
 
 	codeHandler := api.CodeHandler{
 		CodesService: codesService,
 	}
-	r.POST("/api/code", codeHandler.CreateCodeApiHandler)
-	r.POST("/api/code/batch", codeHandler.CreateCodeBatchApiHandler)
+	ag.POST("/api/code", codeHandler.CreateCodeApiHandler)
+	ag.POST("/api/code/batch", codeHandler.CreateCodeBatchApiHandler)
 
 	// ADMIN VIEWS
 	codesHTMLHandler := handlers.CodesHandler{
@@ -136,10 +136,10 @@ func main() {
 		VolunteerCodesRepository: volunteerCodesRepository,
 		CodesService:             codesService,
 	}
-	r.GET("/codes", codesHTMLHandler.CodesViewHandler)
-	r.POST("/codes/assign", codesHTMLHandler.AssignCodesHandler)
-	r.POST("/codes/remove", codesHTMLHandler.RemoveCodesHandler)
-	r.POST("/codes/create", codesHTMLHandler.CreateCodesHandler)
+	ag.GET("/codes", codesHTMLHandler.CodesViewHandler)
+	ag.POST("/codes/assign", codesHTMLHandler.AssignCodesHandler)
+	ag.POST("/codes/remove", codesHTMLHandler.RemoveCodesHandler)
+	ag.POST("/codes/create", codesHTMLHandler.CreateCodesHandler)
 
 	var port = "localhost:8080"
 

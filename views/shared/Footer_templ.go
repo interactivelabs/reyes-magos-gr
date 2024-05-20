@@ -29,7 +29,7 @@ func Footer() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if lib.GetIsAdmin(ctx) {
+		if lib.GetProfile(ctx).IsAdmin {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"pb-6\"><a href=\"/admin/codes\" class=\"text-sm leading-6\">Codes</a></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err

@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
 	"reyes-magos-gr/lib"
 
@@ -40,7 +40,12 @@ func (h LoginHandler) LoginCallbackHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
 	}
 
-	if err := lib.SetCookieSession(ctx, "profile", fmt.Sprint(profile)); err != nil {
+	profileJSON, err := json.Marshal(profile)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	if err := lib.SetCookieSession(ctx, "profile", string(profileJSON)); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
