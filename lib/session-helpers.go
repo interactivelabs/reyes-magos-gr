@@ -70,9 +70,9 @@ const (
 
 type ProfileView struct {
 	IsAdmin  bool
-	nickname string
-	email    string
-	picture  string
+	Nickname string
+	Email    string
+	Picture  string
 }
 
 func GetProfileView(ctx echo.Context) ProfileView {
@@ -84,6 +84,18 @@ func GetProfileView(ctx echo.Context) ProfileView {
 
 	if sessionProfile["dl_admin"] == "true" {
 		profile.IsAdmin = true
+	}
+
+	if nickname, ok := sessionProfile["nickname"].(string); ok {
+		profile.Nickname = nickname
+	}
+
+	if email, ok := sessionProfile["name"].(string); ok {
+		profile.Email = email
+	}
+
+	if picture, ok := sessionProfile["picture"].(string); ok {
+		profile.Picture = picture
 	}
 
 	return profile
