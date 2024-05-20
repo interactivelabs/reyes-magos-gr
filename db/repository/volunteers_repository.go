@@ -59,6 +59,16 @@ func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (model.Volunte
 	return scanAllVolunteer(row)
 }
 
+func (r VolunteersRepository) GetVolunteerByEmail(email string) (model.Volunteer, error) {
+	row := r.DB.QueryRow(`
+		SELECT `+volunteer_all_fields+`
+		FROM volunteers
+		WHERE deleted = 0 AND email = ?
+	`, email)
+
+	return scanAllVolunteer(row)
+}
+
 func (r VolunteersRepository) GetActiveVolunteers() ([]model.Volunteer, error) {
 	rows, err := r.DB.Query(`
 		SELECT ` + volunteer_all_fields + `

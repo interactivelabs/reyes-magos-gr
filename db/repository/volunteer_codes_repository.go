@@ -49,6 +49,35 @@ func (r VolunteerCodesRepository) DeleteVolunteerCode(volunteerCodeID int64) err
 	return nil
 }
 
+func (r VolunteerCodesRepository) GetAllVolunteerCodesByVolunteerID(volunteerCodeID int64) ([]model.Code, error) {
+	rows, err := r.DB.Query(`
+		SELECT codes.*
+		FROM codes
+		INNER JOIN volunteer_codes ON codes.code_id = volunteer_codes.code_id
+		WHERE
+			volunteer_codes.volunteer_id = ? AND codes.used = 0 AND codes.cancelled = 0 AND codes.deleted = 0 AND date(codes.expiration) > date('now')
+			AND volunteer_codes.deleted = 0;
+	`, volunteerCodeID)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
+
+	var codes []model.Code
+	for rows.Next() {
+		var code, err = scanAllCode(rows)
+		if err != nil {
+			return []model.Code{}, err
+		}
+		codes = append(codes, code)
+	}
+
+	return codes, nil
+}
+
 func (r VolunteerCodesRepository) GetAllVolunteersCodes() ([]model.VolunteerCode, error) {
 	rows, err := r.DB.Query(`
 		SELECT 

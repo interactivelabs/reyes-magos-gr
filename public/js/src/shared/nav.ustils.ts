@@ -16,7 +16,7 @@ export const closeIfOutsideClick = ({
     element === event.target ||
     elementButton.contains(event.target as HTMLElement) ||
     elementButton === event.target;
-  if (!isClickInside) {
+  if (!isClickInside && !element.classList.contains("hidden")) {
     element.classList.add("hidden");
     onClose && onClose();
   }

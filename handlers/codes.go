@@ -6,7 +6,7 @@ import (
 	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
-	codes "reyes-magos-gr/views/codes"
+	codes "reyes-magos-gr/views/admin/codes"
 
 	"github.com/labstack/echo/v4"
 )

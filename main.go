@@ -71,7 +71,14 @@ func main() {
 		VolunteerCodesRepository: volunteerCodesRepository,
 	}
 
-	// PUBLIC API AND HTML ENDPOINTS
+	volunteersService := services.VolunteersService{
+		CodesRepository:          codesRepository,
+		OrdersRepository:         ordersRepository,
+		VolunteersRepository:     volunteersRepository,
+		VolunteerCodesRepository: volunteerCodesRepository,
+	}
+
+	// PUBLIC ENDPOINTS
 	homeHandler := handlers.HomeHandler{}
 	e.GET("/", homeHandler.HomeViewHandler)
 
@@ -104,7 +111,17 @@ func main() {
 	// Serve static files (css, js, images)
 	e.Static("/public", "public")
 
-	// API ADMIN ENDPOINTS
+	// VOLUNTEER ENDPOINTS
+	vg := e.Group("/volunteer")
+
+	vg.Use(middleware.IsAuthenticated())
+
+	myCodesHandler := handlers.MyCodesHandler{
+		VolunteersService: volunteersService,
+	}
+	vg.GET("/mycodes", myCodesHandler.MyCodesViewHandler)
+
+	// ADMIN ENDPOINTS
 	ag := e.Group("/admin")
 
 	ag.Use(middleware.IsAdmin())

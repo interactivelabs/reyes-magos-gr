@@ -58,7 +58,7 @@ func Nav() templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div><!--\n\t\t\t\t\t\t\t\tDropdown menu, show/hide based on menu state.\n\t\t\t\t\t\t\t\t--><div id=\"admin-menu-dropdown\" role=\"menu\" aria-orientation=\"vertical\" aria-labelledby=\"admin-menu-button\" tabindex=\"-1\" class=\"hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div><!--\n\t\t\t\t\t\t\t\tDropdown menu, show/hide based on menu state.\n\t\t\t\t\t\t\t\t--><div id=\"admin-menu-dropdown\" role=\"menu\" aria-orientation=\"vertical\" aria-labelledby=\"admin-menu-button\" tabindex=\"-1\" class=\"hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none\"><a href=\"/volunteer/mycodes\" class=\"block px-4 py-2 text-sm\" role=\"menuitem\" tabindex=\"-1\" id=\"admin-menu-item-0\">My Codes</a> <a href=\"/volunteer/orders\" class=\"block px-4 py-2 text-sm\" role=\"menuitem\" tabindex=\"-1\" id=\"admin-menu-item-0\">My Orders</a> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -78,7 +78,7 @@ func Nav() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if lib.GetProfile(ctx).Email != "" {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"relative\"><div class=\"absolute inset-0 flex items-center\" aria-hidden=\"true\"><div class=\"w-full border-t border-gray-300\"></div></div><div class=\"relative flex justify-center\"><span class=\"bg-white px-3 text-base font-semibold leading-6\">Admin</span></div></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a href=\"/volunteer/mycodes\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">My Codes</a> <a href=\"/volunteer/orders\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">My Orders</a><div class=\"relative\"><div class=\"absolute inset-0 flex items-center\" aria-hidden=\"true\"><div class=\"w-full border-t border-gray-300\"></div></div><div class=\"relative flex justify-center\"><span class=\"bg-white px-3 text-base font-semibold leading-6\">Admin</span></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -1,17 +1,9 @@
 package pages
 
+import "fmt"
 import "reyes-magos-gr/views"
 import "reyes-magos-gr/db/model"
-import "time"
-import "fmt"
-
-func formatDate(date string) (string, error) {
-	fmtDate, err := time.Parse("2006-01-02", date)
-	if err != nil {
-		return "", err
-	}
-	return fmtDate.Format("January 2, 2006"), nil
-}
+import "reyes-magos-gr/lib"
 
 templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers []model.Volunteer) {
 	@layout.Base() {
@@ -54,7 +46,7 @@ templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers
 													<input class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" type="checkbox" value={ templ.EscapeString(fmt.Sprint(code.CodeID)) } name="code_ids"/>
 												</td>
 												<td class="p-4 align-middle font-medium">{ code.Code }</td>
-												<td class="p-4 align-middle">{ formatDate(code.Expiration) }</td>
+												<td class="p-4 align-middle">{ lib.FormatDate(code.Expiration) }</td>
 											</tr>
 										}
 									</tbody>
@@ -121,7 +113,7 @@ templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers
 											</td>
 											<td class="p-4 align-middle font-medium">{ code.Volunteer.Name }</td>
 											<td class="p-4 align-middle font-medium">{ code.Code.Code }</td>
-											<td class="p-4 align-middle">{ formatDate(code.Code.Expiration) }</td>
+											<td class="p-4 align-middle">{ lib.FormatDate(code.Code.Expiration) }</td>
 										</tr>
 									}
 								</tbody>
