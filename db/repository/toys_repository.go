@@ -51,7 +51,7 @@ func (r ToysRepository) DeleteToy(toyID int64) error {
 
 func (r ToysRepository) GetToys() ([]model.Toy, error) {
 	rows, err := r.DB.Query(`
-		SELECT ` + toy_all_fields + `
+		SELECT ` + toyAllFields + `
 		FROM toys
 		WHERE deleted = 0;`)
 	if err != nil {
@@ -78,7 +78,7 @@ func (r ToysRepository) GetToys() ([]model.Toy, error) {
 
 func (r ToysRepository) GetToyByID(toyID int64) (model.Toy, error) {
 	row := r.DB.QueryRow(`
-		SELECT `+toy_all_fields+`
+		SELECT `+toyAllFields+`
 		FROM toys
 		WHERE deleted = 0 AND toy_id = ?;
 	`, toyID)
@@ -91,7 +91,7 @@ func (r ToysRepository) GetToyByID(toyID int64) (model.Toy, error) {
 	return toy, nil
 }
 
-const toy_all_fields string = `
+const toyAllFields string = `
 	toy_id,
 	toy_name,
 	COALESCE(toy_description, ''),

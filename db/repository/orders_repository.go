@@ -51,12 +51,48 @@ func (r OrdersRepository) DeleteOrder(orderID int64) error {
 
 func (r OrdersRepository) GetOrderByID(orderID int64) (model.Order, error) {
 	row := r.DB.QueryRow(`
-		SELECT *
+		SELECT `+orderAllFields+`
 		FROM orders
 		WHERE order_id = ?
 	`, orderID)
 	return scanAllOrder(row)
 }
+
+func (r OrdersRepository) GetOrdersByVolunteerID(volunteerID int64) ([]model.Order, error) {
+	rows, err := r.DB.Query(`
+		SELECT `+orderAllFields+`
+		FROM orders
+		WHERE volunteer_id = ?
+	`, volunteerID)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
+
+	var orders []model.Order
+	for rows.Next() {
+		order, err := scanAllOrder(rows)
+		if err != nil {
+			return nil, err
+		}
+		orders = append(orders, order)
+	}
+	return orders, nil
+}
+
+const orderAllFields string = `
+	order_id,
+	toy_id,
+	volunteer_id,
+	code_id,
+	order_date,
+	shipped,
+	COALESCE(shipped_date, ''),
+	completed,
+	deleted`
 
 type OrderScanner interface {
 	Scan(dest ...interface{}) error
@@ -72,6 +108,7 @@ func scanAllOrder(s OrderScanner) (model.Order, error) {
 		&order.OrderDate,
 		&order.Shipped,
 		&order.ShippedDate,
+		&order.Completed,
 		&order.Deleted,
 	)
 	return order, err

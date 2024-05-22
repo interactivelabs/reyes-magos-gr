@@ -25,3 +25,17 @@ func (s VolunteersService) GetVolunteerCodesByEmail(email string) ([]model.Code,
 
 	return volunteerCodes, nil
 }
+
+func (s VolunteersService) GetVolunteerOrdersByEmail(email string) ([]model.Order, error) {
+	volunteer, err := s.VolunteersRepository.GetVolunteerByEmail(email)
+	if err != nil {
+		return nil, err
+	}
+
+	volunteerOrders, err := s.OrdersRepository.GetOrdersByVolunteerID(volunteer.VolunteerID)
+	if err != nil {
+		return nil, err
+	}
+
+	return volunteerOrders, nil
+}

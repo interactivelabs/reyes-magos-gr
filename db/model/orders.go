@@ -8,5 +8,6 @@ type Order struct {
 	OrderDate   string `json:"order_date"`
 	Shipped     int64  `json:"shipped"`
 	ShippedDate string `json:"shipped_date"`
+	Completed   int64  `json:"completed"`
 	Deleted     int64  `json:"deleted"`
 }

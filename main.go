@@ -121,6 +121,11 @@ func main() {
 	}
 	vg.GET("/mycodes", myCodesHandler.MyCodesViewHandler)
 
+	myOrdersHandler := handlers.MyOrdersHandler{
+		VolunteersService: volunteersService,
+	}
+	vg.GET("/myorders", myOrdersHandler.MyOrdersViewHandler)
+
 	// ADMIN ENDPOINTS
 	ag := e.Group("/admin")
 

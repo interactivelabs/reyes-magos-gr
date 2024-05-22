@@ -51,7 +51,7 @@ func (r VolunteersRepository) DeleteVolunteer(volunteerID int64) error {
 
 func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (model.Volunteer, error) {
 	row := r.DB.QueryRow(`
-		SELECT `+volunteer_all_fields+`
+		SELECT `+volunteerAllFields+`
 		FROM volunteers
 		WHERE deleted = 0 AND volunteer_id = ?
 	`, volunteerID)
@@ -61,7 +61,7 @@ func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (model.Volunte
 
 func (r VolunteersRepository) GetVolunteerByEmail(email string) (model.Volunteer, error) {
 	row := r.DB.QueryRow(`
-		SELECT `+volunteer_all_fields+`
+		SELECT `+volunteerAllFields+`
 		FROM volunteers
 		WHERE deleted = 0 AND email = ?
 	`, email)
@@ -71,7 +71,7 @@ func (r VolunteersRepository) GetVolunteerByEmail(email string) (model.Volunteer
 
 func (r VolunteersRepository) GetActiveVolunteers() ([]model.Volunteer, error) {
 	rows, err := r.DB.Query(`
-		SELECT ` + volunteer_all_fields + `
+		SELECT ` + volunteerAllFields + `
 		FROM volunteers
 		WHERE deleted = 0`)
 	if err != nil {
@@ -94,7 +94,7 @@ func (r VolunteersRepository) GetActiveVolunteers() ([]model.Volunteer, error) {
 	return volunteers, nil
 }
 
-const volunteer_all_fields string = `
+const volunteerAllFields string = `
 	volunteer_id,
 	name,
 	email,
