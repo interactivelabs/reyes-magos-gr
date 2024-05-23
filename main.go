@@ -7,6 +7,7 @@ import (
 	"reyes-magos-gr/api"
 	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/handlers"
+	handlers_admin "reyes-magos-gr/handlers/admin"
 	"reyes-magos-gr/middleware"
 	"reyes-magos-gr/platform/authenticator"
 	"reyes-magos-gr/services"
@@ -152,16 +153,21 @@ func main() {
 	ag.POST("/api/code/batch", codeHandler.CreateCodeBatchApiHandler)
 
 	// ADMIN VIEWS
-	codesHTMLHandler := handlers.CodesHandler{
+	codesHandler := handlers_admin.CodesHandler{
 		CodesRepository:          codesRepository,
 		VolunteersRepository:     volunteersRepository,
 		VolunteerCodesRepository: volunteerCodesRepository,
 		CodesService:             codesService,
 	}
-	ag.GET("/codes", codesHTMLHandler.CodesViewHandler)
-	ag.POST("/codes/assign", codesHTMLHandler.AssignCodesHandler)
-	ag.POST("/codes/remove", codesHTMLHandler.RemoveCodesHandler)
-	ag.POST("/codes/create", codesHTMLHandler.CreateCodesHandler)
+	ag.GET("/codes", codesHandler.CodesViewHandler)
+	ag.POST("/codes/assign", codesHandler.AssignCodesHandler)
+	ag.POST("/codes/remove", codesHandler.RemoveCodesHandler)
+	ag.POST("/codes/create", codesHandler.CreateCodesHandler)
+
+	adminOrdersHandler := handlers_admin.OrdersHandler{
+		OrdersRepository: ordersRepository,
+	}
+	ag.GET("/orders", adminOrdersHandler.OrdersViewHandler)
 
 	var port = "localhost:8080"
 

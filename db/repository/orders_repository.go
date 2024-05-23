@@ -83,6 +83,30 @@ func (r OrdersRepository) GetOrdersByVolunteerID(volunteerID int64) ([]model.Ord
 	return orders, nil
 }
 
+func (r OrdersRepository) GetAllActiveOrders() ([]model.Order, error) {
+	rows, err := r.DB.Query(`
+		SELECT ` + orderAllFields + `
+		FROM orders
+		WHERE deleted = 0 AND completed = 0`)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
+
+	var orders []model.Order
+	for rows.Next() {
+		order, err := scanAllOrder(rows)
+		if err != nil {
+			return nil, err
+		}
+		orders = append(orders, order)
+	}
+	return orders, nil
+}
+
 const orderAllFields string = `
 	order_id,
 	toy_id,
