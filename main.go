@@ -100,9 +100,6 @@ func main() {
 	}
 	e.GET("/redeem/:toy_id", redeemToyHandler.RedeemToyViewHandler)
 
-	redeemMultipleHandler := handlers.RedeemMultipleHandler{}
-	e.GET("/redeem/multiple", redeemMultipleHandler.RedeemMultipleViewHandler)
-
 	ordersHandler := handlers.OrdersHandler{
 		OrdersService:        orderService,
 		VolunteersRepository: volunteersRepository,
@@ -165,9 +162,13 @@ func main() {
 	ag.POST("/codes/create", codesHandler.CreateCodesHandler)
 
 	adminOrdersHandler := handlers_admin.OrdersHandler{
-		OrdersRepository: ordersRepository,
+		OrdersRepository:     ordersRepository,
+		ToysRepository:       toysRepository,
+		VolunteersRepository: volunteersRepository,
 	}
 	ag.GET("/orders", adminOrdersHandler.OrdersViewHandler)
+	ag.GET("/order/:order_id", adminOrdersHandler.OrderCardViewHandler)
+	ag.GET("/order/:order_id/edit", adminOrdersHandler.UpdateOrderViewHandler)
 
 	var port = "localhost:8080"
 

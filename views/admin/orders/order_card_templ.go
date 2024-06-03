@@ -13,7 +13,7 @@ import "bytes"
 import "reyes-magos-gr/db/model"
 import "fmt"
 
-func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) templ.Component {
+func OrderCard(order model.Order) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -26,46 +26,46 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form><input type=\"date\" name=\"shipped_date\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a hx-get=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(order.ShippedDate)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(string(templ.URL(fmt.Sprintf("/admin/order/%d/edit", order.OrderID))))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 8, Col: 66}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/order_card.templ`, Line: 8, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"> <input type=\"text\" name=\"email\" value=\"{{order.Email}}\"> <input type=\"text\" name=\"phone\" value=\"{{order.Phone}}\"> <button type=\"button\" hx-get=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\" class=\"w-full block cursor-pointer\"><div class=\"flex flex-1 items-center justify-between truncate rounded-lg border-gray-400 bg-white\"><div class=\"flex-1 truncate px-4 py-2 text-sm text-left\"><p class=\"text-lg text-gray-900 hover:text-gray-600\"><span class=\"text-sm text-gray-600\">Order date:</span> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(string(templ.URL(fmt.Sprintf("/admin/order/%d", order.OrderID))))
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(order.OrderDate)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 13, Col: 76}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/order_card.templ`, Line: 15, Col: 77}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><p class=\"text-lg text-gray-900 hover:text-gray-600\"><span class=\"text-sm text-gray-600\">Shipped:</span> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("#admin-order-%d", order.OrderID))
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(hasOrderShipped(order))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 14, Col: 60}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/order_card.templ`, Line: 18, Col: 81}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Cancel</button></form>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p></div></div></a>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
