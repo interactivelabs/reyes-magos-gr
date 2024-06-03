@@ -1,0 +1,14 @@
+package pages
+
+import "reyes-magos-gr/db/model"
+import "reyes-magos-gr/views"
+
+templ UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) {
+	@layout.Base() {
+		<form>
+			<input type="date" name="shipped_date" value={ order.ShippedDate }/>
+			<input type="text" name="email" value="{{order.Email}}"/>
+			<input type="text" name="phone" value="{{order.Phone}}"/>
+		</form>
+	}
+}

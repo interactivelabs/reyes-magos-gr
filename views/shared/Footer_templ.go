@@ -10,8 +10,6 @@ import "context"
 import "io"
 import "bytes"
 
-import "reyes-magos-gr/lib"
-
 func Footer() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
@@ -25,17 +23,7 @@ func Footer() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<footer class=\"bg-footer-texture text-white\"><div class=\"mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8\"><nav class=\"-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12\" aria-label=\"Footer\"><div class=\"pb-6\"><a href=\"/#hero\" class=\"text-sm leading-6\">Inicio</a></div><div class=\"pb-6\"><a href=\"/#why\" class=\"text-sm leading-6\">Porque?</a></div><div class=\"pb-6\"><a href=\"/#volunteers\" class=\"text-sm leading-6\">Voluntarios</a></div><div class=\"pb-6\"><a href=\"/catalog\" class=\"text-sm leading-6\">Juguetes</a></div>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if lib.GetProfile(ctx).IsAdmin {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"pb-6\"><a href=\"/admin/codes\" class=\"text-sm leading-6\">Codes</a></div>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</nav><p class=\"mt-10 text-center text-xs leading-5\">&copy; 2024 D&L Toys, Inc. All rights reserved.</p></div></footer>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<footer class=\"bg-footer-texture text-white\"><div class=\"mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8\"><nav class=\"-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12\" aria-label=\"Footer\"><div class=\"pb-6\"><a href=\"/#hero\" class=\"text-sm leading-6\">Inicio</a></div><div class=\"pb-6\"><a href=\"/#why\" class=\"text-sm leading-6\">Porque?</a></div><div class=\"pb-6\"><a href=\"/#volunteers\" class=\"text-sm leading-6\">Voluntarios</a></div><div class=\"pb-6\"><a href=\"/catalog\" class=\"text-sm leading-6\">Juguetes</a></div></nav><p class=\"mt-10 text-center text-xs leading-5\">&copy; 2024 D&L Toys, Inc. All rights reserved.</p></div></footer>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

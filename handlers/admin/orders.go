@@ -21,3 +21,7 @@ func (h OrdersHandler) OrdersViewHandler(ctx echo.Context) error {
 
 	return lib.Render(ctx, ordersView.Orders(orders))
 }
+
+func (h OrdersHandler) UpdateOrderViewHandler(ctx echo.Context) error {
+	return lib.Render(ctx, ordersView.Create())
+}
