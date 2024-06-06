@@ -66,7 +66,7 @@ func (r CodesRepository) DeleteCode(codeID int64) error {
 	return nil
 }
 
-func (r CodesRepository) GetCodeByID(codeID int64) (model.Code, error) {
+func (r CodesRepository) GetCodeByID(codeID int64) (code model.Code, err error) {
 	var row = r.DB.QueryRow(`
 		SELECT *
 		FROM codes
@@ -84,7 +84,7 @@ func (r CodesRepository) GetCode(code string) (model.Code, error) {
 	return scanAllCode(row)
 }
 
-func (r CodesRepository) GetActiveCodes() ([]model.Code, error) {
+func (r CodesRepository) GetActiveCodes() (codes []model.Code, err error) {
 	rows, err := r.DB.Query(`
 		SELECT *
 		FROM codes
@@ -98,7 +98,6 @@ func (r CodesRepository) GetActiveCodes() ([]model.Code, error) {
 		_ = rows.Close()
 	}(rows)
 
-	var codes []model.Code
 	for rows.Next() {
 		var code, err = scanAllCode(rows)
 		if err != nil {
@@ -110,7 +109,7 @@ func (r CodesRepository) GetActiveCodes() ([]model.Code, error) {
 	return codes, nil
 }
 
-func (r CodesRepository) GetUnassignedCodes() ([]model.Code, error) {
+func (r CodesRepository) GetUnassignedCodes() (codes []model.Code, err error) {
 	rows, err := r.DB.Query(`
 		SELECT codes.*
 		FROM codes
@@ -126,7 +125,6 @@ func (r CodesRepository) GetUnassignedCodes() ([]model.Code, error) {
 		_ = rows.Close()
 	}(rows)
 
-	var codes []model.Code
 	for rows.Next() {
 		var code, err = scanAllCode(rows)
 		if err != nil {
@@ -142,9 +140,8 @@ type CodeScanner interface {
 	Scan(dest ...interface{}) error
 }
 
-func scanAllCode(s CodeScanner) (model.Code, error) {
-	var code model.Code
-	err := s.Scan(
+func scanAllCode(s CodeScanner) (code model.Code, err error) {
+	err = s.Scan(
 		&code.CodeID,
 		&code.Code,
 		&code.Expiration,

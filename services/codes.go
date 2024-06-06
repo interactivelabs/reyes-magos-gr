@@ -12,8 +12,8 @@ type CodesService struct {
 	CodesRepository repository.CodesRepository
 }
 
-func (s CodesService) CreateCode() (model.Code, error) {
-	code := model.Code{
+func (s CodesService) CreateCode() (code model.Code, err error) {
+	code = model.Code{
 		Code:       generateRandomString(6),
 		Expiration: time.Now().AddDate(0, 0, 10).Format("2006-01-02"),
 	}
@@ -25,8 +25,7 @@ func (s CodesService) CreateCode() (model.Code, error) {
 	return codeRow, nil
 }
 
-func (s CodesService) CreateCodeBatch(Count int64) ([]model.Code, error) {
-	var codes []model.Code
+func (s CodesService) CreateCodeBatch(Count int64) (codes []model.Code, err error) {
 	for i := 0; i < int(Count); i++ {
 		code := model.Code{
 			Code:       generateRandomString(6),
