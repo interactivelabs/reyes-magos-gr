@@ -66,3 +66,29 @@ func (h OrdersHandler) UpdateOrderViewHandler(ctx echo.Context) error {
 
 	return lib.Render(ctx, ordersView.UpdateOrder(order, toy, volunteer))
 }
+
+type SaveOrderChangesrRequest struct {
+	ToyID int64  `form:"toy_id" validate:"required"`
+	Code  string `form:"code" validate:"required"`
+}
+
+func (h OrdersHandler) SaveOrderChangesHandler(ctx echo.Context) error {
+	orderIDStr := ctx.Param("order_id")
+	orderID, err := strconv.ParseInt(orderIDStr, 10, 64)
+
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid order ID")
+	}
+
+	order, err := h.OrdersRepository.GetOrderByID(orderID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	err = h.OrdersRepository.UpdateOrder(order)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return ctx.Redirect(http.StatusSeeOther, "/admin/orders")
+}
