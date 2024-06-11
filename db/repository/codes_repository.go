@@ -89,7 +89,7 @@ func (r CodesRepository) GetActiveCodes() (codes []model.Code, err error) {
 		SELECT *
 		FROM codes
 		WHERE
-			used = 0 AND cancelled = 0 AND deleted = 0 AND date(expiration) > date('now');`)
+			used = 0 AND deleted = 0 AND cancelled = 0 AND date(expiration) > date('now');`)
 	if err != nil {
 		return []model.Code{}, err
 	}

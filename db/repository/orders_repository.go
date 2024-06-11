@@ -10,7 +10,7 @@ type OrdersRepository struct {
 	DB *sql.DB
 }
 
-func (r OrdersRepository) CreateOrder(order model.Order) (int64, error) {
+func (r OrdersRepository) CreateOrder(order model.Order) (id int64, err error) {
 	queryStr, params, err := utils.BuildInsertQuery(order, "orders")
 	if err != nil {
 		return 0, err
@@ -87,7 +87,7 @@ func (r OrdersRepository) GetAllActiveOrders() ([]model.Order, error) {
 	rows, err := r.DB.Query(`
 		SELECT ` + orderAllFields + `
 		FROM orders
-		WHERE deleted = 0 AND completed = 0`)
+		WHERE completed = 0`)
 	if err != nil {
 		return nil, err
 	}

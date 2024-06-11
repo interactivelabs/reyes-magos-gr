@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func ExecuteQuery(db *sql.DB, query string, args ...interface{}) (sql.Result, error) {
+func ExecuteQuery(db *sql.DB, query string, args ...interface{}) (result sql.Result, err error) {
 	stmt, err := db.Prepare(query)
 	if err != nil {
 		return nil, err
@@ -17,7 +17,7 @@ func ExecuteQuery(db *sql.DB, query string, args ...interface{}) (sql.Result, er
 		_ = stmt.Close()
 	}(stmt)
 
-	result, err := stmt.Exec(args...)
+	result, err = stmt.Exec(args...)
 	if err != nil {
 		return nil, err
 	}
@@ -25,14 +25,13 @@ func ExecuteQuery(db *sql.DB, query string, args ...interface{}) (sql.Result, er
 	return result, nil
 }
 
-func BuildUpdateQuery(model interface{}, tableName string, idFieldName string) (string, []interface{}, error) {
+func BuildUpdateQuery(model interface{}, tableName string, idFieldName string) (queryStr string, params []interface{}, err error) {
 	val := reflect.ValueOf(model)
 	typeOfModel := val.Type()
 
 	var query strings.Builder
 	query.WriteString(fmt.Sprintf("UPDATE %s SET ", tableName))
 
-	var params []interface{}
 	var idField reflect.Value
 	for i := 0; i < val.NumField(); i++ {
 		field := val.Field(i)
@@ -50,7 +49,7 @@ func BuildUpdateQuery(model interface{}, tableName string, idFieldName string) (
 		}
 	}
 
-	queryStr := query.String()
+	queryStr = query.String()
 	queryStr = queryStr[:len(queryStr)-2]
 
 	if !idField.IsValid() {
@@ -63,14 +62,13 @@ func BuildUpdateQuery(model interface{}, tableName string, idFieldName string) (
 	return queryStr, params, nil
 }
 
-func BuildInsertQuery(model interface{}, tableName string) (string, []interface{}, error) {
+func BuildInsertQuery(model interface{}, tableName string) (queryStr string, params []interface{}, err error) {
 	val := reflect.ValueOf(model)
 	typeOfModel := val.Type()
 
 	var query strings.Builder
 	query.WriteString(fmt.Sprintf("INSERT INTO %s (", tableName))
 
-	var params []interface{}
 	for i := 0; i < val.NumField(); i++ {
 		field := val.Field(i)
 		if !field.IsZero() {
@@ -83,7 +81,7 @@ func BuildInsertQuery(model interface{}, tableName string) (string, []interface{
 		}
 	}
 
-	queryStr := query.String()
+	queryStr = query.String()
 	queryStr = queryStr[:len(queryStr)-2]
 
 	query.Reset()
@@ -100,11 +98,10 @@ func BuildInsertQuery(model interface{}, tableName string) (string, []interface{
 	return queryStr, params, nil
 }
 
-func BuildDeleteQuery(idValue int64, tableName string, idFieldName string) (string, []interface{}, error) {
+func BuildDeleteQuery(idValue int64, tableName string, idFieldName string) (queryStr string, params []interface{}, err error) {
 	var query strings.Builder
 	query.WriteString(fmt.Sprintf("UPDATE %s SET deleted = 1 WHERE %s = ?;", tableName, idFieldName))
 
-	var params []interface{}
 	params = append(params, idValue)
 
 	return query.String(), params, nil

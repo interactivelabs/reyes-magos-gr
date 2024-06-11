@@ -68,7 +68,7 @@ func (h OrdersHandler) UpdateOrderViewHandler(ctx echo.Context) error {
 }
 
 type SaveOrderChangesrRequest struct {
-	ToyID int64  `form:"toy_id" validate:"required"`
+	ToyID int64  `form:"shipped_date" validate:"required"`
 	Code  string `form:"code" validate:"required"`
 }
 
