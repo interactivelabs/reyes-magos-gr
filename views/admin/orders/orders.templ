@@ -2,7 +2,7 @@ package pages
 
 import "fmt"
 import "reyes-magos-gr/db/model"
-import "reyes-magos-gr/views"
+import "reyes-magos-gr/views/admin"
 
 func hasOrderShipped(order model.Order) string {
 	if order.Shipped == 1 {
@@ -11,8 +11,8 @@ func hasOrderShipped(order model.Order) string {
 	return "Not Shipped"
 }
 
-templ Orders(orders []model.Order) {
-	@layout.Base() {
+templ Orders(orders []model.Order, completedOrders []model.Order) {
+	@admin.AdminLayout() {
 		<h1 class="text-center pt-8 text-2xl">Orders</h1>
 		<section id="admin_orders" class="relative isolate px-6 py-20 lg:px-8">
 			<div>
@@ -20,7 +20,7 @@ templ Orders(orders []model.Order) {
 				<dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
 					<div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
 						<dt class="truncate text-sm font-medium text-gray-500">Total Orders</dt>
-						<dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{ fmt.Sprint(len(orders)) }</dd>
+						<dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{ fmt.Sprint(len(orders) + len(completedOrders)) }</dd>
 					</div>
 					<div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
 						<dt class="truncate text-sm font-medium text-gray-500">Open Orders</dt>
@@ -28,7 +28,7 @@ templ Orders(orders []model.Order) {
 					</div>
 					<div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
 						<dt class="truncate text-sm font-medium text-gray-500">Completed Orders</dt>
-						<dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{ fmt.Sprint(len(orders)) }</dd>
+						<dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{ fmt.Sprint(len(completedOrders)) }</dd>
 					</div>
 				</dl>
 			</div>

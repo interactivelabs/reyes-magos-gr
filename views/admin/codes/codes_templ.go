@@ -11,9 +11,9 @@ import "io"
 import "bytes"
 
 import "fmt"
-import "reyes-magos-gr/views"
 import "reyes-magos-gr/db/model"
 import "reyes-magos-gr/lib"
+import "reyes-magos-gr/views/admin"
 
 func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers []model.Volunteer) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -222,7 +222,7 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table><div class=\"flex justify-center py-6\"><button type=\"submit\" class=\"inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none\">Remove</button></div></form></div></div></div></div><script type=\"module\" src=\"/public/js/dist/admin.js\"></script>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table><div class=\"flex justify-center py-6\"><button type=\"submit\" class=\"inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none\">Remove</button></div></form></div></div></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -231,7 +231,7 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = layout.Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = admin.AdminLayout().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

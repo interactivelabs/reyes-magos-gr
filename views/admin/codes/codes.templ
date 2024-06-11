@@ -1,12 +1,12 @@
 package pages
 
 import "fmt"
-import "reyes-magos-gr/views"
 import "reyes-magos-gr/db/model"
 import "reyes-magos-gr/lib"
+import "reyes-magos-gr/views/admin"
 
 templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers []model.Volunteer) {
-	@layout.Base() {
+	@admin.AdminLayout() {
 		<div class="w-full">
 			<div class="relative w-full">
 				<div class="p-8 text-center">
@@ -131,6 +131,5 @@ templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers
 				</div>
 			</div>
 		</div>
-		<script type="module" src="/public/js/dist/admin.js"></script>
 	}
 }

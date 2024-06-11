@@ -22,7 +22,12 @@ func (h OrdersHandler) OrdersViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, ordersView.Orders(orders))
+	completedOrders, err := h.OrdersRepository.GetCompletedOrders()
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return lib.Render(ctx, ordersView.Orders(orders, completedOrders))
 }
 
 func (h OrdersHandler) OrderCardViewHandler(ctx echo.Context) error {

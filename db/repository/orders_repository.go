@@ -58,16 +58,7 @@ func (r OrdersRepository) GetOrderByID(orderID int64) (order model.Order, err er
 	return scanAllOrder(row)
 }
 
-func (r OrdersRepository) GetOrdersByVolunteerID(volunteerID int64) (orders []model.Order, err error) {
-	rows, err := r.DB.Query(`
-		SELECT `+orderAllFields+`
-		FROM orders
-		WHERE volunteer_id = ?
-	`, volunteerID)
-	if err != nil {
-		return nil, err
-	}
-
+func GetOrdersFromQuery(rows *sql.Rows) (orders []model.Order, err error) {
 	defer func(rows *sql.Rows) {
 		_ = rows.Close()
 	}(rows)
@@ -82,6 +73,19 @@ func (r OrdersRepository) GetOrdersByVolunteerID(volunteerID int64) (orders []mo
 	return orders, nil
 }
 
+func (r OrdersRepository) GetOrdersByVolunteerID(volunteerID int64) (orders []model.Order, err error) {
+	rows, err := r.DB.Query(`
+		SELECT `+orderAllFields+`
+		FROM orders
+		WHERE volunteer_id = ?
+	`, volunteerID)
+	if err != nil {
+		return nil, err
+	}
+
+	return GetOrdersFromQuery(rows)
+}
+
 func (r OrdersRepository) GetAllActiveOrders() (orders []model.Order, err error) {
 	rows, err := r.DB.Query(`
 		SELECT ` + orderAllFields + `
@@ -91,18 +95,19 @@ func (r OrdersRepository) GetAllActiveOrders() (orders []model.Order, err error)
 		return nil, err
 	}
 
-	defer func(rows *sql.Rows) {
-		_ = rows.Close()
-	}(rows)
+	return GetOrdersFromQuery(rows)
+}
 
-	for rows.Next() {
-		order, err := scanAllOrder(rows)
-		if err != nil {
-			return nil, err
-		}
-		orders = append(orders, order)
+func (r OrdersRepository) GetCompletedOrders() (orders []model.Order, err error) {
+	rows, err := r.DB.Query(`
+		SELECT ` + orderAllFields + `
+		FROM orders
+		WHERE completed = 1`)
+	if err != nil {
+		return nil, err
 	}
-	return orders, nil
+
+	return GetOrdersFromQuery(rows)
 }
 
 const orderAllFields string = `
