@@ -49,27 +49,31 @@ func (r VolunteersRepository) DeleteVolunteer(volunteerID int64) error {
 	return nil
 }
 
-func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (model.Volunteer, error) {
+func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (volubnteer model.Volunteer, err error) {
 	row := r.DB.QueryRow(`
 		SELECT `+volunteerAllFields+`
 		FROM volunteers
-		WHERE deleted = 0 AND volunteer_id = ?
+		WHERE
+			deleted = 0
+			AND volunteer_id = ?
 	`, volunteerID)
 
 	return scanAllVolunteer(row)
 }
 
-func (r VolunteersRepository) GetVolunteerByEmail(email string) (model.Volunteer, error) {
+func (r VolunteersRepository) GetVolunteerByEmail(email string) (voluntgeer model.Volunteer, err error) {
 	row := r.DB.QueryRow(`
 		SELECT `+volunteerAllFields+`
 		FROM volunteers
-		WHERE deleted = 0 AND email = ?
+		WHERE
+			deleted = 0
+			AND email = ?
 	`, email)
 
 	return scanAllVolunteer(row)
 }
 
-func (r VolunteersRepository) GetActiveVolunteers() ([]model.Volunteer, error) {
+func (r VolunteersRepository) GetActiveVolunteers() (volunteers []model.Volunteer, err error) {
 	rows, err := r.DB.Query(`
 		SELECT ` + volunteerAllFields + `
 		FROM volunteers
@@ -82,7 +86,6 @@ func (r VolunteersRepository) GetActiveVolunteers() ([]model.Volunteer, error) {
 		_ = rows.Close()
 	}(rows)
 
-	var volunteers []model.Volunteer
 	for rows.Next() {
 		volunteer, err := scanAllVolunteer(rows)
 		if err != nil {
@@ -114,9 +117,8 @@ type VolunteerScanner interface {
 	Scan(dest ...interface{}) error
 }
 
-func scanAllVolunteer(s VolunteerScanner) (model.Volunteer, error) {
-	var volunteer model.Volunteer
-	err := s.Scan(
+func scanAllVolunteer(s VolunteerScanner) (volunteer model.Volunteer, err error) {
+	err = s.Scan(
 		&volunteer.VolunteerID,
 		&volunteer.Name,
 		&volunteer.Email,

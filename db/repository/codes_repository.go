@@ -70,7 +70,10 @@ func (r CodesRepository) GetCodeByID(codeID int64) (code model.Code, err error) 
 	var row = r.DB.QueryRow(`
 		SELECT *
 		FROM codes
-		WHERE code_id = ? AND deleted = 0 AND cancelled = 0;
+		WHERE
+			code_id = ?
+			AND deleted = 0
+			AND cancelled = 0;
 	`, codeID)
 	return scanAllCode(row)
 }
@@ -79,7 +82,10 @@ func (r CodesRepository) GetCode(code string) (model.Code, error) {
 	var row = r.DB.QueryRow(`
 		SELECT *
 		FROM codes
-		WHERE code = ? AND deleted = 0 AND cancelled = 0;
+		WHERE
+			code = ?
+			AND deleted = 0
+			AND cancelled = 0;
 	`, code)
 	return scanAllCode(row)
 }
@@ -89,7 +95,10 @@ func (r CodesRepository) GetActiveCodes() (codes []model.Code, err error) {
 		SELECT *
 		FROM codes
 		WHERE
-			used = 0 AND deleted = 0 AND cancelled = 0 AND date(expiration) > date('now');`)
+			used = 0
+			AND deleted = 0
+			AND cancelled = 0
+			AND date(expiration) > date('now');`)
 	if err != nil {
 		return []model.Code{}, err
 	}
@@ -115,8 +124,11 @@ func (r CodesRepository) GetUnassignedCodes() (codes []model.Code, err error) {
 		FROM codes
 		LEFT JOIN volunteer_codes ON codes.code_id = volunteer_codes.code_id
 		WHERE
-			volunteer_code_id IS null AND codes.used = 0 AND codes.cancelled = 0
-			AND codes.deleted = 0 AND date(codes.expiration) > date('now');`)
+			volunteer_code_id IS null
+			AND codes.used = 0
+			AND codes.cancelled = 0
+			AND codes.deleted = 0
+			AND date(codes.expiration) > date('now');`)
 	if err != nil {
 		return []model.Code{}, err
 	}

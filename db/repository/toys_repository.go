@@ -10,7 +10,7 @@ type ToysRepository struct {
 	DB *sql.DB
 }
 
-func (r ToysRepository) CreateToy(toy model.Toy) (int64, error) {
+func (r ToysRepository) CreateToy(toy model.Toy) (id int64, err error) {
 	queryStr, params, err := utils.BuildInsertQuery(toy, "toys")
 	if err != nil {
 		return 0, err
@@ -49,7 +49,7 @@ func (r ToysRepository) DeleteToy(toyID int64) error {
 	return nil
 }
 
-func (r ToysRepository) GetToys() ([]model.Toy, error) {
+func (r ToysRepository) GetToys() (toys []model.Toy, err error) {
 	rows, err := r.DB.Query(`
 		SELECT ` + toyAllFields + `
 		FROM toys
@@ -62,7 +62,6 @@ func (r ToysRepository) GetToys() ([]model.Toy, error) {
 		_ = rows.Close()
 	}(rows)
 
-	var toys []model.Toy
 	for rows.Next() {
 		var toy model.Toy
 		toy, err = scanAllToy(rows)
@@ -76,14 +75,16 @@ func (r ToysRepository) GetToys() ([]model.Toy, error) {
 	return toys, nil
 }
 
-func (r ToysRepository) GetToyByID(toyID int64) (model.Toy, error) {
+func (r ToysRepository) GetToyByID(toyID int64) (toy model.Toy, err error) {
 	row := r.DB.QueryRow(`
 		SELECT `+toyAllFields+`
 		FROM toys
-		WHERE deleted = 0 AND toy_id = ?;
-	`, toyID)
+		WHERE
+			deleted = 0
+			AND toy_id = ?;
+`, toyID)
 
-	toy, err := scanAllToy(row)
+	toy, err = scanAllToy(row)
 	if err != nil {
 		return model.Toy{}, err
 	}
@@ -106,9 +107,8 @@ type ToyScanner interface {
 	Scan(dest ...interface{}) error
 }
 
-func scanAllToy(s ToyScanner) (model.Toy, error) {
-	var toy model.Toy
-	err := s.Scan(
+func scanAllToy(s ToyScanner) (toy model.Toy, err error) {
+	err = s.Scan(
 		&toy.ToyID,
 		&toy.ToyName,
 		&toy.ToyDescription,

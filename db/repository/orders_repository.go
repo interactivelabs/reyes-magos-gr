@@ -49,7 +49,7 @@ func (r OrdersRepository) DeleteOrder(orderID int64) error {
 	return nil
 }
 
-func (r OrdersRepository) GetOrderByID(orderID int64) (model.Order, error) {
+func (r OrdersRepository) GetOrderByID(orderID int64) (order model.Order, err error) {
 	row := r.DB.QueryRow(`
 		SELECT `+orderAllFields+`
 		FROM orders
@@ -58,7 +58,7 @@ func (r OrdersRepository) GetOrderByID(orderID int64) (model.Order, error) {
 	return scanAllOrder(row)
 }
 
-func (r OrdersRepository) GetOrdersByVolunteerID(volunteerID int64) ([]model.Order, error) {
+func (r OrdersRepository) GetOrdersByVolunteerID(volunteerID int64) (orders []model.Order, err error) {
 	rows, err := r.DB.Query(`
 		SELECT `+orderAllFields+`
 		FROM orders
@@ -72,7 +72,6 @@ func (r OrdersRepository) GetOrdersByVolunteerID(volunteerID int64) ([]model.Ord
 		_ = rows.Close()
 	}(rows)
 
-	var orders []model.Order
 	for rows.Next() {
 		order, err := scanAllOrder(rows)
 		if err != nil {
@@ -83,7 +82,7 @@ func (r OrdersRepository) GetOrdersByVolunteerID(volunteerID int64) ([]model.Ord
 	return orders, nil
 }
 
-func (r OrdersRepository) GetAllActiveOrders() ([]model.Order, error) {
+func (r OrdersRepository) GetAllActiveOrders() (orders []model.Order, err error) {
 	rows, err := r.DB.Query(`
 		SELECT ` + orderAllFields + `
 		FROM orders
@@ -96,7 +95,6 @@ func (r OrdersRepository) GetAllActiveOrders() ([]model.Order, error) {
 		_ = rows.Close()
 	}(rows)
 
-	var orders []model.Order
 	for rows.Next() {
 		order, err := scanAllOrder(rows)
 		if err != nil {
@@ -122,9 +120,8 @@ type OrderScanner interface {
 	Scan(dest ...interface{}) error
 }
 
-func scanAllOrder(s OrderScanner) (model.Order, error) {
-	var order model.Order
-	err := s.Scan(
+func scanAllOrder(s OrderScanner) (order model.Order, err error) {
+	err = s.Scan(
 		&order.OrderID,
 		&order.ToyID,
 		&order.VolunteerID,

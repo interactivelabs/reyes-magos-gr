@@ -10,7 +10,7 @@ type VolunteerCodesRepository struct {
 	DB *sql.DB
 }
 
-func (r VolunteerCodesRepository) CreateVolunteerCode(volunteerCode model.VolunteerCode) (int64, error) {
+func (r VolunteerCodesRepository) CreateVolunteerCode(volunteerCode model.VolunteerCode) (id int64, err error) {
 	queryStr, params, err := utils.BuildInsertQuery(volunteerCode, "volunteer_codes")
 	if err != nil {
 		return 0, err
@@ -49,13 +49,18 @@ func (r VolunteerCodesRepository) DeleteVolunteerCode(volunteerCodeID int64) err
 	return nil
 }
 
-func (r VolunteerCodesRepository) GetAllVolunteerCodesByVolunteerID(volunteerCodeID int64) ([]model.Code, error) {
+func (r VolunteerCodesRepository) GetAllVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []model.Code, err error) {
 	rows, err := r.DB.Query(`
 		SELECT codes.*
 		FROM codes
-		INNER JOIN volunteer_codes ON codes.code_id = volunteer_codes.code_id
+		INNER JOIN
+			volunteer_codes ON codes.code_id = volunteer_codes.code_id
 		WHERE
-			volunteer_codes.volunteer_id = ? AND codes.used = 0 AND codes.cancelled = 0 AND codes.deleted = 0 AND date(codes.expiration) > date('now')
+			volunteer_codes.volunteer_id = ?
+			AND codes.used = 0
+			AND codes.cancelled = 0
+			AND codes.deleted = 0
+			AND date(codes.expiration) > date('now')
 			AND volunteer_codes.deleted = 0;
 	`, volunteerCodeID)
 	if err != nil {
@@ -66,7 +71,6 @@ func (r VolunteerCodesRepository) GetAllVolunteerCodesByVolunteerID(volunteerCod
 		_ = rows.Close()
 	}(rows)
 
-	var codes []model.Code
 	for rows.Next() {
 		var code, err = scanAllCode(rows)
 		if err != nil {
@@ -78,7 +82,7 @@ func (r VolunteerCodesRepository) GetAllVolunteerCodesByVolunteerID(volunteerCod
 	return codes, nil
 }
 
-func (r VolunteerCodesRepository) GetAllVolunteersCodes() ([]model.VolunteerCode, error) {
+func (r VolunteerCodesRepository) GetAllVolunteersCodes() (volunteerCodes []model.VolunteerCode, err error) {
 	rows, err := r.DB.Query(`
 		SELECT 
 			volunteer_code_id,
@@ -92,8 +96,12 @@ func (r VolunteerCodesRepository) GetAllVolunteersCodes() ([]model.VolunteerCode
 		INNER JOIN volunteer_codes ON codes.code_id = volunteer_codes.code_id
 		INNER JOIN volunteers ON volunteer_codes.volunteer_id = volunteers.volunteer_id
 		WHERE
-			codes.used = 0 AND codes.cancelled = 0 AND codes.deleted = 0 AND date(codes.expiration) > date('now')
-			AND volunteer_codes.deleted = 0 AND volunteers.deleted = 0;`)
+			codes.used = 0
+			AND codes.cancelled = 0
+			AND codes.deleted = 0
+			AND date(codes.expiration) > date('now')
+			AND volunteer_codes.deleted = 0
+			AND volunteers.deleted = 0;`)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +110,6 @@ func (r VolunteerCodesRepository) GetAllVolunteersCodes() ([]model.VolunteerCode
 		_ = rows.Close()
 	}(rows)
 
-	var volunteerCodes []model.VolunteerCode
 	for rows.Next() {
 		var volunteerCode model.VolunteerCode
 		var volunteer model.Volunteer
@@ -129,12 +136,13 @@ func (r VolunteerCodesRepository) GetAllVolunteersCodes() ([]model.VolunteerCode
 	return volunteerCodes, nil
 }
 
-func (r VolunteerCodesRepository) GetVolunteerIdByCodeId(codeID int64) (int64, error) {
-	var volunteerID int64
-	err := r.DB.QueryRow(`
+func (r VolunteerCodesRepository) GetVolunteerIdByCodeId(codeID int64) (volunteerID int64, err error) {
+	err = r.DB.QueryRow(`
 		SELECT volunteer_id
 		FROM volunteer_codes
-		WHERE code_id = ? AND deleted = 0;
+		WHERE
+			code_id = ?
+			AND deleted = 0;
 	`, codeID).Scan(&volunteerID)
 	if err != nil {
 		return 0, err
