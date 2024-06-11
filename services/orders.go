@@ -13,9 +13,7 @@ type OrdersService struct {
 	VolunteerCodesRepository repository.VolunteerCodesRepository
 }
 
-func (s OrdersService) CreateOrder(toyID int64, code string) (model.Order, error) {
-	var order model.Order
-
+func (s OrdersService) CreateOrder(toyID int64, code string) (order model.Order, err error) {
 	codeResult, err := s.CodesRepository.GetCode(code)
 	if err != nil {
 		return order, err

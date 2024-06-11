@@ -75,8 +75,7 @@ type ProfileView struct {
 	Picture  string
 }
 
-func GetProfileView(ctx echo.Context) ProfileView {
-	profile := ProfileView{}
+func GetProfileView(ctx echo.Context) (profile ProfileView) {
 	sessionProfile, err := GetSessionProfile(ctx)
 	if err != nil || sessionProfile == nil {
 		return profile
@@ -101,7 +100,7 @@ func GetProfileView(ctx echo.Context) ProfileView {
 	return profile
 }
 
-func GetProfile(ctx context.Context) ProfileView {
+func GetProfile(ctx context.Context) (profile ProfileView) {
 	if profile, ok := ctx.Value(profileKey).(ProfileView); ok {
 		return profile
 	}
