@@ -14,13 +14,6 @@ import "fmt"
 import "reyes-magos-gr/db/model"
 import "reyes-magos-gr/views/admin"
 
-func hasOrderShipped(order model.Order) string {
-	if order.Shipped == 1 {
-		return "Shipped"
-	}
-	return "Not Shipped"
-}
-
 func Orders(orders []model.Order, completedOrders []model.Order) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
@@ -47,7 +40,7 @@ func Orders(orders []model.Order, completedOrders []model.Order) templ.Component
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(len(orders) + len(completedOrders)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/orders.templ`, Line: 23, Col: 123}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/orders.templ`, Line: 16, Col: 123}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -60,7 +53,7 @@ func Orders(orders []model.Order, completedOrders []model.Order) templ.Component
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(len(orders)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/orders.templ`, Line: 27, Col: 100}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/orders.templ`, Line: 20, Col: 100}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -73,7 +66,7 @@ func Orders(orders []model.Order, completedOrders []model.Order) templ.Component
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(len(completedOrders)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/orders.templ`, Line: 31, Col: 109}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/orders.templ`, Line: 24, Col: 109}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -96,7 +89,7 @@ func Orders(orders []model.Order, completedOrders []model.Order) templ.Component
 					var templ_7745c5c3_Var6 string
 					templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("admin-order-%d", order.OrderID))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/orders.templ`, Line: 40, Col: 102}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/orders.templ`, Line: 33, Col: 102}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 					if templ_7745c5c3_Err != nil {

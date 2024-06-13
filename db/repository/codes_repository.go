@@ -160,6 +160,7 @@ func scanAllCode(s CodeScanner) (code model.Code, err error) {
 		&code.Used,
 		&code.Cancelled,
 		&code.Deleted,
+		&code.Given,
 	)
 
 	if err != nil {

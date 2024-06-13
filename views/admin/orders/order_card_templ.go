@@ -10,8 +10,18 @@ import "context"
 import "io"
 import "bytes"
 
-import "reyes-magos-gr/db/model"
 import "fmt"
+import "reyes-magos-gr/lib"
+import "reyes-magos-gr/db/model"
+
+func hasOrderShipped(order model.Order) string {
+	if order.Shipped == 1 {
+		if shipped, err := lib.FormatDate(order.ShippedDate); err == nil {
+			return shipped
+		}
+	}
+	return "Not Shipped"
+}
 
 func OrderCard(order model.Order) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -33,7 +43,7 @@ func OrderCard(order model.Order) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(string(templ.URL(fmt.Sprintf("/admin/order/%d/edit", order.OrderID))))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/order_card.templ`, Line: 8, Col: 80}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/order_card.templ`, Line: 18, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -44,9 +54,9 @@ func OrderCard(order model.Order) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(order.OrderDate)
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(lib.FormatDate(order.OrderDate))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/order_card.templ`, Line: 15, Col: 77}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/order_card.templ`, Line: 25, Col: 93}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -59,7 +69,7 @@ func OrderCard(order model.Order) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(hasOrderShipped(order))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/order_card.templ`, Line: 18, Col: 81}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/order_card.templ`, Line: 28, Col: 81}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {

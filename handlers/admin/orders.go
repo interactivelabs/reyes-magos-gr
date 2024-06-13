@@ -98,6 +98,9 @@ func (h OrdersHandler) SaveOrderChangesHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
+	if saveOrderRequest.ShippedDate != "" {
+		order.Shipped = 1
+	}
 	order.ShippedDate = saveOrderRequest.ShippedDate
 	order.Completed = saveOrderRequest.OrderCompleted
 

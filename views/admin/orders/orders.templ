@@ -4,13 +4,6 @@ import "fmt"
 import "reyes-magos-gr/db/model"
 import "reyes-magos-gr/views/admin"
 
-func hasOrderShipped(order model.Order) string {
-	if order.Shipped == 1 {
-		return "Shipped"
-	}
-	return "Not Shipped"
-}
-
 templ Orders(orders []model.Order, completedOrders []model.Order) {
 	@admin.AdminLayout() {
 		<h1 class="text-center pt-8 text-2xl">Orders</h1>
