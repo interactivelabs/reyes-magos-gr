@@ -169,7 +169,7 @@ func main() {
 	ag.GET("/orders", adminOrdersHandler.OrdersViewHandler)
 	ag.GET("/order/:order_id", adminOrdersHandler.OrderCardViewHandler)
 	ag.GET("/order/:order_id/edit", adminOrdersHandler.UpdateOrderViewHandler)
-	ag.GET("/order/:order_id/save", adminOrdersHandler.UpdateOrderViewHandler)
+	ag.POST("/order/:order_id/save", adminOrdersHandler.SaveOrderChangesHandler)
 
 	var port = "localhost:8080"
 

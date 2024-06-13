@@ -73,11 +73,19 @@ func (h OrdersHandler) UpdateOrderViewHandler(ctx echo.Context) error {
 }
 
 type SaveOrderChangesrRequest struct {
-	ToyID int64  `form:"shipped_date" validate:"required"`
-	Code  string `form:"code" validate:"required"`
+	ShippedDate    string `form:"shipped_date" validate:"iso_8601_date"`
+	OrderCompleted int64  `form:"order_completed" validate:"number"`
 }
 
 func (h OrdersHandler) SaveOrderChangesHandler(ctx echo.Context) error {
+	saveOrderRequest := new(SaveOrderChangesrRequest)
+	if err := ctx.Bind(saveOrderRequest); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	if err := ctx.Validate(saveOrderRequest); err != nil {
+		return err
+	}
+
 	orderIDStr := ctx.Param("order_id")
 	orderID, err := strconv.ParseInt(orderIDStr, 10, 64)
 
@@ -90,10 +98,13 @@ func (h OrdersHandler) SaveOrderChangesHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
+	order.ShippedDate = saveOrderRequest.ShippedDate
+	order.Completed = saveOrderRequest.OrderCompleted
+
 	err = h.OrdersRepository.UpdateOrder(order)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return ctx.Redirect(http.StatusSeeOther, "/admin/orders")
+	return lib.Render(ctx, ordersView.OrderCard(order))
 }
