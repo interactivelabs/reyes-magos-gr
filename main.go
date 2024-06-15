@@ -7,7 +7,7 @@ import (
 	"reyes-magos-gr/api"
 	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/handlers"
-	handlers_admin "reyes-magos-gr/handlers/admin"
+	"reyes-magos-gr/handlers/admin"
 	"reyes-magos-gr/middleware"
 	"reyes-magos-gr/platform/authenticator"
 	"reyes-magos-gr/services"
@@ -150,7 +150,7 @@ func main() {
 	ag.POST("/api/code/batch", codeHandler.CreateCodeBatchApiHandler)
 
 	// ADMIN VIEWS
-	codesHandler := handlers_admin.CodesHandler{
+	codesHandler := admin.CodesHandler{
 		CodesRepository:          codesRepository,
 		VolunteersRepository:     volunteersRepository,
 		VolunteerCodesRepository: volunteerCodesRepository,
@@ -161,7 +161,7 @@ func main() {
 	ag.POST("/codes/remove", codesHandler.RemoveCodesHandler)
 	ag.POST("/codes/create", codesHandler.CreateCodesHandler)
 
-	adminOrdersHandler := handlers_admin.OrdersHandler{
+	adminOrdersHandler := admin.OrdersHandler{
 		OrdersRepository:     ordersRepository,
 		ToysRepository:       toysRepository,
 		VolunteersRepository: volunteersRepository,

@@ -1,4 +1,4 @@
-package handlers_admin
+package admin
 
 import (
 	"net/http"
@@ -16,6 +16,19 @@ type OrdersHandler struct {
 	VolunteersRepository repository.VolunteersRepository
 }
 
+type Order interface {
+	Param(name string) string
+}
+
+func getOrderId(o Order) (int64, error) {
+	orderIDStr := o.Param("order_id")
+	orderID, err := strconv.ParseInt(orderIDStr, 10, 64)
+	if err != nil {
+		return 0, echo.NewHTTPError(http.StatusBadRequest, "Invalid order ID")
+	}
+	return orderID, nil
+}
+
 func (h OrdersHandler) OrdersViewHandler(ctx echo.Context) error {
 	orders, err := h.OrdersRepository.GetAllActiveOrders()
 	if err != nil {
@@ -31,11 +44,9 @@ func (h OrdersHandler) OrdersViewHandler(ctx echo.Context) error {
 }
 
 func (h OrdersHandler) OrderCardViewHandler(ctx echo.Context) error {
-	orderIDStr := ctx.Param("order_id")
-	orderID, err := strconv.ParseInt(orderIDStr, 10, 64)
-
+	orderID, err := getOrderId(ctx)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid order ID")
+		return err
 	}
 
 	order, err := h.OrdersRepository.GetOrderByID(orderID)
@@ -47,11 +58,9 @@ func (h OrdersHandler) OrderCardViewHandler(ctx echo.Context) error {
 }
 
 func (h OrdersHandler) UpdateOrderViewHandler(ctx echo.Context) error {
-	orderIDStr := ctx.Param("order_id")
-	orderID, err := strconv.ParseInt(orderIDStr, 10, 64)
-
+	orderID, err := getOrderId(ctx)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid order ID")
+		return err
 	}
 
 	order, err := h.OrdersRepository.GetOrderByID(orderID)
@@ -86,11 +95,9 @@ func (h OrdersHandler) SaveOrderChangesHandler(ctx echo.Context) error {
 		return err
 	}
 
-	orderIDStr := ctx.Param("order_id")
-	orderID, err := strconv.ParseInt(orderIDStr, 10, 64)
-
+	orderID, err := getOrderId(ctx)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid order ID")
+		return err
 	}
 
 	order, err := h.OrdersRepository.GetOrderByID(orderID)
