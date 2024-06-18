@@ -12,8 +12,9 @@ import "bytes"
 
 import "fmt"
 import "reyes-magos-gr/db/model"
-import "reyes-magos-gr/views"
 import "reyes-magos-gr/lib"
+import "reyes-magos-gr/views"
+import "reyes-magos-gr/views/components"
 
 func MyCodes(codes []model.Code) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -34,20 +35,15 @@ func MyCodes(codes []model.Code) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-center pt-8 text-2xl\">My Codes</h1><section id=\"my_codes\" class=\"relative isolate px-6 py-20 lg:px-8\"><div><h2 class=\"text-lg font-semibold leading-6 text-gray-900\">Codes Status</h2><dl class=\"mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3\"><div class=\"overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6\"><dt class=\"truncate text-sm font-medium text-gray-500\">Total Given Codes</dt><dd class=\"mt-1 text-3xl font-semibold tracking-tight text-gray-900\">0</dd></div><div class=\"overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6\"><dt class=\"truncate text-sm font-medium text-gray-500\">Currently Available Codes</dt><dd class=\"mt-1 text-3xl font-semibold tracking-tight text-gray-900\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-center pt-8 text-2xl\">My Codes</h1><section id=\"my_codes\" class=\"relative isolate px-6 py-20 lg:px-8\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(len(codes)))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 21, Col: 99}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</dd></div><div class=\"overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6\"><dt class=\"truncate text-sm font-medium text-gray-500\">Used Codes</dt><dd class=\"mt-1 text-3xl font-semibold tracking-tight text-gray-900\">24.57%</dd></div></dl></div>")
+			templ_7745c5c3_Err = components.Stats("Codes Stats", []components.Stat{
+				{Name: "Total Codes", Value: fmt.Sprint(len(codes))},
+				{Name: "Given Orders", Value: fmt.Sprint(len(codes))},
+				{Name: "Available Codes", Value: fmt.Sprintf("%d%%", len(codes))},
+			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -61,12 +57,12 @@ func MyCodes(codes []model.Code) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var4 string
-					templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(code.Code)
+					var templ_7745c5c3_Var3 string
+					templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(code.Code)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 34, Col: 96}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 23, Col: 96}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -74,12 +70,12 @@ func MyCodes(codes []model.Code) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var5 string
-					templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(code.Code)
+					var templ_7745c5c3_Var4 string
+					templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(code.Code)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 37, Col: 74}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 26, Col: 74}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -87,12 +83,12 @@ func MyCodes(codes []model.Code) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var6 string
-					templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(lib.FormatDate(code.Expiration))
+					var templ_7745c5c3_Var5 string
+					templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(lib.FormatDate(code.Expiration))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 38, Col: 73}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 27, Col: 73}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -100,12 +96,12 @@ func MyCodes(codes []model.Code) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var7 string
-					templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("mycodes-copied-label-%s", code.Code))
+					var templ_7745c5c3_Var6 string
+					templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("mycodes-copied-label-%s", code.Code))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 40, Col: 132}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 29, Col: 132}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}

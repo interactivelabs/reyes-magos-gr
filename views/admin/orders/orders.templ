@@ -3,35 +3,46 @@ package pages
 import "fmt"
 import "reyes-magos-gr/db/model"
 import "reyes-magos-gr/views/admin"
+import "reyes-magos-gr/views/components"
+
+templ LinkOrderCard(order model.Order) {
+	<a
+		hx-swap="outerHTML"
+		hx-get={ string(templ.URL(fmt.Sprintf("/admin/order/%d/edit", order.OrderID))) }
+		class="w-full block cursor-pointer"
+	>
+		@components.OrderCard(order)
+	</a>
+}
 
 templ Orders(orders []model.Order, completedOrders []model.Order) {
 	@admin.AdminLayout() {
 		<h1 class="text-center pt-8 text-2xl">Orders</h1>
 		<section id="admin_orders" class="relative isolate px-6 py-20 lg:px-8">
-			<div>
-				<h2 class="text-lg font-semibold leading-6 text-gray-900">Orders Status</h2>
-				<dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-					<div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-						<dt class="truncate text-sm font-medium text-gray-500">Total Orders</dt>
-						<dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{ fmt.Sprint(len(orders) + len(completedOrders)) }</dd>
-					</div>
-					<div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-						<dt class="truncate text-sm font-medium text-gray-500">Open Orders</dt>
-						<dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{ fmt.Sprint(len(orders)) }</dd>
-					</div>
-					<div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-						<dt class="truncate text-sm font-medium text-gray-500">Completed Orders</dt>
-						<dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{ fmt.Sprint(len(completedOrders)) }</dd>
-					</div>
-				</dl>
-			</div>
+			@components.Stats("Orders Stats", []components.Stat{
+				{Name: "Total Orders", Value: fmt.Sprint(len(orders) + len(completedOrders))},
+				{Name: "Open Orders", Value: fmt.Sprint(len(orders))},
+				{Name: "Completed Orders", Value: fmt.Sprint(len(completedOrders))},
+			})
 			if len(orders) > 0 {
-				<div class="py-20">
+				<div class="pt-20">
 					<h2 class="text-lg font-semibold leading-6 text-gray-900">Open Orders</h2>
-					<ul role="list" id="myorders-code-list" class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+					<ul class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
 						for _, order := range orders {
 							<li class="col-span-1 flex rounded-lg shadow" id={ fmt.Sprintf("admin-order-%d", order.OrderID) }>
-								@OrderCard(order)
+								@LinkOrderCard(order)
+							</li>
+						}
+					</ul>
+				</div>
+			}
+			if len(completedOrders) > 0 {
+				<div class="pt-20">
+					<h2 class="text-lg font-semibold leading-6 text-gray-900">Completed Orders</h2>
+					<ul class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+						for _, order := range completedOrders {
+							<li class="col-span-1 flex rounded-lg shadow" id={ fmt.Sprintf("admin-order-%d", order.OrderID) }>
+								@LinkOrderCard(order)
 							</li>
 						}
 					</ul>

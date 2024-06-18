@@ -2,30 +2,19 @@ package pages
 
 import "fmt"
 import "reyes-magos-gr/db/model"
-import "reyes-magos-gr/views"
 import "reyes-magos-gr/lib"
+import "reyes-magos-gr/views"
+import "reyes-magos-gr/views/components"
 
 templ MyCodes(codes []model.Code) {
 	@layout.Base() {
 		<h1 class="text-center pt-8 text-2xl">My Codes</h1>
 		<section id="my_codes" class="relative isolate px-6 py-20 lg:px-8">
-			<div>
-				<h2 class="text-lg font-semibold leading-6 text-gray-900">Codes Status</h2>
-				<dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-					<div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-						<dt class="truncate text-sm font-medium text-gray-500">Total Given Codes</dt>
-						<dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">0</dd>
-					</div>
-					<div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-						<dt class="truncate text-sm font-medium text-gray-500">Currently Available Codes</dt>
-						<dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{ fmt.Sprint(len(codes)) }</dd>
-					</div>
-					<div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-						<dt class="truncate text-sm font-medium text-gray-500">Used Codes</dt>
-						<dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">24.57%</dd>
-					</div>
-				</dl>
-			</div>
+			@components.Stats("Codes Stats", []components.Stat{
+				{Name: "Total Codes", Value: fmt.Sprint(len(codes))},
+				{Name: "Given Orders", Value: fmt.Sprint(len(codes))},
+				{Name: "Available Codes", Value: fmt.Sprintf("%d%%", len(codes))},
+			})
 			if len(codes) > 0 {
 				<div class="py-20">
 					<h2 class="text-lg font-semibold leading-6 text-gray-900">Available Codes</h2>

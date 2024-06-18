@@ -1,0 +1,17 @@
+package components
+
+import "reyes-magos-gr/lib"
+import "reyes-magos-gr/db/model"
+
+templ OrderCard(order model.Order) {
+	<div class="flex flex-1 items-center justify-between truncate rounded-lg border-gray-400 bg-white">
+		<div class="flex-1 truncate px-4 py-2 text-sm text-left">
+			<p class="text-lg text-gray-900 hover:text-gray-600">
+				<span class="text-sm text-gray-600">Order date:</span> { lib.FormatDate(order.OrderDate) }
+			</p>
+			<p class="text-lg text-gray-900 hover:text-gray-600">
+				<span class="text-sm text-gray-600">Shipped:</span> { lib.HasOrderShipped(order) }
+			</p>
+		</div>
+	</div>
+}

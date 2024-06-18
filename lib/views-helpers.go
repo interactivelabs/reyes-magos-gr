@@ -2,6 +2,7 @@ package lib
 
 import (
 	"context"
+	"reyes-magos-gr/db/model"
 	"time"
 
 	"github.com/a-h/templ"
@@ -20,4 +21,13 @@ func FormatDate(date string) (string, error) {
 		return "", err
 	}
 	return fmtDate.Format("January 2, 2006"), nil
+}
+
+func HasOrderShipped(order model.Order) string {
+	if order.Shipped == 1 {
+		if shipped, err := FormatDate(order.ShippedDate); err == nil {
+			return shipped
+		}
+	}
+	return "Not Shipped"
 }

@@ -13,13 +13,7 @@ import "bytes"
 import "fmt"
 import "reyes-magos-gr/db/model"
 import "reyes-magos-gr/views"
-
-func hasOrderShipped(order model.Order) string {
-	if order.Shipped == 1 {
-		return "Shipped"
-	}
-	return "Not Shipped"
-}
+import "reyes-magos-gr/views/components"
 
 func MyOrders(orders []model.Order) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -40,82 +34,32 @@ func MyOrders(orders []model.Order) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-center pt-8 text-2xl\">My Orders</h1><section id=\"my_orders\" class=\"relative isolate px-6 py-20 lg:px-8\"><div><h2 class=\"text-lg font-semibold leading-6 text-gray-900\">Orders Status</h2><dl class=\"mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3\"><div class=\"overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6\"><dt class=\"truncate text-sm font-medium text-gray-500\">Total Orders</dt><dd class=\"mt-1 text-3xl font-semibold tracking-tight text-gray-900\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1 class=\"text-center pt-8 text-2xl\">My Orders</h1><section id=\"my_orders\" class=\"relative isolate px-6 py-20 lg:px-8\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(len(orders)))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_orders/MyOrders.templ`, Line: 23, Col: 100}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</dd></div><div class=\"overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6\"><dt class=\"truncate text-sm font-medium text-gray-500\">Open Orders</dt><dd class=\"mt-1 text-3xl font-semibold tracking-tight text-gray-900\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(len(orders)))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_orders/MyOrders.templ`, Line: 27, Col: 100}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</dd></div><div class=\"overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6\"><dt class=\"truncate text-sm font-medium text-gray-500\">Completed Orders</dt><dd class=\"mt-1 text-3xl font-semibold tracking-tight text-gray-900\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var5 string
-			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(len(orders)))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_orders/MyOrders.templ`, Line: 31, Col: 100}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</dd></div></dl></div>")
+			templ_7745c5c3_Err = components.Stats("Orders Stats", []components.Stat{
+				{Name: "Total Orders", Value: fmt.Sprint(len(orders))},
+				{Name: "Open Orders", Value: fmt.Sprint(len(orders))},
+			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if len(orders) > 0 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"py-20\"><h2 class=\"text-lg font-semibold leading-6 text-gray-900\">Open Orders</h2><ul role=\"list\" id=\"myorders-code-list\" class=\"mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"py-20\"><h2 class=\"text-lg font-semibold leading-6 text-gray-900\">Open Orders</h2><ul class=\"mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				for _, order := range orders {
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"col-span-1 flex rounded-lg shadow\"><div class=\"flex flex-1 items-center justify-between truncate rounded-lg border-gray-400 bg-white\"><div class=\"flex-1 truncate px-4 py-2 text-sm text-left\"><p class=\"text-lg text-gray-900 hover:text-gray-600\"><span class=\"text-sm text-gray-600\">Order date:</span> ")
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"col-span-1 flex rounded-lg shadow\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var6 string
-					templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(order.OrderDate)
-					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_orders/MyOrders.templ`, Line: 44, Col: 83}
-					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+					templ_7745c5c3_Err = components.OrderCard(order).Render(ctx, templ_7745c5c3_Buffer)
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><p class=\"text-lg text-gray-900 hover:text-gray-600\"><span class=\"text-sm text-gray-600\">Shipped:</span> ")
-					if templ_7745c5c3_Err != nil {
-						return templ_7745c5c3_Err
-					}
-					var templ_7745c5c3_Var7 string
-					templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(hasOrderShipped(order))
-					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_orders/MyOrders.templ`, Line: 47, Col: 87}
-					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
-					if templ_7745c5c3_Err != nil {
-						return templ_7745c5c3_Err
-					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p></div></div></li>")
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</li>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}

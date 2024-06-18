@@ -54,7 +54,7 @@ func (h OrdersHandler) OrderCardViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, ordersView.OrderCard(order))
+	return lib.Render(ctx, ordersView.LinkOrderCard(order))
 }
 
 func (h OrdersHandler) UpdateOrderViewHandler(ctx echo.Context) error {
@@ -116,5 +116,5 @@ func (h OrdersHandler) SaveOrderChangesHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, ordersView.OrderCard(order))
+	return lib.Render(ctx, ordersView.LinkOrderCard(order))
 }

@@ -7,7 +7,7 @@ require (
 	github.com/coreos/go-oidc/v3 v3.10.0
 	github.com/dranikpg/dto-mapper v0.2.1
 	github.com/go-playground/validator/v10 v10.22.0
-	github.com/gorilla/sessions v1.2.2
+	github.com/gorilla/sessions v1.3.0
 	github.com/labstack/echo-contrib v0.17.1
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/mattn/go-sqlite3 v1.14.22
