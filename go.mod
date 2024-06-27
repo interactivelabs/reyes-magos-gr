@@ -3,7 +3,7 @@ module reyes-magos-gr
 go 1.21
 
 require (
-	github.com/a-h/templ v0.2.707
+	github.com/a-h/templ v0.2.731
 	github.com/coreos/go-oidc/v3 v3.10.0
 	github.com/dranikpg/dto-mapper v0.2.1
 	github.com/go-playground/validator/v10 v10.22.0
