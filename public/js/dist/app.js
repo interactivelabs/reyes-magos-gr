@@ -76,26 +76,8 @@ function initNav() {
 }
 
 // public/js/src/app/myCodes.ts
-var copyCode = async (code) => {
-  try {
-    await navigator.clipboard.writeText(code);
-  } catch (err) {
-    console.error("Failed to copy: ", err);
-  }
-};
-function initMycodes() {
-  const codesList = document.getElementById("mycodes-code-list");
-  if (!codesList) {
-    return;
-  }
-  codesList.addEventListener("click", async (evt) => {
-    let target = evt.target;
-    if (!target || target.tagName === "UL") return;
-    while (target?.tagName !== "LI") {
-      target = target?.parentElement;
-    }
-    const code = target.id;
-    await copyCode(code);
+var copy = async (code) => {
+  const flashToast = () => {
     const toast = document.getElementById(`mycodes-copied-label-${code}`);
     if (toast) {
       toast.classList.remove("hidden");
@@ -103,7 +85,36 @@ function initMycodes() {
         toast.classList.add("hidden");
       }, 1500);
     }
-  });
+  };
+  try {
+    await navigator.clipboard.writeText(code);
+    flashToast();
+    console.log("Copied successfully!");
+  } catch (err) {
+    console.error("Failed to copy: ", err);
+  }
+};
+var share = async (code) => {
+  const data = {
+    title: "Comparte la alegria!",
+    text: `Utiliza este codigo para obtener un juguete: ${code}`,
+    url: window.location.href
+  };
+  try {
+    await navigator.share(data);
+    console.log("Shared successfully!");
+  } catch (err) {
+    console.error("Share failed: ", err);
+  }
+};
+function initMycodes() {
+  globalThis.shareCode = async (code) => {
+    if (typeof navigator.share === "undefined") {
+      copy(code);
+    } else {
+      share(code);
+    }
+  };
 }
 
 // public/js/src/app.ts

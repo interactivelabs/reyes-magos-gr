@@ -6,6 +6,10 @@ import "reyes-magos-gr/lib"
 import "reyes-magos-gr/views"
 import "reyes-magos-gr/views/components"
 
+script onShareHandler(code string) {
+  shareCode(code);
+}
+
 templ MyCodes(codes []model.Code) {
 	@layout.Base() {
 		<h1 class="text-center pt-8 text-2xl">My Codes</h1>
@@ -20,7 +24,7 @@ templ MyCodes(codes []model.Code) {
 					<h2 class="text-lg font-semibold leading-6 text-gray-900">Available Codes</h2>
 					<ul role="list" id="mycodes-code-list" class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
 						for _, code := range codes {
-							<li class="col-span-1 flex rounded-lg shadow cursor-pointer" role="button" id={ code.Code }>
+							<li class="col-span-1 flex rounded-lg shadow cursor-pointer">
 								<div class="flex flex-1 items-center justify-between truncate rounded-lg border-gray-400 bg-white">
 									<div class="flex-1 truncate px-4 py-2 text-sm text-left">
 										<p class="text-lg text-gray-900 hover:text-gray-600">{ code.Code }</p>
@@ -28,7 +32,9 @@ templ MyCodes(codes []model.Code) {
 									</div>
 									<div class="flex-shrink-0 pr-2 text-green-800 animate-bounce hidden" id={ fmt.Sprintf("mycodes-copied-label-%s", code.Code) }>Copied</div>
 									<div class="flex-shrink-0 pr-2">
-										<img class="h-6 w-6" src="/public/img/clipboard.svg" alt="" role="presentation"/>
+										<button type="button" onclick={ onShareHandler(code.Code) }>
+											<img class="h-6 w-6" src="/public/img/clipboard.svg" alt="" role="presentation"/>
+										</button>
 									</div>
 								</div>
 							</li>

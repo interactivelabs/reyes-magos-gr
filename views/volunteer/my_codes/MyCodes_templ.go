@@ -16,6 +16,16 @@ import "reyes-magos-gr/lib"
 import "reyes-magos-gr/views"
 import "reyes-magos-gr/views/components"
 
+func onShareHandler(code string) templ.ComponentScript {
+	return templ.ComponentScript{
+		Name: `__templ_onShareHandler_430e`,
+		Function: `function __templ_onShareHandler_430e(code){shareCode(code);
+}`,
+		Call:       templ.SafeScript(`__templ_onShareHandler_430e`, code),
+		CallInline: templ.SafeScriptInline(`__templ_onShareHandler_430e`, code),
+	}
+}
+
 func MyCodes(codes []model.Code) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
@@ -53,29 +63,16 @@ func MyCodes(codes []model.Code) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				for _, code := range codes {
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"col-span-1 flex rounded-lg shadow cursor-pointer\" role=\"button\" id=\"")
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"col-span-1 flex rounded-lg shadow cursor-pointer\"><div class=\"flex flex-1 items-center justify-between truncate rounded-lg border-gray-400 bg-white\"><div class=\"flex-1 truncate px-4 py-2 text-sm text-left\"><p class=\"text-lg text-gray-900 hover:text-gray-600\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var3 string
 					templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(code.Code)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 23, Col: 96}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 30, Col: 74}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
-					if templ_7745c5c3_Err != nil {
-						return templ_7745c5c3_Err
-					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"flex flex-1 items-center justify-between truncate rounded-lg border-gray-400 bg-white\"><div class=\"flex-1 truncate px-4 py-2 text-sm text-left\"><p class=\"text-lg text-gray-900 hover:text-gray-600\">")
-					if templ_7745c5c3_Err != nil {
-						return templ_7745c5c3_Err
-					}
-					var templ_7745c5c3_Var4 string
-					templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(code.Code)
-					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 26, Col: 74}
-					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -83,12 +80,12 @@ func MyCodes(codes []model.Code) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var5 string
-					templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(lib.FormatDate(code.Expiration))
+					var templ_7745c5c3_Var4 string
+					templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(lib.FormatDate(code.Expiration))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 27, Col: 73}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 31, Col: 73}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -96,16 +93,33 @@ func MyCodes(codes []model.Code) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var6 string
-					templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("mycodes-copied-label-%s", code.Code))
+					var templ_7745c5c3_Var5 string
+					templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("mycodes-copied-label-%s", code.Code))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 29, Col: 132}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/my_codes/MyCodes.templ`, Line: 33, Col: 132}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Copied</div><div class=\"flex-shrink-0 pr-2\"><img class=\"h-6 w-6\" src=\"/public/img/clipboard.svg\" alt=\"\" role=\"presentation\"></div></div></li>")
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Copied</div><div class=\"flex-shrink-0 pr-2\">")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, onShareHandler(code.Code))
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button type=\"button\" onclick=\"")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					var templ_7745c5c3_Var6 templ.ComponentScript = onShareHandler(code.Code)
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6.Call)
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><img class=\"h-6 w-6\" src=\"/public/img/clipboard.svg\" alt=\"\" role=\"presentation\"></button></div></div></li>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
