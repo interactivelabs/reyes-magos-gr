@@ -1,10 +1,10 @@
 package admin
 
-import "reyes-magos-gr/views"
+import layout "reyes-magos-gr/views"
 
 templ AdminLayout() {
 	@layout.Base() {
 		{ children... }
-		<script type="module" src="/public/js/dist/admin.js" defer></script>
+		<script type="module" src="/public/js/admin.js" defer></script>
 	}
 }

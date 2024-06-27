@@ -1,9 +1,11 @@
 package pages
 
-import "fmt"
-import "reyes-magos-gr/db/model"
-import "reyes-magos-gr/views"
-import "reyes-magos-gr/views/components"
+import (
+	"fmt"
+	"reyes-magos-gr/db/model"
+	layout "reyes-magos-gr/views"
+	"reyes-magos-gr/views/components"
+)
 
 templ MyOrders(orders []model.Order) {
 	@layout.Base() {

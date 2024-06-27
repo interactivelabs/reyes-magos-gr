@@ -1,10 +1,12 @@
 package pages
 
-import "fmt"
-import "reyes-magos-gr/db/model"
-import "reyes-magos-gr/lib"
-import "reyes-magos-gr/views"
-import "reyes-magos-gr/views/components"
+import (
+	"fmt"
+	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/lib"
+	layout "reyes-magos-gr/views"
+	"reyes-magos-gr/views/components"
+)
 
 script onShareHandler(code string) {
   shareCode(code);
@@ -25,18 +27,18 @@ templ MyCodes(codes []model.Code) {
 					<ul role="list" id="mycodes-code-list" class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
 						for _, code := range codes {
 							<li class="col-span-1 flex rounded-lg shadow cursor-pointer">
-								<div class="flex flex-1 items-center justify-between truncate rounded-lg border-gray-400 bg-white">
-									<div class="flex-1 truncate px-4 py-2 text-sm text-left">
-										<p class="text-lg text-gray-900 hover:text-gray-600">{ code.Code }</p>
-										<p class="text-gray-500">Exp: { lib.FormatDate(code.Expiration) }</p>
-									</div>
-									<div class="flex-shrink-0 pr-2 text-green-800 animate-bounce hidden" id={ fmt.Sprintf("mycodes-copied-label-%s", code.Code) }>Copied</div>
-									<div class="flex-shrink-0 pr-2">
-										<button type="button" onclick={ onShareHandler(code.Code) }>
+								<button class="w-full" type="button" onclick={ onShareHandler(code.Code) }>
+									<div class="flex flex-1 items-center justify-between truncate rounded-lg border-gray-400 bg-white">
+										<div class="flex-1 truncate px-4 py-2 text-sm text-left">
+											<p class="text-lg text-gray-900 hover:text-gray-600">{ code.Code }</p>
+											<p class="text-gray-500">Exp: { lib.FormatDate(code.Expiration) }</p>
+										</div>
+										<div class="flex-shrink-0 pr-2 text-green-800 animate-bounce hidden" id={ fmt.Sprintf("mycodes-copied-label-%s", code.Code) }>Copied</div>
+										<div class="flex-shrink-0 pr-2">
 											<img class="h-6 w-6" src="/public/img/clipboard.svg" alt="" role="presentation"/>
-										</button>
+										</div>
 									</div>
-								</div>
+								</button>
 							</li>
 						}
 					</ul>

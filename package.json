@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "App for distributing toys",
   "scripts": {
-    "build:css": "tailwindcss -i ./public/css/input.css -o ./public/css/main.css --minify",
-    "build:js": "esbuild public/js/src/app.ts public/js/sc/admin.ts  --outdir=public/js/dist --bundle --format=esm --tree-shaking=true --minify",
-    "build": "npm run build:css && npm run build:js",
-    "dev:css": "tailwindcss -i ./public/css/input.css -o ./public/css/main.css --watch",
-    "dev:js": "esbuild public/js/src/app.ts public/js/src/admin.ts  --outdir=public/js/dist --bundle --format=esm --tree-shaking=true --sourcemap --watch",
-    "dev": "npm run dev:css & npm run dev:js"
+    "build:css": "tailwindcss -i ./assets/css/main.css -o ./public/css/main.css --minify",
+    "build:js": "esbuild assets/js/app.ts assets/js/admin.ts  --outdir=public/js --bundle --format=esm --tree-shaking=true --minify",
+    "build": "npm run build:js",
+    "dev:css": "tailwindcss -i ./assets/css/main.css -o ./public/css/main.css --watch",
+    "dev:js": "esbuild assets/js/app.ts assets/js/admin.ts  --outdir=public/js --bundle --format=esm --tree-shaking=true --sourcemap --watch",
+    "dev": "npm run dev:js"
   },
   "repository": {
     "type": "git",
