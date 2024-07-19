@@ -1,1 +1,124 @@
-var s=({element:e,elementButton:o,event:t,onClose:n})=>{!(e.contains(t.target)||e===t.target||o.contains(t.target)||o===t.target)&&!e.classList.contains("hidden")&&(e.classList.add("hidden"),n&&n())},l=e=>{e&&(e.classList.contains("hidden")?e.setAttribute("open","true"):e.removeAttribute("open"),e.classList.toggle("hidden"))};function a(){let e=document.getElementById("admin-menu-dropdown"),o=document.getElementById("admin-menu-button"),t=n=>{n.stopPropagation(),l(e)};o?.addEventListener("click",t),document.addEventListener("click",n=>{n.stopPropagation(),e&&o&&s({element:e,elementButton:o,event:n})})}function d(){let e=document.getElementById("mobile-menu-container"),o=document.getElementById("mobile-menu-button"),t=document.getElementById("mobile-menu-button-icon-closed"),n=document.getElementById("mobile-menu-button-icon-open"),c=()=>{t?.classList.toggle("hidden"),n?.classList.toggle("hidden")},u=i=>{i.stopPropagation(),l(e),c()};o?.addEventListener("click",u),document.addEventListener("click",i=>{i.stopPropagation(),e&&o&&s({event:i,element:e,elementButton:o,onClose:c})})}var m=async e=>{let o=()=>{let t=document.getElementById(`mycodes-copied-label-${e}`);t&&(t.classList.remove("hidden"),setTimeout(()=>{t.classList.add("hidden")},1500))};try{await navigator.clipboard.writeText(e),o(),console.log("Copied successfully!")}catch(t){console.error("Failed to copy: ",t)}},g=async e=>{let o={title:"Comparte la alegria!",text:`Utiliza este codigo para obtener un juguete: ${e}`,url:window.location.href};try{await navigator.share(o),console.log("Shared successfully!")}catch(t){console.error("Share failed: ",t)}};function r(){globalThis.shareCode=async e=>{typeof navigator.share>"u"?m(e):g(e)}}r();a();d();
+// assets/js/shared/nav.ustils.ts
+var closeIfOutsideClick = ({
+  element,
+  elementButton,
+  event,
+  onClose
+}) => {
+  const isClickInside = element.contains(event.target) || element === event.target || elementButton.contains(event.target) || elementButton === event.target;
+  if (!isClickInside && !element.classList.contains("hidden")) {
+    element.classList.add("hidden");
+    onClose && onClose();
+  }
+};
+var toggleMenu = (menuContainer) => {
+  if (!menuContainer) return;
+  if (menuContainer.classList.contains("hidden")) {
+    menuContainer.setAttribute("open", "true");
+  } else {
+    menuContainer.removeAttribute("open");
+  }
+  menuContainer.classList.toggle("hidden");
+};
+
+// assets/js/admin/admin.nav.ts
+function initAdminNav() {
+  const adminMenuDropdown = document.getElementById("admin-menu-dropdown");
+  const adminMenuButton = document.getElementById("admin-menu-button");
+  const toggleAdminMenu = (evt) => {
+    evt.stopPropagation();
+    toggleMenu(adminMenuDropdown);
+  };
+  adminMenuButton?.addEventListener("click", toggleAdminMenu);
+  document.addEventListener("click", (event) => {
+    event.stopPropagation();
+    if (adminMenuDropdown && adminMenuButton) {
+      closeIfOutsideClick({
+        element: adminMenuDropdown,
+        elementButton: adminMenuButton,
+        event
+      });
+    }
+  });
+}
+
+// assets/js/app/nav.ts
+function initNav() {
+  const mobileMenuContainer = document.getElementById("mobile-menu-container");
+  const mobileMenuButton = document.getElementById("mobile-menu-button");
+  const mobileMenuButtonIconClosed = document.getElementById(
+    "mobile-menu-button-icon-closed"
+  );
+  const mobileMenuButtonIconOpen = document.getElementById(
+    "mobile-menu-button-icon-open"
+  );
+  const toggleMobileMenuButtonIcon = () => {
+    mobileMenuButtonIconClosed?.classList.toggle("hidden");
+    mobileMenuButtonIconOpen?.classList.toggle("hidden");
+  };
+  const toggleMobileMenu = (evt) => {
+    evt.stopPropagation();
+    toggleMenu(mobileMenuContainer);
+    toggleMobileMenuButtonIcon();
+  };
+  mobileMenuButton?.addEventListener("click", toggleMobileMenu);
+  document.addEventListener("click", (event) => {
+    event.stopPropagation();
+    if (mobileMenuContainer && mobileMenuButton) {
+      closeIfOutsideClick({
+        event,
+        element: mobileMenuContainer,
+        elementButton: mobileMenuButton,
+        onClose: toggleMobileMenuButtonIcon
+      });
+    }
+  });
+}
+
+// assets/js/app/myCodes.ts
+var copy = async (code) => {
+  const flashToast = () => {
+    const toast = document.getElementById(`mycodes-copied-label-${code}`);
+    if (toast) {
+      toast.classList.remove("hidden");
+      setTimeout(() => {
+        toast.classList.add("hidden");
+      }, 1500);
+    }
+  };
+  try {
+    await navigator.clipboard.writeText(code);
+    flashToast();
+    console.log("Copied successfully!");
+  } catch (err) {
+    console.error("Failed to copy: ", err);
+  }
+};
+var share = async (code) => {
+  const data = {
+    title: "Comparte la alegria!",
+    text: `Utiliza este codigo para obtener un juguete: ${code}`,
+    url: window.location.href
+  };
+  try {
+    await navigator.share(data);
+    console.log("Shared successfully!");
+  } catch (err) {
+    console.error("Share failed: ", err);
+  }
+};
+function initMycodes() {
+  globalThis.shareCode = async (code) => {
+    if (typeof navigator.share === "undefined") {
+      copy(code);
+    } else {
+      share(code);
+    }
+  };
+}
+
+// assets/js/app.ts
+initMycodes();
+initAdminNav();
+initNav();
+//# sourceMappingURL=app.js.map
