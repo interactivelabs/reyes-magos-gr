@@ -171,11 +171,16 @@ func main() {
 	ag.GET("/order/:order_id/edit", adminOrdersHandler.UpdateOrderViewHandler)
 	ag.POST("/order/:order_id/save", adminOrdersHandler.SaveOrderChangesHandler)
 
-	var port = "localhost:8080"
+	var host = "localhost"
+	var port = "8080"
 
 	if os.Getenv("PORT") != "" {
 		port = os.Getenv("PORT")
 	}
 
-	e.Logger.Fatal(e.Start(port))
+	if os.Getenv("RAILWAY_PROJECT_ID") != "" {
+		host = "0.0.0.0"
+	}
+
+	e.Logger.Fatal(e.Start(host + ":" + port))
 }
