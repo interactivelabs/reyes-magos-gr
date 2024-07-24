@@ -1,2 +1,2 @@
 [phases.setup]
-nixLibs = ["...", "libgcc"]
+aptPkgs = ["...", "build-essential"]
