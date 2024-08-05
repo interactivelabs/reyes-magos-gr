@@ -1,10 +1,13 @@
 package components
 
-import "reyes-magos-gr/lib"
-import "reyes-magos-gr/db/model"
+import (
+	"fmt"
+	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/lib"
+)
 
 templ OrderCard(order model.Order) {
-	<div class="flex flex-1 items-center justify-between truncate rounded-lg border-gray-400 bg-white">
+	<div class="flex flex-col flex-1 rounded-lg border-gray-400 bg-white">
 		<div class="flex-1 truncate px-4 py-2 text-sm text-left">
 			<p class="text-lg text-gray-900 hover:text-gray-600">
 				<span class="text-sm text-gray-600">Order date:</span> { lib.FormatDate(order.OrderDate) }
@@ -12,6 +15,15 @@ templ OrderCard(order model.Order) {
 			<p class="text-lg text-gray-900 hover:text-gray-600">
 				<span class="text-sm text-gray-600">Shipped:</span> { lib.HasOrderShipped(order) }
 			</p>
+		</div>
+		<div class="flex-1">
+			<button
+				type="button"
+				class="relative flex-1 inline-flex items-center rounded-md justify-center bg-brand-orange px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-gray-300"
+				hx-get={ string(templ.URL(fmt.Sprintf("/volunteer/myorders/%d", order.OrderID))) }
+			>
+				Details <img class="inline-block h-4 w-4 ml-4" src="/public/img/fingerprint.svg" alt="" role="presentation"/>
+			</button>
 		</div>
 	</div>
 }

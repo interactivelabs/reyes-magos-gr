@@ -119,7 +119,7 @@ func main() {
 		CodesRepository:  codesRepository,
 	}
 	vg.GET("/mycodes", myCodesHandler.MyCodesViewHandler)
-	vg.GET("/mycodes/give/:code_id", myCodesHandler.GiveCode)
+	vg.POST("/mycodes/give/:code_id", myCodesHandler.GiveCode)
 
 	myOrdersHandler := handlers.MyOrdersHandler{
 		VolunteersService: volunteersService,
