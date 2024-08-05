@@ -91,9 +91,6 @@ func (h VolunteerHandler) UpdateVolunteerApiHandler(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, volunteer.VolunteerID)
 }
 
-type DeleteVolunteerRequest struct {
-}
-
 func (h VolunteerHandler) DeleteVolunteerApiHandler(ctx echo.Context) error {
 
 	volunteerIDStr := ctx.Param("volunteer_id")

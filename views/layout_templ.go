@@ -8,7 +8,10 @@ package layout
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "reyes-magos-gr/views/shared"
+import (
+	"reyes-magos-gr/views/components"
+	"reyes-magos-gr/views/shared"
+)
 
 func Base() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -28,7 +31,7 @@ func Base() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\" class=\"bg-slate-50\"><head><meta charSet=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><meta name=\"description\" content=\"Site for toy distribution\"><title>D&L Toys</title><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Indie+Flower&amp;family=Metrophobic&amp;display=optional\" rel=\"stylesheet\"><link rel=\"icon\" type=\"image/x-icon\" href=\"/public/img/favicon.ico\"><link rel=\"stylesheet\" href=\"/public/css/main.css\"><script src=\"https://unpkg.com/htmx.org@1.9.12\" integrity=\"sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2\" crossorigin=\"anonymous\" fetchpriority=\"high\"></script></head><body class=\"text-brand-blue\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\" class=\"bg-slate-50\"><head><meta charSet=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><meta name=\"description\" content=\"Site for toy distribution\"><title>D&L Toys</title><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Indie+Flower&amp;family=Metrophobic&amp;display=optional\" rel=\"stylesheet\"><link rel=\"icon\" type=\"image/x-icon\" href=\"/public/img/favicon.ico\"><link rel=\"stylesheet\" href=\"/public/css/main.css\"><script src=\"https://unpkg.com/htmx.org@2.0.1\" fetchpriority=\"high\"></script></head><body class=\"text-brand-blue\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -49,6 +52,10 @@ func Base() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = shared.Footer().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = components.Toast().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

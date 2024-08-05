@@ -75,21 +75,42 @@ function initNav() {
   });
 }
 
+// assets/js/shared/toast.ts
+var hideToast = () => {
+  const toastContainer = document.getElementById("toast-container");
+  const toastPanel = document.getElementById("toast-panel");
+  toastPanel?.classList.remove("show-toast");
+  toastPanel?.classList.add("hide-toast");
+  setTimeout(() => {
+    toastContainer?.classList.remove("flex");
+    toastContainer?.classList.add("hidden");
+  }, 300);
+};
+var showToast = ({ title, subTitle, duration = 5e3 }) => {
+  const toastContainer = document.getElementById("toast-container");
+  const toastPanel = document.getElementById("toast-panel");
+  toastContainer?.classList.remove("hidden");
+  toastContainer?.classList.add("flex");
+  toastPanel?.classList.remove("hide-toast");
+  toastPanel?.classList.add("show-toast");
+  const toastTitle = document.getElementById("toast-title");
+  const toastSubTitle = document.getElementById("toast-subtitle");
+  toastTitle.innerText = title;
+  toastSubTitle.innerText = subTitle;
+  setTimeout(() => hideToast(), duration);
+};
+function initToast() {
+  globalThis.hideToast = hideToast;
+}
+
 // assets/js/app/myCodes.ts
 var copy = async (code) => {
-  const flashToast = () => {
-    const toast = document.getElementById(`mycodes-copied-label-${code}`);
-    if (toast) {
-      toast.classList.remove("hidden");
-      setTimeout(() => {
-        toast.classList.add("hidden");
-      }, 1500);
-    }
-  };
   try {
     await navigator.clipboard.writeText(code);
-    flashToast();
-    console.log("Copied successfully!");
+    showToast({
+      title: "Copiado!",
+      subTitle: "El codigo ha sido copiado al portapapeles."
+    });
   } catch (err) {
     console.error("Failed to copy: ", err);
   }
@@ -98,16 +119,16 @@ var share = async (code) => {
   const data = {
     title: "Comparte la alegria!",
     text: `Utiliza este codigo para obtener un juguete: ${code}`,
-    url: window.location.href
+    url: `${window.location.origin}/catalog`
   };
   try {
     await navigator.share(data);
-    console.log("Shared successfully!");
   } catch (err) {
     console.error("Share failed: ", err);
   }
 };
 function initMycodes() {
+  globalThis.copyCode = copy;
   globalThis.shareCode = async (code) => {
     if (typeof navigator.share === "undefined") {
       copy(code);
@@ -121,4 +142,5 @@ function initMycodes() {
 initMycodes();
 initAdminNav();
 initNav();
+initToast();
 //# sourceMappingURL=app.js.map

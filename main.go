@@ -116,8 +116,10 @@ func main() {
 
 	myCodesHandler := handlers.MyCodesHandler{
 		VolunteersService: volunteersService,
+		CodesRepository:  codesRepository,
 	}
 	vg.GET("/mycodes", myCodesHandler.MyCodesViewHandler)
+	vg.GET("/mycodes/give/:code_id", myCodesHandler.GiveCode)
 
 	myOrdersHandler := handlers.MyOrdersHandler{
 		VolunteersService: volunteersService,

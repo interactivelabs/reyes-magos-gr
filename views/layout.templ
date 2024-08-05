@@ -1,6 +1,9 @@
 package layout
 
-import "reyes-magos-gr/views/shared"
+import (
+	"reyes-magos-gr/views/components"
+	"reyes-magos-gr/views/shared"
+)
 
 templ Base() {
 	<!DOCTYPE html>
@@ -15,7 +18,7 @@ templ Base() {
 			<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Metrophobic&display=optional" rel="stylesheet"/>
 			<link rel="icon" type="image/x-icon" href="/public/img/favicon.ico"/>
 			<link rel="stylesheet" href="/public/css/main.css"/>
-			<script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous" fetchpriority="high"></script>
+			<script src="https://unpkg.com/htmx.org@2.0.1" fetchpriority="high"></script>
 		</head>
 		<body class="text-brand-blue">
 			@shared.Nav()
@@ -23,6 +26,7 @@ templ Base() {
 				{ children... }
 			</main>
 			@shared.Footer()
+			@components.Toast()
 		</body>
 		<script type="module" src="/public/js/app.js" defer></script>
 	</html>

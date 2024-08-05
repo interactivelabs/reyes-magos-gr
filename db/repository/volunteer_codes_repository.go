@@ -49,20 +49,19 @@ func (r VolunteerCodesRepository) DeleteVolunteerCode(volunteerCodeID int64) err
 	return nil
 }
 
-func (r VolunteerCodesRepository) GetAllVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []model.Code, err error) {
-	rows, err := r.DB.Query(`
-		SELECT codes.*
-		FROM codes
-		INNER JOIN
-			volunteer_codes ON codes.code_id = volunteer_codes.code_id
-		WHERE
-			volunteer_codes.volunteer_id = ?
-			AND codes.used = 0
-			AND codes.cancelled = 0
-			AND codes.deleted = 0
-			AND date(codes.expiration) > date('now')
-			AND volunteer_codes.deleted = 0;
-	`, volunteerCodeID)
+const baseQueryVolunteerCodesByVolunteerID string = `
+	SELECT codes.*
+	FROM codes
+	INNER JOIN
+		volunteer_codes ON codes.code_id = volunteer_codes.code_id
+	WHERE
+		volunteer_codes.volunteer_id = ?
+		AND codes.cancelled = 0
+		AND codes.deleted = 0
+		AND volunteer_codes.deleted = 0 `
+
+func (r VolunteerCodesRepository) GetAllVolunteerCodesByVolunteerID(query string, volunteerCodeID int64) (codes []model.Code, err error) {
+	rows, err := r.DB.Query(query, volunteerCodeID)
 	if err != nil {
 		return nil, err
 	}
@@ -80,6 +79,30 @@ func (r VolunteerCodesRepository) GetAllVolunteerCodesByVolunteerID(volunteerCod
 	}
 
 	return codes, nil
+}
+
+func (r VolunteerCodesRepository) GetActiveVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []model.Code, err error) {
+	query := baseQueryVolunteerCodesByVolunteerID + `
+		AND date(codes.expiration) > date('now')
+		AND codes.used = 0
+		AND codes.given = 0;`
+
+	return r.GetAllVolunteerCodesByVolunteerID(query, volunteerCodeID)
+}
+
+func (r VolunteerCodesRepository) GetUsedVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []model.Code, err error) {
+	query := baseQueryVolunteerCodesByVolunteerID + `
+		AND codes.used = 1;`
+
+	return r.GetAllVolunteerCodesByVolunteerID(query, volunteerCodeID)
+}
+
+func (r VolunteerCodesRepository) GetGivenVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []model.Code, err error) {
+	query := baseQueryVolunteerCodesByVolunteerID + `
+		AND codes.used = 0
+		AND codes.given = 1;`
+
+	return r.GetAllVolunteerCodesByVolunteerID(query, volunteerCodeID)
 }
 
 func (r VolunteerCodesRepository) GetAllVolunteersCodes() (volunteerCodes []model.VolunteerCode, err error) {

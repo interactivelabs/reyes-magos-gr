@@ -12,18 +12,23 @@ type VolunteersService struct {
 	VolunteerCodesRepository repository.VolunteerCodesRepository
 }
 
-func (s VolunteersService) GetVolunteerCodesByEmail(email string) (codes []model.Code, err error) {
+func (s VolunteersService) GetVolunteerCodesByEmail(email string) (codes []model.Code, givenCodes []model.Code, err error) {
 	volunteer, err := s.VolunteersRepository.GetVolunteerByEmail(email)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	codes, err = s.VolunteerCodesRepository.GetAllVolunteerCodesByVolunteerID(volunteer.VolunteerID)
+	codes, err = s.VolunteerCodesRepository.GetActiveVolunteerCodesByVolunteerID(volunteer.VolunteerID)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return codes, nil
+	givenCodes, err = s.VolunteerCodesRepository.GetGivenVolunteerCodesByVolunteerID(volunteer.VolunteerID)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return codes, givenCodes, nil
 }
 
 func (s VolunteersService) GetVolunteerOrdersByEmail(email string) (orders []model.Order, err error) {

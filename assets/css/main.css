@@ -7,7 +7,16 @@
 /* Image by <a href="https://www.freepik.com/free-photo/top-view-monochrome-paper_17193859.htm#page=4&query=pastel%20paper%20background&position=22&from_view=search&track=ais&uuid=d8295a69-ce46-4c62-8b1f-84cc9dbf8e9e">Freepik</a> */
 
 @layer base {
-    html {
-        font-family: "Metrophobic", system-ui, sans-serif;
-    }
+  html {
+    font-family: "Metrophobic", system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .show-toast {
+    @apply transform ease-out duration-300 transition translate-y-0 opacity-100 sm:translate-x-0;
+  }
+  .hide-toast {
+    @apply transition ease-in duration-100 translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2;
+  }
 }

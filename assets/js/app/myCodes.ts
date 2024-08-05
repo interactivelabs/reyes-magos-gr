@@ -1,18 +1,12 @@
-const copy = async (code: string) => {
-  const flashToast = () => {
-    const toast = document.getElementById(`mycodes-copied-label-${code}`);
-    if (toast) {
-      toast.classList.remove("hidden");
-      setTimeout(() => {
-        toast.classList.add("hidden");
-      }, 1500);
-    }
-  };
+import { showToast } from "../shared/toast";
 
+const copy = async (code: string) => {
   try {
     await navigator.clipboard.writeText(code);
-    flashToast();
-    console.log("Copied successfully!");
+    showToast({
+      title: "Copiado!",
+      subTitle: "El codigo ha sido copiado al portapapeles.",
+    });
   } catch (err) {
     console.error("Failed to copy: ", err);
   }
@@ -22,18 +16,18 @@ const share = async (code: string) => {
   const data = {
     title: "Comparte la alegria!",
     text: `Utiliza este codigo para obtener un juguete: ${code}`,
-    url: window.location.href,
+    url: `${window.location.origin}/catalog`,
   };
 
   try {
     await navigator.share(data);
-    console.log("Shared successfully!");
   } catch (err) {
     console.error("Share failed: ", err);
   }
 };
 
 export default function initMycodes() {
+  globalThis.copyCode = copy;
   globalThis.shareCode = async (code: string) => {
     if (typeof navigator.share === "undefined") {
       copy(code);
