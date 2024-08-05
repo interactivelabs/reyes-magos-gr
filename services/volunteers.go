@@ -37,7 +37,7 @@ func (s VolunteersService) GetVolunteerOrdersByEmail(email string) (orders []mod
 		return nil, err
 	}
 
-	orders, err = s.OrdersRepository.GetOrdersByVolunteerID(volunteer.VolunteerID)
+	orders, err = s.OrdersRepository.GetPendingOrdersByVolunteerID(volunteer.VolunteerID)
 	if err != nil {
 		return nil, err
 	}

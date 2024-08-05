@@ -12,8 +12,7 @@ templ MyOrders(orders []model.Order) {
 		<h1 class="text-center pt-8 text-2xl">My Orders</h1>
 		<section id="my_orders" class="relative isolate px-6 py-20 lg:px-8">
 			@components.Stats("Orders Stats", []components.Stat{
-				{Name: "Total Orders", Value: fmt.Sprint(len(orders))},
-				{Name: "Open Orders", Value: fmt.Sprint(len(orders))},
+				{Name: "Pending Orders", Value: fmt.Sprint(len(orders))},
 			})
 			if len(orders) > 0 {
 				<div class="py-20">

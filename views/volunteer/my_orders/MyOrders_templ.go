@@ -50,8 +50,7 @@ func MyOrders(orders []model.Order) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = components.Stats("Orders Stats", []components.Stat{
-				{Name: "Total Orders", Value: fmt.Sprint(len(orders))},
-				{Name: "Open Orders", Value: fmt.Sprint(len(orders))},
+				{Name: "Pending Orders", Value: fmt.Sprint(len(orders))},
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err

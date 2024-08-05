@@ -73,11 +73,13 @@ func GetOrdersFromQuery(rows *sql.Rows) (orders []model.Order, err error) {
 	return orders, nil
 }
 
-func (r OrdersRepository) GetOrdersByVolunteerID(volunteerID int64) (orders []model.Order, err error) {
+func (r OrdersRepository) GetPendingOrdersByVolunteerID(volunteerID int64) (orders []model.Order, err error) {
 	rows, err := r.DB.Query(`
 		SELECT `+orderAllFields+`
 		FROM orders
 		WHERE volunteer_id = ?
+			AND deleted = 0
+			AND completed = 0
 	`, volunteerID)
 	if err != nil {
 		return nil, err

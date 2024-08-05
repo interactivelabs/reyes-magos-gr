@@ -23,7 +23,7 @@ templ MyCodeItem(code model.Code) {
 			<p class="text-gray-500">Exp: { lib.FormatDate(code.Expiration) }</p>
 		</div>
 		if code.Given == 1 {
-			<div class="flex-1 flex items-center justify-center bg-gray-200 text-gray-500 text-sm font-semibold">
+			<div class="h-full w-full p-2 text-center bg-gray-200 text-gray-500 text-sm font-semibold">
 				Regalado
 			</div>
 		} else {
@@ -48,7 +48,7 @@ templ MyCodeItem(code model.Code) {
 					hx-post={ string(templ.URL(fmt.Sprintf("/volunteer/mycodes/give/%d", code.CodeID))) }
 					hx-target={ fmt.Sprintf("#volunteer-code-%d", code.CodeID) }
 				>
-					Regalar
+					Give
 				</button>
 			</div>
 		}
@@ -68,6 +68,16 @@ templ MyCodes(codes []model.Code, givenCodes []model.Code) {
 					<h2 class="text-lg font-semibold leading-6 text-gray-900">Available Codes</h2>
 					<ul role="list" id="mycodes-code-list" class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
 						for _, code := range codes {
+							@MyCodeItem(code)
+						}
+					</ul>
+				</div>
+			}
+			if len(givenCodes) > 0 {
+				<div class="py-20">
+					<h2 class="text-lg font-semibold leading-6 text-gray-900">Given Codes</h2>
+					<ul role="list" id="mycodes-code-list" class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+						for _, code := range givenCodes {
 							@MyCodeItem(code)
 						}
 					</ul>
