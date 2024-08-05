@@ -48,7 +48,7 @@ templ MyCodeItem(code model.Code) {
 					hx-post={ string(templ.URL(fmt.Sprintf("/volunteer/mycodes/give/%d", code.CodeID))) }
 					hx-target={ fmt.Sprintf("#volunteer-code-%d", code.CodeID) }
 				>
-					Give
+					Give <img class="inline-block h-4 w-4 ml-4" src="/public/img/gift.svg" alt="" role="presentation"/>
 				</button>
 			</div>
 		}
