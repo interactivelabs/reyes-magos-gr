@@ -96,10 +96,12 @@ const toyAllFields string = `
 	toy_id,
 	toy_name,
 	COALESCE(toy_description, ''),
+	COALESCE(category, ''),
 	age_min,
 	age_max,
 	image1,
 	image2,
+	image3,
 	source_url,
 	deleted`
 
@@ -112,10 +114,12 @@ func scanAllToy(s ToyScanner) (toy model.Toy, err error) {
 		&toy.ToyID,
 		&toy.ToyName,
 		&toy.ToyDescription,
+		&toy.Category,
 		&toy.AgeMin,
 		&toy.AgeMax,
 		&toy.Image1,
 		&toy.Image2,
+		&toy.Image3,
 		&toy.SourceURL,
 		&toy.Deleted)
 	return toy, err

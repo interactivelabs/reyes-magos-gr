@@ -130,8 +130,6 @@ func scanAllVolunteer(s VolunteerScanner) (volunteer model.Volunteer, err error)
 		&volunteer.City,
 		&volunteer.Province,
 		&volunteer.ZipCode,
-		&volunteer.Secret,
-		&volunteer.Passcode,
 		&volunteer.Deleted,
 	)
 

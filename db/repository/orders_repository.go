@@ -121,6 +121,8 @@ const orderAllFields string = `
 	shipped,
 	COALESCE(shipped_date, ''),
 	completed,
+	COALESCE(completed_date, ''),
+	cancelled,
 	deleted`
 
 type OrderScanner interface {
@@ -137,6 +139,8 @@ func scanAllOrder(s OrderScanner) (order model.Order, err error) {
 		&order.Shipped,
 		&order.ShippedDate,
 		&order.Completed,
+		&order.CompletedDate,
+		&order.Cancelled,
 		&order.Deleted,
 	)
 	return order, err

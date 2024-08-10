@@ -1,16 +1,35 @@
+create table codes
+(
+    code_id    integer           not null
+        constraint codes_pk
+            primary key autoincrement,
+    code       TEXT              not null,
+    expiration TEXT              not null,
+    used       integer default 0 not null,
+    cancelled  integer default 0 not null,
+    deleted    integer default 0 not null,
+    given      integer default 0
+);
+
+create unique index codes_code_uindex
+    on codes (code);
+
 create table toys
 (
     toy_id          integer not null
         constraint toys_pk
             primary key autoincrement,
     toy_name        TEXT    not null,
+    toy_description TEXT,
+    category        TEXT,
     age_min         integer not null,
     age_max         integer not null,
     image1          TEXT,
     image2          TEXT,
+    image3          TEXT,
     source_url      TEXT,
-    toy_description TEXT,
     deleted         integer default 0
+    
 );
 
 create table volunteers
@@ -28,25 +47,31 @@ create table volunteers
     city         TEXT    not null,
     province     TEXT,
     zip_code     TEXT    not null,
-    secret       TEXT    not null,
-    passcode     integer not null,
-    deleted      integer default 0
+    deleted      integer default 0 not null
 );
 
-create table codes
+create table orders
 (
-    code_id    integer           not null
-        constraint codes_pk
+    order_id       integer           not null
+        constraint orders_pk
             primary key autoincrement,
-    code       TEXT              not null,
-    expiration TEXT              not null,
-    used       integer default 0 not null,
-    cancelled  integer default 0,
-    deleted    integer default 0
+    toy_id         integer           not null
+        constraint orders_toys_fk
+            references toys,
+    volunteer_id   integer           not null
+        constraint orders_volunteers_fk
+            references volunteers,
+    code_id        integer           not null
+        constraint orders_codes_fk
+            references codes,
+    order_date     TEXT              not null,
+    shipped        integer default 0 not null,
+    shipped_date   TEXT,
+    completed      INTEGER default 0 not null,
+    completed_date TEXT,
+    cancelled       integer default 0 not null,
+    deleted        integer default 0 not null
 );
-
-create unique index codes_code_uindex
-    on codes (code);
 
 create table volunteer_codes
 (
@@ -62,22 +87,3 @@ create table volunteer_codes
     deleted           integer default 0 not null
 );
 
-create table orders
-(
-    order_id     integer           not null
-        constraint orders_pk
-            primary key autoincrement,
-    toy_id       integer           not null
-        constraint orders_toys_fk
-            references toys,
-    volunteer_id integer           not null
-        constraint orders_volunteers_fk
-            references volunteers,
-    code_id      integer           not null
-        constraint orders_codes_fk
-            references codes,
-    order_date   TEXT              not null,
-    shipped      integer default 0 not null,
-    shipped_date TEXT,
-    deleted      integer default 0
-);

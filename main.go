@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"log"
 	"os"
 	"reyes-magos-gr/api"
@@ -10,15 +9,13 @@ import (
 	"reyes-magos-gr/handlers/admin"
 	"reyes-magos-gr/middleware"
 	"reyes-magos-gr/platform/authenticator"
+	"reyes-magos-gr/platform/database"
 	"reyes-magos-gr/services"
 
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
-	_ "github.com/mattn/go-sqlite3"
 )
-
-const filename = "./db/reyes.sqlite"
 
 func main() {
 	e := echo.New()
@@ -35,10 +32,13 @@ func main() {
 	}
 
 	// Initialize DB
-	db, err := sql.Open("sqlite3", filename)
+	db, connector, dir, err := database.New()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer os.RemoveAll(dir)
+	defer connector.Close()
+	defer db.Close()
 
 	// CREATE REPOSITORY INSTANCES
 	codesRepository := repository.CodesRepository{
@@ -116,7 +116,7 @@ func main() {
 
 	myCodesHandler := handlers.MyCodesHandler{
 		VolunteersService: volunteersService,
-		CodesRepository:  codesRepository,
+		CodesRepository:   codesRepository,
 	}
 	vg.GET("/mycodes", myCodesHandler.MyCodesViewHandler)
 	vg.POST("/mycodes/give/:code_id", myCodesHandler.GiveCode)
