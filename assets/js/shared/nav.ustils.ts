@@ -16,18 +16,22 @@ export const closeIfOutsideClick = ({
     element === event.target ||
     elementButton.contains(event.target as HTMLElement) ||
     elementButton === event.target;
-  if (!isClickInside && !element.classList.contains("hidden")) {
-    element.classList.add("hidden");
+  if (
+    !isClickInside &&
+    element.getAttribute("data-transition-state") === "open"
+  ) {
+    element.setAttribute("data-transition-state", "closed");
     onClose && onClose();
   }
 };
 
 export const toggleMenu = (menuContainer: HTMLElement | null) => {
   if (!menuContainer) return;
-  if (menuContainer.classList.contains("hidden")) {
+  if (menuContainer.getAttribute("data-transition-state") === "closed") {
     menuContainer.setAttribute("open", "true");
+    menuContainer.setAttribute("data-transition-state", "open");
   } else {
     menuContainer.removeAttribute("open");
+    menuContainer.setAttribute("data-transition-state", "closed");
   }
-  menuContainer.classList.toggle("hidden");
 };

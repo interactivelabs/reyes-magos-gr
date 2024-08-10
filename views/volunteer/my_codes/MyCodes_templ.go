@@ -163,7 +163,7 @@ func MyCodeItem(code model.Code) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Give  <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 text-white\"><use href=\"/public/img/gift.svg#checkCircle\" fill=\"white\"></use></svg></button></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Give  <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/gift.svg#gift\"></use></svg></button></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

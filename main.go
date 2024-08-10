@@ -123,8 +123,10 @@ func main() {
 
 	myOrdersHandler := handlers.MyOrdersHandler{
 		VolunteersService: volunteersService,
+		Ordersrepository:  ordersRepository,
 	}
 	vg.GET("/myorders", myOrdersHandler.MyOrdersViewHandler)
+	vg.POST("/myorders/:order_id/completed", myOrdersHandler.MyOrdersCompleteHandler)
 
 	// ADMIN ENDPOINTS
 	ag := e.Group("/admin")
