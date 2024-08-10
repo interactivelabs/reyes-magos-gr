@@ -61,7 +61,7 @@ func Nav() templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div><!--\n\t\t\t\t\t\t\t\tDropdown menu, show/hide based on menu state.\n\t\t\t\t\t\t\t\t--><div id=\"admin-menu-dropdown\" role=\"menu\" aria-orientation=\"vertical\" aria-labelledby=\"admin-menu-button\" tabindex=\"-1\" class=\"hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none\"><a href=\"/volunteer/mycodes\" class=\"block px-4 py-2 text-sm\" role=\"menuitem\" tabindex=\"-1\" id=\"admin-menu-item-0\">My Codes</a> <a href=\"/volunteer/myorders\" class=\"block px-4 py-2 text-sm\" role=\"menuitem\" tabindex=\"-1\" id=\"admin-menu-item-0\">My Orders</a> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div><!--\n\t\t\t\t\t\t\t\tDropdown menu, show/hide based on menu state.\n\t\t\t\t\t\t\t\t--><div id=\"admin-menu-dropdown\" role=\"menu\" aria-orientation=\"vertical\" aria-labelledby=\"admin-menu-button\" tabindex=\"-1\" class=\"transition absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none\" data-transition-state=\"closed\" data-transition-closed=\"ease-in duration-200 opacity-0 translate-y-1\" data-transition-open=\"ease-out duration-200 opacity-100 translate-y-0\"><a href=\"/volunteer/mycodes\" class=\"block px-4 py-2 text-sm\" role=\"menuitem\" tabindex=\"-1\" id=\"admin-menu-item-0\">My Codes</a> <a href=\"/volunteer/myorders\" class=\"block px-4 py-2 text-sm\" role=\"menuitem\" tabindex=\"-1\" id=\"admin-menu-item-0\">My Orders</a> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -76,17 +76,7 @@ func Nav() templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><!-- Mobile menu, show/hide based on menu state. --><div id=\"mobile-menu-container\" class=\"hidden bg-white absolute w-full z-50\" role=\"menu\"><div class=\"space-y-1 pb-4 pt-2\"><a href=\"/#hero\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">Inicio</a> <a href=\"/#why\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">Porque?</a> <a href=\"/#volunteers\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">Voluntarios</a> <a href=\"/catalog\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">Juguetes</a> ")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if lib.GetProfile(ctx).Email != "" {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"w-full border-t border-gray-300\"></div><a href=\"/volunteer/mycodes\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">My Codes</a> <a href=\"/volunteer/myorders\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">My Orders</a>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></nav></header>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><!-- Mobile menu, show/hide based on menu state. --><div role=\"menu\" id=\"mobile-menu-container\" class=\"transition bg-white absolute w-full z-50\" data-transition-state=\"closed\" data-transition-closed=\"ease-in duration-300 opacity-0 translate-y-1\" data-transition-open=\"ease-out duration-300 opacity-100 translate-y-0\"><div class=\"space-y-1 pb-4 pt-2\"><a href=\"/#hero\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">Inicio</a> <a href=\"/#why\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">Porque?</a> <a href=\"/#volunteers\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">Voluntarios</a> <a href=\"/catalog\" class=\"block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium hover:border-gray-300 hover:bg-gray-50\" role=\"menuitem\">Juguetes</a></div></div></nav></header>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
