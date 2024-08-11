@@ -8,9 +8,7 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import layout "reyes-magos-gr/views"
-
-func Support() templ.Component {
+func Error404() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -40,13 +38,13 @@ func Support() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"hero\" class=\"bg-hero-paper relative isolate px-6 pt-14 lg:px-8\"><div class=\"mx-auto max-w-2xl py-32 sm:py-48 lg:py-56\"><div class=\"text-center\"><h1 class=\"text-4xl font-display font-bold tracking-tight sm:text-6xl\">La inocente sonrisa de los niños es el lenguage universal de la bondad</h1><p class=\"mt-6 text-lg leading-8 text-brand-orange\">En este sitio podras recibir un juguete gratuito para un niño</p><div class=\"mt-10 flex items-center justify-center gap-x-6\"><a href=\"/catalog\" class=\"rounded-full border-2 border-brand-orange bg-brand-orange px-5 py-4 text-sm font-semibold text-white shadow-sm hover:bg-transparent hover:text-brand-orange\">Recibe un juguete</a> <a href=\"#steps\" class=\"text-sm font-semibold leading-6 text-brand-orange\">Ver como <span aria-hidden=\"true\">→</span></a></div></div></div></section><section id=\"support\" class=\"relative isolate px-6 py-20 lg:px-8\"><div class=\"mx-auto\"><div class=\"text-center mt-12\"><h2 class=\"text-3xl font-display font-bold tracking-tight sm:text-4xl\">If you need support please reach out to</h2><a href=\"mailto:support@dl-toys.com\" class=\"inline-block text-xl mt-12 font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></div></div></section></main>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main class=\"relative isolate min-h-full\"><img src=\"/public/img/sad_bear.webp\" alt=\"\" class=\"absolute inset-0 -z-10 h-full w-full object-cover object-top brightness-50\"><div class=\"mx-auto max-w-7xl px-6 py-32 text-center sm:py-40 lg:px-8 backdrop-opacity-10\"><p class=\"text-base font-semibold leading-8 text-white\">404</p><h1 class=\"mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl\">Page not found</h1><p class=\"mt-4 text-base text-white/70 sm:mt-6\">Sorry, we couldn’t find the page you’re looking for.</p><div class=\"mt-10 flex justify-center\"><a href=\"/\" class=\"text-sm font-semibold leading-7 text-white\"><span aria-hidden=\"true\">&larr;</span> Back to home</a></div></div></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = layout.Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = LayoutErrors().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

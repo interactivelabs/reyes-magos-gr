@@ -41,25 +41,11 @@ func main() {
 	defer db.Close()
 
 	// CREATE REPOSITORY INSTANCES
-	codesRepository := repository.CodesRepository{
-		DB: db,
-	}
-
-	toysRepository := repository.ToysRepository{
-		DB: db,
-	}
-
-	ordersRepository := repository.OrdersRepository{
-		DB: db,
-	}
-
-	volunteerCodesRepository := repository.VolunteerCodesRepository{
-		DB: db,
-	}
-
-	volunteersRepository := repository.VolunteersRepository{
-		DB: db,
-	}
+	codesRepository := repository.CodesRepository{DB: db}
+	toysRepository := repository.ToysRepository{DB: db}
+	ordersRepository := repository.OrdersRepository{DB: db}
+	volunteerCodesRepository := repository.VolunteerCodesRepository{DB: db}
+	volunteersRepository := repository.VolunteersRepository{DB: db}
 
 	// CREATE SERVICES INSTANCES
 	codesService := services.CodesService{
@@ -83,6 +69,9 @@ func main() {
 	homeHandler := handlers.HomeHandler{}
 	e.GET("/", homeHandler.HomeViewHandler)
 	e.GET("/support", homeHandler.SupportViewHandler)
+	e.GET("/401", homeHandler.Error401)
+	e.GET("/404", homeHandler.Error404)
+	e.GET("/500", homeHandler.Error500)
 
 	loginHandler := handlers.LoginHandler{
 		Auth: auth,
@@ -175,6 +164,8 @@ func main() {
 	ag.GET("/order/:order_id", adminOrdersHandler.OrderCardViewHandler)
 	ag.GET("/order/:order_id/edit", adminOrdersHandler.UpdateOrderViewHandler)
 	ag.POST("/order/:order_id/save", adminOrdersHandler.SaveOrderChangesHandler)
+
+	e.HTTPErrorHandler = middleware.CustomHTTPErrorHandler
 
 	var host = "localhost"
 	var port = "8080"

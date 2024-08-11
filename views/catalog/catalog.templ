@@ -8,82 +8,84 @@ import (
 
 templ Catalog(toys []model.Toy) {
 	@layout.Base() {
-		<section id="catalog" class="relative isolate px-6 py-20 lg:px-8">
-			<h1 class="text-4xl font-display font-bold tracking-tight text-center mb-20">Escoje un juguete</h1>
-			<div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-				<!-- Filters -->
-				<section aria-labelledby="filter-heading" class="grid items-center border-b border-t border-gray-200">
-					<h2 id="filter-heading" class="sr-only">Filtros</h2>
-					<div class="relative col-start-1 row-start-1 py-4">
-						<div class="mx-auto flex max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8">
-							<div>
-								<button type="button" class="group flex items-center font-medium text-gray-700" aria-controls="disclosure-1" aria-expanded="false">
-									Filtros
-								</button>
-							</div>
-							<div class="pl-6">
-								<button type="button" class="text-gray-500">Clear all</button>
-							</div>
-						</div>
-					</div>
-					<div class="border-t border-gray-200 py-10" id="disclosure-1">
-						<div class="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 px-4 text-sm sm:px-6 md:gap-x-6 lg:px-8">
-							<div class="grid auto-rows-min grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-6">
-								<fieldset>
-									<legend class="block font-medium">Edades (años)</legend>
-									<div class="space-y-6 pt-6 sm:space-y-4 sm:pt-4">
-										<div class="flex items-center text-base sm:text-sm">
-											<input id="price-0" name="price[]" value="0" type="checkbox" class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"/>
-											<label for="price-0" class="ml-3 min-w-0 flex-1 text-gray-600">0 - 1</label>
-										</div>
-										<div class="flex items-center text-base sm:text-sm">
-											<input id="price-1" name="price[]" value="25" type="checkbox" class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"/>
-											<label for="price-1" class="ml-3 min-w-0 flex-1 text-gray-600">1 - 3</label>
-										</div>
-										<div class="flex items-center text-base sm:text-sm">
-											<input id="price-2" name="price[]" value="50" type="checkbox" class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"/>
-											<label for="price-2" class="ml-3 min-w-0 flex-1 text-gray-600">2 - 5</label>
-										</div>
-									</div>
-								</fieldset>
-								<fieldset>
-									<legend class="block font-medium">Categoria</legend>
-									<div class="space-y-6 pt-6 sm:space-y-4 sm:pt-4">
-										<div class="flex items-center text-base sm:text-sm">
-											<input id="color-0" name="color[]" value="white" type="checkbox" class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"/>
-											<label for="color-0" class="ml-3 min-w-0 flex-1 text-gray-600">Didacticos</label>
-										</div>
-										<div class="flex items-center text-base sm:text-sm">
-											<input id="color-1" name="color[]" value="beige" type="checkbox" class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"/>
-											<label for="color-1" class="ml-3 min-w-0 flex-1 text-gray-600">Deportivos</label>
-										</div>
-									</div>
-								</fieldset>
-							</div>
-						</div>
-					</div>
-				</section>
-				<div class="py-8 grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8">
-					for _, toy := range toys {
-						<a href={ templ.URL(fmt.Sprintf("redeem/%d", toy.ToyID)) }>
-							<div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
-								<div class="p-4 group-hover:opacity-75">
-									<img src={ toy.Image1 } alt={ toy.ToyDescription } class="w-full"/>
+		<main>
+			<section id="catalog" class="relative isolate px-6 py-20 lg:px-8">
+				<h1 class="text-4xl font-display font-bold tracking-tight text-center mb-20">Escoje un juguete</h1>
+				<div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+					<!-- Filters -->
+					<section aria-labelledby="filter-heading" class="grid items-center border-b border-t border-gray-200">
+						<h2 id="filter-heading" class="sr-only">Filtros</h2>
+						<div class="relative col-start-1 row-start-1 py-4">
+							<div class="mx-auto flex max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8">
+								<div>
+									<button type="button" class="group flex items-center font-medium text-gray-700" aria-controls="disclosure-1" aria-expanded="false">
+										Filtros
+									</button>
 								</div>
-								<div class="flex flex-1 flex-col space-y-2 p-4">
-									<h3 class="text-lg font-bold">
-										<span aria-hidden="true" class="absolute inset-0"></span>
-										{ toy.ToyName }
-									</h3>
-									<div class="flex-1">
-										<p class="text-sm italic text-gray-500 text-right">{ fmt.Sprint(toy.AgeMin) } a { fmt.Sprint(toy.AgeMax) } años</p>
-									</div>
+								<div class="pl-6">
+									<button type="button" class="text-gray-500">Clear all</button>
 								</div>
 							</div>
-						</a>
-					}
+						</div>
+						<div class="border-t border-gray-200 py-10" id="disclosure-1">
+							<div class="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 px-4 text-sm sm:px-6 md:gap-x-6 lg:px-8">
+								<div class="grid auto-rows-min grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-6">
+									<fieldset>
+										<legend class="block font-medium">Edades (años)</legend>
+										<div class="space-y-6 pt-6 sm:space-y-4 sm:pt-4">
+											<div class="flex items-center text-base sm:text-sm">
+												<input id="price-0" name="price[]" value="0" type="checkbox" class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"/>
+												<label for="price-0" class="ml-3 min-w-0 flex-1 text-gray-600">0 - 1</label>
+											</div>
+											<div class="flex items-center text-base sm:text-sm">
+												<input id="price-1" name="price[]" value="25" type="checkbox" class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"/>
+												<label for="price-1" class="ml-3 min-w-0 flex-1 text-gray-600">1 - 3</label>
+											</div>
+											<div class="flex items-center text-base sm:text-sm">
+												<input id="price-2" name="price[]" value="50" type="checkbox" class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"/>
+												<label for="price-2" class="ml-3 min-w-0 flex-1 text-gray-600">2 - 5</label>
+											</div>
+										</div>
+									</fieldset>
+									<fieldset>
+										<legend class="block font-medium">Categoria</legend>
+										<div class="space-y-6 pt-6 sm:space-y-4 sm:pt-4">
+											<div class="flex items-center text-base sm:text-sm">
+												<input id="color-0" name="color[]" value="white" type="checkbox" class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"/>
+												<label for="color-0" class="ml-3 min-w-0 flex-1 text-gray-600">Didacticos</label>
+											</div>
+											<div class="flex items-center text-base sm:text-sm">
+												<input id="color-1" name="color[]" value="beige" type="checkbox" class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"/>
+												<label for="color-1" class="ml-3 min-w-0 flex-1 text-gray-600">Deportivos</label>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+							</div>
+						</div>
+					</section>
+					<div class="py-8 grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8">
+						for _, toy := range toys {
+							<a href={ templ.URL(fmt.Sprintf("redeem/%d", toy.ToyID)) }>
+								<div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
+									<div class="p-4 group-hover:opacity-75">
+										<img src={ toy.Image1 } alt={ toy.ToyDescription } class="w-full"/>
+									</div>
+									<div class="flex flex-1 flex-col space-y-2 p-4">
+										<h3 class="text-lg font-bold">
+											<span aria-hidden="true" class="absolute inset-0"></span>
+											{ toy.ToyName }
+										</h3>
+										<div class="flex-1">
+											<p class="text-sm italic text-gray-500 text-right">{ fmt.Sprint(toy.AgeMin) } a { fmt.Sprint(toy.AgeMax) } años</p>
+										</div>
+									</div>
+								</div>
+							</a>
+						}
+					</div>
 				</div>
-			</div>
-		</section>
+			</section>
+		</main>
 	}
 }

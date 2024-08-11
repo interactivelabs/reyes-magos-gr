@@ -9,23 +9,25 @@ import (
 
 templ MyOrders(orders []model.Order) {
 	@layout.Base() {
-		<h1 class="text-center pt-8 text-2xl">My Orders</h1>
-		<section id="my_orders" class="relative isolate px-6 py-20 lg:px-8">
-			@components.Stats("Orders Stats", []components.Stat{
-				{Name: "Pending Orders", Value: fmt.Sprint(len(orders))},
-			})
-			if len(orders) > 0 {
-				<div class="py-20">
-					<h2 class="text-lg font-semibold leading-6 text-gray-900">Open Orders</h2>
-					<ul class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-						for _, order := range orders {
-							<li class="col-span-1 flex rounded-lg shadow">
-								@components.OrderCard(order)
-							</li>
-						}
-					</ul>
-				</div>
-			}
-		</section>
+		<main>
+			<h1 class="text-center pt-8 text-2xl">My Orders</h1>
+			<section id="my_orders" class="relative isolate px-6 py-20 lg:px-8">
+				@components.Stats("Orders Stats", []components.Stat{
+					{Name: "Pending Orders", Value: fmt.Sprint(len(orders))},
+				})
+				if len(orders) > 0 {
+					<div class="py-20">
+						<h2 class="text-lg font-semibold leading-6 text-gray-900">Open Orders</h2>
+						<ul class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+							for _, order := range orders {
+								<li class="col-span-1 flex rounded-lg shadow">
+									@components.OrderCard(order)
+								</li>
+							}
+						</ul>
+					</div>
+				}
+			</section>
+		</main>
 	}
 }

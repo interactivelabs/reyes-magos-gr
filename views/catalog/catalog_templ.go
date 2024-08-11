@@ -44,7 +44,7 @@ func Catalog(toys []model.Toy) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section id=\"catalog\" class=\"relative isolate px-6 py-20 lg:px-8\"><h1 class=\"text-4xl font-display font-bold tracking-tight text-center mb-20\">Escoje un juguete</h1><div class=\"mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8\"><!-- Filters --><section aria-labelledby=\"filter-heading\" class=\"grid items-center border-b border-t border-gray-200\"><h2 id=\"filter-heading\" class=\"sr-only\">Filtros</h2><div class=\"relative col-start-1 row-start-1 py-4\"><div class=\"mx-auto flex max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8\"><div><button type=\"button\" class=\"group flex items-center font-medium text-gray-700\" aria-controls=\"disclosure-1\" aria-expanded=\"false\">Filtros</button></div><div class=\"pl-6\"><button type=\"button\" class=\"text-gray-500\">Clear all</button></div></div></div><div class=\"border-t border-gray-200 py-10\" id=\"disclosure-1\"><div class=\"mx-auto grid max-w-7xl grid-cols-2 gap-x-4 px-4 text-sm sm:px-6 md:gap-x-6 lg:px-8\"><div class=\"grid auto-rows-min grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-6\"><fieldset><legend class=\"block font-medium\">Edades (años)</legend><div class=\"space-y-6 pt-6 sm:space-y-4 sm:pt-4\"><div class=\"flex items-center text-base sm:text-sm\"><input id=\"price-0\" name=\"price[]\" value=\"0\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500\"> <label for=\"price-0\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">0 - 1</label></div><div class=\"flex items-center text-base sm:text-sm\"><input id=\"price-1\" name=\"price[]\" value=\"25\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500\"> <label for=\"price-1\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">1 - 3</label></div><div class=\"flex items-center text-base sm:text-sm\"><input id=\"price-2\" name=\"price[]\" value=\"50\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500\"> <label for=\"price-2\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">2 - 5</label></div></div></fieldset><fieldset><legend class=\"block font-medium\">Categoria</legend><div class=\"space-y-6 pt-6 sm:space-y-4 sm:pt-4\"><div class=\"flex items-center text-base sm:text-sm\"><input id=\"color-0\" name=\"color[]\" value=\"white\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500\"> <label for=\"color-0\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">Didacticos</label></div><div class=\"flex items-center text-base sm:text-sm\"><input id=\"color-1\" name=\"color[]\" value=\"beige\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500\"> <label for=\"color-1\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">Deportivos</label></div></div></fieldset></div></div></div></section><div class=\"py-8 grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"catalog\" class=\"relative isolate px-6 py-20 lg:px-8\"><h1 class=\"text-4xl font-display font-bold tracking-tight text-center mb-20\">Escoje un juguete</h1><div class=\"mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8\"><!-- Filters --><section aria-labelledby=\"filter-heading\" class=\"grid items-center border-b border-t border-gray-200\"><h2 id=\"filter-heading\" class=\"sr-only\">Filtros</h2><div class=\"relative col-start-1 row-start-1 py-4\"><div class=\"mx-auto flex max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8\"><div><button type=\"button\" class=\"group flex items-center font-medium text-gray-700\" aria-controls=\"disclosure-1\" aria-expanded=\"false\">Filtros</button></div><div class=\"pl-6\"><button type=\"button\" class=\"text-gray-500\">Clear all</button></div></div></div><div class=\"border-t border-gray-200 py-10\" id=\"disclosure-1\"><div class=\"mx-auto grid max-w-7xl grid-cols-2 gap-x-4 px-4 text-sm sm:px-6 md:gap-x-6 lg:px-8\"><div class=\"grid auto-rows-min grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-6\"><fieldset><legend class=\"block font-medium\">Edades (años)</legend><div class=\"space-y-6 pt-6 sm:space-y-4 sm:pt-4\"><div class=\"flex items-center text-base sm:text-sm\"><input id=\"price-0\" name=\"price[]\" value=\"0\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500\"> <label for=\"price-0\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">0 - 1</label></div><div class=\"flex items-center text-base sm:text-sm\"><input id=\"price-1\" name=\"price[]\" value=\"25\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500\"> <label for=\"price-1\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">1 - 3</label></div><div class=\"flex items-center text-base sm:text-sm\"><input id=\"price-2\" name=\"price[]\" value=\"50\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500\"> <label for=\"price-2\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">2 - 5</label></div></div></fieldset><fieldset><legend class=\"block font-medium\">Categoria</legend><div class=\"space-y-6 pt-6 sm:space-y-4 sm:pt-4\"><div class=\"flex items-center text-base sm:text-sm\"><input id=\"color-0\" name=\"color[]\" value=\"white\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500\"> <label for=\"color-0\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">Didacticos</label></div><div class=\"flex items-center text-base sm:text-sm\"><input id=\"color-1\" name=\"color[]\" value=\"beige\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500\"> <label for=\"color-1\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">Deportivos</label></div></div></fieldset></div></div></div></section><div class=\"py-8 grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -65,7 +65,7 @@ func Catalog(toys []model.Toy) templ.Component {
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(toy.Image1)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 71, Col: 30}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 72, Col: 31}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
@@ -78,7 +78,7 @@ func Catalog(toys []model.Toy) templ.Component {
 				var templ_7745c5c3_Var5 string
 				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyDescription)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 71, Col: 57}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 72, Col: 58}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 				if templ_7745c5c3_Err != nil {
@@ -91,7 +91,7 @@ func Catalog(toys []model.Toy) templ.Component {
 				var templ_7745c5c3_Var6 string
 				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyName)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 76, Col: 23}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 77, Col: 24}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
@@ -104,7 +104,7 @@ func Catalog(toys []model.Toy) templ.Component {
 				var templ_7745c5c3_Var7 string
 				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(toy.AgeMin))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 79, Col: 85}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 80, Col: 86}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 				if templ_7745c5c3_Err != nil {
@@ -117,7 +117,7 @@ func Catalog(toys []model.Toy) templ.Component {
 				var templ_7745c5c3_Var8 string
 				templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(toy.AgeMax))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 79, Col: 114}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 80, Col: 115}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 				if templ_7745c5c3_Err != nil {
@@ -128,7 +128,7 @@ func Catalog(toys []model.Toy) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></section>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></section></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

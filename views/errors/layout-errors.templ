@@ -1,13 +1,13 @@
-package layout
+package pages
 
 import (
 	"reyes-magos-gr/views/components"
 	"reyes-magos-gr/views/shared"
 )
 
-templ Base() {
+templ LayoutErrors() {
 	<!DOCTYPE html>
-	<html lang="en" class="bg-slate-50">
+	<html lang="en" class="bg-slate-50 h-full">
 		<head>
 			<meta charSet="utf-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -20,7 +20,7 @@ templ Base() {
 			<link rel="stylesheet" href="/public/css/main.css"/>
 			<script src="https://unpkg.com/htmx.org@2.0.1" fetchpriority="high"></script>
 		</head>
-		<body class="text-brand-blue">
+		<body class="text-brand-blue h-full">
 			@shared.Nav()
 			{ children... }
 			@shared.Footer()
