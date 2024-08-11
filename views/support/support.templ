@@ -1,0 +1,28 @@
+package pages
+
+import layout "reyes-magos-gr/views"
+
+templ Support() {
+	@layout.Base() {
+		<section id="hero" class="bg-hero-paper relative isolate px-6 pt-14 lg:px-8">
+			<div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+				<div class="text-center">
+					<h1 class="text-4xl font-display font-bold tracking-tight sm:text-6xl">La inocente sonrisa de los niños es el lenguage universal de la bondad</h1>
+					<p class="mt-6 text-lg leading-8 text-brand-orange">En este sitio podras recibir un juguete gratuito para un niño</p>
+					<div class="mt-10 flex items-center justify-center gap-x-6">
+						<a href="/catalog" class="rounded-full border-2 border-brand-orange bg-brand-orange px-5 py-4 text-sm font-semibold text-white shadow-sm hover:bg-transparent hover:text-brand-orange">Recibe un juguete</a>
+						<a href="#steps" class="text-sm font-semibold leading-6 text-brand-orange">Ver como <span aria-hidden="true">→</span></a>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section id="support" class="relative isolate px-6 py-20 lg:px-8">
+			<div class="mx-auto">
+				<div class="text-center mt-12">
+					<h2 class="text-3xl font-display font-bold tracking-tight sm:text-4xl">If you need support please reach out to</h2>
+					<a href="mailto:support@dl-toys.com" class="inline-block text-xl mt-12 font-semibold leading-6 text-brand-orange underline">support@dl-toys.com</a>
+				</div>
+			</div>
+		</section>
+	}
+}

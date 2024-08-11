@@ -13,6 +13,7 @@ func New() (db *sql.DB, connector *libsql.Connector, dir string, err error) {
 	dbName := os.Getenv("TURSO_LOCAL_DB")
 	primaryUrl := os.Getenv("TURSO_DATABASE_URL")
 	authToken := os.Getenv("TURSO_AUTH_TOKEN")
+	encryptionKey := os.Getenv("TURSO_ENCRYPTION_KEY")
 
 	dir, err = os.MkdirTemp("", "libsql-*")
 	if err != nil {
@@ -24,6 +25,7 @@ func New() (db *sql.DB, connector *libsql.Connector, dir string, err error) {
 
 	connector, err = libsql.NewEmbeddedReplicaConnector(dbPath, primaryUrl,
 		libsql.WithAuthToken(authToken),
+		libsql.WithEncryption(encryptionKey),
 	)
 
 	if err != nil {

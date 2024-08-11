@@ -82,6 +82,7 @@ func main() {
 	// PUBLIC ENDPOINTS
 	homeHandler := handlers.HomeHandler{}
 	e.GET("/", homeHandler.HomeViewHandler)
+	e.GET("/support", homeHandler.SupportViewHandler)
 
 	loginHandler := handlers.LoginHandler{
 		Auth: auth,
