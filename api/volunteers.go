@@ -88,7 +88,6 @@ func (h VolunteerHandler) UpdateVolunteerApiHandler(ctx echo.Context) error {
 }
 
 func (h VolunteerHandler) DeleteVolunteerApiHandler(ctx echo.Context) error {
-
 	volunteerIDStr := ctx.Param("volunteer_id")
 	volunteerID, err := strconv.ParseInt(volunteerIDStr, 10, 64)
 	if err != nil {

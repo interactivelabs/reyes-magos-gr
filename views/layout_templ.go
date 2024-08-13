@@ -31,7 +31,7 @@ func Base() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\" class=\"bg-slate-50\"><head><meta charSet=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><meta name=\"description\" content=\"Site for toy distribution\"><title>D&L Toys</title><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Indie+Flower&amp;family=Metrophobic&amp;display=optional\" rel=\"stylesheet\"><link rel=\"icon\" type=\"image/x-icon\" href=\"/public/img/favicon.ico\"><link rel=\"stylesheet\" href=\"/public/css/main.css\"><script src=\"https://unpkg.com/htmx.org@2.0.1\" fetchpriority=\"high\"></script></head><body class=\"text-brand-blue\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\" class=\"bg-slate-50\"><head><meta charSet=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><meta name=\"description\" content=\"Site for toy distribution\"><title>D&L Toys</title><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Indie+Flower&amp;family=Metrophobic&amp;display=optional\" rel=\"stylesheet\"><link rel=\"icon\" type=\"image/x-icon\" href=\"/public/img/favicon.ico\"><link rel=\"stylesheet\" href=\"/public/css/main.css\"><script src=\"https://unpkg.com/htmx.org@2.0.2\" integrity=\"sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ\" crossorigin=\"anonymous\" fetchpriority=\"high\"></script></head><body class=\"text-brand-blue\" hx-ext=\"preload\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -51,7 +51,11 @@ func Base() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</body><script type=\"module\" src=\"/public/js/app.js\" defer></script></html>")
+		templ_7745c5c3_Err = components.Dialog().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</body><script src=\"https://unpkg.com/htmx-ext-preload@2.0.0/preload.js\"></script><script src=\"https://unpkg.com/htmx-ext-remove-me@2.0.0/remove-me.js\"></script><script type=\"module\" src=\"/public/js/app.js\" defer></script></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

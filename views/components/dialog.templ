@@ -1,0 +1,38 @@
+package components
+
+templ CancelButton() {
+	<button
+		type="button"
+		onclick="htmx.find('#dialog-element').close();"
+		class={ BaseSecondaryButton }
+	>
+		Cancel
+	</button>
+}
+
+templ Dialog() {
+	<dialog
+		id="dialog-element"
+		class="inset-0 backdrop:bg-black backdrop:opacity-50 md:w-1/2 p-8 pt-10 rounded-lg bg-white shadow-xl transition-all"
+		aria-labelledby="modal-title"
+		role="dialog"
+	>
+		<div class="absolute right-0 top-0 hidden sm:block p-4">
+			<button
+				type="button"
+				class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
+				onclick="htmx.find('#dialog-element').close();"
+			>
+				<span class="sr-only">Close</span>
+				<svg aria-hidden="true" class="h-6 w-6 fill-current">
+					<use href="/public/img/close.svg#close"></use>
+				</svg>
+			</button>
+		</div>
+		<div
+			id="dialog-content"
+			class="text-left"
+			hx-on::after-swap="htmx.find('#dialog-element').showModal();"
+		></div>
+	</dialog>
+}

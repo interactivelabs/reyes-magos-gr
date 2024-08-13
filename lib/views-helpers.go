@@ -2,6 +2,7 @@ package lib
 
 import (
 	"context"
+	"fmt"
 	"reyes-magos-gr/db/model"
 	"time"
 
@@ -30,4 +31,8 @@ func HasOrderShipped(order model.Order) string {
 		}
 	}
 	return "Not Shipped"
+}
+
+func GetSafeIdUrl(url string, id int64) string {
+	return string(templ.URL(fmt.Sprintf(url, id)))
 }
