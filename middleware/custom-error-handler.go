@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 
 	"reyes-magos-gr/lib"
@@ -10,13 +11,16 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func CustomHTTPErrorHandler(err error, c echo.Context) {
+func CustomHTTPErrorHandler(err error, ctx echo.Context) {
 
 	code := http.StatusInternalServerError
 	if he, ok := err.(*echo.HTTPError); ok {
 		code = he.Code
 	}
-	c.Logger().Error(err)
+
+	fmt.Println(ctx.Request().URL.Path)
+
+	ctx.Logger().Error(err)
 
 	var errorPage func() templ.Component
 
@@ -29,6 +33,6 @@ func CustomHTTPErrorHandler(err error, c echo.Context) {
 		errorPage = errors.Error500
 	}
 
-	lib.Render(c, errorPage())
+	lib.Render(ctx, errorPage())
 
 }

@@ -18,14 +18,17 @@ templ Base() {
 			<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Metrophobic&display=optional" rel="stylesheet"/>
 			<link rel="icon" type="image/x-icon" href="/public/img/favicon.ico"/>
 			<link rel="stylesheet" href="/public/css/main.css"/>
-			<script src="https://unpkg.com/htmx.org@2.0.1" fetchpriority="high"></script>
+			<script src="https://unpkg.com/htmx.org@2.0.2" integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ" crossorigin="anonymous" fetchpriority="high"></script>
 		</head>
-		<body class="text-brand-blue">
+		<body class="text-brand-blue" hx-ext="preload">
 			@shared.Nav()
 			{ children... }
 			@shared.Footer()
 			@components.Toast()
+			@components.Dialog()
 		</body>
+		<script src="https://unpkg.com/htmx-ext-preload@2.0.0/preload.js"></script>
+		<script src="https://unpkg.com/htmx-ext-remove-me@2.0.0/remove-me.js"></script>
 		<script type="module" src="/public/js/app.js" defer></script>
 	</html>
 }

@@ -166,12 +166,14 @@ func main() {
 	ag.PUT("/order/:order_id/save", adminOrdersHandler.SaveOrderChangesHandler)
 
 	volunteersHandler := admin.VolunteersHandler{
-		VolunteersService: volunteersService,
+		VolunteersService:    volunteersService,
+		VolunteersRepository: volunteersRepository,
 	}
 	ag.GET("/volunteers", volunteersHandler.VolunteersViewHandler)
 	ag.GET("/volunteers/create", volunteersHandler.VolunteersCreateHandler)
-	ag.POST("/volunteers", volunteersHandler.VolunteersViewHandler)
-	ag.PUT("/volunteers/:volunteer_id/save", volunteersHandler.VolunteersViewHandler)
+	ag.POST("/volunteers", volunteersHandler.VolunteersCreatePostHandler)
+	ag.GET("/volunteers/:volunteer_id", volunteersHandler.VolunteersUpdateViewHandler)
+	ag.PUT("/volunteers/:volunteer_id/save", volunteersHandler.VolunteersUpdatePutHandler)
 
 	e.HTTPErrorHandler = middleware.CustomHTTPErrorHandler
 

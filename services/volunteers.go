@@ -3,6 +3,8 @@ package services
 import (
 	"reyes-magos-gr/db/model"
 	"reyes-magos-gr/db/repository"
+
+	"github.com/dranikpg/dto-mapper"
 )
 
 type VolunteersService struct {
@@ -62,4 +64,74 @@ func (s VolunteersService) GetActiveVolunteersGrupedByLocation() (groupedVolunte
 	}
 
 	return GroupVolunteersByLocation(allVolunteers), nil
+}
+
+type CreateVolunteerRequest struct {
+	Name     string `form:"name" validate:"required"`
+	Email    string `form:"email" validate:"required"`
+	Phone    string `form:"phone"`
+	Address  string `form:"address" validate:"required"`
+	Address2 string `form:"address2"`
+	Country  string `form:"country" validate:"required"`
+	State    string `form:"state" validate:"required"`
+	City     string `form:"city" validate:"required"`
+	Province string `form:"province"`
+	ZipCode  string `form:"zip_code" validate:"required"`
+}
+
+func (s VolunteersService) CreateVolunteer(tr CreateVolunteerRequest) (volunteerID int64, err error) {
+	var volunteer model.Volunteer
+	err = dto.Map(&volunteer, tr)
+	if err != nil {
+		return 0, err
+	}
+
+	volunteerID, err = s.VolunteersRepository.CreateVolunteer(volunteer)
+	if err != nil {
+		return 0, err
+	}
+
+	return volunteerID, nil
+}
+
+func (s VolunteersService) CreateAndGetVolunteer(tr CreateVolunteerRequest) (volunteer model.Volunteer, err error) {
+	volunteerID, err := s.CreateVolunteer(tr)
+	if err != nil {
+		return model.Volunteer{}, err
+	}
+
+	volunteer, err = s.VolunteersRepository.GetVolunteerByID(volunteerID)
+	if err != nil {
+		return model.Volunteer{}, err
+	}
+
+	return volunteer, nil
+}
+
+type UpdateVolunteerRequest struct {
+	VolunteerID int64  `form:"volunteer_id" validate:"required"`
+	Name        string `form:"name" validate:"required"`
+	Email       string `form:"email" validate:"required"`
+	Phone       string `form:"phone"`
+	Address     string `form:"address" validate:"required"`
+	Address2    string `form:"address2"`
+	Country     string `form:"country" validate:"required"`
+	State       string `form:"state" validate:"required"`
+	City        string `form:"city" validate:"required"`
+	Province    string `form:"province"`
+	ZipCode     string `form:"zip_code" validate:"required"`
+}
+
+func (h VolunteersService) UpdateVolunteer(tr UpdateVolunteerRequest) (volunteer model.Volunteer, err error) {
+	err = dto.Map(&volunteer, tr)
+	if err != nil {
+		return model.Volunteer{}, err
+	}
+
+	err = h.VolunteersRepository.UpdateVolunteer(volunteer)
+	if err != nil {
+		return model.Volunteer{}, err
+	}
+
+	return volunteer, nil
 }
