@@ -44,3 +44,22 @@ func (s VolunteersService) GetVolunteerOrdersByEmail(email string) (orders []mod
 
 	return orders, nil
 }
+
+func GroupVolunteersByLocation(volunteers []model.Volunteer) (groupedVolunteers map[string][]model.Volunteer) {
+	groupedVolunteers = make(map[string][]model.Volunteer)
+	for _, volunteer := range volunteers {
+		location := volunteer.State + ", " + volunteer.City
+		groupedVolunteers[location] = append(groupedVolunteers[location], volunteer)
+	}
+	return groupedVolunteers
+}
+
+func (s VolunteersService) GetActiveVolunteersGrupedByLocation() (groupedVolunteers map[string][]model.Volunteer, err error) {
+
+	allVolunteers, err := s.VolunteersRepository.GetActiveVolunteers()
+	if err != nil {
+		return nil, err
+	}
+
+	return GroupVolunteersByLocation(allVolunteers), nil
+}

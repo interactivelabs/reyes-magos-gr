@@ -109,8 +109,6 @@ const volunteerAllFields string = `
 	city,
 	COALESCE(province, ''),
 	zip_code,
-	secret,
-	passcode,
 	deleted`
 
 type VolunteerScanner interface {

@@ -8,32 +8,11 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "reyes-magos-gr/db/model"
-import "fmt"
-
-const BaseButton = "rounded-md px-3.5 py-2.5 text-sm font-semibold shadow-sm "
-const BaseSecondaryButton string = BaseButton + "bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
-const BasePrimaryButton string = BaseButton + "bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 "
-
-const BaseLabelStyles string = "block text-sm font-medium leading-6 text-gray-900 "
-const BaseInputStyles string = "block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-
-const BaseToggleButtonStyles string = "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 "
-const BaseToggleInsertStyles string = "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out "
-
-func ToggleButtonStyles(completed int64) string {
-	if completed == 1 {
-		return BaseToggleButtonStyles + "bg-indigo-600"
-	}
-	return BaseToggleButtonStyles + "bg-gray-200"
-}
-
-func ToggleInsertStyles(completed int64) string {
-	if completed == 1 {
-		return BaseToggleInsertStyles + "translate-x-5"
-	}
-	return BaseToggleInsertStyles + "translate-x-0"
-}
+import (
+	"fmt"
+	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/views/components"
+)
 
 func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -53,14 +32,14 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form class=\"w-full p-8 bg-white\" hx-post=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form class=\"w-full p-8 bg-white\" hx-put=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(string(templ.URL(fmt.Sprintf("/admin/order/%d/save", order.OrderID))))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 33, Col: 81}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 12, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -73,7 +52,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("#admin-order-%d", order.OrderID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 34, Col: 59}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 13, Col: 59}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -83,7 +62,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var4 = []any{BaseLabelStyles}
+		var templ_7745c5c3_Var4 = []any{components.BaseLabelStyles}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var4...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -105,7 +84,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var6 = []any{BaseInputStyles}
+		var templ_7745c5c3_Var6 = []any{components.BaseInputStyles}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var6...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -117,7 +96,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(volunteer.Email)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 40, Col: 61}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 19, Col: 61}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -140,7 +119,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var9 = []any{BaseLabelStyles}
+		var templ_7745c5c3_Var9 = []any{components.BaseLabelStyles}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var9...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -162,7 +141,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var11 = []any{BaseInputStyles}
+		var templ_7745c5c3_Var11 = []any{components.BaseInputStyles}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var11...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -174,7 +153,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		var templ_7745c5c3_Var12 string
 		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(volunteer.Phone)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 46, Col: 59}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 25, Col: 59}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 		if templ_7745c5c3_Err != nil {
@@ -197,7 +176,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var14 = []any{BaseLabelStyles}
+		var templ_7745c5c3_Var14 = []any{components.BaseLabelStyles}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var14...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -219,7 +198,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var16 = []any{BaseInputStyles}
+		var templ_7745c5c3_Var16 = []any{components.BaseInputStyles}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var16...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -231,7 +210,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		var templ_7745c5c3_Var17 string
 		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(order.ShippedDate)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 52, Col: 69}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 31, Col: 69}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 		if templ_7745c5c3_Err != nil {
@@ -257,7 +236,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		var templ_7745c5c3_Var19 string
 		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(order.Completed))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 56, Col: 83}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 35, Col: 83}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 		if templ_7745c5c3_Err != nil {
@@ -267,7 +246,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var20 = []any{ToggleButtonStyles(order.Completed)}
+		var templ_7745c5c3_Var20 = []any{components.ToggleButtonStyles(order.Completed)}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var20...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -289,7 +268,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var22 = []any{ToggleInsertStyles(order.Completed)}
+		var templ_7745c5c3_Var22 = []any{components.ToggleInsertStyles(order.Completed)}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var22...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -311,7 +290,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var24 = []any{BaseLabelStyles}
+		var templ_7745c5c3_Var24 = []any{components.BaseLabelStyles}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var24...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -333,7 +312,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var26 = []any{BaseSecondaryButton}
+		var templ_7745c5c3_Var26 = []any{components.BaseSecondaryButton}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var26...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -358,7 +337,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		var templ_7745c5c3_Var28 string
 		templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(string(templ.URL(fmt.Sprintf("/admin/order/%d", order.OrderID))))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 75, Col: 78}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 54, Col: 78}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 		if templ_7745c5c3_Err != nil {
@@ -371,7 +350,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		var templ_7745c5c3_Var29 string
 		templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("#admin-order-%d", order.OrderID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 76, Col: 62}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/orders/update_order.templ`, Line: 55, Col: 62}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
 		if templ_7745c5c3_Err != nil {
@@ -381,7 +360,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var30 = []any{BasePrimaryButton}
+		var templ_7745c5c3_Var30 = []any{components.BasePrimaryButton}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var30...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
