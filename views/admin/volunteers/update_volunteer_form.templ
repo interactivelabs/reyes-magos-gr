@@ -1,0 +1,41 @@
+package pages
+
+import (
+	"fmt"
+	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/views/components"
+)
+
+templ UpdateVolunteerForm(volunteer model.Volunteer) {
+	<form
+		class="w-full p-8 bg-white rounded-md shadow-sm border-gray-400"
+		hx-put={ string(templ.URL(fmt.Sprintf("/admin/volunteer/%d/save", volunteer.VolunteerID))) }
+	>
+		<div class="grid grid-cols-1 gap-x-6 gap-y-8">
+			<div>
+				<label for="email" class={ components.BaseLabelStyles }>Email</label>
+				<div class="mt-2">
+					<input type="email" name="email" value={ volunteer.Email } class={ components.BaseInputStyles } readonly/>
+				</div>
+			</div>
+			<div>
+				<label for="phone" class={ components.BaseLabelStyles }>Phone</label>
+				<div class="mt-2">
+					<input type="tel" name="phone" value={ volunteer.Phone } class={ components.BaseInputStyles } readonly/>
+				</div>
+			</div>
+			<div class="mt-6 flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-8">
+				<button
+					type="button"
+					class={ components.BaseSecondaryButton }
+				>
+					Cancel
+				</button>
+				<button
+					type="submit"
+					class={ components.BasePrimaryButton }
+				>Save</button>
+			</div>
+		</div>
+	</form>
+}

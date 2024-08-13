@@ -1,0 +1,73 @@
+package pages
+
+import (
+	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/views/admin"
+	"reyes-magos-gr/views/components"
+)
+
+templ AdminVolunteers(groupedVolunteers map[string][]model.Volunteer) {
+	@admin.AdminLayout() {
+		<main class="container mx-auto p-4">
+			<h1 class="text-center pt-8 text-2xl">Volunteers</h1>
+			<div class="sm:flex sm:items-center">
+				<div class="sm:flex-auto">
+					<h1 class="text-base font-semibold leading-6 text-gray-900">Volunteers</h1>
+					<p class="mt-2 text-sm text-gray-700">A list of all the active Volunteers.</p>
+				</div>
+				<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+					<button
+						type="button"
+						class={ components.BasePrimaryButton }
+						hx-get="/admin/volunteers/create"
+						hx-target="#volunteer-new-container"
+					>
+						Add Volunteer
+					</button>
+				</div>
+			</div>
+			<div id="volunteer-new-container" class="md:w-1/2 my-4 mx-auto"></div>
+			<section id="admin_volunteers" class="mt-8 flow-root">
+				if len(groupedVolunteers) > 0 {
+					<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+						<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+							<table class="min-w-full">
+								<thead class="bg-white">
+									<tr>
+										<th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">Name</th>
+										<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
+										<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Phone</th>
+										<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Address</th>
+										<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3">
+											<span class="sr-only">Edit</span>
+										</th>
+									</tr>
+								</thead>
+								<tbody class="bg-white">
+									for location, volunteers := range groupedVolunteers {
+										<tr class="border-t border-gray-200">
+											<th colspan="5" scope="colgroup" class="bg-gray-50 py-2 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">{ location }</th>
+										</tr>
+										for _, volunteer := range volunteers {
+											<tr class="border-t border-gray-300">
+												<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">{ volunteer.Name }</td>
+												<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{ volunteer.Email }</td>
+												<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{ volunteer.Phone }</td>
+												<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+													{ volunteer.Address }, { volunteer.Address2 }, { volunteer.Province }, { volunteer.City }, { volunteer.State }, { volunteer.ZipCode }, { volunteer.Country }
+												</td>
+												<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
+													<button type="button" class={ components.BaseSecondaryButton }>Edit</button>
+												</td>
+											</tr>
+										}
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				}
+			</section>
+		</main>
+	}
+}
