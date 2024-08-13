@@ -46,6 +46,7 @@ templ VolunteerRow(volunteer model.Volunteer) {
 				type="button"
 				class={ components.BaseSecondaryButton }
 				hx-delete={ lib.GetSafeIdUrl("/admin/volunteers/%d/delete", volunteer.VolunteerID) }
+				hx-target={ fmt.Sprintf("#admin-volunteer-row-%d", volunteer.VolunteerID) }
 			>
 				Delete
 			</button>

@@ -37,9 +37,9 @@ func UpdateVolunteerForm(volunteer model.Volunteer) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(string(templ.URL(fmt.Sprintf("/admin/volunteer/%d/save", volunteer.VolunteerID))))
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(string(templ.URL(fmt.Sprintf("/admin/volunteers/%d/save", volunteer.VolunteerID))))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 11, Col: 92}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 11, Col: 93}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -58,7 +58,7 @@ func UpdateVolunteerForm(volunteer model.Volunteer) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-on::after-request=\"htmx.find(&#39;#dialog-element&#39;).close();\"><div class=\"grid grid-cols-1 gap-x-6 gap-y-8\"><div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\" hx-on::after-request=\"htmx.find(&#39;#dialog-element&#39;).close();\"><div class=\"grid grid-cols-1 gap-x-6 gap-y-8\"><div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -109,7 +109,7 @@ func UpdateVolunteerForm(volunteer model.Volunteer) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(volunteer.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 19, Col: 95}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 20, Col: 95}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
@@ -166,7 +166,7 @@ func UpdateVolunteerForm(volunteer model.Volunteer) templ.Component {
 		var templ_7745c5c3_Var13 string
 		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(volunteer.Email)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 25, Col: 98}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 26, Col: 98}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 		if templ_7745c5c3_Err != nil {
@@ -223,7 +223,7 @@ func UpdateVolunteerForm(volunteer model.Volunteer) templ.Component {
 		var templ_7745c5c3_Var18 string
 		templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(volunteer.Phone)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 31, Col: 96}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 32, Col: 96}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 		if templ_7745c5c3_Err != nil {
@@ -280,7 +280,7 @@ func UpdateVolunteerForm(volunteer model.Volunteer) templ.Component {
 		var templ_7745c5c3_Var23 string
 		templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(volunteer.Address)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 37, Col: 101}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 38, Col: 101}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 		if templ_7745c5c3_Err != nil {
@@ -337,7 +337,7 @@ func UpdateVolunteerForm(volunteer model.Volunteer) templ.Component {
 		var templ_7745c5c3_Var28 string
 		templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(volunteer.Address2)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 43, Col: 103}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 44, Col: 103}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 		if templ_7745c5c3_Err != nil {
@@ -394,7 +394,7 @@ func UpdateVolunteerForm(volunteer model.Volunteer) templ.Component {
 		var templ_7745c5c3_Var33 string
 		templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(volunteer.City)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 49, Col: 95}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 50, Col: 95}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
 		if templ_7745c5c3_Err != nil {
@@ -451,7 +451,7 @@ func UpdateVolunteerForm(volunteer model.Volunteer) templ.Component {
 		var templ_7745c5c3_Var38 string
 		templ_7745c5c3_Var38, templ_7745c5c3_Err = templ.JoinStringErrs(volunteer.Province)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 55, Col: 103}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 56, Col: 103}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var38))
 		if templ_7745c5c3_Err != nil {
@@ -508,7 +508,7 @@ func UpdateVolunteerForm(volunteer model.Volunteer) templ.Component {
 		var templ_7745c5c3_Var43 string
 		templ_7745c5c3_Var43, templ_7745c5c3_Err = templ.JoinStringErrs(volunteer.State)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 61, Col: 97}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 62, Col: 97}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var43))
 		if templ_7745c5c3_Err != nil {
@@ -565,7 +565,7 @@ func UpdateVolunteerForm(volunteer model.Volunteer) templ.Component {
 		var templ_7745c5c3_Var48 string
 		templ_7745c5c3_Var48, templ_7745c5c3_Err = templ.JoinStringErrs(volunteer.ZipCode)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 67, Col: 102}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 68, Col: 102}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var48))
 		if templ_7745c5c3_Err != nil {
@@ -622,7 +622,7 @@ func UpdateVolunteerForm(volunteer model.Volunteer) templ.Component {
 		var templ_7745c5c3_Var53 string
 		templ_7745c5c3_Var53, templ_7745c5c3_Err = templ.JoinStringErrs(volunteer.Country)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 73, Col: 101}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 74, Col: 101}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var53))
 		if templ_7745c5c3_Err != nil {

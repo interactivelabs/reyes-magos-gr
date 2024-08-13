@@ -10,17 +10,17 @@ import templruntime "github.com/a-h/templ/runtime"
 
 const BaseButton = "rounded-md px-3.5 py-2.5 text-sm font-semibold shadow-sm "
 const BaseSecondaryButton string = BaseButton + "bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
-const BasePrimaryButton string = BaseButton + "bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 "
+const BasePrimaryButton string = BaseButton + "bg-brand-orange text-white hover:bg-brand-orange focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange "
 
 const BaseLabelStyles string = "block text-sm font-medium leading-6 text-gray-900 "
-const BaseInputStyles string = "block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
+const BaseInputStyles string = "block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-orange sm:text-sm sm:leading-6 "
 
-const BaseToggleButtonStyles string = "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 "
+const BaseToggleButtonStyles string = "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2 "
 const BaseToggleInsertStyles string = "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out "
 
 func ToggleButtonStyles(completed int64) string {
 	if completed == 1 {
-		return BaseToggleButtonStyles + "bg-indigo-600"
+		return BaseToggleButtonStyles + "bg-brand-orange"
 	}
 	return BaseToggleButtonStyles + "bg-gray-200"
 }
