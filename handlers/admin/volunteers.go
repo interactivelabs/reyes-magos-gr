@@ -61,7 +61,13 @@ func (h VolunteersHandler) VolunteersUpdateViewHandler(ctx echo.Context) error {
 }
 
 func (h VolunteersHandler) VolunteersUpdatePutHandler(ctx echo.Context) error {
-	tr := new(services.UpdateVolunteerRequest)
+	volunteerIDStr := ctx.Param("volunteer_id")
+	volunteerID, err := strconv.ParseInt(volunteerIDStr, 10, 64)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid volunteer ID")
+	}
+
+	tr := new(services.CreateVolunteerRequest)
 	if err := ctx.Bind(tr); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
@@ -70,7 +76,7 @@ func (h VolunteersHandler) VolunteersUpdatePutHandler(ctx echo.Context) error {
 		return err
 	}
 
-	volunteer, err := h.VolunteersService.UpdateVolunteer(*tr)
+	volunteer, err := h.VolunteersService.UpdateVolunteer(*tr, volunteerID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

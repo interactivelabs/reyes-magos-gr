@@ -174,6 +174,7 @@ func main() {
 	ag.POST("/volunteers", volunteersHandler.VolunteersCreatePostHandler)
 	ag.GET("/volunteers/:volunteer_id", volunteersHandler.VolunteersUpdateViewHandler)
 	ag.PUT("/volunteers/:volunteer_id/save", volunteersHandler.VolunteersUpdatePutHandler)
+	ag.DELETE("/volunteers/:volunteer_id/delete", volunteersHandler.VolunteersDeleteHandler)
 
 	e.HTTPErrorHandler = middleware.CustomHTTPErrorHandler
 

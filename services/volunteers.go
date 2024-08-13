@@ -108,25 +108,13 @@ func (s VolunteersService) CreateAndGetVolunteer(tr CreateVolunteerRequest) (vol
 	return volunteer, nil
 }
 
-type UpdateVolunteerRequest struct {
-	VolunteerID int64  `form:"volunteer_id" validate:"required"`
-	Name        string `form:"name" validate:"required"`
-	Email       string `form:"email" validate:"required"`
-	Phone       string `form:"phone"`
-	Address     string `form:"address" validate:"required"`
-	Address2    string `form:"address2"`
-	Country     string `form:"country" validate:"required"`
-	State       string `form:"state" validate:"required"`
-	City        string `form:"city" validate:"required"`
-	Province    string `form:"province"`
-	ZipCode     string `form:"zip_code" validate:"required"`
-}
-
-func (h VolunteersService) UpdateVolunteer(tr UpdateVolunteerRequest) (volunteer model.Volunteer, err error) {
+func (h VolunteersService) UpdateVolunteer(tr CreateVolunteerRequest, volunteerID int64) (volunteer model.Volunteer, err error) {
 	err = dto.Map(&volunteer, tr)
 	if err != nil {
 		return model.Volunteer{}, err
 	}
+
+	volunteer.VolunteerID = volunteerID
 
 	err = h.VolunteersRepository.UpdateVolunteer(volunteer)
 	if err != nil {
