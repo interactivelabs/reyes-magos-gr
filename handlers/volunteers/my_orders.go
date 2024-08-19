@@ -1,4 +1,4 @@
-package handlers
+package volunteers
 
 import (
 	"net/http"
@@ -14,7 +14,7 @@ import (
 
 type MyOrdersHandler struct {
 	VolunteersService services.VolunteersService
-	Ordersrepository repository.OrdersRepository
+	Ordersrepository  repository.OrdersRepository
 }
 
 func (h MyOrdersHandler) MyOrdersViewHandler(ctx echo.Context) error {
