@@ -182,6 +182,10 @@ func main() {
 	}
 	ag.GET("/toys", toysHandler.ToysViewHandler)
 	ag.GET("/toys/create", toysHandler.CreateToyFormHandler)
+	ag.POST("/toys", toysHandler.CreateToyPostHandler)
+	ag.GET("/toys/:toy_id", toysHandler.UpdateToyFormHandler)
+	ag.PUT("/toys/:toy_id/save", toysHandler.UpdateToyPutHandler)
+	ag.DELETE("/toys/:toy_id/delete", toysHandler.DeleteToyHandler)
 
 	e.HTTPErrorHandler = middleware.CustomHTTPErrorHandler
 
