@@ -10,7 +10,7 @@ script closeDialog() {
 	htmx.find('#dialog-element').setAttribute('data-transition-state', 'closed');
 }
 
-templ CancelButton() {
+templ CancelModalButton() {
 	<button
 		type="button"
 		onclick={ closeDialog() }

@@ -1,0 +1,69 @@
+package pages
+
+import (
+	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/views/components"
+)
+
+templ VolunteerForm(volunteer model.Volunteer) {
+	<div>
+		<label for="name" class={ components.BaseLabelStyles }>Name</label>
+		<div class="mt-2">
+			<input type="text" name="name" class={ components.BaseInputStyles } value={ volunteer.Name }/>
+		</div>
+	</div>
+	<div>
+		<label for="email" class={ components.BaseLabelStyles }>Email</label>
+		<div class="mt-2">
+			<input type="email" name="email" class={ components.BaseInputStyles } value={ volunteer.Email }/>
+		</div>
+	</div>
+	<div>
+		<label for="phone" class={ components.BaseLabelStyles }>Phone</label>
+		<div class="mt-2">
+			<input type="tel" name="phone" class={ components.BaseInputStyles } value={ volunteer.Phone }/>
+		</div>
+	</div>
+	<div>
+		<label for="address" class={ components.BaseLabelStyles }>Address</label>
+		<div class="mt-2">
+			<input type="text" name="address" class={ components.BaseInputStyles } value={ volunteer.Address }/>
+		</div>
+	</div>
+	<div>
+		<label for="address2" class={ components.BaseLabelStyles }>Address 2</label>
+		<div class="mt-2">
+			<input type="text" name="address2" class={ components.BaseInputStyles } value={ volunteer.Address2 }/>
+		</div>
+	</div>
+	<div>
+		<label for="city" class={ components.BaseLabelStyles }>City</label>
+		<div class="mt-2">
+			<input type="text" name="city" class={ components.BaseInputStyles } value={ volunteer.City }/>
+		</div>
+	</div>
+	<div>
+		<label for="province" class={ components.BaseLabelStyles }>Province / County</label>
+		<div class="mt-2">
+			<input type="text" name="province" class={ components.BaseInputStyles } value={ volunteer.Province }/>
+		</div>
+	</div>
+	<div>
+		<label for="state" class={ components.BaseLabelStyles }>State</label>
+		<div class="mt-2">
+			<input type="text" name="state" class={ components.BaseInputStyles } value={ volunteer.State }/>
+		</div>
+	</div>
+	<div>
+		<label for="zip_code" class={ components.BaseLabelStyles }>Zip Code</label>
+		<div class="mt-2">
+			<input type="text" name="zip_code" class={ components.BaseInputStyles } value={ volunteer.ZipCode }/>
+		</div>
+	</div>
+	<div>
+		<label for="country" class={ components.BaseLabelStyles }>Country</label>
+		<div class="mt-2">
+			<input type="text" name="country" class={ components.BaseInputStyles } value={ volunteer.Country }/>
+		</div>
+	</div>
+}

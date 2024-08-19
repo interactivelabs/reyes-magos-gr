@@ -157,7 +157,7 @@ func Nav() templ.Component {
 				return templ_7745c5c3_Err
 			}
 			if lib.GetProfile(ctx).IsAdmin {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"block p-4 text-sm border-b-2 text-center\">Admin</div><a href=\"/admin/codes\" class=\"block p-4 text-sm\" role=\"menuitem\">Codes</a> <a href=\"/admin/orders\" class=\"block p-4 text-sm\" role=\"menuitem\">Orders</a> <a href=\"/admin/volunteers\" class=\"block p-4 text-sm\" role=\"menuitem\">Volunteers</a>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"block p-4 text-sm border-b-2 text-center\">Admin</div><a href=\"/admin/codes\" class=\"block p-4 text-sm\" role=\"menuitem\">Codes</a> <a href=\"/admin/orders\" class=\"block p-4 text-sm\" role=\"menuitem\">Orders</a> <a href=\"/admin/volunteers\" class=\"block p-4 text-sm\" role=\"menuitem\">Volunteers</a> <a href=\"/admin/toys\" class=\"block p-4 text-sm\" role=\"menuitem\">Toys</a>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

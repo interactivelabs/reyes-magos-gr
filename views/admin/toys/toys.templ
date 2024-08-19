@@ -1,0 +1,88 @@
+package pages
+
+import (
+	"fmt"
+	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/lib"
+	"reyes-magos-gr/views/admin"
+	"reyes-magos-gr/views/components"
+)
+
+templ ToyRow(toy model.Toy) {
+	<tr
+		class="border-t border-gray-300"
+		id={ fmt.Sprintf("admin-toys-row-%d", toy.ToyID) }
+	>
+		<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">{ toy.ToyName }</td>
+		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{ toy.Category }</td>
+		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-ellipsis">{ toy.ToyDescription }</td>
+		<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
+			<button
+				type="button"
+				class={ components.BaseSecondaryButton }
+				hx-get={ lib.GetSafeIdUrl("/admin/toys/%d", toy.ToyID) }
+				hx-target="#dialog-content"
+				hx-swap="innerHTML"
+			>
+				Edit
+			</button>
+			<button
+				type="button"
+				class={ components.BaseSecondaryButton }
+				hx-delete={ lib.GetSafeIdUrl("/admin/toys/%d/delete", toy.ToyID) }
+				hx-target={ fmt.Sprintf("#admin-toys-row-%d", toy.ToyID) }
+			>
+				Delete
+			</button>
+		</td>
+	</tr>
+}
+
+templ Toys(toys []model.Toy) {
+	@admin.AdminLayout() {
+		<main class="container mx-auto p-4">
+			<h1 class="text-center pt-8 text-2xl">Toys</h1>
+			<div class="sm:flex sm:items-center">
+				<div class="sm:flex-auto">
+					<h1 class="text-base font-semibold leading-6 text-gray-900">Toys</h1>
+					<p class="mt-2 text-sm text-gray-700">A list of all the active Toys.</p>
+				</div>
+				<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+					<button
+						type="button"
+						class={ components.BasePrimaryButton }
+						hx-get="/admin/toys/create"
+						hx-target="#dialog-content"
+						hx-swap="innerHTML"
+					>
+						Add Toy
+					</button>
+				</div>
+			</div>
+			<section id="admin_toys" class="mt-8 flow-root">
+				<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+					<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+						<table class="min-w-full rounded-md shadow-sm border">
+							<thead class="bg-white">
+								<tr>
+									<th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">Name</th>
+									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
+									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Phone</th>
+									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Address</th>
+									<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3">
+										<span class="sr-only">Actions</span>
+									</th>
+								</tr>
+							</thead>
+							<tbody class="bg-white" id="admin-toys-table-body">
+								for _, toy := range toys {
+									@ToyRow(toy)
+								}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section>
+		</main>
+	}
+}

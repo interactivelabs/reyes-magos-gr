@@ -1,0 +1,64 @@
+package pages
+
+import (
+	"fmt"
+	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/views/components"
+)
+
+templ ToyForm(toy model.Toy) {
+	<div>
+		<label for="toy_name" class={ components.BaseLabelStyles }>Name</label>
+		<div class="mt-2">
+			<input type="text" name="name" class={ components.BaseInputStyles } value={ toy.ToyName }/>
+		</div>
+	</div>
+	<div>
+		<label for="toy_description" class={ components.BaseLabelStyles }>Description</label>
+		<div class="mt-2">
+			<textarea name="description" class={ components.BaseInputStyles } value={ toy.ToyDescription }></textarea>
+		</div>
+	</div>
+	<div>
+		<label for="category" class={ components.BaseLabelStyles }>Category</label>
+		<div class="mt-2">
+			<input type="text" name="category" class={ components.BaseInputStyles } value={ toy.Category }/>
+		</div>
+	</div>
+	<div>
+		<label for="age_min" class={ components.BaseLabelStyles }>Minimum Age</label>
+		<div class="mt-2">
+			<input type="number" name="age_min" class={ components.BaseInputStyles } value={ fmt.Sprint(toy.AgeMin) }/>
+		</div>
+	</div>
+	<div>
+		<label for="age_max" class={ components.BaseLabelStyles }>Maximum Age</label>
+		<div class="mt-2">
+			<input type="number" name="age_max" class={ components.BaseInputStyles } value={ fmt.Sprint(toy.AgeMax) }/>
+		</div>
+	</div>
+	<div>
+		<label for="image1" class={ components.BaseLabelStyles }>Image 1</label>
+		<div class="mt-2">
+			<input type="url" name="image1" class={ components.BaseInputStyles } value={ string(templ.URL(toy.Image1)) }/>
+		</div>
+	</div>
+	<div>
+		<label for="image2" class={ components.BaseLabelStyles }>Image 2</label>
+		<div class="mt-2">
+			<input type="url" name="image2" class={ components.BaseInputStyles } value={ string(templ.URL(toy.Image2)) }/>
+		</div>
+	</div>
+	<div>
+		<label for="image3" class={ components.BaseLabelStyles }>Image 3</label>
+		<div class="mt-2">
+			<input type="url" name="image3" class={ components.BaseInputStyles } value={ string(templ.URL(toy.Image3)) }/>
+		</div>
+	</div>
+	<div>
+		<label for="source_url" class={ components.BaseLabelStyles }>Source Url</label>
+		<div class="mt-2">
+			<input type="url" name="source_url" class={ components.BaseInputStyles } value={ string(templ.URL(toy.SourceURL)) }/>
+		</div>
+	</div>
+}

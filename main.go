@@ -7,6 +7,7 @@ import (
 	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/handlers"
 	"reyes-magos-gr/handlers/admin"
+	"reyes-magos-gr/handlers/volunteers"
 	"reyes-magos-gr/middleware"
 	"reyes-magos-gr/platform/authenticator"
 	"reyes-magos-gr/platform/database"
@@ -104,14 +105,14 @@ func main() {
 
 	vg.Use(middleware.IsAuthenticated())
 
-	myCodesHandler := handlers.MyCodesHandler{
+	myCodesHandler := volunteers.MyCodesHandler{
 		VolunteersService: volunteersService,
 		CodesRepository:   codesRepository,
 	}
 	vg.GET("/mycodes", myCodesHandler.MyCodesViewHandler)
 	vg.POST("/mycodes/give/:code_id", myCodesHandler.GiveCode)
 
-	myOrdersHandler := handlers.MyOrdersHandler{
+	myOrdersHandler := volunteers.MyOrdersHandler{
 		VolunteersService: volunteersService,
 		Ordersrepository:  ordersRepository,
 	}
@@ -175,6 +176,12 @@ func main() {
 	ag.GET("/volunteers/:volunteer_id", volunteersHandler.VolunteersUpdateViewHandler)
 	ag.PUT("/volunteers/:volunteer_id/save", volunteersHandler.VolunteersUpdatePutHandler)
 	ag.DELETE("/volunteers/:volunteer_id/delete", volunteersHandler.VolunteersDeleteHandler)
+
+	toysHandler := admin.ToysHandler{
+		ToysRepository: toysRepository,
+	}
+	ag.GET("/toys", toysHandler.ToysViewHandler)
+	ag.GET("/toys/create", toysHandler.CreateToyFormHandler)
 
 	e.HTTPErrorHandler = middleware.CustomHTTPErrorHandler
 

@@ -1,20 +1,21 @@
 package pages
 
 import (
-	"fmt"
 	"reyes-magos-gr/db/model"
 	"reyes-magos-gr/views/components"
 )
 
-templ UpdateVolunteerForm(volunteer model.Volunteer) {
+templ CreateToyForm() {
 	<form
-		hx-put={ string(templ.URL(fmt.Sprintf("/admin/volunteers/%d/save", volunteer.VolunteerID))) }
-		hx-target={ fmt.Sprintf("#admin-volunteer-row-%d", volunteer.VolunteerID) }
-		hx-swap="outerHTML"
+		id="toy-new-form"
+		class="w-full p-8 bg-white"
+		hx-post={ string(templ.URL("/admin/toys")) }
+		hx-target="#admin-toys-table-body"
+		hx-swap="afterbegin"
 		hx-on::after-request="htmx.find('#dialog-element').close();"
 	>
 		<div class="grid grid-cols-1 gap-x-6 gap-y-8">
-			@VolunteerForm(volunteer)
+			@ToyForm(model.Toy{})
 			<div class="mt-6 flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-8">
 				@components.CancelModalButton()
 				<button
