@@ -46,7 +46,7 @@ func (h OrdersHandler) OrdersViewHandler(ctx echo.Context) error {
 func (h OrdersHandler) OrderCardViewHandler(ctx echo.Context) error {
 	orderID, err := getOrderId(ctx)
 	if err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	order, err := h.OrdersRepository.GetOrderByID(orderID)
@@ -60,7 +60,7 @@ func (h OrdersHandler) OrderCardViewHandler(ctx echo.Context) error {
 func (h OrdersHandler) UpdateOrderViewHandler(ctx echo.Context) error {
 	orderID, err := getOrderId(ctx)
 	if err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	order, err := h.OrdersRepository.GetOrderByID(orderID)
@@ -92,12 +92,12 @@ func (h OrdersHandler) SaveOrderChangesHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	if err := ctx.Validate(saveOrderRequest); err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	orderID, err := getOrderId(ctx)
 	if err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	order, err := h.OrdersRepository.GetOrderByID(orderID)

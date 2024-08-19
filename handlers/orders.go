@@ -26,7 +26,7 @@ func (h OrdersHandler) CreateOrderViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	if err := ctx.Validate(acr); err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	order, err := h.OrdersService.CreateOrder(acr.ToyID, acr.Code)

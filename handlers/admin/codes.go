@@ -48,7 +48,7 @@ func (h CodesHandler) AssignCodesHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	if err := ctx.Validate(acr); err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	for _, codeID := range acr.CodeIDs {
@@ -76,7 +76,7 @@ func (h CodesHandler) RemoveCodesHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	if err := ctx.Validate(acr); err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	for _, volunteerCodeID := range acr.VolunteerCodeIDs {
@@ -107,7 +107,7 @@ func (h CodesHandler) CreateCodesHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	if err := ctx.Validate(acr); err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	_, err := h.CodesService.CreateCodeBatch(acr.Count)

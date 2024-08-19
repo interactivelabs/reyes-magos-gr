@@ -35,7 +35,7 @@ func (h VolunteersHandler) VolunteersCreatePostHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	if err := ctx.Validate(tr); err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	volunteer, err := h.VolunteersService.CreateAndGetVolunteer(*tr)
@@ -73,7 +73,7 @@ func (h VolunteersHandler) VolunteersUpdatePutHandler(ctx echo.Context) error {
 	}
 
 	if err := ctx.Validate(tr); err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	volunteer, err := h.VolunteersService.UpdateVolunteer(*tr, volunteerID)
