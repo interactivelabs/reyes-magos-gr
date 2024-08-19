@@ -18,21 +18,25 @@ func CustomHTTPErrorHandler(err error, ctx echo.Context) {
 		code = he.Code
 	}
 
-	fmt.Println(ctx.Request().URL.Path)
+	if code != 401 && code != 404 && code != 500 {
+		ctx.Logger().Error(err)
+		ctx.JSON(code, err.Error())
+	} else {
 
-	ctx.Logger().Error(err)
+		fmt.Println(ctx.Request().URL.Path)
+		ctx.Logger().Error(err)
 
-	var errorPage func() templ.Component
+		var errorPage func() templ.Component
 
-	switch code {
-	case 401:
-		errorPage = errors.Error401
-	case 404:
-		errorPage = errors.Error404
-	case 500:
-		errorPage = errors.Error500
+		switch code {
+		case 401:
+			errorPage = errors.Error401
+		case 404:
+			errorPage = errors.Error404
+		case 500:
+			errorPage = errors.Error500
+		}
+
+		lib.Render(ctx, errorPage())
 	}
-
-	lib.Render(ctx, errorPage())
-
 }

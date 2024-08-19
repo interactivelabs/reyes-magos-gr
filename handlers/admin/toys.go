@@ -46,13 +46,13 @@ func (h ToysHandler) CreateToyPostHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	if err := ctx.Validate(tr); err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	var toy model.Toy
 	err := dto.Map(&toy, tr)
 	if err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	toyID, err := h.ToysRepository.CreateToy(toy)
@@ -91,13 +91,13 @@ func (h ToysHandler) UpdateToyPutHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	if err := ctx.Validate(tr); err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	var toy model.Toy
 	err = dto.Map(&toy, tr)
 	if err != nil {
-		return err
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
 	toy.ToyID = toyID
