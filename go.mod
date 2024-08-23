@@ -1,19 +1,19 @@
 module reyes-magos-gr
 
-go 1.22
+go 1.23
 
-toolchain go1.22.6
+toolchain go1.23.0
 
 require (
 	github.com/a-h/templ v0.2.747
 	github.com/coreos/go-oidc/v3 v3.11.0
 	github.com/dranikpg/dto-mapper v0.2.1
 	github.com/go-playground/validator/v10 v10.22.0
-	github.com/gorilla/sessions v1.3.0
+	github.com/gorilla/sessions v1.4.0
 	github.com/labstack/echo-contrib v0.17.1
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/stretchr/testify v1.9.0
-	github.com/tursodatabase/go-libsql v0.0.0-20240725130945-f44f2b84c8c8
+	github.com/tursodatabase/go-libsql v0.0.0-20240819180805-a9b092b8bc77
 	golang.org/x/oauth2 v0.22.0
 )
 
@@ -37,7 +37,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	golang.org/x/crypto v0.26.0 // indirect
-	golang.org/x/exp v0.0.0-20240808152545-0cdaa3abc0fa // indirect
+	golang.org/x/exp v0.0.0-20240823005443-9b4947da3948 // indirect
 	golang.org/x/net v0.28.0 // indirect
 	golang.org/x/sys v0.24.0 // indirect
 	golang.org/x/text v0.17.0 // indirect
