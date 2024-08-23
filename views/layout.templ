@@ -5,21 +5,25 @@ import (
 	"reyes-magos-gr/views/shared"
 )
 
+templ Head() {
+	<head>
+		<meta charSet="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<meta name="description" content="Site for toy distribution"/>
+		<title>D&L Toys</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com"/>
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+		<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Metrophobic&display=optional" rel="stylesheet"/>
+		<link rel="icon" type="image/x-icon" href="/public/img/favicon.ico"/>
+		<link rel="stylesheet" href="/public/css/main.css"/>
+		<script src="https://unpkg.com/htmx.org@2.0.2" integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ" crossorigin="anonymous" fetchpriority="high"></script>
+	</head>
+}
+
 templ Base() {
 	<!DOCTYPE html>
 	<html lang="en" class="bg-slate-50">
-		<head>
-			<meta charSet="utf-8"/>
-			<meta name="viewport" content="width=device-width, initial-scale=1"/>
-			<meta name="description" content="Site for toy distribution"/>
-			<title>D&L Toys</title>
-			<link rel="preconnect" href="https://fonts.googleapis.com"/>
-			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-			<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Metrophobic&display=optional" rel="stylesheet"/>
-			<link rel="icon" type="image/x-icon" href="/public/img/favicon.ico"/>
-			<link rel="stylesheet" href="/public/css/main.css"/>
-			<script src="https://unpkg.com/htmx.org@2.0.2" integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ" crossorigin="anonymous" fetchpriority="high"></script>
-		</head>
+		@Head()
 		<body class="text-brand-blue" hx-ext="preload">
 			@shared.Nav()
 			{ children... }

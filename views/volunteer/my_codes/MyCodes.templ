@@ -33,14 +33,20 @@ templ MyCodeItem(code model.Code) {
 					class="relative flex-1 inline-flex items-center rounded-l-md justify-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
 					onclick={ onCopyHandler(code.Code) }
 				>
-					Copy <img class="inline-block h-4 w-4 ml-4" src="/public/img/clipboard.svg" alt="" role="presentation"/>
+					Copy
+					<svg aria-hidden="true" class="h-4 w-4 ml-4 fill-current">
+						<use href="/public/img/clipboard.svg#clipboard"></use>
+					</svg>
 				</button>
 				<button
 					type="button"
 					class="relative flex-1 inline-flex items-center  justify-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
 					onclick={ onShareHandler(code.Code) }
 				>
-					Share <img class="inline-block h-4 w-4 ml-4" src="/public/img/share.svg" alt="" role="presentation"/>
+					Share 
+					<svg aria-hidden="true" class="h-4 w-4 ml-4 fill-current">
+						<use href="/public/img/share.svg#share"></use>
+					</svg>
 				</button>
 				<button
 					type="button"
