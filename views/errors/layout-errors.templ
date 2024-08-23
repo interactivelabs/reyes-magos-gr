@@ -1,6 +1,7 @@
 package pages
 
 import (
+	layout "reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
 	"reyes-magos-gr/views/shared"
 )
@@ -8,18 +9,7 @@ import (
 templ LayoutErrors() {
 	<!DOCTYPE html>
 	<html lang="en" class="bg-slate-50 h-full">
-		<head>
-			<meta charSet="utf-8"/>
-			<meta name="viewport" content="width=device-width, initial-scale=1"/>
-			<meta name="description" content="Site for toy distribution"/>
-			<title>D&L Toys</title>
-			<link rel="preconnect" href="https://fonts.googleapis.com"/>
-			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-			<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Metrophobic&display=optional" rel="stylesheet"/>
-			<link rel="icon" type="image/x-icon" href="/public/img/favicon.ico"/>
-			<link rel="stylesheet" href="/public/css/main.css"/>
-			<script src="https://unpkg.com/htmx.org@2.0.1" fetchpriority="high"></script>
-		</head>
+		@layout.Head()
 		<body class="text-brand-blue h-full">
 			@shared.Nav()
 			{ children... }

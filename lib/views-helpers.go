@@ -3,6 +3,7 @@ package lib
 import (
 	"context"
 	"fmt"
+	"os"
 	"reyes-magos-gr/db/model"
 	"time"
 
@@ -35,4 +36,12 @@ func HasOrderShipped(order model.Order) string {
 
 func GetSafeIdUrl(url string, id int64) string {
 	return string(templ.URL(fmt.Sprintf(url, id)))
+}
+
+func GetAssetUrl(url string) string {
+	env := os.Getenv("ENV")
+	if env == "development" {
+		return string(templ.URL(fmt.Sprintf("/public/%s", url)))
+	}
+	return string(templ.URL(fmt.Sprintf("https://static.dl-toys.com/%s", url)))
 }

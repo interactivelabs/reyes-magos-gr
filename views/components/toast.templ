@@ -18,7 +18,9 @@ templ Toast() {
 						<div class="ml-4 flex flex-shrink-0">
 							<button type="button" class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2" onclick="hideToast()">
 								<span class="sr-only">Close</span>
-								<img class="inline-block h-4 w-4 ml-4" src="/public/img/close.svg" alt="" role="presentation"/>
+								<svg aria-hidden="true" class="h-4 w-4 ml-4 fill-current">
+									<use href="/public/img/close.svg#close"></use>
+								</svg>
 							</button>
 						</div>
 					</div>
