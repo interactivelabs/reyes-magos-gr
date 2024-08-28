@@ -23,9 +23,10 @@ func (h LoginHandler) LogoutRedirectHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	scheme := "http"
-	if ctx.Request().TLS != nil {
-		scheme = "https"
+	scheme := "https"
+	env := os.Getenv("ENV")
+	if env == "development" {
+		scheme = "http"
 	}
 
 	returnTo, err := url.Parse(scheme + "://" + ctx.Request().Host)
