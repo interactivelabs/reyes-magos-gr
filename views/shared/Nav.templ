@@ -76,6 +76,7 @@ templ Nav() {
 								>
 									<a href="/volunteer/mycodes" class="block p-4 text-sm" role="menuitem">My Codes</a>
 									<a href="/volunteer/myorders" class="block p-4 text-sm" role="menuitem">My Orders</a>
+									<a href="/logout" class="block p-4 text-sm" role="menuitem">Logout</a>
 									if lib.GetProfile(ctx).IsAdmin {
 										<div class="block p-4 text-sm border-b-2 text-center">Admin</div>
 										<a href="/admin/codes" class="block p-4 text-sm" role="menuitem">Codes</a>
