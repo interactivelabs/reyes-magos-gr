@@ -4,8 +4,10 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        "hero-paper": "url('https://static.dl-toys.com/bg_water02_sm.webp')",
-        "footer-texture": "url('https://static.dl-toys.com/footer_bg.webp')",
+        "hero-paper":
+          "url('https://static.dl-toys.com/img/bg_water02_sm.webp')",
+        "footer-texture":
+          "url('https://static.dl-toys.com/img/footer_bg.webp')",
       },
       fontFamily: {
         display: ['"Indie Flower"', "cursive"],
