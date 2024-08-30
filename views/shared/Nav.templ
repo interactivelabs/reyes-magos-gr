@@ -32,7 +32,7 @@ templ Nav() {
 					<div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
 						<div class="flex flex-shrink-0 items-center">
 							<a href="/">
-								<img class="h-16 w-auto" src={ lib.GetAssetUrl("logo01_sm.webp") } alt="D-L Toys logo"/>
+								<img class="h-16 w-auto" src={ lib.GetAssetUrl("img/logo01_sm.webp") } alt="D-L Toys logo"/>
 							</a>
 						</div>
 						<div class="hidden sm:ml-6 sm:flex sm:space-x-8 font-medium tracking-wide uppercase">
@@ -59,7 +59,7 @@ templ Nav() {
 										if lib.GetProfile(ctx).Picture != "" {
 											<img class="h-6 w-6 rounded-full" src={ lib.GetProfile(ctx).Picture } alt="" role="presentation"/>
 										} else {
-											<img class="h-6 w-6 rounded-full" src="/public/img/fingerprint.svg" alt="" role="presentation"/>
+											<img class="h-6 w-6 rounded-full" src={ lib.GetAssetUrl("img/fingerprint.svg") } alt="" role="presentation"/>
 										}
 									</button>
 								</div>
