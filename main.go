@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"reyes-magos-gr/api"
@@ -36,6 +37,9 @@ func main() {
 	db, connector, dir, err := database.New()
 	if err != nil {
 		log.Fatal(err)
+	}
+	if _, err := connector.Sync(); err != nil {
+		fmt.Println("Error syncing database:", err)
 	}
 	defer os.RemoveAll(dir)
 	defer connector.Close()
@@ -73,6 +77,7 @@ func main() {
 	e.GET("/401", homeHandler.Error401)
 	e.GET("/404", homeHandler.Error404)
 	e.GET("/500", homeHandler.Error500)
+	e.GET("/health", homeHandler.HealthViewHandler)
 
 	loginHandler := handlers.LoginHandler{
 		Auth: auth,
