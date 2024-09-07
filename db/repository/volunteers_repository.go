@@ -16,7 +16,7 @@ func (r VolunteersRepository) CreateVolunteer(volunteer model.Volunteer) (int64,
 		return 0, err
 	}
 
-	res, err := utils.ExecuteQuery(r.DB, queryStr, params...)
+	res, err := utils.ExecuteMutationQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return 0, err
 	}
@@ -29,7 +29,7 @@ func (r VolunteersRepository) UpdateVolunteer(volunteer model.Volunteer) error {
 		return err
 	}
 
-	_, err = utils.ExecuteQuery(r.DB, queryStr, params...)
+	_, err = utils.ExecuteMutationQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func (r VolunteersRepository) DeleteVolunteer(volunteerID int64) error {
 		return err
 	}
 
-	_, err = utils.ExecuteQuery(r.DB, queryStr, params...)
+	_, err = utils.ExecuteMutationQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return err
 	}

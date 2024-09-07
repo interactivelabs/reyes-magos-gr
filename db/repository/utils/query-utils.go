@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func ExecuteQuery(db *sql.DB, query string, args ...interface{}) (result sql.Result, err error) {
+func ExecuteMutationQuery(db *sql.DB, query string, args ...interface{}) (result sql.Result, err error) {
 	stmt, err := db.Prepare(query)
 	if err != nil {
 		return nil, err

@@ -13,11 +13,27 @@ type CatalogHandler struct {
 	ToysRepository repository.ToysRepository
 }
 
+type CatalogHandlerRequest struct {
+	AgeMin   int64    `query:"age_min"`
+	AgeMax   int64    `query:"age_max"`
+	Category []string `query:"category"`
+}
+
 func (h CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
-	toys, err := h.ToysRepository.GetToys()
+	cr := new(CatalogHandlerRequest)
+	if err := ctx.Bind(cr); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	toys, err := h.ToysRepository.GetToysWithFilters(cr.AgeMin, cr.AgeMax, cr.Category)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, catalog.Catalog(toys))
+	categories, err := h.ToysRepository.GetCategories()
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return lib.Render(ctx, catalog.Catalog(toys, categories, cr.Category, int(cr.AgeMin), int(cr.AgeMax)))
 }

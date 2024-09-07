@@ -4,9 +4,32 @@ import (
 	"fmt"
 	"reyes-magos-gr/db/model"
 	layout "reyes-magos-gr/views"
+	"reyes-magos-gr/views/components"
 )
 
-templ Catalog(toys []model.Toy) {
+script toggleFilters() {
+	htmx.find('#filters-panel').toggleAttribute('aria-expanded');
+
+	if (htmx.find('#filters-panel').getAttribute('data-transition-state') === 'open') {
+		htmx.find('#filters-panel').setAttribute('data-transition-state', 'closed');
+		return;
+	}
+	htmx.find('#filters-panel').setAttribute('data-transition-state', 'open');
+}
+
+script onRemoveFilter(filterValue string) {
+	removeFilter(filterValue)
+}
+
+templ AgeRangeLabels() {
+	<span class="text-sm text-gray-500 absolute start-0 -bottom-6">1</span>
+	<span class="text-sm text-gray-500 absolute start-1/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">4</span>
+	<span class="text-sm text-gray-500 absolute start-2/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">8</span>
+	<span class="text-sm text-gray-500 absolute start-3/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">12</span>
+	<span class="text-sm text-gray-500 absolute end-0 -bottom-6">16</span>
+}
+
+templ Catalog(toys []model.Toy, categories []string, categoryFilters []string, ageMin int, ageMax int) {
 	@layout.Base() {
 		<main>
 			<section id="catalog" class="relative isolate px-6 py-20 lg:px-8">
@@ -18,50 +41,90 @@ templ Catalog(toys []model.Toy) {
 						<div class="relative col-start-1 row-start-1 py-4">
 							<div class="mx-auto flex max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8">
 								<div>
-									<button type="button" class="group flex items-center font-medium text-gray-700" aria-controls="disclosure-1" aria-expanded="false">
+									<button
+										type="button"
+										class="group flex items-center font-medium text-gray-700"
+										aria-controls="filters-panel"
+										aria-expanded="false"
+										onclick={ toggleFilters() }
+									>
 										Filtros
 									</button>
 								</div>
 								<div class="pl-6">
-									<button type="button" class="text-gray-500">Clear all</button>
+									<button type="button" class="text-gray-500" onclick="clearFilters()">Clear all</button>
 								</div>
 							</div>
 						</div>
-						<div class="border-t border-gray-200 py-10" id="disclosure-1">
-							<div class="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 px-4 text-sm sm:px-6 md:gap-x-6 lg:px-8">
-								<div class="grid auto-rows-min grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-6">
-									<fieldset>
-										<legend class="block font-medium">Edades (años)</legend>
-										<div class="space-y-6 pt-6 sm:space-y-4 sm:pt-4">
-											<div class="flex items-center text-base sm:text-sm">
-												<input id="price-0" name="price[]" value="0" type="checkbox" class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-orange focus:ring-brand-orange"/>
-												<label for="price-0" class="ml-3 min-w-0 flex-1 text-gray-600">0 - 1</label>
-											</div>
-											<div class="flex items-center text-base sm:text-sm">
-												<input id="price-1" name="price[]" value="25" type="checkbox" class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-orange focus:ring-brand-orange"/>
-												<label for="price-1" class="ml-3 min-w-0 flex-1 text-gray-600">1 - 3</label>
-											</div>
-											<div class="flex items-center text-base sm:text-sm">
-												<input id="price-2" name="price[]" value="50" type="checkbox" class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-orange focus:ring-brand-orange"/>
-												<label for="price-2" class="ml-3 min-w-0 flex-1 text-gray-600">2 - 5</label>
-											</div>
+						if len(categoryFilters) > 0 {
+							<div class="bg-gray-100">
+								<div class="mx-auto max-w-7xl px-4 py-3 sm:flex sm:items-center sm:px-6 lg:px-8">
+									for _, filter := range categoryFilters {
+										<div class="-my-1 flex flex-wrap items-center">
+											<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
+												<span>{ filter }</span>
+												<button
+													type="button"
+													class="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
+													onclick={ onRemoveFilter(filter) }
+												>
+													<span class="sr-only">Remove filter for { filter }</span>
+													<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+														<path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
+													</svg>
+												</button>
+											</span>
 										</div>
-									</fieldset>
-									<fieldset>
-										<legend class="block font-medium">Categoria</legend>
-										<div class="space-y-6 pt-6 sm:space-y-4 sm:pt-4">
-											<div class="flex items-center text-base sm:text-sm">
-												<input id="color-0" name="color[]" value="white" type="checkbox" class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-orange focus:ring-brand-orange"/>
-												<label for="color-0" class="ml-3 min-w-0 flex-1 text-gray-600">Didacticos</label>
-											</div>
-											<div class="flex items-center text-base sm:text-sm">
-												<input id="color-1" name="color[]" value="beige" type="checkbox" class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-orange focus:ring-brand-orange"/>
-												<label for="color-1" class="ml-3 min-w-0 flex-1 text-gray-600">Deportivos</label>
-											</div>
-										</div>
-									</fieldset>
+									}
 								</div>
 							</div>
+						}
+						<div
+							class="border-t border-gray-200 py-10 transition ease-in-out transform translate-y-0"
+							id="filters-panel"
+							data-transition-state="closed"
+							data-transition-closed="duraion-300 translate-y-0"
+							data-transition-open="duraion-300 translate-y-1"
+						>
+							<form
+								id="filters-form"
+								onsubmit="event.preventDefault();updateFilters();"
+							>
+								<div class="mx-auto max-w-7xl gap-x-6 px-4 text-sm sm:flex sm:px-6 md:gap-x-8 lg:px-8">
+									<div class="w-full sm:w-auto">
+										<div class="space-y-6 sm:space-y-4 relative">
+											<label for="age_min" class="block mb-2 font-bold">Edad Minima</label>
+											<input id="age_min" type="range" min="1" max="16" value={ fmt.Sprint(ageMin) } class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointe"/>
+											@AgeRangeLabels()
+										</div>
+										<div class="space-y-6 pt-8 sm:space-y-4 relative">
+											<label for="age_max" class="block mb-2 font-bold">Edad Maxima</label>
+											<input id="age_max" type="range" min="1" max="16" value={ fmt.Sprint(ageMax) } class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointe"/>
+											@AgeRangeLabels()
+										</div>
+									</div>
+									<div>
+										<legend class="block font-bold mb-6">Categorias</legend>
+										<div class="grid auto-rows-min grid-cols-1 gap-y-4 sm:grid-cols-2 md:grid-cols-3 md:gap-x-8 lg:grid-cols-4">
+											for i, category := range categories {
+												<div class="flex items-center text-base sm:text-sm">
+													<input
+														id={ fmt.Sprintf("category-%d", i) }
+														name="category[]"
+														value={ category }
+														type="checkbox"
+														class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-orange focus:ring-brand-orange"
+													/>
+													<label for={ fmt.Sprintf("category-%d", i) } class="ml-3 min-w-0 flex-1 text-gray-600">{ category }</label>
+												</div>
+											}
+										</div>
+									</div>
+								</div>
+								<div class="text-right">
+									<button type="submit" class={ components.BasePrimaryButton }>Aplicar Filtros</button>
+								</div>
+							</form>
 						</div>
 					</section>
 					<div class="py-8 grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8">

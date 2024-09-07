@@ -16,7 +16,7 @@ func (r CodesRepository) CreateCode(code model.Code) (int64, model.Code, error) 
 		return 0, model.Code{}, err
 	}
 
-	res, err := utils.ExecuteQuery(r.DB, queryStr, params...)
+	res, err := utils.ExecuteMutationQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return 0, model.Code{}, err
 	}
@@ -46,7 +46,7 @@ func (r CodesRepository) UpdateCode(code model.Code) error {
 		return err
 	}
 
-	_, err = utils.ExecuteQuery(r.DB, queryStr, params...)
+	_, err = utils.ExecuteMutationQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return err
 	}
@@ -59,7 +59,7 @@ func (r CodesRepository) DeleteCode(codeID int64) error {
 		return err
 	}
 
-	_, err = utils.ExecuteQuery(r.DB, queryStr, params...)
+	_, err = utils.ExecuteMutationQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return err
 	}
