@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"reyes-magos-gr/db/model"
 	utils "reyes-magos-gr/db/repository/utils"
+	"strings"
 )
 
 type ToysRepository struct {
@@ -16,7 +17,7 @@ func (r ToysRepository) CreateToy(toy model.Toy) (id int64, err error) {
 		return 0, err
 	}
 
-	res, err := utils.ExecuteQuery(r.DB, queryStr, params...)
+	res, err := utils.ExecuteMutationQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return 0, err
 	}
@@ -29,7 +30,7 @@ func (r ToysRepository) UpdateToy(toy model.Toy) error {
 		return err
 	}
 
-	_, err = utils.ExecuteQuery(r.DB, queryStr, params...)
+	_, err = utils.ExecuteMutationQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return err
 	}
@@ -42,7 +43,7 @@ func (r ToysRepository) DeleteToy(toyID int64) error {
 		return err
 	}
 
-	_, err = utils.ExecuteQuery(r.DB, queryStr, params...)
+	_, err = utils.ExecuteMutationQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return err
 	}
@@ -54,6 +55,65 @@ func (r ToysRepository) GetToys() (toys []model.Toy, err error) {
 		SELECT ` + toyAllFields + `
 		FROM toys
 		WHERE deleted = 0;`)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
+
+	for rows.Next() {
+		var toy model.Toy
+		toy, err = scanAllToy(rows)
+		if err != nil {
+			return nil, err
+		}
+
+		toys = append(toys, toy)
+	}
+
+	return toys, nil
+}
+
+func (r ToysRepository) GetToysWithFilters(ageMin int64, ageMax int64, category []string) (toys []model.Toy, err error) {
+	var ageMinFiler int64
+	ageMinFiler = 0
+	if ageMin > 0 {
+		ageMinFiler = ageMin
+	}
+
+	var ageMaxFiler int64
+	ageMaxFiler = 100
+	if ageMax > 0 {
+		ageMaxFiler = ageMax
+	}
+
+	query := `
+		SELECT ` + toyAllFields + `
+		FROM toys
+		WHERE
+			deleted = 0
+			AND age_min >= ?
+			AND age_max <= ?`
+
+	var rows *sql.Rows
+	if len(category) > 0 {
+		query += ` AND category in ( ` + strings.Join(strings.Split(strings.Repeat("?", len(category)), ""), ",") + ` );`
+		params := make([]interface{}, len(category)+2)
+		params[0] = ageMinFiler
+		params[1] = ageMaxFiler
+		i := 2
+		for _, v := range category {
+			params[i] = v
+			i++
+		}
+		rows, err = r.DB.Query(query, params...)
+	} else {
+		query += ";"
+		rows, err = r.DB.Query(query, ageMinFiler, ageMaxFiler)
+	}
+
 	if err != nil {
 		return nil, err
 	}
@@ -123,4 +183,30 @@ func scanAllToy(s ToyScanner) (toy model.Toy, err error) {
 		&toy.SourceURL,
 		&toy.Deleted)
 	return toy, err
+}
+
+func (r ToysRepository) GetCategories() (categories []string, err error) {
+	rows, err := r.DB.Query(`
+		SELECT DISTINCT category
+		FROM toys
+		WHERE deleted = 0;`)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
+
+	for rows.Next() {
+		var category string
+		err = rows.Scan(&category)
+		if err != nil {
+			return nil, err
+		}
+
+		categories = append(categories, category)
+	}
+
+	return categories, nil
 }

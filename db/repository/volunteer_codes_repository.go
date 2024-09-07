@@ -16,7 +16,7 @@ func (r VolunteerCodesRepository) CreateVolunteerCode(volunteerCode model.Volunt
 		return 0, err
 	}
 
-	res, err := utils.ExecuteQuery(r.DB, queryStr, params...)
+	res, err := utils.ExecuteMutationQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return 0, err
 	}
@@ -29,7 +29,7 @@ func (r VolunteerCodesRepository) UpdateVolunteerCode(volunteerCode model.Volunt
 		return err
 	}
 
-	_, err = utils.ExecuteQuery(r.DB, queryStr, params...)
+	_, err = utils.ExecuteMutationQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func (r VolunteerCodesRepository) DeleteVolunteerCode(volunteerCodeID int64) err
 		return err
 	}
 
-	_, err = utils.ExecuteQuery(r.DB, queryStr, params...)
+	_, err = utils.ExecuteMutationQuery(r.DB, queryStr, params...)
 	if err != nil {
 		return err
 	}
@@ -107,7 +107,7 @@ func (r VolunteerCodesRepository) GetGivenVolunteerCodesByVolunteerID(volunteerC
 
 func (r VolunteerCodesRepository) GetAllVolunteersCodes() (volunteerCodes []model.VolunteerCode, err error) {
 	rows, err := r.DB.Query(`
-		SELECT 
+		SELECT
 			volunteer_code_id,
 			codes.code_id,
 			codes.code,

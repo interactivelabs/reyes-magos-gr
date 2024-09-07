@@ -34,10 +34,7 @@ export default function initTailwindTransitions() {
           target,
           `data-transition-${oldValue}`
         );
-        console.log(delay);
-        setTimeout(() => {
-          hideElement(target as HTMLElement);
-        }, delay);
+        setTimeout(() => hideElement(target as HTMLElement), delay);
       }
 
       // Remove previous state classes

@@ -12,9 +12,36 @@ import (
 	"fmt"
 	"reyes-magos-gr/db/model"
 	layout "reyes-magos-gr/views"
+	"reyes-magos-gr/views/components"
 )
 
-func Catalog(toys []model.Toy) templ.Component {
+func toggleFilters() templ.ComponentScript {
+	return templ.ComponentScript{
+		Name: `__templ_toggleFilters_90fb`,
+		Function: `function __templ_toggleFilters_90fb(){htmx.find('#filters-panel').toggleAttribute('aria-expanded');
+
+	if (htmx.find('#filters-panel').getAttribute('data-transition-state') === 'open') {
+		htmx.find('#filters-panel').setAttribute('data-transition-state', 'closed');
+		return;
+	}
+	htmx.find('#filters-panel').setAttribute('data-transition-state', 'open');
+}`,
+		Call:       templ.SafeScript(`__templ_toggleFilters_90fb`),
+		CallInline: templ.SafeScriptInline(`__templ_toggleFilters_90fb`),
+	}
+}
+
+func onRemoveFilter(filterValue string) templ.ComponentScript {
+	return templ.ComponentScript{
+		Name: `__templ_onRemoveFilter_dc3f`,
+		Function: `function __templ_onRemoveFilter_dc3f(filterValue){removeFilter(filterValue)
+}`,
+		Call:       templ.SafeScript(`__templ_onRemoveFilter_dc3f`, filterValue),
+		CallInline: templ.SafeScriptInline(`__templ_onRemoveFilter_dc3f`, filterValue),
+	}
+}
+
+func AgeRangeLabels() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -32,7 +59,33 @@ func Catalog(toys []model.Toy) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Var2 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<span class=\"text-sm text-gray-500 absolute start-0 -bottom-6\">1</span> <span class=\"text-sm text-gray-500 absolute start-1/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6\">4</span> <span class=\"text-sm text-gray-500 absolute start-2/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6\">8</span> <span class=\"text-sm text-gray-500 absolute start-3/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6\">12</span> <span class=\"text-sm text-gray-500 absolute end-0 -bottom-6\">16</span>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return templ_7745c5c3_Err
+	})
+}
+
+func Catalog(toys []model.Toy, categories []string, categoryFilters []string, ageMin int, ageMax int) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var2 == nil {
+			templ_7745c5c3_Var2 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Var3 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 			if !templ_7745c5c3_IsBuffer {
@@ -44,7 +97,213 @@ func Catalog(toys []model.Toy) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"catalog\" class=\"relative isolate px-6 py-20 lg:px-8\"><h1 class=\"text-4xl font-display font-bold tracking-tight text-center mb-20\">Escoje un juguete</h1><div class=\"mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8\"><!-- Filters --><section aria-labelledby=\"filter-heading\" class=\"grid items-center border-b border-t border-gray-200\"><h2 id=\"filter-heading\" class=\"sr-only\">Filtros</h2><div class=\"relative col-start-1 row-start-1 py-4\"><div class=\"mx-auto flex max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8\"><div><button type=\"button\" class=\"group flex items-center font-medium text-gray-700\" aria-controls=\"disclosure-1\" aria-expanded=\"false\">Filtros</button></div><div class=\"pl-6\"><button type=\"button\" class=\"text-gray-500\">Clear all</button></div></div></div><div class=\"border-t border-gray-200 py-10\" id=\"disclosure-1\"><div class=\"mx-auto grid max-w-7xl grid-cols-2 gap-x-4 px-4 text-sm sm:px-6 md:gap-x-6 lg:px-8\"><div class=\"grid auto-rows-min grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-6\"><fieldset><legend class=\"block font-medium\">Edades (años)</legend><div class=\"space-y-6 pt-6 sm:space-y-4 sm:pt-4\"><div class=\"flex items-center text-base sm:text-sm\"><input id=\"price-0\" name=\"price[]\" value=\"0\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-orange focus:ring-brand-orange\"> <label for=\"price-0\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">0 - 1</label></div><div class=\"flex items-center text-base sm:text-sm\"><input id=\"price-1\" name=\"price[]\" value=\"25\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-orange focus:ring-brand-orange\"> <label for=\"price-1\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">1 - 3</label></div><div class=\"flex items-center text-base sm:text-sm\"><input id=\"price-2\" name=\"price[]\" value=\"50\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-orange focus:ring-brand-orange\"> <label for=\"price-2\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">2 - 5</label></div></div></fieldset><fieldset><legend class=\"block font-medium\">Categoria</legend><div class=\"space-y-6 pt-6 sm:space-y-4 sm:pt-4\"><div class=\"flex items-center text-base sm:text-sm\"><input id=\"color-0\" name=\"color[]\" value=\"white\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-orange focus:ring-brand-orange\"> <label for=\"color-0\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">Didacticos</label></div><div class=\"flex items-center text-base sm:text-sm\"><input id=\"color-1\" name=\"color[]\" value=\"beige\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-orange focus:ring-brand-orange\"> <label for=\"color-1\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">Deportivos</label></div></div></fieldset></div></div></div></section><div class=\"py-8 grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"catalog\" class=\"relative isolate px-6 py-20 lg:px-8\"><h1 class=\"text-4xl font-display font-bold tracking-tight text-center mb-20\">Escoje un juguete</h1><div class=\"mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8\"><!-- Filters --><section aria-labelledby=\"filter-heading\" class=\"grid items-center border-b border-t border-gray-200\"><h2 id=\"filter-heading\" class=\"sr-only\">Filtros</h2><div class=\"relative col-start-1 row-start-1 py-4\"><div class=\"mx-auto flex max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8\"><div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, toggleFilters())
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button type=\"button\" class=\"group flex items-center font-medium text-gray-700\" aria-controls=\"filters-panel\" aria-expanded=\"false\" onclick=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var4 templ.ComponentScript = toggleFilters()
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4.Call)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Filtros</button></div><div class=\"pl-6\"><button type=\"button\" class=\"text-gray-500\" onclick=\"clearFilters()\">Clear all</button></div></div></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if len(categoryFilters) > 0 {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"bg-gray-100\"><div class=\"mx-auto max-w-7xl px-4 py-3 sm:flex sm:items-center sm:px-6 lg:px-8\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				for _, filter := range categoryFilters {
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"-my-1 flex flex-wrap items-center\"><span class=\"m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900\"><span>")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					var templ_7745c5c3_Var5 string
+					templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(filter)
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 65, Col: 26}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> ")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, onRemoveFilter(filter))
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button type=\"button\" class=\"ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500\" onclick=\"")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					var templ_7745c5c3_Var6 templ.ComponentScript = onRemoveFilter(filter)
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6.Call)
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><span class=\"sr-only\">Remove filter for ")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					var templ_7745c5c3_Var7 string
+					templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(filter)
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 71, Col: 61}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> <svg class=\"h-2 w-2\" stroke=\"currentColor\" fill=\"none\" viewBox=\"0 0 8 8\"><path stroke-linecap=\"round\" stroke-width=\"1.5\" d=\"M1 1l6 6m0-6L1 7\"></path></svg></button></span></div>")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"border-t border-gray-200 py-10 transition ease-in-out transform translate-y-0\" id=\"filters-panel\" data-transition-state=\"closed\" data-transition-closed=\"duraion-300 translate-y-0\" data-transition-open=\"duraion-300 translate-y-1\"><form id=\"filters-form\" onsubmit=\"event.preventDefault();updateFilters();\"><div class=\"mx-auto max-w-7xl gap-x-6 px-4 text-sm sm:flex sm:px-6 md:gap-x-8 lg:px-8\"><div class=\"w-full sm:w-auto\"><div class=\"space-y-6 sm:space-y-4 relative\"><label for=\"age_min\" class=\"block mb-2 font-bold\">Edad Minima</label> <input id=\"age_min\" type=\"range\" min=\"1\" max=\"16\" value=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var8 string
+			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(ageMin))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 97, Col: 87}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointe\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = AgeRangeLabels().Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"space-y-6 pt-8 sm:space-y-4 relative\"><label for=\"age_max\" class=\"block mb-2 font-bold\">Edad Maxima</label> <input id=\"age_max\" type=\"range\" min=\"1\" max=\"16\" value=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var9 string
+			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(ageMax))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 102, Col: 87}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointe\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = AgeRangeLabels().Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div><legend class=\"block font-bold mb-6\">Categorias</legend><div class=\"grid auto-rows-min grid-cols-1 gap-y-4 sm:grid-cols-2 md:grid-cols-3 md:gap-x-8 lg:grid-cols-4\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			for i, category := range categories {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex items-center text-base sm:text-sm\"><input id=\"")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var10 string
+				templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("category-%d", i))
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 112, Col: 48}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" name=\"category[]\" value=\"")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var11 string
+				templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(category)
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 114, Col: 30}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" type=\"checkbox\" class=\"h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-orange focus:ring-brand-orange\"> <label for=\"")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var12 string
+				templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("category-%d", i))
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 118, Col: 55}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"ml-3 min-w-0 flex-1 text-gray-600\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var13 string
+				templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(category)
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 118, Col: 110}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</label></div>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div><div class=\"text-right\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var14 = []any{components.BasePrimaryButton}
+			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var14...)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button type=\"submit\" class=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var15 string
+			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var14).String())
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 1, Col: 0}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Aplicar Filtros</button></div></form></div></section><div class=\"py-8 grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -53,8 +312,8 @@ func Catalog(toys []model.Toy) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var3 templ.SafeURL = templ.URL(fmt.Sprintf("redeem/%d", toy.ToyID))
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var3)))
+				var templ_7745c5c3_Var16 templ.SafeURL = templ.URL(fmt.Sprintf("redeem/%d", toy.ToyID))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var16)))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -62,12 +321,12 @@ func Catalog(toys []model.Toy) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var4 string
-				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(toy.Image1)
+				var templ_7745c5c3_Var17 string
+				templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(toy.Image1)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 72, Col: 31}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 135, Col: 31}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -75,12 +334,12 @@ func Catalog(toys []model.Toy) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var5 string
-				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyDescription)
+				var templ_7745c5c3_Var18 string
+				templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyDescription)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 72, Col: 58}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 135, Col: 58}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -88,12 +347,12 @@ func Catalog(toys []model.Toy) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var6 string
-				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyName)
+				var templ_7745c5c3_Var19 string
+				templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyName)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 77, Col: 24}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 140, Col: 24}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -101,12 +360,12 @@ func Catalog(toys []model.Toy) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var7 string
-				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(toy.AgeMin))
+				var templ_7745c5c3_Var20 string
+				templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(toy.AgeMin))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 80, Col: 86}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 143, Col: 86}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -114,12 +373,12 @@ func Catalog(toys []model.Toy) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var8 string
-				templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(toy.AgeMax))
+				var templ_7745c5c3_Var21 string
+				templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(toy.AgeMax))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 80, Col: 115}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 143, Col: 115}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -134,7 +393,7 @@ func Catalog(toys []model.Toy) templ.Component {
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = layout.Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layout.Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

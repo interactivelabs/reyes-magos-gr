@@ -133,6 +133,7 @@ func main() {
 		ToysRepository: toysRepository,
 	}
 	ag.POST("/api/toy", toyHandler.CreateToyApiHandler)
+	ag.POST("/api/toys", toyHandler.CreateBatchToysApiHandler)
 	ag.PUT("/api/toy", toyHandler.UpdateToyApiHandler)
 	ag.DELETE("/api/toy/:toy_id", toyHandler.DeleteToyApiHandler)
 
