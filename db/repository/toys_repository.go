@@ -76,7 +76,7 @@ func (r ToysRepository) GetToys() (toys []model.Toy, err error) {
 	return toys, nil
 }
 
-func (r ToysRepository) GetToysWithFilters(ageMin int64, ageMax int64, category []string) (toys []model.Toy, err error) {
+func getFilteredQuery(ageMin int64, ageMax int64, category []string, countOnly bool) (query string, params []interface{}) {
 	var ageMinFiler int64
 	ageMinFiler = 0
 	if ageMin > 0 {
@@ -89,30 +89,42 @@ func (r ToysRepository) GetToysWithFilters(ageMin int64, ageMax int64, category 
 		ageMaxFiler = ageMax
 	}
 
-	query := `
-		SELECT ` + toyAllFields + `
+	params = append(params, ageMinFiler, ageMaxFiler)
+
+	var selectFields = toyAllFields
+	if countOnly {
+		selectFields = "COUNT(*)"
+	}
+
+	query = `
+		SELECT ` + selectFields + `
 		FROM toys
 		WHERE
 			deleted = 0
 			AND age_min >= ?
 			AND age_max <= ?`
 
-	var rows *sql.Rows
 	if len(category) > 0 {
-		query += ` AND category in ( ` + strings.Join(strings.Split(strings.Repeat("?", len(category)), ""), ",") + ` );`
-		params := make([]interface{}, len(category)+2)
-		params[0] = ageMinFiler
-		params[1] = ageMaxFiler
-		i := 2
+		query += ` AND category in ( ` + strings.Join(strings.Split(strings.Repeat("?", len(category)), ""), ",") + ` )`
 		for _, v := range category {
-			params[i] = v
-			i++
+			params = append(params, v)
 		}
-		rows, err = r.DB.Query(query, params...)
-	} else {
-		query += ";"
-		rows, err = r.DB.Query(query, ageMinFiler, ageMaxFiler)
 	}
+
+	return query, params
+}
+
+func (r ToysRepository) GetToysWithFiltersPaged(page int64, pageSize int64, ageMin int64, ageMax int64, category []string) (toys []model.Toy, err error) {
+
+	query, params := getFilteredQuery(ageMin, ageMax, category, false)
+
+	queryPaging := ` LIMIT ? OFFSET ?;`
+	offset := (page - 1) * pageSize
+	query += queryPaging
+	params = append(params, pageSize, offset)
+
+	var rows *sql.Rows
+	rows, err = r.DB.Query(query, params...)
 
 	if err != nil {
 		return nil, err
@@ -133,6 +145,18 @@ func (r ToysRepository) GetToysWithFilters(ageMin int64, ageMax int64, category 
 	}
 
 	return toys, nil
+}
+
+func (r ToysRepository) GetToysCountWithFilters(ageMin int64, ageMax int64, category []string) (count int64, err error) {
+	query, params := getFilteredQuery(ageMin, ageMax, category, true)
+	row := r.DB.QueryRow(query, params...)
+
+	err = row.Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
 }
 
 func (r ToysRepository) GetToyByID(toyID int64) (toy model.Toy, err error) {
@@ -209,4 +233,18 @@ func (r ToysRepository) GetCategories() (categories []string, err error) {
 	}
 
 	return categories, nil
+}
+
+func (r ToysRepository) GetToysCount() (count int64, err error) {
+	row := r.DB.QueryRow(`
+		SELECT COUNT(*)
+		FROM toys
+		WHERE deleted = 0;`)
+
+	err = row.Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
 }

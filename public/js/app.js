@@ -266,6 +266,11 @@ var updateUrlFilters = (params) => {
   const newQueryString = params.toString();
   window.location.replace(`${window.location.pathname}?${newQueryString}`);
 };
+var getAgeFilters = () => {
+  const ageMin = document.getElementsByName("age_min")[0];
+  const ageMax = document.getElementsByName("age_max")[0];
+  return { ageMin: ageMin.value, ageMax: ageMax.value };
+};
 var updateFilters = () => {
   const filters = getFilters();
   const selectedFilters = Array.from(filters).filter(
@@ -274,10 +279,19 @@ var updateFilters = () => {
   const selectedFiltersValues = selectedFilters.map((filter) => filter.value);
   const params = new URLSearchParams(window.location.search);
   params.delete("category");
+  params.delete("age_min");
+  params.delete("age_max");
   if (selectedFiltersValues.length > 0) {
     for (const filter of selectedFiltersValues) {
       params.append("category", filter);
     }
+  }
+  const { ageMin, ageMax } = getAgeFilters();
+  if (parseInt(ageMin, 10) > 1) {
+    params.set("age_min", ageMin);
+  }
+  if (parseInt(ageMax, 10) > 1) {
+    params.set("age_max", ageMax);
   }
   updateUrlFilters(params);
 };
@@ -288,6 +302,8 @@ var clearFilters = () => {
   }
   const params = new URLSearchParams(window.location.search);
   params.delete("category");
+  params.delete("age_min");
+  params.delete("age_max");
   updateUrlFilters(params);
 };
 var removeFilter = (filterValue) => {

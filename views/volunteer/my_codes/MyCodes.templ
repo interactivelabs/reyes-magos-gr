@@ -35,7 +35,7 @@ templ MyCodeItem(code model.Code) {
 				>
 					Copy
 					<svg aria-hidden="true" class="h-4 w-4 ml-4 fill-current">
-						<use href="/public/img/clipboard.svg#clipboard"></use>
+						<use href="/public/img/clipboard.svg#icon"></use>
 					</svg>
 				</button>
 				<button
@@ -43,9 +43,9 @@ templ MyCodeItem(code model.Code) {
 					class="relative flex-1 inline-flex items-center  justify-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
 					onclick={ onShareHandler(code.Code) }
 				>
-					Share 
+					Share
 					<svg aria-hidden="true" class="h-4 w-4 ml-4 fill-current">
-						<use href="/public/img/share.svg#share"></use>
+						<use href="/public/img/share.svg#icon"></use>
 					</svg>
 				</button>
 				<button
@@ -54,9 +54,9 @@ templ MyCodeItem(code model.Code) {
 					hx-post={ string(templ.URL(fmt.Sprintf("/volunteer/mycodes/give/%d", code.CodeID))) }
 					hx-target={ fmt.Sprintf("#volunteer-code-%d", code.CodeID) }
 				>
-					Give 
+					Give
 					<svg aria-hidden="true" class="h-4 w-4 ml-4 fill-current">
-						<use href="/public/img/gift.svg#gift"></use>
+						<use href="/public/img/gift.svg#icon"></use>
 					</svg>
 				</button>
 			</div>

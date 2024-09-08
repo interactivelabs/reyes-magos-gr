@@ -108,7 +108,7 @@ func OrderCard(order model.Order) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\">Complete  <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/checkCircle.svg#checkCircle\"></use></svg></button></div>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\">Complete  <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/checkCircle.svg#icon\"></use></svg></button></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

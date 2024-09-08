@@ -21,7 +21,16 @@ script onRemoveFilter(filterValue string) {
 	removeFilter(filterValue)
 }
 
-templ AgeRangeLabels() {
+templ AgeRangeFields(name string, value int64) {
+	<input
+		min="1"
+		max="16"
+		type="range"
+		id={ name }
+		name={ name }
+		value={ fmt.Sprint(value) }
+		class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointe"
+	/>
 	<span class="text-sm text-gray-500 absolute start-0 -bottom-6">1</span>
 	<span class="text-sm text-gray-500 absolute start-1/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">4</span>
 	<span class="text-sm text-gray-500 absolute start-2/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">8</span>
@@ -29,7 +38,42 @@ templ AgeRangeLabels() {
 	<span class="text-sm text-gray-500 absolute end-0 -bottom-6">16</span>
 }
 
-templ Catalog(toys []model.Toy, categories []string, categoryFilters []string, ageMin int, ageMax int) {
+func getPagingStyles(page int64, i int64) string {
+	var selected string
+	if i == page {
+		selected = "text-brand-orange border-brand-orange"
+	} else {
+		selected = "text-gray-500 hover:border-gray-300 hover:text-gray-700 border-transparent"
+	}
+	return fmt.Sprintf("inline-flex items-center border-t-2 px-4 pt-4 text-sm font-medium %s", selected)
+}
+
+templ FilterPill(filter string) {
+	<div class="-my-1 flex flex-wrap items-center">
+		<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
+			<span>{ filter }</span>
+			<button
+				type="button"
+				onclick={ onRemoveFilter(filter) }
+				class="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
+			>
+				<span class="sr-only">Remove filter for { filter }</span>
+				<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+					<path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
+				</svg>
+			</button>
+		</span>
+	</div>
+}
+
+func getPaginationLink(currentQuery string, page int64) string {
+	if currentQuery == "" {
+		return fmt.Sprintf("/catalog?page=%d", page)
+	}
+	return fmt.Sprintf("/catalog?%s&page=%d", currentQuery, page)
+}
+
+templ Catalog(toys []model.Toy, categories []string, page int64, pages int64, pageSize int64, count int64, currentQuery string, categoryFilters []string, ageMin int64, ageMax int64) {
 	@layout.Base() {
 		<main>
 			<section id="catalog" class="relative isolate px-6 py-20 lg:px-8">
@@ -43,11 +87,14 @@ templ Catalog(toys []model.Toy, categories []string, categoryFilters []string, a
 								<div>
 									<button
 										type="button"
-										class="group flex items-center font-medium text-gray-700"
 										aria-controls="filters-panel"
 										aria-expanded="false"
 										onclick={ toggleFilters() }
+										class="group flex items-center font-medium text-gray-700"
 									>
+										<svg aria-hidden="true" class="h-4 w-4 mr-4 fill-current">
+											<use href="/public/img/filter_empty.svg#icon"></use>
+										</svg>
 										Filtros
 									</button>
 								</div>
@@ -56,35 +103,27 @@ templ Catalog(toys []model.Toy, categories []string, categoryFilters []string, a
 								</div>
 							</div>
 						</div>
-						if len(categoryFilters) > 0 {
+						if len(categoryFilters) > 0 || ageMin > 1 || ageMax > 1 {
 							<div class="bg-gray-100">
 								<div class="mx-auto max-w-7xl px-4 py-3 sm:flex sm:items-center sm:px-6 lg:px-8">
+									if ageMin > 1 {
+										@FilterPill(fmt.Sprintf("Edad Minima: %d", ageMin))
+									}
+									if ageMax > 1 {
+										@FilterPill(fmt.Sprintf("Edad Maxima: %d", ageMax))
+									}
 									for _, filter := range categoryFilters {
-										<div class="-my-1 flex flex-wrap items-center">
-											<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
-												<span>{ filter }</span>
-												<button
-													type="button"
-													class="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
-													onclick={ onRemoveFilter(filter) }
-												>
-													<span class="sr-only">Remove filter for { filter }</span>
-													<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
-														<path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
-													</svg>
-												</button>
-											</span>
-										</div>
+										@FilterPill(filter)
 									}
 								</div>
 							</div>
 						}
 						<div
-							class="border-t border-gray-200 py-10 transition ease-in-out transform translate-y-0"
 							id="filters-panel"
 							data-transition-state="closed"
 							data-transition-closed="duraion-300 translate-y-0"
 							data-transition-open="duraion-300 translate-y-1"
+							class="border-t border-gray-200 py-10 transition ease-in-out transform translate-y-0"
 						>
 							<form
 								id="filters-form"
@@ -94,28 +133,28 @@ templ Catalog(toys []model.Toy, categories []string, categoryFilters []string, a
 									<div class="w-full sm:w-auto">
 										<div class="space-y-6 sm:space-y-4 relative">
 											<label for="age_min" class="block mb-2 font-bold">Edad Minima</label>
-											<input id="age_min" type="range" min="1" max="16" value={ fmt.Sprint(ageMin) } class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointe"/>
-											@AgeRangeLabels()
+											@AgeRangeFields("age_min", ageMin)
 										</div>
 										<div class="space-y-6 pt-8 sm:space-y-4 relative">
 											<label for="age_max" class="block mb-2 font-bold">Edad Maxima</label>
-											<input id="age_max" type="range" min="1" max="16" value={ fmt.Sprint(ageMax) } class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointe"/>
-											@AgeRangeLabels()
+											@AgeRangeFields("age_max", ageMax)
 										</div>
 									</div>
-									<div>
+									<div class="mt-12 sm:mt-0">
 										<legend class="block font-bold mb-6">Categorias</legend>
 										<div class="grid auto-rows-min grid-cols-1 gap-y-4 sm:grid-cols-2 md:grid-cols-3 md:gap-x-8 lg:grid-cols-4">
 											for i, category := range categories {
 												<div class="flex items-center text-base sm:text-sm">
 													<input
-														id={ fmt.Sprintf("category-%d", i) }
 														name="category[]"
-														value={ category }
 														type="checkbox"
+														value={ category }
+														id={ fmt.Sprintf("category-%d", i) }
 														class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-orange focus:ring-brand-orange"
 													/>
-													<label for={ fmt.Sprintf("category-%d", i) } class="ml-3 min-w-0 flex-1 text-gray-600">{ category }</label>
+													<label for={ fmt.Sprintf("category-%d", i) } class="ml-3 min-w-0 flex-1 text-gray-600">
+														{ category }
+													</label>
 												</div>
 											}
 										</div>
@@ -130,23 +169,68 @@ templ Catalog(toys []model.Toy, categories []string, categoryFilters []string, a
 					<div class="py-8 grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8">
 						for _, toy := range toys {
 							<a href={ templ.URL(fmt.Sprintf("redeem/%d", toy.ToyID)) }>
-								<div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white">
-									<div class="p-4 group-hover:opacity-75">
+								<div class="group relative flex flex-col overflow-hidden">
+									<div class="m-4 group-hover:opacity-75">
 										<img src={ toy.Image1 } alt={ toy.ToyDescription } class="w-full"/>
 									</div>
-									<div class="flex flex-1 flex-col space-y-2 p-4">
+									<div class="flex flex-1 flex-col m-4">
 										<h3 class="text-lg font-bold">
 											<span aria-hidden="true" class="absolute inset-0"></span>
 											{ toy.ToyName }
 										</h3>
 										<div class="flex-1">
-											<p class="text-sm italic text-gray-500 text-right">{ fmt.Sprint(toy.AgeMin) } a { fmt.Sprint(toy.AgeMax) } años</p>
+											<span class="text-sm italic text-gray-500 text-right">Categoria: </span>
+											<span>{ toy.Category }</span>
+										</div>
+										<div class="flex-1">
+											<span class="text-sm italic text-gray-500 text-right">
+												Edades:
+											</span>
+											<span>{ fmt.Sprint(toy.AgeMin) } a { fmt.Sprint(toy.AgeMax) } años</span>
 										</div>
 									</div>
 								</div>
 							</a>
 						}
 					</div>
+					<nav class="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0">
+						<div class="-mt-px flex w-0 flex-1">
+							if page > 1 {
+								<a
+									href={ templ.URL(getPaginationLink(currentQuery, page-1)) }
+									class="inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+								>
+									<svg class="mr-3 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+										<path fill-rule="evenodd" d="M18 10a.75.75 0 01-.75.75H4.66l2.1 1.95a.75.75 0 11-1.02 1.1l-3.5-3.25a.75.75 0 010-1.1l3.5-3.25a.75.75 0 111.02 1.1l-2.1 1.95h12.59A.75.75 0 0118 10z" clip-rule="evenodd"></path>
+									</svg>
+									Previous
+								</a>
+							}
+						</div>
+						<div class="hidden md:-mt-px md:flex">
+							for i := 1; i <= pages; i++ {
+								<a
+									href={ templ.URL(getPaginationLink(currentQuery, i)) }
+									class={ getPagingStyles(page, i) }
+								>
+									{ fmt.Sprint(i) }
+								</a>
+							}
+						</div>
+						<div class="-mt-px flex w-0 flex-1 justify-end">
+							if page < pages {
+								<a
+									href={ templ.URL(getPaginationLink(currentQuery, page+1)) }
+									class="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+								>
+									Next
+									<svg class="ml-3 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+										<path fill-rule="evenodd" d="M2 10a.75.75 0 01.75-.75h12.59l-2.1-1.95a.75.75 0 111.02-1.1l3.5 3.25a.75.75 0 010 1.1l-3.5 3.25a.75.75 0 11-1.02-1.1l2.1-1.95H2.75A.75.75 0 012 10z" clip-rule="evenodd"></path>
+									</svg>
+								</a>
+							}
+						</div>
+					</nav>
 				</div>
 			</section>
 		</main>
