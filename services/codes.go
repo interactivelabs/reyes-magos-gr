@@ -26,7 +26,7 @@ func (s CodesService) CreateCode() (code model.Code, err error) {
 }
 
 func (s CodesService) CreateCodeBatch(Count int64) (codes []model.Code, err error) {
-	for i := 0; i < int(Count); i++ {
+	for i := 0; i < int64(Count); i++ {
 		code := model.Code{
 			Code:       generateRandomString(6),
 			Expiration: time.Now().AddDate(0, 0, 10).Format("2006-01-02"),
@@ -40,7 +40,7 @@ func (s CodesService) CreateCodeBatch(Count int64) (codes []model.Code, err erro
 	return codes, nil
 }
 
-func generateRandomString(length int) string {
+func generateRandomString(length int64) string {
 	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 	var sb strings.Builder

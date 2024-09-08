@@ -6,6 +6,12 @@ const updateUrlFilters = (params) => {
   window.location.replace(`${window.location.pathname}?${newQueryString}`);
 };
 
+const getAgeFilters = () => {
+  const ageMin = document.getElementsByName("age_min")[0] as HTMLInputElement;
+  const ageMax = document.getElementsByName("age_max")[0] as HTMLInputElement;
+  return { ageMin: ageMin.value, ageMax: ageMax.value };
+};
+
 export const updateFilters = () => {
   const filters = getFilters();
 
@@ -17,11 +23,21 @@ export const updateFilters = () => {
   const params = new URLSearchParams(window.location.search);
 
   params.delete("category");
+  params.delete("age_min");
+  params.delete("age_max");
 
   if (selectedFiltersValues.length > 0) {
     for (const filter of selectedFiltersValues) {
       params.append("category", filter);
     }
+  }
+
+  const { ageMin, ageMax } = getAgeFilters();
+  if (parseInt(ageMin, 10) > 1) {
+    params.set("age_min", ageMin);
+  }
+  if (parseInt(ageMax, 10) > 1) {
+    params.set("age_max", ageMax);
   }
 
   updateUrlFilters(params);
@@ -37,6 +53,8 @@ const clearFilters = () => {
   const params = new URLSearchParams(window.location.search);
 
   params.delete("category");
+  params.delete("age_min");
+  params.delete("age_max");
 
   updateUrlFilters(params);
 };

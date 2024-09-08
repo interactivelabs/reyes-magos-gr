@@ -120,7 +120,7 @@ func MyCodeItem(code model.Code) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Copy <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/clipboard.svg#clipboard\"></use></svg></button> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Copy <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/clipboard.svg#icon\"></use></svg></button> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -137,7 +137,7 @@ func MyCodeItem(code model.Code) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Share  <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/share.svg#share\"></use></svg></button> <button type=\"button\" class=\"relative -ml-px flex-1 inline-flex items-center rounded-r-md justify-center bg-brand-orange px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-gray-300\" hx-post=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Share <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/share.svg#icon\"></use></svg></button> <button type=\"button\" class=\"relative -ml-px flex-1 inline-flex items-center rounded-r-md justify-center bg-brand-orange px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-gray-300\" hx-post=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -163,7 +163,7 @@ func MyCodeItem(code model.Code) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Give  <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/gift.svg#gift\"></use></svg></button></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Give <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/gift.svg#icon\"></use></svg></button></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

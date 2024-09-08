@@ -122,7 +122,7 @@ func Dialog() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><span class=\"sr-only\">Close</span> <svg aria-hidden=\"true\" class=\"h-6 w-6 fill-current\"><use href=\"/public/img/close.svg#close\"></use></svg></button></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><span class=\"sr-only\">Close</span> <svg aria-hidden=\"true\" class=\"h-6 w-6 fill-current\"><use href=\"/public/img/close.svg#icon\"></use></svg></button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
