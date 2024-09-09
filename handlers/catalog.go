@@ -49,7 +49,8 @@ func (h CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	pages := int64(math.Ceil(float64(count / PAGE_SIZE)))
+	pagesFloat := float64(count) / float64(PAGE_SIZE)
+	pages := int64(math.Ceil(pagesFloat))
 
 	currentQueryVlues := ctx.Request().URL.Query()
 	currentQueryVlues.Del("page")
