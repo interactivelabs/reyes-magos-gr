@@ -38,9 +38,9 @@ templ AgeRangeFields(name string, value int64) {
 	<span class="text-sm text-gray-500 absolute end-0 -bottom-6">16</span>
 }
 
-func getPagingStyles(page int64, i int64) string {
+func getPagingStyles(page int64, i int) string {
 	var selected string
-	if i == page {
+	if i == int(page) {
 		selected = "text-brand-orange border-brand-orange"
 	} else {
 		selected = "text-gray-500 hover:border-gray-300 hover:text-gray-700 border-transparent"
@@ -66,7 +66,7 @@ templ FilterPill(filter string) {
 	</div>
 }
 
-func getPaginationLink(currentQuery string, page int64) string {
+func getPaginationLink(currentQuery string, page int) string {
 	if currentQuery == "" {
 		return fmt.Sprintf("/catalog?page=%d", page)
 	}
@@ -197,7 +197,7 @@ templ Catalog(toys []model.Toy, categories []string, page int64, pages int64, pa
 						<div class="-mt-px flex w-0 flex-1">
 							if page > 1 {
 								<a
-									href={ templ.URL(getPaginationLink(currentQuery, page-1)) }
+									href={ templ.URL(getPaginationLink(currentQuery, int(page-1))) }
 									class="inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
 								>
 									<svg class="mr-3 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -208,7 +208,7 @@ templ Catalog(toys []model.Toy, categories []string, page int64, pages int64, pa
 							}
 						</div>
 						<div class="hidden md:-mt-px md:flex">
-							for i := 1; i <= pages; i++ {
+							for i := 1; i <= int(pages); i++ {
 								<a
 									href={ templ.URL(getPaginationLink(currentQuery, i)) }
 									class={ getPagingStyles(page, i) }
@@ -220,7 +220,7 @@ templ Catalog(toys []model.Toy, categories []string, page int64, pages int64, pa
 						<div class="-mt-px flex w-0 flex-1 justify-end">
 							if page < pages {
 								<a
-									href={ templ.URL(getPaginationLink(currentQuery, page+1)) }
+									href={ templ.URL(getPaginationLink(currentQuery, int(page+1))) }
 									class="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
 								>
 									Next
@@ -231,6 +231,18 @@ templ Catalog(toys []model.Toy, categories []string, page int64, pages int64, pa
 							}
 						</div>
 					</nav>
+					<div class="mt-6 text-center text-sm font-medium text-gray-500">
+						Showing <span class="text-base font-bold text-brand-blue">{ fmt.Sprint(((page - 1) * pageSize) + 1) }</span>
+						to 
+						<span class="text-base font-bold text-brand-blue">
+							if count <= (page * pageSize) {
+								{ fmt.Sprint(count) }
+							} else {
+								{ fmt.Sprint(page * pageSize) }
+							}
+						</span>
+						of <span class="text-base font-bold text-brand-blue">{ fmt.Sprint(count) }</span> results
+					</div>
 				</div>
 			</section>
 		</main>

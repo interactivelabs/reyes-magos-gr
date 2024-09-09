@@ -2,6 +2,7 @@ const getFilters = () =>
   document.getElementsByName("category[]") as NodeListOf<HTMLInputElement>;
 
 const updateUrlFilters = (params) => {
+  params.delete("page");
   const newQueryString = params.toString();
   window.location.replace(`${window.location.pathname}?${newQueryString}`);
 };
