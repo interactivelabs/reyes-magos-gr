@@ -1,10 +1,12 @@
 package services
 
 import (
-	"errors"
+	"net/http"
 	"reyes-magos-gr/db/model"
 	"reyes-magos-gr/db/repository"
 	"time"
+
+	"github.com/labstack/echo/v4"
 )
 
 type OrdersService struct {
@@ -16,11 +18,11 @@ type OrdersService struct {
 func (s OrdersService) CreateOrder(toyID int64, code string) (order model.Order, err error) {
 	codeResult, err := s.CodesRepository.GetCode(code)
 	if err != nil {
-		return order, err
+		return order, echo.NewHTTPError(http.StatusBadRequest, "Code Not Found")
 	}
 
 	if codeResult.Used == 1 {
-		return order, errors.New("Code already used")
+		return order, echo.NewHTTPError(http.StatusConflict, "Code already used")
 	}
 
 	volunteerID, err := s.VolunteerCodesRepository.GetVolunteerIdByCodeId(codeResult.CodeID)
