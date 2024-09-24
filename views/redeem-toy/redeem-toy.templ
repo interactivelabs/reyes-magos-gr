@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reyes-magos-gr/db/model"
 	layout "reyes-magos-gr/views"
+	"reyes-magos-gr/views/components"
 )
 
 templ RedeemToy(toy model.Toy) {
@@ -11,72 +12,54 @@ templ RedeemToy(toy model.Toy) {
 		<main>
 			<div class="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
 				<h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">El juguete que escojiste</h1>
-				<div class="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
-					<section aria-labelledby="cart-heading" class="lg:col-span-7">
-						<h2 id="cart-heading" class="sr-only">Juguetes en tu carrito</h2>
-						<ul role="list" class="divide-y divide-gray-200 border-b border-t border-gray-200">
-							<li class="flex py-6 sm:py-10">
-								<div class="flex-shrink-0">
-									<img src={ toy.Image1 } alt={ toy.ToyDescription } class="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48"/>
-								</div>
-								<div class="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
-									<div class="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-										<div>
-											<div class="flex justify-between">
-												<h3 class="text-sm">
-													<a href="#" class="font-medium text-gray-700 hover:text-gray-800">{ toy.ToyName }</a>
-												</h3>
-											</div>
-											<div class="mt-1 flex text-sm">
-												<p class="text-gray-500">{ toy.ToyDescription }</p>
-											</div>
-										</div>
-										<div class="mt-4 sm:mt-0 sm:pr-9">
-											<div class="absolute right-0 top-0">
-												<button type="button" class="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500" onclick="history.back()">
-													<span class="sr-only">Remove</span>
-													<svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-														<path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"></path>
-													</svg>
-												</button>
-											</div>
-										</div>
-									</div>
-									<div class="mt-4 flex space-x-2 text-sm text-gray-700">
-										<svg class="h-5 w-5 flex-shrink-0 text-green-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-											<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"></path>
-										</svg>
-										<span>Disponible</span>
-									</div>
-								</div>
-							</li>
-						</ul>
-					</section>
-					<section aria-labelledby="summary-heading" class="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
-						<form hx-post="/orders/create" hx-target="this" hx-swap="outerHTML">
-							<label class="text-lg leading-6 font-medium text-gray-900">Codigo</label>
-							<div class="mt-2">
-								<input
-									id="code"
-									type="code"
-									name="code"
-									class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:text-brand-orange sm:text-sm sm:leading-6"
-									pattern="[A-Z1-9]+"
-									placeholder="A1B2C3"
-									onkeyup="this.value = this.value.toUpperCase();"
-								/>
-								<input type="hidden" name="toy_id" value={ fmt.Sprint(toy.ToyID) }/>
+				<div class="mx-auto mt-8 max-w-2xl sm:px-6 lg:max-w-7xl lg:px-8">
+					<div class="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
+						<div class="lg:col-span-5 lg:col-start-8">
+							<h2 class="text-xl font-medium text-gray-900">{ toy.ToyName }</h2>
+						</div>
+						<div class="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0">
+							<h3 class="sr-only">Images</h3>
+							<div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-8">
+								<img src={ toy.Image1 } alt={ toy.ToyDescription } class="rounded-lg w-full lg:col-span-2 lg:row-span-2"/>
+								<img src={ toy.Image2 } alt={ toy.ToyDescription } class="hidden rounded-lg lg:block"/>
+								<img src={ toy.Image3 } alt={ toy.ToyDescription } class="hidden rounded-lg lg:block"/>
 							</div>
-							<div class="mt-6">
-								<button
-									type="submit"
-									class="rounded-full border-2 border-brand-orange bg-brand-orange px-5 py-4 text-sm font-semibold text-white shadow-sm hover:bg-transparent hover:text-brand-orange"
-								>
-									Ordernar Juguete
-								</button>
+						</div>
+						<div class="lg:col-span-5">
+							<div class="mt-4">
+								<h3 class="text-sm font-medium text-gray-900">Descripción:</h3>
+								<p class="mt-2">{ toy.ToyDescription }</p>
 							</div>
-						</form>
-					</section>
+							<div class="mt-4">
+								<h3 class="text-sm font-medium text-gray-900">Categoria:</h3>
+								<p class="mt-2">{ toy.Category }</p>
+							</div>
+							<div class="mt-4">
+								<h3 class="text-sm font-medium text-gray-900">Edades (años):</h3>
+								<p class="mt-2">{ fmt.Sprint(toy.AgeMin) } - { fmt.Sprint(toy.AgeMax) }</p>
+							</div>
+							<form class="mt-10" hx-post="/orders/create" hx-target="this" hx-swap="outerHTML">
+								<label class="text-lg leading-6 font-medium text-gray-900">Codigo</label>
+								<div class="mt-2">
+									<input
+										id="code"
+										type="code"
+										name="code"
+										class={ components.BaseInputStyles }
+										pattern="[A-Z,1-9]+"
+										placeholder="A1B2C3"
+										onkeyup="this.value = this.value.toUpperCase();"
+									/>
+									<input type="hidden" name="toy_id" value={ fmt.Sprint(toy.ToyID) }/>
+								</div>
+								<div class="mt-6 text-right">
+									<button type="submit" class={ components.BrandPrimaryButton + " w-full lg:w-auto" }>
+										Ordernar Juguete
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
 				</div>
 			</div>
 		</main>

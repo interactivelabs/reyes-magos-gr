@@ -1,1 +1,345 @@
-var d=({element:t,elementButton:e,event:o,onClose:n})=>{!(t.contains(o.target)||t===o.target||e.contains(o.target)||e===o.target)&&t.getAttribute("data-transition-state")==="open"&&(t.setAttribute("data-transition-state","closed"),n&&n())},m=t=>{t&&(t.getAttribute("data-transition-state")==="closed"?(t.setAttribute("open","true"),t.setAttribute("data-transition-state","open")):(t.removeAttribute("open"),t.setAttribute("data-transition-state","closed")))};function f(){let t=document.getElementById("admin-menu-dropdown"),e=document.getElementById("admin-menu-button"),o=n=>{n.stopPropagation(),m(t)};e?.addEventListener("click",o),document.addEventListener("click",n=>{n.stopPropagation(),t&&e&&d({element:t,elementButton:e,event:n})})}function p(){let t=document.getElementById("mobile-menu-container"),e=document.getElementById("mobile-menu-button"),o=document.getElementById("mobile-menu-button-icon-closed"),n=document.getElementById("mobile-menu-button-icon-open"),i=()=>{o?.classList.toggle("hidden"),n?.classList.toggle("hidden")},a=s=>{s.stopPropagation(),m(t),i()};e?.addEventListener("click",a),document.addEventListener("click",s=>{s.stopPropagation(),t&&e&&d({event:s,element:t,elementButton:e,onClose:i})})}var L=()=>{let t=document.getElementById("toast-container"),e=document.getElementById("toast-panel");e?.classList.remove("show-toast"),e?.classList.add("hide-toast"),setTimeout(()=>{t?.classList.remove("flex"),t?.classList.add("hidden")},300)},w=({title:t,subTitle:e,duration:o=5e3})=>{let n=document.getElementById("toast-container"),i=document.getElementById("toast-panel");n?.classList.remove("hidden"),n?.classList.add("flex"),i?.classList.remove("hide-toast"),i?.classList.add("show-toast");let a=document.getElementById("toast-title"),s=document.getElementById("toast-subtitle");a.innerText=t,s.innerText=e,setTimeout(()=>L(),o)};function h(){globalThis.hideToast=L}var I=async t=>{try{await navigator.clipboard.writeText(t),w({title:"Copiado!",subTitle:"El codigo ha sido copiado al portapapeles."})}catch(e){console.error("Failed to copy: ",e)}},k=async t=>{let e={title:"Comparte la alegria!",text:`Utiliza este codigo para obtener un juguete: ${t}`,url:`${window.location.origin}/catalog`};try{await navigator.share(e)}catch(o){console.error("Share failed: ",o)}};function E(){globalThis.copyCode=I,globalThis.shareCode=async t=>{typeof navigator.share>"u"?I(t):k(t)}}var S=(t,e)=>{let o=t.getAttribute(e);if(!o)throw new Error(`Missing ${e} attribute`);let n=o.split(" "),i=n.filter(s=>s.startsWith("final:"));return[n.filter(s=>!s.startsWith("final:")),i]},v=(t,e,o)=>{let[n,i]=S(t,e),a=(s,r)=>{setTimeout(()=>{t.classList.add(r)},s)};n.forEach(s=>{o==="add"?(t.classList.add(s),a(10,s)):t.classList.remove(s)}),i.forEach(s=>{let r=s.split("final:")[1],[g,c]=JSON.parse(r.replace(/'/g,'"'));o==="add"?a(g,c):t.classList.remove(c)})},y=(t,e)=>{v(t,e,"add")},C=(t,e)=>{v(t,e,"remove")},x=(t,e)=>{let o=t.getAttribute(e);if(!o)throw new Error(`Missing ${e} attribute`);let i=o.split(" ").filter(s=>s.startsWith("delay-")||s.startsWith("duration-"));if(!i||!i.length)return 150;let a=0;return i.forEach(s=>{let r=parseInt(s.split("-")[1],10);a+=r}),a};function b(){let t="data-transition-state",e=a=>{a.style.display="none"},o=a=>{a.style.display="block",a.offsetHeight},n=a=>{for(let s of a){let{type:r,attributeName:g,oldValue:c,target:l}=s;if(r!=="attributes"||g!==t||!l)return;let M=l.getAttribute(t);if(y(l,`data-transition-${M}`),M==="open")o(l);else{let F=x(l,`data-transition-${c}`);setTimeout(()=>e(l),F)}c&&C(l,`data-transition-${c}`)}},i=new MutationObserver(n);document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(`[${t}]`).forEach(s=>{let r=s.getAttribute(t);if(r!=="closed"&&r!=="open")throw new Error(`Invalid ${r} for transitions, use data-styles-[state] for non open/close transitions`);r==="closed"?e(s):o(s),y(s,`data-transition-${r}`),i.observe(s,{attributes:!0,attributeOldValue:!0,attributeFilter:[t]})})})}var u=()=>document.getElementsByName("category[]"),A=t=>{t.delete("page");let e=t.toString();window.location.replace(`${window.location.pathname}?${e}`)},H=()=>{let t=document.getElementsByName("age_min")[0],e=document.getElementsByName("age_max")[0];return{ageMin:t.value,ageMax:e.value}},B=()=>{let t=u(),o=Array.from(t).filter(s=>s.checked).map(s=>s.value),n=new URLSearchParams(window.location.search);if(n.delete("category"),n.delete("age_min"),n.delete("age_max"),o.length>0)for(let s of o)n.append("category",s);let{ageMin:i,ageMax:a}=H();parseInt(i,10)>1&&n.set("age_min",i),parseInt(a,10)>1&&n.set("age_max",a),A(n)},O=()=>{let t=u();for(let o of t)o.checked=!1;let e=new URLSearchParams(window.location.search);e.delete("category"),e.delete("age_min"),e.delete("age_max"),A(e)},D=t=>{let e=u();for(let o of e)o.value===t&&(o.checked=!1);B()},$=()=>{let t=new URLSearchParams(window.location.search),e=u();if(t.has("category")){let o=t.getAll("category");for(let n of e)o.includes(n.value)&&(n.checked=!0)}};function T(){globalThis.updateFilters=B,globalThis.clearFilters=O,globalThis.removeFilter=D,$()}b();E();f();p();h();T();
+// assets/js/shared/nav.ustils.ts
+var closeIfOutsideClick = ({
+  element,
+  elementButton,
+  event,
+  onClose
+}) => {
+  const isClickInside = element.contains(event.target) || element === event.target || elementButton.contains(event.target) || elementButton === event.target;
+  if (!isClickInside && element.getAttribute("data-transition-state") === "open") {
+    element.setAttribute("data-transition-state", "closed");
+    onClose && onClose();
+  }
+};
+var toggleMenu = (menuContainer) => {
+  if (!menuContainer) return;
+  if (menuContainer.getAttribute("data-transition-state") === "closed") {
+    menuContainer.setAttribute("open", "true");
+    menuContainer.setAttribute("data-transition-state", "open");
+  } else {
+    menuContainer.removeAttribute("open");
+    menuContainer.setAttribute("data-transition-state", "closed");
+  }
+};
+
+// assets/js/admin/admin.nav.ts
+function initAdminNav() {
+  const adminMenuDropdown = document.getElementById("admin-menu-dropdown");
+  const adminMenuButton = document.getElementById("admin-menu-button");
+  const toggleAdminMenu = (evt) => {
+    evt.stopPropagation();
+    toggleMenu(adminMenuDropdown);
+  };
+  adminMenuButton?.addEventListener("click", toggleAdminMenu);
+  document.addEventListener("click", (event) => {
+    event.stopPropagation();
+    if (adminMenuDropdown && adminMenuButton) {
+      closeIfOutsideClick({
+        element: adminMenuDropdown,
+        elementButton: adminMenuButton,
+        event
+      });
+    }
+  });
+}
+
+// assets/js/app/nav.ts
+function initNav() {
+  const mobileMenuContainer = document.getElementById("mobile-menu-container");
+  const mobileMenuButton = document.getElementById("mobile-menu-button");
+  const mobileMenuButtonIconClosed = document.getElementById(
+    "mobile-menu-button-icon-closed"
+  );
+  const mobileMenuButtonIconOpen = document.getElementById(
+    "mobile-menu-button-icon-open"
+  );
+  const toggleMobileMenuButtonIcon = () => {
+    mobileMenuButtonIconClosed?.classList.toggle("hidden");
+    mobileMenuButtonIconOpen?.classList.toggle("hidden");
+  };
+  const toggleMobileMenu = (evt) => {
+    evt.stopPropagation();
+    toggleMenu(mobileMenuContainer);
+    toggleMobileMenuButtonIcon();
+  };
+  mobileMenuButton?.addEventListener("click", toggleMobileMenu);
+  document.addEventListener("click", (event) => {
+    event.stopPropagation();
+    if (mobileMenuContainer && mobileMenuButton) {
+      closeIfOutsideClick({
+        event,
+        element: mobileMenuContainer,
+        elementButton: mobileMenuButton,
+        onClose: toggleMobileMenuButtonIcon
+      });
+    }
+  });
+}
+
+// assets/js/shared/toast.ts
+var hideToast = () => {
+  const toastContainer = document.getElementById("toast-container");
+  const toastPanel = document.getElementById("toast-panel");
+  toastPanel?.classList.remove("show-toast");
+  toastPanel?.classList.add("hide-toast");
+  setTimeout(() => {
+    toastContainer?.classList.remove("flex");
+    toastContainer?.classList.add("hidden");
+  }, 300);
+};
+var showToast = ({ title, subTitle, duration = 5e3 }) => {
+  const toastContainer = document.getElementById("toast-container");
+  const toastPanel = document.getElementById("toast-panel");
+  toastContainer?.classList.remove("hidden");
+  toastContainer?.classList.add("flex");
+  toastPanel?.classList.remove("hide-toast");
+  toastPanel?.classList.add("show-toast");
+  const toastTitle = document.getElementById("toast-title");
+  const toastSubTitle = document.getElementById("toast-subtitle");
+  toastTitle.innerText = title;
+  toastSubTitle.innerText = subTitle;
+  setTimeout(() => hideToast(), duration);
+};
+function initToast() {
+  globalThis.hideToast = hideToast;
+}
+
+// assets/js/app/myCodes.ts
+var copy = async (code) => {
+  try {
+    await navigator.clipboard.writeText(code);
+    showToast({
+      title: "Copiado!",
+      subTitle: "El codigo ha sido copiado al portapapeles."
+    });
+  } catch (err) {
+    console.error("Failed to copy: ", err);
+  }
+};
+var share = async (code) => {
+  const data = {
+    title: "Comparte la alegria!",
+    text: `Utiliza este codigo para obtener un juguete: ${code}`,
+    url: `${window.location.origin}/catalog`
+  };
+  try {
+    await navigator.share(data);
+  } catch (err) {
+    console.error("Share failed: ", err);
+  }
+};
+function initMycodes() {
+  globalThis.copyCode = copy;
+  globalThis.shareCode = async (code) => {
+    if (typeof navigator.share === "undefined") {
+      copy(code);
+    } else {
+      share(code);
+    }
+  };
+}
+
+// assets/js/tailwind/tailwind-core.ts
+var getStateClasses = (element, attribute) => {
+  const stateClasses = element.getAttribute(attribute);
+  if (!stateClasses) {
+    throw new Error(`Missing ${attribute} attribute`);
+  }
+  const stateClassesArray = stateClasses.split(" ");
+  const afterClasses = stateClassesArray.filter(
+    (className) => className.startsWith("final:")
+  );
+  const immediateClasses = stateClassesArray.filter(
+    (className) => !className.startsWith("final:")
+  );
+  return [immediateClasses, afterClasses];
+};
+var updateStateClasses = (element, attribute, action) => {
+  const [immediateClasses, afterClasses] = getStateClasses(element, attribute);
+  const createTimeoutToAddClass = (delay, className) => {
+    setTimeout(() => {
+      element.classList.add(className);
+    }, delay);
+  };
+  immediateClasses.forEach((className) => {
+    if (action === "add" /* ADD */) {
+      element.classList.add(className);
+      createTimeoutToAddClass(10, className);
+    } else {
+      element.classList.remove(className);
+    }
+  });
+  afterClasses.forEach((className) => {
+    const props = className.split("final:")[1];
+    const [delay, afterClassName] = JSON.parse(props.replace(/'/g, '"'));
+    if (action === "add" /* ADD */) {
+      createTimeoutToAddClass(delay, afterClassName);
+    } else {
+      element.classList.remove(afterClassName);
+    }
+  });
+};
+var addStateClasses = (element, attribute) => {
+  updateStateClasses(element, attribute, "add" /* ADD */);
+};
+var removeStateClasses = (element, attribute) => {
+  updateStateClasses(element, attribute, "remove" /* REMOVE */);
+};
+var getDelayFromAttribute = (element, attribute) => {
+  const classNames = element.getAttribute(attribute);
+  if (!classNames) {
+    throw new Error(`Missing ${attribute} attribute`);
+  }
+  const classNamesArray = classNames.split(" ");
+  const delayClasses = classNamesArray.filter(
+    (className) => className.startsWith("delay-") || className.startsWith("duration-")
+  );
+  if (!delayClasses || !delayClasses.length) return 150;
+  let delay = 0;
+  delayClasses.forEach((delayClass) => {
+    const delayValue = parseInt(delayClass.split("-")[1], 10);
+    delay += delayValue;
+  });
+  return delay;
+};
+
+// assets/js/tailwind/tailwind-transitions.ts
+function initTailwindTransitions() {
+  const ATTRIBUTE = "data-transition-state";
+  const hideElement = (element) => {
+    element.style.display = "none";
+  };
+  const showElement = (element) => {
+    element.style.display = "block";
+    element.offsetHeight;
+  };
+  const transitionMutationCallback = (mutationsList) => {
+    for (const mutation of mutationsList) {
+      const { type, attributeName, oldValue, target } = mutation;
+      if (type !== "attributes" || attributeName !== ATTRIBUTE || !target) {
+        return;
+      }
+      const state = target.getAttribute(ATTRIBUTE);
+      addStateClasses(target, `data-transition-${state}`);
+      if (state === "open") {
+        showElement(target);
+      } else {
+        const delay = getDelayFromAttribute(
+          target,
+          `data-transition-${oldValue}`
+        );
+        setTimeout(() => hideElement(target), delay);
+      }
+      if (oldValue) {
+        removeStateClasses(target, `data-transition-${oldValue}`);
+      }
+    }
+  };
+  const observer = new MutationObserver(transitionMutationCallback);
+  document.addEventListener("DOMContentLoaded", function() {
+    const allElements = document.querySelectorAll(`[${ATTRIBUTE}]`);
+    allElements.forEach((transitionElement) => {
+      const state = transitionElement.getAttribute(ATTRIBUTE);
+      if (state !== "closed" && state !== "open") {
+        throw new Error(
+          `Invalid ${state} for transitions, use data-styles-[state] for non open/close transitions`
+        );
+      }
+      if (state === "closed") {
+        hideElement(transitionElement);
+      } else {
+        showElement(transitionElement);
+      }
+      addStateClasses(transitionElement, `data-transition-${state}`);
+      observer.observe(transitionElement, {
+        attributes: true,
+        attributeOldValue: true,
+        attributeFilter: [ATTRIBUTE]
+      });
+    });
+  });
+}
+
+// assets/js/app/catalogFilters.ts
+var getFilters = () => document.getElementsByName("category[]");
+var updateUrlFilters = (params) => {
+  params.delete("page");
+  const newQueryString = params.toString();
+  window.location.replace(`${window.location.pathname}?${newQueryString}`);
+};
+var getAgeFilters = () => {
+  const ageMin = document.getElementsByName("age_min")[0];
+  const ageMax = document.getElementsByName("age_max")[0];
+  return { ageMin: ageMin.value, ageMax: ageMax.value };
+};
+var updateFilters = () => {
+  const filters = getFilters();
+  const selectedFilters = Array.from(filters).filter(
+    (filter) => filter.checked
+  );
+  const selectedFiltersValues = selectedFilters.map((filter) => filter.value);
+  const params = new URLSearchParams(window.location.search);
+  params.delete("category");
+  params.delete("age_min");
+  params.delete("age_max");
+  if (selectedFiltersValues.length > 0) {
+    for (const filter of selectedFiltersValues) {
+      params.append("category", filter);
+    }
+  }
+  const { ageMin, ageMax } = getAgeFilters();
+  if (parseInt(ageMin, 10) > 1) {
+    params.set("age_min", ageMin);
+  }
+  if (parseInt(ageMax, 10) > 1) {
+    params.set("age_max", ageMax);
+  }
+  updateUrlFilters(params);
+};
+var clearFilters = () => {
+  const filters = getFilters();
+  for (const filter of filters) {
+    filter.checked = false;
+  }
+  const params = new URLSearchParams(window.location.search);
+  params.delete("category");
+  params.delete("age_min");
+  params.delete("age_max");
+  updateUrlFilters(params);
+};
+var removeFilter = (filterValue) => {
+  const filters = getFilters();
+  for (const filter of filters) {
+    if (filter.value === filterValue) {
+      filter.checked = false;
+    }
+  }
+  updateFilters();
+};
+var setUrlFilters = () => {
+  const params = new URLSearchParams(window.location.search);
+  const filters = getFilters();
+  if (params.has("category")) {
+    const selectedFilters = params.getAll("category");
+    for (const filter of filters) {
+      if (selectedFilters.includes(filter.value)) {
+        filter.checked = true;
+      }
+    }
+  }
+};
+function initCatalogFilters() {
+  globalThis.updateFilters = updateFilters;
+  globalThis.clearFilters = clearFilters;
+  globalThis.removeFilter = removeFilter;
+  setUrlFilters();
+}
+
+// assets/js/app.ts
+initTailwindTransitions();
+initMycodes();
+initAdminNav();
+initNav();
+initToast();
+initCatalogFilters();
+//# sourceMappingURL=app.js.map

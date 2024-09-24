@@ -18,7 +18,7 @@ func CustomHTTPErrorHandler(err error, ctx echo.Context) {
 		code = he.Code
 	}
 
-	if code != 401 && code != 404 && code != 500 {
+	if code != 401 && code != 404 {
 		ctx.Logger().Error(err)
 		ctx.JSON(code, err.Error())
 	} else {
@@ -33,8 +33,8 @@ func CustomHTTPErrorHandler(err error, ctx echo.Context) {
 			errorPage = errors.Error401
 		case 404:
 			errorPage = errors.Error404
-		case 500:
-			errorPage = errors.Error500
+			// case 500:
+			// 	errorPage = errors.Error500
 		}
 
 		lib.Render(ctx, errorPage())

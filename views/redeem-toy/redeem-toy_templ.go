@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"reyes-magos-gr/db/model"
 	layout "reyes-magos-gr/views"
+	"reyes-magos-gr/views/components"
 )
 
 func RedeemToy(toy model.Toy) templ.Component {
@@ -47,16 +48,29 @@ func RedeemToy(toy model.Toy) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><div class=\"mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8\"><h1 class=\"text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl\">El juguete que escojiste</h1><div class=\"mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16\"><section aria-labelledby=\"cart-heading\" class=\"lg:col-span-7\"><h2 id=\"cart-heading\" class=\"sr-only\">Juguetes en tu carrito</h2><ul role=\"list\" class=\"divide-y divide-gray-200 border-b border-t border-gray-200\"><li class=\"flex py-6 sm:py-10\"><div class=\"flex-shrink-0\"><img src=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><div class=\"mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8\"><h1 class=\"text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl\">El juguete que escojiste</h1><div class=\"mx-auto mt-8 max-w-2xl sm:px-6 lg:max-w-7xl lg:px-8\"><div class=\"lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8\"><div class=\"lg:col-span-5 lg:col-start-8\"><h2 class=\"text-xl font-medium text-gray-900\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(toy.Image1)
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyName)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 20, Col: 30}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 18, Col: 66}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h2></div><div class=\"mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0\"><h3 class=\"sr-only\">Images</h3><div class=\"grid grid-cols-1 lg:grid-cols-2 lg:gap-8\"><img src=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var4 string
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(toy.Image1)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 23, Col: 29}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -64,55 +78,177 @@ func RedeemToy(toy model.Toy) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyDescription)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 20, Col: 57}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48\"></div><div class=\"ml-4 flex flex-1 flex-col justify-between sm:ml-6\"><div class=\"relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0\"><div><div class=\"flex justify-between\"><h3 class=\"text-sm\"><a href=\"#\" class=\"font-medium text-gray-700 hover:text-gray-800\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
 			var templ_7745c5c3_Var5 string
-			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyName)
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyDescription)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 27, Col: 92}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 23, Col: 56}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></h3></div><div class=\"mt-1 flex text-sm\"><p class=\"text-gray-500\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"rounded-lg w-full lg:col-span-2 lg:row-span-2\"> <img src=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var6 string
-			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyDescription)
+			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(toy.Image2)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 31, Col: 57}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 24, Col: 29}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p></div></div><div class=\"mt-4 sm:mt-0 sm:pr-9\"><div class=\"absolute right-0 top-0\"><button type=\"button\" class=\"-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500\" onclick=\"history.back()\"><span class=\"sr-only\">Remove</span> <svg class=\"h-5 w-5\" viewBox=\"0 0 20 20\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z\"></path></svg></button></div></div></div><div class=\"mt-4 flex space-x-2 text-sm text-gray-700\"><svg class=\"h-5 w-5 flex-shrink-0 text-green-500\" viewBox=\"0 0 20 20\" fill=\"currentColor\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z\" clip-rule=\"evenodd\"></path></svg> <span>Disponible</span></div></div></li></ul></section><section aria-labelledby=\"summary-heading\" class=\"mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8\"><form hx-post=\"/orders/create\" hx-target=\"this\" hx-swap=\"outerHTML\"><label class=\"text-lg leading-6 font-medium text-gray-900\">Codigo</label><div class=\"mt-2\"><input id=\"code\" type=\"code\" name=\"code\" class=\"block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:text-brand-orange sm:text-sm sm:leading-6\" pattern=\"[A-Z1-9]+\" placeholder=\"A1B2C3\" onkeyup=\"this.value = this.value.toUpperCase();\"> <input type=\"hidden\" name=\"toy_id\" value=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" alt=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var7 string
-			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(toy.ToyID))
+			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyDescription)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 68, Col: 72}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 24, Col: 56}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"mt-6\"><button type=\"submit\" class=\"rounded-full border-2 border-brand-orange bg-brand-orange px-5 py-4 text-sm font-semibold text-white shadow-sm hover:bg-transparent hover:text-brand-orange\">Ordernar Juguete</button></div></form></section></div></div></main>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"hidden rounded-lg lg:block\"> <img src=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var8 string
+			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(toy.Image3)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 25, Col: 29}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" alt=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var9 string
+			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyDescription)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 25, Col: 56}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"hidden rounded-lg lg:block\"></div></div><div class=\"lg:col-span-5\"><div class=\"mt-4\"><h3 class=\"text-sm font-medium text-gray-900\">Descripción:</h3><p class=\"mt-2\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var10 string
+			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyDescription)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 31, Col: 44}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p></div><div class=\"mt-4\"><h3 class=\"text-sm font-medium text-gray-900\">Categoria:</h3><p class=\"mt-2\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var11 string
+			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(toy.Category)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 35, Col: 38}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p></div><div class=\"mt-4\"><h3 class=\"text-sm font-medium text-gray-900\">Edades (años):</h3><p class=\"mt-2\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var12 string
+			templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(toy.AgeMin))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 39, Col: 48}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" - ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var13 string
+			templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(toy.AgeMax))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 39, Col: 77}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p></div><form class=\"mt-10\" hx-post=\"/orders/create\" hx-target=\"this\" hx-swap=\"outerHTML\"><label class=\"text-lg leading-6 font-medium text-gray-900\">Codigo</label><div class=\"mt-2\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var14 = []any{components.BaseInputStyles}
+			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var14...)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input id=\"code\" type=\"code\" name=\"code\" class=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var15 string
+			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var14).String())
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 1, Col: 0}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" pattern=\"[A-Z,1-9]+\" placeholder=\"A1B2C3\" onkeyup=\"this.value = this.value.toUpperCase();\"> <input type=\"hidden\" name=\"toy_id\" value=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var16 string
+			templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(toy.ToyID))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 53, Col: 73}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div><div class=\"mt-6 text-right\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var17 = []any{components.BrandPrimaryButton + " w-full lg:w-auto"}
+			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var17...)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button type=\"submit\" class=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var18 string
+			templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var17).String())
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/redeem-toy/redeem-toy.templ`, Line: 1, Col: 0}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Ordernar Juguete</button></div></form></div></div></div></div></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
