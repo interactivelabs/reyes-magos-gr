@@ -2,7 +2,6 @@ package pages
 
 import (
 	layout "reyes-magos-gr/views"
-	"reyes-magos-gr/views/components"
 	"reyes-magos-gr/views/shared"
 )
 
@@ -14,7 +13,6 @@ templ LayoutErrors() {
 			@shared.Nav()
 			{ children... }
 			@shared.Footer()
-			@components.Toast()
 		</body>
 		<script type="module" src="/public/js/app.js" defer></script>
 	</html>

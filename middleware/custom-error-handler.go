@@ -33,10 +33,9 @@ func CustomHTTPErrorHandler(err error, ctx echo.Context) {
 			errorPage = errors.Error401
 		case 404:
 			errorPage = errors.Error404
-			// case 500:
-			// 	errorPage = errors.Error500
 		}
 
+		ctx.Response().WriteHeader(code)
 		lib.Render(ctx, errorPage())
 	}
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"reyes-magos-gr/db/model"
 	"time"
 
 	"github.com/a-h/templ"
@@ -18,20 +17,11 @@ func Render(ctx echo.Context, component templ.Component) error {
 }
 
 func FormatDate(date string) (string, error) {
-	fmtDate, err := time.Parse("2006-01-02", date)
+	fmtDate, err := time.Parse(time.RFC3339, date)
 	if err != nil {
 		return "", err
 	}
-	return fmtDate.Format("January 2, 2006"), nil
-}
-
-func HasOrderShipped(order model.Order) string {
-	if order.Shipped == 1 {
-		if shipped, err := FormatDate(order.ShippedDate); err == nil {
-			return shipped
-		}
-	}
-	return "Not Shipped"
+	return fmtDate.Format(TextDate), nil
 }
 
 func GetSafeIdUrl(url string, id int64) string {
@@ -44,4 +34,11 @@ func GetAssetUrl(url string) string {
 		return string(templ.URL(fmt.Sprintf("/public/%s", url)))
 	}
 	return string(templ.URL(fmt.Sprintf("https://static.dl-toys.com/%s", url)))
+}
+
+func GetHTMLErrorCode(err error) (code int) {
+	if he, ok := err.(*echo.HTTPError); ok {
+		return he.Code
+	}
+	return 0
 }

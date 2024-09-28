@@ -7,6 +7,40 @@ import (
 	"reyes-magos-gr/views/components"
 )
 
+templ RedeemToyForm(toyId int64, errorMsg string) {
+	<form class="mt-10" hx-post="/orders/create" hx-target="this" hx-swap="outerHTML">
+		<label class="text-lg leading-6 font-medium text-gray-900">Codigo</label>
+		<div class="mt-2">
+			<input
+				id="code"
+				type="code"
+				name="code"
+				class={ components.BaseInputStyles }
+				pattern="[A-Z,1-9]+"
+				placeholder="A1B2C3"
+				onkeyup="this.value = this.value.toUpperCase();"
+			/>
+			<input type="hidden" name="toy_id" value={ fmt.Sprint(toyId) }/>
+		</div>
+		if errorMsg != "" {
+			<p class="mt-2 text-red-600">{ errorMsg }</p>
+		}
+		<div class="mt-6 text-right">
+			<button type="submit" class={ components.BrandPrimaryButton + " w-full lg:w-auto" }>
+				Ordernar Juguete
+			</button>
+		</div>
+	</form>
+}
+
+script swapImage(imageId string) {
+	const largeImg = htmx.find('#toy-image-1');
+	const smallImg = htmx.find('#toy-image-' + imageId);
+	const tmpSrc = largeImg.src;
+	largeImg.src = smallImg.src;
+	smallImg.src = tmpSrc;
+}
+
 templ RedeemToy(toy model.Toy) {
 	@layout.Base() {
 		<main>
@@ -19,10 +53,27 @@ templ RedeemToy(toy model.Toy) {
 						</div>
 						<div class="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0">
 							<h3 class="sr-only">Images</h3>
-							<div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-8">
-								<img src={ toy.Image1 } alt={ toy.ToyDescription } class="rounded-lg w-full lg:col-span-2 lg:row-span-2"/>
-								<img src={ toy.Image2 } alt={ toy.ToyDescription } class="hidden rounded-lg lg:block"/>
-								<img src={ toy.Image3 } alt={ toy.ToyDescription } class="hidden rounded-lg lg:block"/>
+							<div class="grid grid-cols-2 gap-4 lg:gap-8">
+								<img
+									id="toy-image-1"
+									src={ toy.Image1 }
+									alt={ toy.ToyDescription }
+									class="rounded-lg w-full col-span-2 lg:row-span-2 cursor-pointer"
+								/>
+								<img
+									id="toy-image-2"
+									src={ toy.Image2 }
+									alt={ toy.ToyDescription }
+									class="rounded-lg cursor-pointer"
+									onclick={ swapImage("2") }
+								/>
+								<img
+									id="toy-image-3"
+									src={ toy.Image3 }
+									alt={ toy.ToyDescription }
+									class="rounded-lg cursor-pointer"
+									onclick={ swapImage("3") }
+								/>
 							</div>
 						</div>
 						<div class="lg:col-span-5">
@@ -38,26 +89,7 @@ templ RedeemToy(toy model.Toy) {
 								<h3 class="text-sm font-medium text-gray-900">Edades (años):</h3>
 								<p class="mt-2">{ fmt.Sprint(toy.AgeMin) } - { fmt.Sprint(toy.AgeMax) }</p>
 							</div>
-							<form class="mt-10" hx-post="/orders/create" hx-target="this" hx-swap="outerHTML">
-								<label class="text-lg leading-6 font-medium text-gray-900">Codigo</label>
-								<div class="mt-2">
-									<input
-										id="code"
-										type="code"
-										name="code"
-										class={ components.BaseInputStyles }
-										pattern="[A-Z,1-9]+"
-										placeholder="A1B2C3"
-										onkeyup="this.value = this.value.toUpperCase();"
-									/>
-									<input type="hidden" name="toy_id" value={ fmt.Sprint(toy.ToyID) }/>
-								</div>
-								<div class="mt-6 text-right">
-									<button type="submit" class={ components.BrandPrimaryButton + " w-full lg:w-auto" }>
-										Ordernar Juguete
-									</button>
-								</div>
-							</form>
+							@RedeemToyForm(toy.ToyID, "")
 						</div>
 					</div>
 				</div>

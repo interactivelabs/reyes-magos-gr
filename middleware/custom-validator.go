@@ -27,7 +27,7 @@ func iso8601Date(fl validator.FieldLevel) bool {
 		return true
 	}
 
-	_, err := time.Parse("2006-01-02", fl.Field().String())
+	_, err := time.Parse(time.RFC3339, fl.Field().String())
 	if err != nil {
 		return false
 	}

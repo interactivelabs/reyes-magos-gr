@@ -12,11 +12,15 @@ type CodesService struct {
 	CodesRepository repository.CodesRepository
 }
 
-func (s CodesService) CreateCode() (code model.Code, err error) {
-	code = model.Code{
+func NewCode() model.Code {
+	return model.Code{
 		Code:       generateRandomString(6),
-		Expiration: time.Now().AddDate(0, 0, 10).Format("2006-01-02"),
+		Expiration: time.Now().AddDate(0, 0, 10).Format(time.RFC3339),
 	}
+}
+
+func (s CodesService) CreateCode() (code model.Code, err error) {
+	code = NewCode()
 	_, codeRow, err := s.CodesRepository.CreateCode(code)
 	if err != nil {
 		return model.Code{}, err
@@ -27,10 +31,7 @@ func (s CodesService) CreateCode() (code model.Code, err error) {
 
 func (s CodesService) CreateCodeBatch(Count int64) (codes []model.Code, err error) {
 	for i := 0; i < int(Count); i++ {
-		code := model.Code{
-			Code:       generateRandomString(6),
-			Expiration: time.Now().AddDate(0, 0, 10).Format("2006-01-02"),
-		}
+		code := NewCode()
 		_, codeRow, err := s.CodesRepository.CreateCode(code)
 		if err != nil {
 			return nil, err
