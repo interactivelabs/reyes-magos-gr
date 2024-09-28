@@ -27,14 +27,14 @@ func (s OrdersService) CreateOrder(toyID int64, code string) (order model.Order,
 
 	volunteerID, err := s.VolunteerCodesRepository.GetVolunteerIdByCodeId(codeResult.CodeID)
 	if err != nil {
-		return order, err
+		return order, echo.NewHTTPError(http.StatusBadRequest, "Code not assigned to volunteer")
 	}
 
 	order = model.Order{
 		ToyID:       toyID,
 		CodeID:      codeResult.CodeID,
 		VolunteerID: volunteerID,
-		OrderDate:   time.Now().Format("2006-01-02"),
+		OrderDate:   time.Now().Format(time.RFC3339),
 	}
 
 	orderID, err := s.OrdersRepository.CreateOrder(order)

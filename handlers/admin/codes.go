@@ -115,5 +115,5 @@ func (h CodesHandler) CreateCodesHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return ctx.Redirect(http.StatusTemporaryRedirect, "/admin/codes")
+	return ctx.Redirect(303, "/admin/codes")
 }

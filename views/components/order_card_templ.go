@@ -14,6 +14,15 @@ import (
 	"reyes-magos-gr/lib"
 )
 
+func HasOrderShipped(order model.Order) string {
+	if order.Shipped == 1 {
+		if shipped, err := lib.FormatDate(order.ShippedDate); err == nil {
+			return shipped
+		}
+	}
+	return "Not Shipped"
+}
+
 func OrderCard(order model.Order) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -42,7 +51,7 @@ func OrderCard(order model.Order) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("order-card-%d", order.OrderID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/order_card.templ`, Line: 10, Col: 119}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/order_card.templ`, Line: 19, Col: 119}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -55,7 +64,7 @@ func OrderCard(order model.Order) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(lib.FormatDate(order.OrderDate))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/order_card.templ`, Line: 13, Col: 92}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/order_card.templ`, Line: 22, Col: 92}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -66,9 +75,9 @@ func OrderCard(order model.Order) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(lib.HasOrderShipped(order))
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(HasOrderShipped(order))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/order_card.templ`, Line: 16, Col: 84}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/order_card.templ`, Line: 25, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -92,7 +101,7 @@ func OrderCard(order model.Order) templ.Component {
 				var templ_7745c5c3_Var5 string
 				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(string(templ.URL(fmt.Sprintf("/volunteer/myorders/%d/completed", order.OrderID))))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/order_card.templ`, Line: 29, Col: 97}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/order_card.templ`, Line: 38, Col: 97}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 				if templ_7745c5c3_Err != nil {
@@ -105,13 +114,13 @@ func OrderCard(order model.Order) templ.Component {
 				var templ_7745c5c3_Var6 string
 				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("#order-card-%d", order.OrderID))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/order_card.templ`, Line: 30, Col: 62}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/order_card.templ`, Line: 39, Col: 62}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\">Complete  <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/checkCircle.svg#icon\"></use></svg></button></div>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\">Complete <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/checkCircle.svg#icon\"></use></svg></button></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

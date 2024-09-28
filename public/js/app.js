@@ -77,9 +77,12 @@ function initNav() {
 }
 
 // assets/js/shared/toast.ts
-var hideToast = () => {
-  const toastContainer = document.getElementById("toast-container");
-  const toastPanel = document.getElementById("toast-panel");
+var hideToast = (variant = "" /* SUCCESS */) => {
+  const variantSelector = variant ? `${variant}-` : "";
+  const toastContainer = document.getElementById(
+    `toast-${variantSelector}container`
+  );
+  const toastPanel = document.getElementById(`toast-${variantSelector}panel`);
   toastPanel?.classList.remove("show-toast");
   toastPanel?.classList.add("hide-toast");
   setTimeout(() => {
@@ -87,21 +90,36 @@ var hideToast = () => {
     toastContainer?.classList.add("hidden");
   }, 300);
 };
-var showToast = ({ title, subTitle, duration = 5e3 }) => {
-  const toastContainer = document.getElementById("toast-container");
-  const toastPanel = document.getElementById("toast-panel");
+var showToast = ({
+  title,
+  subTitle,
+  duration = 5e3,
+  variant = "" /* SUCCESS */
+}) => {
+  const variantSelector = variant ? `${variant}-` : "";
+  const toastContainer = document.getElementById(
+    `toast-${variantSelector}container`
+  );
+  const toastPanel = document.getElementById(`toast-${variantSelector}panel`);
   toastContainer?.classList.remove("hidden");
   toastContainer?.classList.add("flex");
   toastPanel?.classList.remove("hide-toast");
   toastPanel?.classList.add("show-toast");
-  const toastTitle = document.getElementById("toast-title");
-  const toastSubTitle = document.getElementById("toast-subtitle");
+  const toastTitle = document.getElementById(`toast-${variantSelector}title`);
+  const toastSubTitle = document.getElementById(
+    `toast-${variantSelector}subtitle`
+  );
   toastTitle.innerText = title;
   toastSubTitle.innerText = subTitle;
-  setTimeout(() => hideToast(), duration);
+  setTimeout(() => hideToast(variant), duration);
 };
+var showErrorToast = (props) => showToast({ ...props, variant: "error" /* ERROR */ });
+var hideErrorToast = () => hideToast("error" /* ERROR */);
 function initToast() {
+  globalThis.showToast = showToast;
   globalThis.hideToast = hideToast;
+  globalThis.showErrorToast = showErrorToast;
+  globalThis.hideErrorToast = hideErrorToast;
 }
 
 // assets/js/app/myCodes.ts
@@ -334,6 +352,18 @@ function initCatalogFilters() {
   globalThis.removeFilter = removeFilter;
   setUrlFilters();
 }
+
+// assets/js/shared/htmxErrorHandler.ts
+window.addEventListener("htmx:responseError", (e) => {
+  console.log(e);
+  const code = e.detail.xhr.status;
+  if (code === 500) {
+    showErrorToast({
+      title: "Error del servidor",
+      subTitle: "Ha ocurrido un error inesperado. Por favor intenta de nuevo."
+    });
+  }
+});
 
 // assets/js/app.ts
 initTailwindTransitions();
