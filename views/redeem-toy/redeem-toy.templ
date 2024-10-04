@@ -16,7 +16,7 @@ templ RedeemToyForm(toyId int64, errorMsg string) {
 				type="code"
 				name="code"
 				class={ components.BaseInputStyles }
-				pattern="[A-Z,1-9]+"
+				pattern="[A-Z|1-9]+"
 				placeholder="A1B2C3"
 				onkeyup="this.value = this.value.toUpperCase();"
 			/>

@@ -17,7 +17,7 @@ templ MyOrders(orders []model.Order) {
 				})
 				if len(orders) > 0 {
 					<div class="py-20">
-						<h2 class="text-lg font-semibold leading-6 text-gray-900">Open Orders</h2>
+						<h2 class="text-lg font-semibold leading-6 text-gray-900">Open orders</h2>
 						<ul class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
 							for _, order := range orders {
 								<li class="col-span-1 flex rounded-lg shadow">

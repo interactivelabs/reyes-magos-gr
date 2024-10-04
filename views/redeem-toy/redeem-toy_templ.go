@@ -58,7 +58,7 @@ func RedeemToyForm(toyId int64, errorMsg string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" pattern=\"[A-Z,1-9]+\" placeholder=\"A1B2C3\" onkeyup=\"this.value = this.value.toUpperCase();\"> <input type=\"hidden\" name=\"toy_id\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" pattern=\"[A-Z|1-9]+\" placeholder=\"A1B2C3\" onkeyup=\"this.value = this.value.toUpperCase();\"> <input type=\"hidden\" name=\"toy_id\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

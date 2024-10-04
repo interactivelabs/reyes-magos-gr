@@ -218,13 +218,13 @@ func MyCodes(codes []model.Code, givenCodes []model.Code) templ.Component {
 			}
 			templ_7745c5c3_Err = components.Stats("Codes Stats", []components.Stat{
 				{Name: "Available Codes", Value: fmt.Sprint(len(codes))},
-				{Name: "Given Codes", Value: fmt.Sprint(len(givenCodes))},
+				{Name: "Given Unused Codes", Value: fmt.Sprint(len(givenCodes))},
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if len(codes) > 0 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"py-20\"><h2 class=\"text-lg font-semibold leading-6 text-gray-900\">Available Codes</h2><ul role=\"list\" id=\"mycodes-code-list\" class=\"mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"py-20\"><h2 class=\"text-lg font-semibold leading-6 text-gray-900\">Available to give codes</h2><ul role=\"list\" id=\"mycodes-code-list\" class=\"mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -240,7 +240,7 @@ func MyCodes(codes []model.Code, givenCodes []model.Code) templ.Component {
 				}
 			}
 			if len(givenCodes) > 0 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"py-20\"><h2 class=\"text-lg font-semibold leading-6 text-gray-900\">Given Codes</h2><ul role=\"list\" id=\"mycodes-code-list\" class=\"mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"py-20\"><h2 class=\"text-lg font-semibold leading-6 text-gray-900\">Given unused codes</h2><ul role=\"list\" id=\"mycodes-code-list\" class=\"mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
