@@ -11,7 +11,7 @@ templ UpdateVolunteerForm(volunteer model.Volunteer) {
 		hx-put={ string(templ.URL(fmt.Sprintf("/admin/volunteers/%d/save", volunteer.VolunteerID))) }
 		hx-target={ fmt.Sprintf("#admin-volunteer-row-%d", volunteer.VolunteerID) }
 		hx-swap="outerHTML"
-		hx-on::after-request="htmx.find('#dialog-element').close();"
+		hx-on::after-request={ components.CloseDialog() }
 	>
 		<div class="grid grid-cols-1 gap-x-6 gap-y-8">
 			@VolunteerForm(volunteer)
