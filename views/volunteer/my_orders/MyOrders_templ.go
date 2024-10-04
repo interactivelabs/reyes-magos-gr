@@ -59,7 +59,7 @@ func MyOrders(orders []model.Order) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			if len(orders) > 0 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"py-20\"><h2 class=\"text-lg font-semibold leading-6 text-gray-900\">Open Orders</h2><ul class=\"mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"py-20\"><h2 class=\"text-lg font-semibold leading-6 text-gray-900\">Open orders</h2><ul class=\"mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

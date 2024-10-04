@@ -43,5 +43,5 @@ func (h OrdersHandler) CreateOrderViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, orders.CreateOrder(volunteer.Name))
+	return lib.Render(ctx, orders.OrderCreatedSucessBanner(volunteer.Name))
 }
