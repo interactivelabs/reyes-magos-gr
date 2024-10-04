@@ -8,6 +8,7 @@ import (
 	"reyes-magos-gr/views/components"
 	my_orders "reyes-magos-gr/views/volunteer/my_orders"
 	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -49,6 +50,10 @@ func (h MyOrdersHandler) MyOrdersCompleteHandler(ctx echo.Context) error {
 	}
 
 	order.Completed = 1
+	if order.Completed == 1 {
+		order.CompletedDate = time.Now().Format(time.RFC3339)
+	}
+
 	err = h.Ordersrepository.UpdateOrder(order)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
