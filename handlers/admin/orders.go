@@ -6,6 +6,7 @@ import (
 	"reyes-magos-gr/lib"
 	ordersView "reyes-magos-gr/views/admin/orders"
 	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -108,8 +109,15 @@ func (h OrdersHandler) SaveOrderChangesHandler(ctx echo.Context) error {
 	if saveOrderRequest.ShippedDate != "" {
 		order.Shipped = 1
 	}
-	order.ShippedDate = saveOrderRequest.ShippedDate
+
+	shippedDate, err := time.Parse(lib.YYYYMMDD, saveOrderRequest.ShippedDate)
+	order.ShippedDate = shippedDate.Format(time.RFC3339)
+
 	order.Completed = saveOrderRequest.OrderCompleted
+
+	if order.Completed == 1 {
+		order.CompletedDate = time.Now().Format(time.RFC3339)
+	}
 
 	err = h.OrdersRepository.UpdateOrder(order)
 	if err != nil {

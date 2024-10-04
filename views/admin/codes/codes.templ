@@ -19,7 +19,7 @@ templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers
 					<div class="flex justify-around">
 						if len(codes) > 0 {
 							<div class="pb-6">
-								<form method="post" action="/admin/codes/assign">
+								<form method="post" action="/admin/codes/assign" id="assign-codes-form">
 									<h2 class="text-xl text-center py-6">Un assigned</h2>
 									<div class="py-4">
 										<label for="volunteer_id" class="block text-sm font-medium leading-6">Volunteer</label>
@@ -66,6 +66,13 @@ templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers
 											}
 										</tbody>
 									</table>
+									<div>
+										<button
+											type="button"
+											onclick="selectAllUnsigned()"
+											class={ components.BaseSecondaryButton }
+										>Select All</button>
+									</div>
 									<div class="flex justify-center py-6">
 										<button
 											type="submit"

@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"reyes-magos-gr/lib"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -27,7 +28,7 @@ func iso8601Date(fl validator.FieldLevel) bool {
 		return true
 	}
 
-	_, err := time.Parse(time.RFC3339, fl.Field().String())
+	_, err := time.Parse(lib.YYYYMMDD, fl.Field().String())
 	if err != nil {
 		return false
 	}

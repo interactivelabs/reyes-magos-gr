@@ -8,6 +8,16 @@ function initCodes() {
       codeCheckbox.checked = target.checked;
     }
   });
+  globalThis.selectAllUnsigned = () => {
+    const assignCodesForm = document.getElementById("assign-codes-form");
+    const checkboxes = assignCodesForm?.getElementsByTagName("input");
+    if (!checkboxes || !checkboxes.length) return;
+    for (let i = 0; i < checkboxes?.length; i++) {
+      if (checkboxes[i].type === "checkbox") {
+        checkboxes[i].checked = true;
+      }
+    }
+  };
 }
 
 // assets/js/admin/orders.ts
