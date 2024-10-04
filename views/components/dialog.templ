@@ -1,11 +1,11 @@
 package components
 
-script openDialog() {
+script OpenDialog() {
 	htmx.find('#dialog-element').showModal();
 	htmx.find('#dialog-element').setAttribute('data-transition-state', 'open');
 }
 
-script closeDialog() {
+script CloseDialog() {
   htmx.find('#dialog-element').close();
 	htmx.find('#dialog-element').setAttribute('data-transition-state', 'closed');
 }
@@ -13,7 +13,7 @@ script closeDialog() {
 templ CancelModalButton() {
 	<button
 		type="button"
-		onclick={ closeDialog() }
+		onclick={ CloseDialog() }
 		class={ BaseSecondaryButton }
 	>
 		Cancel
@@ -34,7 +34,7 @@ templ Dialog() {
 			<button
 				type="button"
 				class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
-				onclick={ closeDialog() }
+				onclick={ CloseDialog() }
 			>
 				<span class="sr-only">Close</span>
 				<svg aria-hidden="true" class="h-6 w-6 fill-current">
@@ -45,7 +45,7 @@ templ Dialog() {
 		<div
 			id="dialog-content"
 			class="text-left"
-			hx-on::after-swap={ openDialog() }
+			hx-on::after-swap={ OpenDialog() }
 		></div>
 	</dialog>
 }

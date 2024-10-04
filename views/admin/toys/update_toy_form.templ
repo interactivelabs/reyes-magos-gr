@@ -13,7 +13,7 @@ templ UpdateToyForm(toy model.Toy) {
 		hx-put={ string(templ.URL(fmt.Sprintf("/admin/toys/%d/save", toy.ToyID))) }
 		hx-target={ fmt.Sprintf("#admin-toy-row-%d", toy.ToyID) }
 		hx-swap="outerHTML"
-		hx-on::after-request="htmx.find('#dialog-element').close();"
+		hx-on::after-request={ components.CloseDialog() }
 	>
 		<div class="grid grid-cols-1 gap-x-6 gap-y-8">
 			@ToyForm(toy)

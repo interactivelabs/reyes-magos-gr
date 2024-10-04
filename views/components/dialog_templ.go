@@ -8,25 +8,25 @@ package components
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func openDialog() templ.ComponentScript {
+func OpenDialog() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_openDialog_877e`,
-		Function: `function __templ_openDialog_877e(){htmx.find('#dialog-element').showModal();
+		Name: `__templ_OpenDialog_877e`,
+		Function: `function __templ_OpenDialog_877e(){htmx.find('#dialog-element').showModal();
 	htmx.find('#dialog-element').setAttribute('data-transition-state', 'open');
 }`,
-		Call:       templ.SafeScript(`__templ_openDialog_877e`),
-		CallInline: templ.SafeScriptInline(`__templ_openDialog_877e`),
+		Call:       templ.SafeScript(`__templ_OpenDialog_877e`),
+		CallInline: templ.SafeScriptInline(`__templ_OpenDialog_877e`),
 	}
 }
 
-func closeDialog() templ.ComponentScript {
+func CloseDialog() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_closeDialog_9edd`,
-		Function: `function __templ_closeDialog_9edd(){htmx.find('#dialog-element').close();
+		Name: `__templ_CloseDialog_9edd`,
+		Function: `function __templ_CloseDialog_9edd(){htmx.find('#dialog-element').close();
 	htmx.find('#dialog-element').setAttribute('data-transition-state', 'closed');
 }`,
-		Call:       templ.SafeScript(`__templ_closeDialog_9edd`),
-		CallInline: templ.SafeScriptInline(`__templ_closeDialog_9edd`),
+		Call:       templ.SafeScript(`__templ_CloseDialog_9edd`),
+		CallInline: templ.SafeScriptInline(`__templ_CloseDialog_9edd`),
 	}
 }
 
@@ -56,7 +56,7 @@ func CancelModalButton() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, closeDialog())
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, CloseDialog())
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -64,7 +64,7 @@ func CancelModalButton() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var3 templ.ComponentScript = closeDialog()
+		var templ_7745c5c3_Var3 templ.ComponentScript = CloseDialog()
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3.Call)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -115,7 +115,7 @@ func Dialog() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, closeDialog())
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, CloseDialog())
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -123,7 +123,7 @@ func Dialog() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var6 templ.ComponentScript = closeDialog()
+		var templ_7745c5c3_Var6 templ.ComponentScript = CloseDialog()
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6.Call)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -132,7 +132,7 @@ func Dialog() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, openDialog())
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, OpenDialog())
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -140,7 +140,7 @@ func Dialog() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var7 templ.ComponentScript = openDialog()
+		var templ_7745c5c3_Var7 templ.ComponentScript = OpenDialog()
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var7.Call)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
