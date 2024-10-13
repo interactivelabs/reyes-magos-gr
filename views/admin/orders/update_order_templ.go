@@ -363,7 +363,7 @@ func UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) te
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var30 = []any{components.BasePrimaryButton}
+		var templ_7745c5c3_Var30 = []any{components.AppPrimaryButton}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var30...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
