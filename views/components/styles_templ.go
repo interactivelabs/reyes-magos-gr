@@ -8,10 +8,12 @@ package components
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-const BaseButton = "rounded-md px-3.5 py-2.5 text-sm font-semibold shadow-sm "
-const BaseSecondaryButton string = BaseButton + "bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
-const BasePrimaryButton string = BaseButton + "bg-brand-orange text-white hover:bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange "
-const BrandPrimaryButton string = "rounded-full border-2 border-brand-orange bg-brand-orange px-5 py-4 text-sm font-semibold text-white shadow-sm hover:bg-transparent hover:text-brand-orange "
+const BaseButton = "px-3 py-2 text-sm font-semibold shadow-sm "
+const BaseSecondaryButton string = BaseButton + "rounded-md bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
+const BasePrimaryButton string = BaseButton + "border-2 border-brand-orange bg-brand-orange text-white hover:bg-transparent hover:text-brand-orange focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange "
+const AppPrimaryButton string = BasePrimaryButton + "rounded-md "
+const BrandPrimaryButton string = BasePrimaryButton + "rounded-full "
+const BrandPrimaryButtonSmall string = BasePrimaryButton + "rounded-lg "
 
 const BaseLabelStyles string = "block text-sm font-medium leading-6 text-gray-900 "
 const BaseInputStyles string = "block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-orange sm:text-sm sm:leading-6 "
