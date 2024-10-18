@@ -3,13 +3,14 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"reyes-magos-gr/api"
 	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/handlers"
 	"reyes-magos-gr/handlers/admin"
 	"reyes-magos-gr/handlers/volunteers"
-	"reyes-magos-gr/middleware"
+	reyes_middleware "reyes-magos-gr/middleware"
 	"reyes-magos-gr/platform/authenticator"
 	"reyes-magos-gr/platform/database"
 	"reyes-magos-gr/services"
@@ -17,21 +18,44 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"golang.org/x/time/rate"
 )
 
 func main() {
 	e := echo.New()
 
 	// Middleware
-	e.Validator = middleware.NewValidator()
+	e.Validator = reyes_middleware.NewValidator()
 
+	// Security and session configuration
 	cookieSecret := os.Getenv("REYES_COOKIE_SECRET")
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte(cookieSecret))))
 
-	auth, err := authenticator.New()
-	if err != nil {
-		log.Fatalf("Failed to initialize the authenticator: %v", err)
+	env := os.Getenv("ENV")
+	csrfDomain := "dl-toys.com"
+	if env == "development" {
+		csrfDomain = "localhost"
 	}
+
+	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+		TokenLookup:    "cookie:_csrf",
+		CookiePath:     "/",
+		CookieDomain:   csrfDomain,
+		CookieSecure:   true,
+		CookieHTTPOnly: true,
+		CookieSameSite: http.SameSiteStrictMode,
+	}))
+
+	allowOrigins := []string{"https://dl-toys.com", "https://www.dl-toys.com"}
+	if env == "development" {
+		allowOrigins = append(allowOrigins, "http://localhost:8080")
+	}
+
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{AllowOrigins: allowOrigins}))
+
+	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(rate.Limit(10))))
+	e.Use(middleware.Gzip())
 
 	// Initialize DB
 	db, connector, dir, err := database.New()
@@ -79,6 +103,11 @@ func main() {
 	e.GET("/500", homeHandler.Error500)
 	e.GET("/health", homeHandler.HealthViewHandler)
 
+	auth, err := authenticator.New()
+	if err != nil {
+		log.Fatalf("Failed to initialize the authenticator: %v", err)
+	}
+
 	loginHandler := handlers.LoginHandler{
 		Auth: auth,
 	}
@@ -108,7 +137,7 @@ func main() {
 	// VOLUNTEER ENDPOINTS
 	vg := e.Group("/volunteer")
 
-	vg.Use(middleware.IsAuthenticated())
+	vg.Use(reyes_middleware.IsAuthenticated())
 
 	myCodesHandler := volunteers.MyCodesHandler{
 		VolunteersService: volunteersService,
@@ -127,7 +156,7 @@ func main() {
 	// ADMIN ENDPOINTS
 	ag := e.Group("/admin")
 
-	ag.Use(middleware.IsAdmin())
+	ag.Use(reyes_middleware.IsAdmin())
 
 	toyHandler := api.ToyHandler{
 		ToysRepository: toysRepository,
@@ -193,7 +222,7 @@ func main() {
 	ag.PUT("/toys/:toy_id/save", toysHandler.UpdateToyPutHandler)
 	ag.DELETE("/toys/:toy_id/delete", toysHandler.DeleteToyHandler)
 
-	e.HTTPErrorHandler = middleware.CustomHTTPErrorHandler
+	e.HTTPErrorHandler = reyes_middleware.CustomHTTPErrorHandler
 
 	var host = "localhost"
 	var port = "8080"
