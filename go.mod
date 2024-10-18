@@ -15,12 +15,13 @@ require (
 	github.com/stretchr/testify v1.9.0
 	github.com/tursodatabase/go-libsql v0.0.0-20241011135853-3effbb6dea5c
 	golang.org/x/oauth2 v0.23.0
+	golang.org/x/time v0.7.0
 )
 
 require (
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.5 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.6 // indirect
 	github.com/go-jose/go-jose/v4 v4.0.4 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
@@ -41,6 +42,5 @@ require (
 	golang.org/x/net v0.30.0 // indirect
 	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/text v0.19.0 // indirect
-	golang.org/x/time v0.7.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
