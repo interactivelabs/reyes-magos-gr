@@ -12,7 +12,8 @@ import (
 
 func Render(ctx echo.Context, component templ.Component) error {
 	profileView := GetProfileView(ctx)
-	c := context.WithValue(ctx.Request().Context(), profileKey, profileView)
+	c := ctx.Request().Context()
+	c = context.WithValue(c, profileKey, profileView)
 	return component.Render(c, ctx.Response())
 }
 
