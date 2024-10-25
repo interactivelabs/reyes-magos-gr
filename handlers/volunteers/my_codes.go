@@ -5,8 +5,7 @@ import (
 	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
-	not_volunteer "reyes-magos-gr/views/volunteer"
-	my_codes "reyes-magos-gr/views/volunteer/my_codes"
+	volunteer "reyes-magos-gr/views/volunteer"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -25,7 +24,7 @@ func (h MyCodesHandler) MyCodesViewHandler(ctx echo.Context) error {
 
 	_, err := h.VolunteersService.GetVolunteerByEmail(profile.Email)
 	if err != nil {
-		return lib.Render(ctx, not_volunteer.NotVolunteer())
+		return lib.Render(ctx, volunteer.NotVolunteer())
 	}
 
 	codes, givenCodes, err := h.VolunteersService.GetVolunteerCodesByEmail(profile.Email)
@@ -33,7 +32,7 @@ func (h MyCodesHandler) MyCodesViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, my_codes.MyCodes(codes, givenCodes))
+	return lib.Render(ctx, volunteer.MyCodes(codes, givenCodes))
 }
 
 func (h MyCodesHandler) GiveCode(ctx echo.Context) error {
@@ -60,5 +59,5 @@ func (h MyCodesHandler) GiveCode(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, my_codes.MyCodeItem(code))
+	return lib.Render(ctx, volunteer.MyCodeItem(code))
 }

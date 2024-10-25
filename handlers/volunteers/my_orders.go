@@ -6,7 +6,7 @@ import (
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
 	"reyes-magos-gr/views/components"
-	my_orders "reyes-magos-gr/views/volunteer/my_orders"
+	volunteer "reyes-magos-gr/views/volunteer"
 	"strconv"
 	"time"
 
@@ -29,7 +29,7 @@ func (h MyOrdersHandler) MyOrdersViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, my_orders.MyOrders(orders))
+	return lib.Render(ctx, volunteer.MyOrders(orders))
 }
 
 func (h MyOrdersHandler) MyOrdersCompleteHandler(ctx echo.Context) error {
