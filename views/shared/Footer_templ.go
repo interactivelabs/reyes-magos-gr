@@ -8,6 +8,11 @@ package shared
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+import (
+	"strconv"
+	"time"
+)
+
 func Footer() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -29,7 +34,20 @@ func Footer() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<footer class=\"bg-footer-texture text-white\"><div class=\"mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8\"><nav class=\"-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12\" aria-label=\"Footer\"><div class=\"pb-6\"><a href=\"/#hero\" class=\"text-sm leading-6\">Inicio</a></div><div class=\"pb-6\"><a href=\"/#why\" class=\"text-sm leading-6\">Porque?</a></div><div class=\"pb-6\"><a href=\"/#volunteers\" class=\"text-sm leading-6\">Voluntarios</a></div><div class=\"pb-6\"><a href=\"/catalog\" class=\"text-sm leading-6\">Juguetes</a></div><div class=\"pb-6\"><a href=\"/login\" class=\"text-sm leading-6\"><svg aria-hidden=\"true\" class=\"h-4 w-4 fill-current inline-block\"><use href=\"/public/img/lock.svg#icon\"></use></svg> Login</a></div></nav><p class=\"mt-10 text-center text-xs leading-5\">&copy; 2024 D&L Toys, Inc. All rights reserved.</p></div></footer>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<footer class=\"bg-footer-texture text-white\"><div class=\"mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8\"><nav class=\"-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12\" aria-label=\"Footer\"><div class=\"pb-6\"><a href=\"/#hero\" class=\"text-sm leading-6\">Inicio</a></div><div class=\"pb-6\"><a href=\"/#why\" class=\"text-sm leading-6\">Porque?</a></div><div class=\"pb-6\"><a href=\"/#volunteers\" class=\"text-sm leading-6\">Voluntarios</a></div><div class=\"pb-6\"><a href=\"/catalog\" class=\"text-sm leading-6\">Juguetes</a></div><div class=\"pb-6\"><a href=\"/login\" class=\"text-sm leading-6\"><svg aria-hidden=\"true\" class=\"h-4 w-4 fill-current inline-block\"><use href=\"/public/img/lock.svg#icon\"></use></svg> Accesso Voluntarios</a></div></nav><p class=\"mt-10 text-center text-xs leading-5\">&copy; ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var2 string
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(time.Now().Year()))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/shared/Footer.templ`, Line: 33, Col: 90}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" D&L Toys, Inc. All rights reserved.</p></div></footer>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

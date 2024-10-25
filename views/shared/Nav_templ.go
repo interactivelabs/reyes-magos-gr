@@ -181,7 +181,7 @@ func Nav() templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div><div id=\"admin-menu-dropdown\" role=\"menu\" aria-orientation=\"vertical\" aria-labelledby=\"admin-menu-button\" tabindex=\"-1\" class=\"transition absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none\" data-transition-state=\"closed\" data-transition-closed=\"ease-in duration-200 opacity-0 translate-y-1\" data-transition-open=\"ease-out duration-200 opacity-100 translate-y-0\"><a href=\"/volunteer/mycodes\" class=\"block p-4 text-sm\" role=\"menuitem\">My Codes</a> <a href=\"/volunteer/myorders\" class=\"block p-4 text-sm\" role=\"menuitem\">My Orders</a> <a href=\"/logout\" class=\"block p-4 text-sm\" role=\"menuitem\">Logout</a> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div><div id=\"admin-menu-dropdown\" role=\"menu\" aria-orientation=\"vertical\" aria-labelledby=\"admin-menu-button\" tabindex=\"-1\" class=\"transition absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none\" data-transition-state=\"closed\" data-transition-closed=\"ease-in duration-200 opacity-0 translate-y-1\" data-transition-open=\"ease-out duration-200 opacity-100 translate-y-0\"><a href=\"/volunteer/mycodes\" class=\"block p-4 text-sm\" role=\"menuitem\">Mis Codigos</a> <a href=\"/volunteer/myorders\" class=\"block p-4 text-sm\" role=\"menuitem\">Mis Ordenes</a> <a href=\"/logout\" class=\"block p-4 text-sm\" role=\"menuitem\">Salir</a> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

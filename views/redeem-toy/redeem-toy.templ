@@ -24,7 +24,7 @@ templ RedeemToyForm(toyId int64, errorMsg string) {
 			<input type="hidden" name="toy_id" value={ fmt.Sprint(toyId) }/>
 		</div>
 		if errorMsg != "" {
-			<p class="mt-2 text-red-600">{ errorMsg }</p>
+			<p class="mt-2 text-red-600">{ errorMsg }, <a href="/#steps" class="underline font-bold">Ve aqui como obeter un codigo</a></p>
 		}
 		<div class="mt-6 text-right">
 			<button type="submit" class={ components.BrandPrimaryButton + " w-full lg:w-auto" }>
