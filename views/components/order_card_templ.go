@@ -57,20 +57,20 @@ func OrderCard(order model.Order) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"flex-1 px-4 py-2 text-sm text-left\"><p class=\"text-lg text-gray-900 hover:text-gray-600\"><span class=\"text-sm text-gray-600\">Order date:</span> ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"flex-1 px-4 py-2 text-sm text-left\"><p class=\"text-lg text-gray-900 hover:text-gray-600\"><span class=\"text-sm text-gray-600\">Fecha de orden:</span> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(lib.FormatDate(order.OrderDate))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/order_card.templ`, Line: 22, Col: 92}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/order_card.templ`, Line: 22, Col: 96}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><p class=\"text-lg text-gray-900 hover:text-gray-600\"><span class=\"text-sm text-gray-600\">Shipped:</span> ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><p class=\"text-lg text-gray-900 hover:text-gray-600\"><span class=\"text-sm text-gray-600\">Enviado:</span> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -89,7 +89,7 @@ func OrderCard(order model.Order) templ.Component {
 		}
 		if order.Shipped == 1 {
 			if order.Completed == 1 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"h-full w-full p-2 text-center bg-gray-200 text-gray-500 text-sm font-semibold\">Completed</div>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"h-full w-full p-2 text-center bg-gray-200 text-gray-500 text-sm font-semibold\">Completada</div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -120,7 +120,7 @@ func OrderCard(order model.Order) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\">Complete <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/checkCircle.svg#icon\"></use></svg></button></div>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\">Completar <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/checkCircle.svg#icon\"></use></svg></button></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

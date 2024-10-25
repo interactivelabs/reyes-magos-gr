@@ -123,7 +123,7 @@ func MyCodeItem(code model.Code) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Copy <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/clipboard.svg#icon\"></use></svg></button> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Copiar <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/clipboard.svg#icon\"></use></svg></button> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -140,7 +140,7 @@ func MyCodeItem(code model.Code) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Share <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/share.svg#icon\"></use></svg></button> <button type=\"button\" class=\"relative -ml-px flex-1 inline-flex items-center rounded-r-md justify-center bg-brand-orange px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-gray-300\" hx-post=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Comparitr <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/share.svg#icon\"></use></svg></button> <button type=\"button\" class=\"relative -ml-px flex-1 inline-flex items-center rounded-r-md justify-center bg-brand-orange px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-gray-300\" hx-post=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -166,7 +166,7 @@ func MyCodeItem(code model.Code) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Give <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/gift.svg#icon\"></use></svg></button></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Regalar <svg aria-hidden=\"true\" class=\"h-4 w-4 ml-4 fill-current\"><use href=\"/public/img/gift.svg#icon\"></use></svg></button></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -212,19 +212,19 @@ func MyCodes(codes []model.Code, givenCodes []model.Code) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><h1 class=\"text-center pt-8 text-2xl\">My Codes</h1><section id=\"my_codes\" class=\"relative isolate px-6 py-20 lg:px-8\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><h1 class=\"text-center pt-8 text-2xl\">Mis Codigos</h1><section id=\"my_codes\" class=\"relative isolate px-6 py-20 lg:px-8\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = components.Stats("Codes Stats", []components.Stat{
-				{Name: "Available Codes", Value: fmt.Sprint(len(codes))},
-				{Name: "Given Unused Codes", Value: fmt.Sprint(len(givenCodes))},
+				{Name: "Codigos disponibles", Value: fmt.Sprint(len(codes))},
+				{Name: "Codigos regalados", Value: fmt.Sprint(len(givenCodes))},
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if len(codes) > 0 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"py-20\"><h2 class=\"text-lg font-semibold leading-6 text-gray-900\">Available to give codes</h2><ul role=\"list\" id=\"mycodes-code-list\" class=\"mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"py-20\"><h2 class=\"text-lg font-semibold leading-6 text-gray-900\">Codigos disponibles a regalar</h2><ul role=\"list\" id=\"mycodes-code-list\" class=\"mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -240,7 +240,7 @@ func MyCodes(codes []model.Code, givenCodes []model.Code) templ.Component {
 				}
 			}
 			if len(givenCodes) > 0 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"py-20\"><h2 class=\"text-lg font-semibold leading-6 text-gray-900\">Given unused codes</h2><ul role=\"list\" id=\"mycodes-code-list\" class=\"mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"py-20\"><h2 class=\"text-lg font-semibold leading-6 text-gray-900\">Codigos regalados aun no utilizados</h2><ul role=\"list\" id=\"mycodes-code-list\" class=\"mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

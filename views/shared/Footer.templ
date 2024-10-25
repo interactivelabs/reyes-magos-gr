@@ -1,5 +1,10 @@
 package shared
 
+import (
+	"strconv"
+	"time"
+)
+
 templ Footer() {
 	<footer class="bg-footer-texture text-white">
 		<div class="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
@@ -21,11 +26,11 @@ templ Footer() {
 						<svg aria-hidden="true" class="h-4 w-4 fill-current inline-block">
 							<use href="/public/img/lock.svg#icon"></use>
 						</svg>
-						Login
+						Accesso Voluntarios
 					</a>
 				</div>
 			</nav>
-			<p class="mt-10 text-center text-xs leading-5">&copy; 2024 D&L Toys, Inc. All rights reserved.</p>
+			<p class="mt-10 text-center text-xs leading-5">&copy; { strconv.Itoa(time.Now().Year()) } D&L Toys, Inc. All rights reserved.</p>
 		</div>
 	</footer>
 }

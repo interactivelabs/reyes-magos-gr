@@ -5,6 +5,7 @@ import (
 	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
+	not_volunteer "reyes-magos-gr/views/volunteer"
 	my_codes "reyes-magos-gr/views/volunteer/my_codes"
 	"strconv"
 
@@ -20,6 +21,11 @@ func (h MyCodesHandler) MyCodesViewHandler(ctx echo.Context) error {
 	profile := lib.GetProfileView(ctx)
 	if profile.Email == "" {
 		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+	}
+
+	_, err := h.VolunteersService.GetVolunteerByEmail(profile.Email)
+	if err != nil {
+		return lib.Render(ctx, not_volunteer.NotVolunteer())
 	}
 
 	codes, givenCodes, err := h.VolunteersService.GetVolunteerCodesByEmail(profile.Email)

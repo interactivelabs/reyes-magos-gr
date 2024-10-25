@@ -14,6 +14,10 @@ type VolunteersService struct {
 	VolunteerCodesRepository repository.VolunteerCodesRepository
 }
 
+func (s VolunteersService) GetVolunteerByEmail(email string) (model.Volunteer, error) {
+	return s.VolunteersRepository.GetVolunteerByEmail(email)
+}
+
 func (s VolunteersService) GetVolunteerCodesByEmail(email string) (codes []model.Code, givenCodes []model.Code, err error) {
 	volunteer, err := s.VolunteersRepository.GetVolunteerByEmail(email)
 	if err != nil {
