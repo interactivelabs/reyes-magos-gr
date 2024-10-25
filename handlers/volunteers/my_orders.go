@@ -24,6 +24,11 @@ func (h MyOrdersHandler) MyOrdersViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
 	}
 
+	_, err := h.VolunteersService.GetVolunteerByEmail(profile.Email)
+	if err != nil {
+		return lib.Render(ctx, volunteer.NotVolunteer())
+	}
+
 	orders, err := h.VolunteersService.GetVolunteerOrdersByEmail(profile.Email)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
