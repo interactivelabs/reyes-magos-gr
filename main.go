@@ -102,6 +102,8 @@ func main() {
 	e.GET("/404", homeHandler.Error404)
 	e.GET("/500", homeHandler.Error500)
 	e.GET("/health", homeHandler.HealthViewHandler)
+	e.GET("/verifyemail", homeHandler.VerifyEmailHandler)
+	e.GET("/notvolunteer", homeHandler.NotVolunteerHandler)
 
 	auth, err := authenticator.New()
 	if err != nil {

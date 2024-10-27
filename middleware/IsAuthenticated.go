@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"net/http"
 	"reyes-magos-gr/lib"
 
 	"github.com/labstack/echo-contrib/session"
@@ -31,6 +32,10 @@ func IsAuthenticatedBase(shouldCheckAdmin bool) echo.MiddlewareFunc {
 			profile, err := lib.GetSessionProfile(ctx)
 			if err != nil || profile == nil {
 				return echo.ErrUnauthorized
+			}
+
+			if profile["email_verified"].(bool) != true {
+				return ctx.Redirect(http.StatusTemporaryRedirect, "/verifyemail")
 			}
 
 			if shouldCheckAdmin && profile["dl_admin"] != "true" {
