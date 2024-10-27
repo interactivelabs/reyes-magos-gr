@@ -17,14 +17,12 @@ type MyCodesHandler struct {
 }
 
 func (h MyCodesHandler) MyCodesViewHandler(ctx echo.Context) error {
-	profile := lib.GetProfileView(ctx)
-	if profile.Email == "" {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+	profile, perr := GetProfileView(ctx, h.VolunteersService)
+	if perr != nil && perr.Code == http.StatusUnauthorized {
+		return perr
 	}
-
-	_, err := h.VolunteersService.GetVolunteerByEmail(profile.Email)
-	if err != nil {
-		return lib.Render(ctx, volunteer.NotVolunteer())
+	if perr != nil && perr.Code == http.StatusForbidden {
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/notvolunteer")
 	}
 
 	codes, givenCodes, err := h.VolunteersService.GetVolunteerCodesByEmail(profile.Email)
@@ -36,11 +34,6 @@ func (h MyCodesHandler) MyCodesViewHandler(ctx echo.Context) error {
 }
 
 func (h MyCodesHandler) GiveCode(ctx echo.Context) error {
-	profile := lib.GetProfileView(ctx)
-	if profile.Email == "" {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
-	}
-
 	codeIDStr := ctx.Param("code_id")
 	codeID, err := strconv.ParseInt(codeIDStr, 10, 64)
 	if err != nil {
@@ -60,4 +53,18 @@ func (h MyCodesHandler) GiveCode(ctx echo.Context) error {
 	}
 
 	return lib.Render(ctx, volunteer.MyCodeItem(code))
+}
+
+func GetProfileView(ctx echo.Context, volunteersService services.VolunteersService) (lib.ProfileView, *echo.HTTPError) {
+	profile := lib.GetProfileView(ctx)
+	if profile.Email == "" {
+		return lib.ProfileView{}, echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+	}
+
+	_, err := volunteersService.GetVolunteerByEmail(profile.Email)
+	if err != nil {
+		return lib.ProfileView{}, echo.NewHTTPError(http.StatusForbidden, "Not a volunteer")
+	}
+
+	return profile, nil
 }

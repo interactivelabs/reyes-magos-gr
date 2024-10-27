@@ -19,14 +19,12 @@ type MyOrdersHandler struct {
 }
 
 func (h MyOrdersHandler) MyOrdersViewHandler(ctx echo.Context) error {
-	profile := lib.GetProfileView(ctx)
-	if profile.Email == "" {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+	profile, perr := GetProfileView(ctx, h.VolunteersService)
+	if perr != nil && perr.Code == http.StatusUnauthorized {
+		return perr
 	}
-
-	_, err := h.VolunteersService.GetVolunteerByEmail(profile.Email)
-	if err != nil {
-		return lib.Render(ctx, volunteer.NotVolunteer())
+	if perr != nil && perr.Code == http.StatusForbidden {
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/notvolunteer")
 	}
 
 	orders, err := h.VolunteersService.GetVolunteerOrdersByEmail(profile.Email)
@@ -38,11 +36,6 @@ func (h MyOrdersHandler) MyOrdersViewHandler(ctx echo.Context) error {
 }
 
 func (h MyOrdersHandler) MyOrdersCompleteHandler(ctx echo.Context) error {
-	profile := lib.GetProfileView(ctx)
-	if profile.Email == "" {
-		return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
-	}
-
 	orderIDStr := ctx.Param("order_id")
 	orderId, err := strconv.ParseInt(orderIDStr, 10, 64)
 	if err != nil {

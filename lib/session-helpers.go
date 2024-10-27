@@ -21,6 +21,7 @@ func SetCookieSession(ctx echo.Context, name string, value string) error {
 		HttpOnly: true,
 		Secure:   true,
 	}
+
 	s.Values[name] = value
 	if err := s.Save(ctx.Request(), ctx.Response()); err != nil {
 		return err
