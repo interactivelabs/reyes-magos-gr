@@ -13,13 +13,13 @@ templ ToyRow(toy model.Toy) {
 		class="border-t border-gray-300"
 		id={ fmt.Sprintf("admin-toys-row-%d", toy.ToyID) }
 	>
-		<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">{ toy.ToyName }</td>
-		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{ toy.Category }</td>
-		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-ellipsis">{ toy.ToyDescription }</td>
-		<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
+		<td class="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">{ toy.ToyName }</td>
+		<td class="px-3 py-4 text-sm text-gray-500">{ toy.Category }</td>
+		<td class="px-3 py-4 text-sm text-gray-500 text-ellipsis">{ toy.ToyDescription }</td>
+		<td class="relative py-4 pl-3 pr-4 sm:pr-3">
 			<button
 				type="button"
-				class={ components.BaseSecondaryButton }
+				class={ components.BaseSecondaryButton + " w-full" }
 				hx-get={ lib.GetSafeIdUrl("/admin/toys/%d", toy.ToyID) }
 				hx-target="#dialog-content"
 				hx-swap="innerHTML"
@@ -28,7 +28,7 @@ templ ToyRow(toy model.Toy) {
 			</button>
 			<button
 				type="button"
-				class={ components.BaseSecondaryButton }
+				class={ components.BaseSecondaryButton + " w-full mt-4" }
 				hx-delete={ lib.GetSafeIdUrl("/admin/toys/%d/delete", toy.ToyID) }
 				hx-target={ fmt.Sprintf("#admin-toys-row-%d", toy.ToyID) }
 			>
@@ -60,15 +60,14 @@ templ Toys(toys []model.Toy) {
 				</div>
 			</div>
 			<section id="admin_toys" class="mt-8 flow-root">
-				<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+				<div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
 					<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
 						<table class="min-w-full rounded-md shadow-sm border">
 							<thead class="bg-white">
 								<tr>
-									<th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">Name</th>
-									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
-									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Phone</th>
-									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Address</th>
+									<th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">Toy Name</th>
+									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Category</th>
+									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
 									<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3">
 										<span class="sr-only">Actions</span>
 									</th>

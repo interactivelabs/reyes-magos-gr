@@ -50,50 +50,50 @@ func ToyRow(toy model.Toy) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><td class=\"whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><td class=\"py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyName)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/toys/toys.templ`, Line: 16, Col: 102}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/toys/toys.templ`, Line: 16, Col: 84}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"whitespace-nowrap px-3 py-4 text-sm text-gray-500\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"px-3 py-4 text-sm text-gray-500\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(toy.Category)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/toys/toys.templ`, Line: 17, Col: 78}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/toys/toys.templ`, Line: 17, Col: 60}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-ellipsis\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"px-3 py-4 text-sm text-gray-500 text-ellipsis\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyDescription)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/toys/toys.templ`, Line: 18, Col: 98}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/toys/toys.templ`, Line: 18, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</td><td class=\"relative py-4 pl-3 pr-4 sm:pr-3\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var6 = []any{components.BaseSecondaryButton}
+		var templ_7745c5c3_Var6 = []any{components.BaseSecondaryButton + " w-full"}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var6...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -128,7 +128,7 @@ func ToyRow(toy model.Toy) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var9 = []any{components.BaseSecondaryButton}
+		var templ_7745c5c3_Var9 = []any{components.BaseSecondaryButton + " w-full mt-4"}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var9...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -235,7 +235,7 @@ func Toys(toys []model.Toy) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/admin/toys/create\" hx-target=\"#dialog-content\" hx-swap=\"innerHTML\">Add Toy</button></div></div><section id=\"admin_toys\" class=\"mt-8 flow-root\"><div class=\"-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8\"><div class=\"inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8\"><table class=\"min-w-full rounded-md shadow-sm border\"><thead class=\"bg-white\"><tr><th scope=\"col\" class=\"py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3\">Name</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Email</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Phone</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Address</th><th scope=\"col\" class=\"relative py-3.5 pl-3 pr-4 sm:pr-3\"><span class=\"sr-only\">Actions</span></th></tr></thead> <tbody class=\"bg-white\" id=\"admin-toys-table-body\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/admin/toys/create\" hx-target=\"#dialog-content\" hx-swap=\"innerHTML\">Add Toy</button></div></div><section id=\"admin_toys\" class=\"mt-8 flow-root\"><div class=\"-mx-4 -my-2 sm:-mx-6 lg:-mx-8\"><div class=\"inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8\"><table class=\"min-w-full rounded-md shadow-sm border\"><thead class=\"bg-white\"><tr><th scope=\"col\" class=\"py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3\">Toy Name</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Category</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Description</th><th scope=\"col\" class=\"relative py-3.5 pl-3 pr-4 sm:pr-3\"><span class=\"sr-only\">Actions</span></th></tr></thead> <tbody class=\"bg-white\" id=\"admin-toys-table-body\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
