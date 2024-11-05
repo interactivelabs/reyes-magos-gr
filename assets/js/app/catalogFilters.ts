@@ -63,6 +63,14 @@ const clearFilters = () => {
 const removeFilter = (filterValue) => {
   const filters = getFilters();
 
+  if (filterValue === "age_min") {
+    const ageMin = document.getElementsByName("age_min")[0] as HTMLInputElement;
+    ageMin.value = "0";
+  } else if (filterValue === "age_max") {
+    const ageMax = document.getElementsByName("age_max")[0] as HTMLInputElement;
+    ageMax.value = "0";
+  }
+
   for (const filter of filters) {
     if (filter.value === filterValue) {
       filter.checked = false;

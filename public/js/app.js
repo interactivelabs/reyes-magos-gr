@@ -1,1 +1,302 @@
-var m=({element:t,elementButton:e,event:s,onClose:n})=>{!(t.contains(s.target)||t===s.target||e.contains(s.target)||e===s.target)&&t.getAttribute("data-transition-state")==="open"&&(t.setAttribute("data-transition-state","closed"),n&&n())},u=t=>{t&&(t.getAttribute("data-transition-state")==="closed"?(t.setAttribute("open","true"),t.setAttribute("data-transition-state","open")):(t.removeAttribute("open"),t.setAttribute("data-transition-state","closed")))};function f(){let t=document.getElementById("admin-menu-dropdown"),e=document.getElementById("admin-menu-button"),s=n=>{n.stopPropagation(),u(t)};e?.addEventListener("click",s),document.addEventListener("click",n=>{n.stopPropagation(),t&&e&&m({element:t,elementButton:e,event:n})})}function E(){let t=document.getElementById("mobile-menu-container"),e=document.getElementById("mobile-menu-button"),s=document.getElementById("mobile-menu-button-icon-closed"),n=document.getElementById("mobile-menu-button-icon-open"),i=()=>{s?.classList.toggle("hidden"),n?.classList.toggle("hidden")},a=o=>{o.stopPropagation(),u(t),i()};e?.addEventListener("click",a),document.addEventListener("click",o=>{o.stopPropagation(),t&&e&&m({event:o,element:t,elementButton:e,onClose:i})})}var h=(t="")=>{let e=t?`${t}-`:"",s=document.getElementById(`toast-${e}container`),n=document.getElementById(`toast-${e}panel`);n?.classList.remove("show-toast"),n?.classList.add("hide-toast"),setTimeout(()=>{s?.classList.remove("flex"),s?.classList.add("hidden")},300)},g=({title:t,subTitle:e,duration:s=5e3,variant:n=""})=>{let i=n?`${n}-`:"",a=document.getElementById(`toast-${i}container`),o=document.getElementById(`toast-${i}panel`);a?.classList.remove("hidden"),a?.classList.add("flex"),o?.classList.remove("hide-toast"),o?.classList.add("show-toast");let r=document.getElementById(`toast-${i}title`),d=document.getElementById(`toast-${i}subtitle`);r.innerText=t,d.innerText=e,setTimeout(()=>h(n),s)},T=t=>g({...t,variant:"error"}),H=()=>h("error");function b(){globalThis.showToast=g,globalThis.hideToast=h,globalThis.showErrorToast=T,globalThis.hideErrorToast=H}var C=async t=>{try{await navigator.clipboard.writeText(t),g({title:"Copiado!",subTitle:"El codigo ha sido copiado al portapapeles."})}catch(e){console.error("Failed to copy: ",e)}},$=async t=>{let e={title:"Comparte la alegria!",text:`Utiliza este codigo para obtener un juguete: ${t}`,url:`${window.location.origin}/catalog`};try{await navigator.share(e)}catch(s){console.error("Share failed: ",s)}};function y(){globalThis.copyCode=C,globalThis.shareCode=async t=>{typeof navigator.share>"u"?C(t):$(t)}}var R=(t,e)=>{let s=t.getAttribute(e);if(!s)throw new Error(`Missing ${e} attribute`);let n=s.split(" "),i=n.filter(o=>o.startsWith("final:"));return[n.filter(o=>!o.startsWith("final:")),i]},L=(t,e,s)=>{let[n,i]=R(t,e),a=(o,r)=>{setTimeout(()=>{t.classList.add(r)},o)};n.forEach(o=>{s==="add"?(t.classList.add(o),a(10,o)):t.classList.remove(o)}),i.forEach(o=>{let r=o.split("final:")[1],[d,c]=JSON.parse(r.replace(/'/g,'"'));s==="add"?a(d,c):t.classList.remove(c)})},M=(t,e)=>{L(t,e,"add")},I=(t,e)=>{L(t,e,"remove")},A=(t,e)=>{let s=t.getAttribute(e);if(!s)throw new Error(`Missing ${e} attribute`);let i=s.split(" ").filter(o=>o.startsWith("delay-")||o.startsWith("duration-"));if(!i||!i.length)return 150;let a=0;return i.forEach(o=>{let r=parseInt(o.split("-")[1],10);a+=r}),a};function w(){let t="data-transition-state",e=a=>{a.style.display="none"},s=a=>{a.style.display="block",a.offsetHeight},n=a=>{for(let o of a){let{type:r,attributeName:d,oldValue:c,target:l}=o;if(r!=="attributes"||d!==t||!l)return;let v=l.getAttribute(t);if(M(l,`data-transition-${v}`),v==="open")s(l);else{let F=A(l,`data-transition-${c}`);setTimeout(()=>e(l),F)}c&&I(l,`data-transition-${c}`)}},i=new MutationObserver(n);document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(`[${t}]`).forEach(o=>{let r=o.getAttribute(t);if(r!=="closed"&&r!=="open")throw new Error(`Invalid ${r} for transitions, use data-styles-[state] for non open/close transitions`);r==="closed"?e(o):s(o),M(o,`data-transition-${r}`),i.observe(o,{attributes:!0,attributeOldValue:!0,attributeFilter:[t]})})})}var p=()=>document.getElementsByName("category[]"),S=t=>{t.delete("page");let e=t.toString();window.location.replace(`${window.location.pathname}?${e}`)},k=()=>{let t=document.getElementsByName("age_min")[0],e=document.getElementsByName("age_max")[0];return{ageMin:t.value,ageMax:e.value}},B=()=>{let t=p(),s=Array.from(t).filter(o=>o.checked).map(o=>o.value),n=new URLSearchParams(window.location.search);if(n.delete("category"),n.delete("age_min"),n.delete("age_max"),s.length>0)for(let o of s)n.append("category",o);let{ageMin:i,ageMax:a}=k();parseInt(i,10)>1&&n.set("age_min",i),parseInt(a,10)>1&&n.set("age_max",a),S(n)},O=()=>{let t=p();for(let s of t)s.checked=!1;let e=new URLSearchParams(window.location.search);e.delete("category"),e.delete("age_min"),e.delete("age_max"),S(e)},D=t=>{let e=p();for(let s of e)s.value===t&&(s.checked=!1);B()},N=()=>{let t=new URLSearchParams(window.location.search),e=p();if(t.has("category")){let s=t.getAll("category");for(let n of e)s.includes(n.value)&&(n.checked=!0)}};function x(){globalThis.updateFilters=B,globalThis.clearFilters=O,globalThis.removeFilter=D,N()}window.addEventListener("htmx:responseError",t=>{console.log(t),t.detail.xhr.status===500&&T({title:"Error del servidor",subTitle:"Ha ocurrido un error inesperado. Por favor intenta de nuevo."})});w();y();f();E();b();x();
+// assets/js/shared/toast.ts
+var hideToast = (variant = "" /* SUCCESS */) => {
+  const variantSelector = variant ? `${variant}-` : "";
+  const toastContainer = document.getElementById(
+    `toast-${variantSelector}container`
+  );
+  const toastPanel = document.getElementById(`toast-${variantSelector}panel`);
+  toastPanel?.classList.remove("show-toast");
+  toastPanel?.classList.add("hide-toast");
+  setTimeout(() => {
+    toastContainer?.classList.remove("flex");
+    toastContainer?.classList.add("hidden");
+  }, 300);
+};
+var showToast = ({
+  title,
+  subTitle,
+  duration = 5e3,
+  variant = "" /* SUCCESS */
+}) => {
+  const variantSelector = variant ? `${variant}-` : "";
+  const toastContainer = document.getElementById(
+    `toast-${variantSelector}container`
+  );
+  const toastPanel = document.getElementById(`toast-${variantSelector}panel`);
+  toastContainer?.classList.remove("hidden");
+  toastContainer?.classList.add("flex");
+  toastPanel?.classList.remove("hide-toast");
+  toastPanel?.classList.add("show-toast");
+  const toastTitle = document.getElementById(`toast-${variantSelector}title`);
+  const toastSubTitle = document.getElementById(
+    `toast-${variantSelector}subtitle`
+  );
+  toastTitle.innerText = title;
+  toastSubTitle.innerText = subTitle;
+  setTimeout(() => hideToast(variant), duration);
+};
+var showErrorToast = (props) => showToast({ ...props, variant: "error" /* ERROR */ });
+var hideErrorToast = () => hideToast("error" /* ERROR */);
+function initToast() {
+  globalThis.showToast = showToast;
+  globalThis.hideToast = hideToast;
+  globalThis.showErrorToast = showErrorToast;
+  globalThis.hideErrorToast = hideErrorToast;
+}
+
+// assets/js/app/myCodes.ts
+var copy = async (code) => {
+  try {
+    await navigator.clipboard.writeText(code);
+    showToast({
+      title: "Copiado!",
+      subTitle: "El codigo ha sido copiado al portapapeles."
+    });
+  } catch (err) {
+    console.error("Failed to copy: ", err);
+  }
+};
+var share = async (code) => {
+  const data = {
+    title: "Comparte la alegria!",
+    text: `Utiliza este codigo para obtener un juguete: ${code}`,
+    url: `${window.location.origin}/catalog`
+  };
+  try {
+    await navigator.share(data);
+  } catch (err) {
+    console.error("Share failed: ", err);
+  }
+};
+function initMycodes() {
+  globalThis.copyCode = copy;
+  globalThis.shareCode = async (code) => {
+    if (typeof navigator.share === "undefined") {
+      copy(code);
+    } else {
+      share(code);
+    }
+  };
+}
+
+// assets/js/tailwind/tailwind-core.ts
+var getStateClasses = (element, attribute) => {
+  const stateClasses = element.getAttribute(attribute);
+  if (!stateClasses) {
+    throw new Error(`Missing ${attribute} attribute`);
+  }
+  const stateClassesArray = stateClasses.split(" ");
+  const afterClasses = stateClassesArray.filter(
+    (className) => className.startsWith("final:")
+  );
+  const immediateClasses = stateClassesArray.filter(
+    (className) => !className.startsWith("final:")
+  );
+  return [immediateClasses, afterClasses];
+};
+var updateStateClasses = (element, attribute, action) => {
+  const [immediateClasses, afterClasses] = getStateClasses(element, attribute);
+  const createTimeoutToAddClass = (delay, className) => {
+    setTimeout(() => {
+      element.classList.add(className);
+    }, delay);
+  };
+  immediateClasses.forEach((className) => {
+    if (action === "add" /* ADD */) {
+      element.classList.add(className);
+      createTimeoutToAddClass(10, className);
+    } else {
+      element.classList.remove(className);
+    }
+  });
+  afterClasses.forEach((className) => {
+    const props = className.split("final:")[1];
+    const [delay, afterClassName] = JSON.parse(props.replace(/'/g, '"'));
+    if (action === "add" /* ADD */) {
+      createTimeoutToAddClass(delay, afterClassName);
+    } else {
+      element.classList.remove(afterClassName);
+    }
+  });
+};
+var addStateClasses = (element, attribute) => {
+  updateStateClasses(element, attribute, "add" /* ADD */);
+};
+var removeStateClasses = (element, attribute) => {
+  updateStateClasses(element, attribute, "remove" /* REMOVE */);
+};
+var getDelayFromAttribute = (element, attribute) => {
+  const classNames = element.getAttribute(attribute);
+  if (!classNames) {
+    throw new Error(`Missing ${attribute} attribute`);
+  }
+  const classNamesArray = classNames.split(" ");
+  const delayClasses = classNamesArray.filter(
+    (className) => className.startsWith("delay-") || className.startsWith("duration-")
+  );
+  if (!delayClasses || !delayClasses.length) return 150;
+  let delay = 0;
+  delayClasses.forEach((delayClass) => {
+    const delayValue = parseInt(delayClass.split("-")[1], 10);
+    delay += delayValue;
+  });
+  return delay;
+};
+
+// assets/js/tailwind/tailwind-transitions.ts
+function initTailwindTransitions() {
+  const ATTRIBUTE = "data-transition-state";
+  const hideElement = (element) => {
+    element.style.display = "none";
+  };
+  const showElement = (element) => {
+    element.style.display = "block";
+    element.offsetHeight;
+  };
+  const transitionMutationCallback = (mutationsList) => {
+    for (const mutation of mutationsList) {
+      const { type, attributeName, oldValue, target } = mutation;
+      if (type !== "attributes" || attributeName !== ATTRIBUTE || !target) {
+        return;
+      }
+      const state = target.getAttribute(ATTRIBUTE);
+      addStateClasses(target, `data-transition-${state}`);
+      if (state === "open") {
+        showElement(target);
+      } else {
+        const delay = getDelayFromAttribute(
+          target,
+          `data-transition-${oldValue}`
+        );
+        setTimeout(() => hideElement(target), delay);
+      }
+      if (oldValue) {
+        removeStateClasses(target, `data-transition-${oldValue}`);
+      }
+    }
+  };
+  const observer = new MutationObserver(transitionMutationCallback);
+  document.addEventListener("DOMContentLoaded", function() {
+    const allElements = document.querySelectorAll(`[${ATTRIBUTE}]`);
+    allElements.forEach((transitionElement) => {
+      const state = transitionElement.getAttribute(ATTRIBUTE);
+      if (state !== "closed" && state !== "open") {
+        throw new Error(
+          `Invalid ${state} for transitions, use data-styles-[state] for non open/close transitions`
+        );
+      }
+      if (state === "closed") {
+        hideElement(transitionElement);
+      } else {
+        showElement(transitionElement);
+      }
+      addStateClasses(transitionElement, `data-transition-${state}`);
+      observer.observe(transitionElement, {
+        attributes: true,
+        attributeOldValue: true,
+        attributeFilter: [ATTRIBUTE]
+      });
+    });
+  });
+}
+
+// assets/js/app/catalogFilters.ts
+var getFilters = () => document.getElementsByName("category[]");
+var updateUrlFilters = (params) => {
+  params.delete("page");
+  const newQueryString = params.toString();
+  window.location.replace(`${window.location.pathname}?${newQueryString}`);
+};
+var getAgeFilters = () => {
+  const ageMin = document.getElementsByName("age_min")[0];
+  const ageMax = document.getElementsByName("age_max")[0];
+  return { ageMin: ageMin.value, ageMax: ageMax.value };
+};
+var updateFilters = () => {
+  const filters = getFilters();
+  const selectedFilters = Array.from(filters).filter(
+    (filter) => filter.checked
+  );
+  const selectedFiltersValues = selectedFilters.map((filter) => filter.value);
+  const params = new URLSearchParams(window.location.search);
+  params.delete("category");
+  params.delete("age_min");
+  params.delete("age_max");
+  if (selectedFiltersValues.length > 0) {
+    for (const filter of selectedFiltersValues) {
+      params.append("category", filter);
+    }
+  }
+  const { ageMin, ageMax } = getAgeFilters();
+  if (parseInt(ageMin, 10) > 1) {
+    params.set("age_min", ageMin);
+  }
+  if (parseInt(ageMax, 10) > 1) {
+    params.set("age_max", ageMax);
+  }
+  updateUrlFilters(params);
+};
+var clearFilters = () => {
+  const filters = getFilters();
+  for (const filter of filters) {
+    filter.checked = false;
+  }
+  const params = new URLSearchParams(window.location.search);
+  params.delete("category");
+  params.delete("age_min");
+  params.delete("age_max");
+  updateUrlFilters(params);
+};
+var removeFilter = (filterValue) => {
+  const filters = getFilters();
+  if (filterValue === "age_min") {
+    const ageMin = document.getElementsByName("age_min")[0];
+    ageMin.value = "0";
+  } else if (filterValue === "age_max") {
+    const ageMax = document.getElementsByName("age_max")[0];
+    ageMax.value = "0";
+  }
+  for (const filter of filters) {
+    if (filter.value === filterValue) {
+      filter.checked = false;
+    }
+  }
+  updateFilters();
+};
+var setUrlFilters = () => {
+  const params = new URLSearchParams(window.location.search);
+  const filters = getFilters();
+  if (params.has("category")) {
+    const selectedFilters = params.getAll("category");
+    for (const filter of filters) {
+      if (selectedFilters.includes(filter.value)) {
+        filter.checked = true;
+      }
+    }
+  }
+};
+function initCatalogFilters() {
+  globalThis.updateFilters = updateFilters;
+  globalThis.clearFilters = clearFilters;
+  globalThis.removeFilter = removeFilter;
+  setUrlFilters();
+}
+
+// assets/js/shared/htmxErrorHandler.ts
+window.addEventListener("htmx:responseError", (e) => {
+  console.log(e);
+  const code = e.detail.xhr.status;
+  if (code === 500) {
+    showErrorToast({
+      title: "Error del servidor",
+      subTitle: "Ha ocurrido un error inesperado. Por favor intenta de nuevo."
+    });
+  }
+});
+
+// assets/js/app.ts
+initTailwindTransitions();
+initMycodes();
+initToast();
+initCatalogFilters();
+//# sourceMappingURL=app.js.map

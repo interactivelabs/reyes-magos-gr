@@ -7,19 +7,11 @@ import (
 	"reyes-magos-gr/views/components"
 )
 
-script toggleFilters() {
-	htmx.find('#filters-panel').toggleAttribute('aria-expanded');
-
-	if (htmx.find('#filters-panel').getAttribute('data-transition-state') === 'open') {
-		htmx.find('#filters-panel').setAttribute('data-transition-state', 'closed');
-		return;
-	}
-	htmx.find('#filters-panel').setAttribute('data-transition-state', 'open');
-}
-
 script onRemoveFilter(filterValue string) {
 	removeFilter(filterValue)
 }
+
+const RangeBaseStyles string = "text-sm text-gray-500 absolute -bottom-6"
 
 templ AgeRangeFields(name string, value int64) {
 	<input
@@ -31,11 +23,11 @@ templ AgeRangeFields(name string, value int64) {
 		value={ fmt.Sprint(value) }
 		class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointe"
 	/>
-	<span class="text-sm text-gray-500 absolute start-0 -bottom-6">1</span>
-	<span class="text-sm text-gray-500 absolute start-1/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">4</span>
-	<span class="text-sm text-gray-500 absolute start-2/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">8</span>
-	<span class="text-sm text-gray-500 absolute start-3/4 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">12</span>
-	<span class="text-sm text-gray-500 absolute end-0 -bottom-6">16</span>
+	<span class={ RangeBaseStyles + " start-0" }>1</span>
+	<span class={ RangeBaseStyles + " start-1/4 -translate-x-1/2 rtl:translate-x-1/2" }>4</span>
+	<span class={ RangeBaseStyles + " start-2/4 -translate-x-1/2 rtl:translate-x-1/2" }>8</span>
+	<span class={ RangeBaseStyles + " start-3/4 -translate-x-1/2 rtl:translate-x-1/2" }>12</span>
+	<span class={ RangeBaseStyles + " end-0" }>16</span>
 }
 
 func getPagingStyles(page int64, i int) string {
@@ -48,16 +40,16 @@ func getPagingStyles(page int64, i int) string {
 	return fmt.Sprintf("inline-flex items-center border-t-2 px-4 pt-4 text-sm font-medium %s", selected)
 }
 
-templ FilterPill(filter string) {
+templ FilterPill(filter_label string, filter_value string) {
 	<div class="-my-1 flex flex-wrap items-center">
 		<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
-			<span>{ filter }</span>
+			<span>{ filter_label }</span>
 			<button
 				type="button"
-				onclick={ onRemoveFilter(filter) }
+				onclick={ onRemoveFilter(filter_value) }
 				class="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
 			>
-				<span class="sr-only">Remove filter for { filter }</span>
+				<span class="sr-only">Remove filter for { filter_label }</span>
 				<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
 					<path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
 				</svg>
@@ -86,7 +78,7 @@ templ Catalog(toys []model.Toy, categories []string, page int64, pages int64, pa
 				<h1 class="text-4xl font-display font-bold tracking-tight text-center mb-20">Escoje un juguete</h1>
 				<div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
 					<!-- Filters -->
-					<section aria-labelledby="filter-heading" class="grid items-center border-b border-t border-gray-200">
+					<section x-data="{ open: false }" aria-labelledby="filter-heading" class="grid items-center border-b border-t border-gray-200">
 						<h2 id="filter-heading" class="sr-only">Filtros</h2>
 						<div class="relative col-start-1 row-start-1 py-4">
 							<div class="mx-auto flex max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8">
@@ -95,7 +87,7 @@ templ Catalog(toys []model.Toy, categories []string, page int64, pages int64, pa
 										type="button"
 										aria-controls="filters-panel"
 										aria-expanded="false"
-										onclick={ toggleFilters() }
+										@click="open = !open"
 										class="group flex items-center font-medium text-gray-700"
 									>
 										<svg aria-hidden="true" class="h-4 w-4 mr-4 fill-current">
@@ -113,28 +105,30 @@ templ Catalog(toys []model.Toy, categories []string, page int64, pages int64, pa
 							<div class="bg-gray-100">
 								<div class="mx-auto max-w-7xl px-4 py-3 sm:flex sm:items-center sm:px-6 lg:px-8">
 									if ageMin > 1 {
-										@FilterPill(fmt.Sprintf("Edad Minima: %d", ageMin))
+										@FilterPill(fmt.Sprintf("Edad Minima: %d", ageMin), "age_min")
 									}
 									if ageMax > 1 {
-										@FilterPill(fmt.Sprintf("Edad Maxima: %d", ageMax))
+										@FilterPill(fmt.Sprintf("Edad Maxima: %d", ageMax), "age_max")
 									}
 									for _, filter := range categoryFilters {
-										@FilterPill(filter)
+										@FilterPill(filter, filter)
 									}
 								</div>
 							</div>
 						}
 						<div
 							id="filters-panel"
-							data-transition-state="closed"
-							data-transition-closed="duraion-300 translate-y-0"
-							data-transition-open="duraion-300 translate-y-1"
-							class="border-t border-gray-200 py-10 transition ease-in-out transform translate-y-0"
+							class="border-t border-gray-200 py-8"
+							x-cloak
+							x-show="open"
+							x-transition:enter="transition ease-out duration-500"
+							x-transition:enter-start="translate-y-1"
+							x-transition:enter-end="translate-y-0"
+							x-transition:leave="transition ease-in duration-300"
+							x-transition:leave-start="translate-y-0"
+							x-transition:leave-end="translate-y-1"
 						>
-							<form
-								id="filters-form"
-								onsubmit="event.preventDefault();updateFilters();"
-							>
+							<form id="filters-form" onsubmit="event.preventDefault();updateFilters();">
 								<div class="mx-auto max-w-7xl gap-x-6 px-4 text-sm sm:flex sm:px-6 md:gap-x-8 lg:px-8">
 									<div class="w-full sm:w-auto">
 										<div class="space-y-6 sm:space-y-4 relative">

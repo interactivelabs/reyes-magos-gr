@@ -16,13 +16,15 @@ templ Head() {
 		<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Metrophobic&display=optional" rel="stylesheet"/>
 		<link rel="stylesheet" href="/public/css/main.css"/>
 		<link rel="icon" type="image/x-icon" href="/public/img/favicon.ico"/>
+		<style>[x-cloak]{display:none}</style>
+		<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 		<script src="https://unpkg.com/htmx.org@2.0.3" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous" fetchpriority="high"></script>
 	</head>
 }
 
 templ Base() {
 	<!DOCTYPE html>
-	<html lang="en" class="bg-slate-50">
+	<html lang="es_MX" class="bg-slate-50">
 		@Head()
 		<body class="text-brand-blue" hx-ext="preload">
 			@shared.Nav()
@@ -32,8 +34,8 @@ templ Base() {
 			@components.ToastError()
 			@components.Dialog()
 		</body>
-		<script src="https://unpkg.com/htmx-ext-preload@2.0.0/preload.js"></script>
-		<script src="https://unpkg.com/htmx-ext-remove-me@2.0.0/remove-me.js"></script>
-		<script type="module" src="/public/js/app.js" defer></script>
+		<script defer src="https://unpkg.com/htmx-ext-preload@2.0.0/preload.js"></script>
+		<script defer src="https://unpkg.com/htmx-ext-remove-me@2.0.0/remove-me.js"></script>
+		<script defer type="module" src="/public/js/app.js"></script>
 	</html>
 }
