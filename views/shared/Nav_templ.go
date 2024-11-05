@@ -34,14 +34,14 @@ func Nav() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<header><nav class=\"bg-white shadow\"><div class=\"mx-auto max-w-7xl px-2 py-2 sm:px-6 lg:px-8\"><div class=\"relative flex h-16 justify-between\"><div class=\"absolute inset-y-0 left-0 flex items-center sm:hidden\"><!-- Mobile menu button --><button type=\"button\" id=\"mobile-menu-button\" class=\"relative inline-flex items-center justify-center rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-orange\" aria-controls=\"mobile-menu\" aria-expanded=\"false\"><span class=\"absolute -inset-0.5\"></span> <span class=\"sr-only\">Abrir menu</span> <svg id=\"mobile-menu-button-icon-closed\" class=\"block h-6 w-6\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" aria-hidden=\"true\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5\"></path></svg> <svg id=\"mobile-menu-button-icon-open\" class=\"hidden h-6 w-6\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" aria-hidden=\"true\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 18L18 6M6 6l12 12\"></path></svg></button></div><div class=\"flex flex-1 items-center justify-center sm:items-stretch sm:justify-start\"><div class=\"flex flex-shrink-0 items-center\"><a href=\"/\"><img class=\"h-16 w-auto\" src=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<header><nav class=\"bg-white shadow\" x-data=\"{ openMenu: false }\"><div class=\"mx-auto max-w-7xl px-2 py-2 sm:px-6 lg:px-8\"><div class=\"relative flex h-16 justify-between\"><div class=\"absolute inset-y-0 left-0 flex items-center sm:hidden\"><!-- Mobile menu button --><button type=\"button\" id=\"mobile-menu-button\" aria-controls=\"mobile-menu\" aria-expanded=\"false\" class=\"relative inline-flex items-center justify-center rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-orange\" @click=\"openMenu = !openMenu\"><span class=\"absolute -inset-0.5\"></span> <span class=\"sr-only\">Abrir menu</span> <svg id=\"mobile-menu-button-icon-closed\" class=\"block h-6 w-6\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" aria-hidden=\"true\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5\"></path></svg> <svg id=\"mobile-menu-button-icon-open\" class=\"hidden h-6 w-6\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" aria-hidden=\"true\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 18L18 6M6 6l12 12\"></path></svg></button></div><div class=\"flex flex-1 items-center justify-center sm:items-stretch sm:justify-start\"><div class=\"flex flex-shrink-0 items-center\"><a href=\"/\"><img class=\"h-16 w-auto\" src=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetAssetUrl("img/logo01_sm.webp"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/shared/Nav.templ`, Line: 35, Col: 76}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/shared/Nav.templ`, Line: 36, Col: 76}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -140,7 +140,7 @@ func Nav() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if lib.GetProfile(ctx).Email != "" {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0\"><!-- Profile dropdown --><div class=\"relative ml-3\"><div><button type=\"button\" id=\"admin-menu-button\" class=\"relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2\" aria-expanded=\"false\" aria-haspopup=\"true\"><span class=\"absolute -inset-1.5\"></span> <span class=\"sr-only\">Open admin menu</span> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0\"><!-- Profile dropdown --><div class=\"relative ml-3\" x-data=\"{ openAdmin: false }\"><div><button type=\"button\" id=\"admin-menu-button\" aria-expanded=\"false\" aria-haspopup=\"true\" @click=\"openAdmin = !openAdmin\" class=\"relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2\"><span class=\"absolute -inset-1.5\"></span> <span class=\"sr-only\">Open admin menu</span> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -152,7 +152,7 @@ func Nav() templ.Component {
 				var templ_7745c5c3_Var11 string
 				templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetProfile(ctx).Picture)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/shared/Nav.templ`, Line: 60, Col: 78}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/shared/Nav.templ`, Line: 62, Col: 78}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 				if templ_7745c5c3_Err != nil {
@@ -170,7 +170,7 @@ func Nav() templ.Component {
 				var templ_7745c5c3_Var12 string
 				templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetAssetUrl("img/fingerprint.svg"))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/shared/Nav.templ`, Line: 62, Col: 89}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/shared/Nav.templ`, Line: 64, Col: 89}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 				if templ_7745c5c3_Err != nil {
@@ -181,7 +181,7 @@ func Nav() templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div><div id=\"admin-menu-dropdown\" role=\"menu\" aria-orientation=\"vertical\" aria-labelledby=\"admin-menu-button\" tabindex=\"-1\" class=\"transition absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none\" data-transition-state=\"closed\" data-transition-closed=\"ease-in duration-200 opacity-0 translate-y-1\" data-transition-open=\"ease-out duration-200 opacity-100 translate-y-0\"><a href=\"/volunteer/mycodes\" class=\"block p-4 text-sm\" role=\"menuitem\">Mis Codigos</a> <a href=\"/volunteer/myorders\" class=\"block p-4 text-sm\" role=\"menuitem\">Mis Ordenes</a> <a href=\"/logout\" class=\"block p-4 text-sm\" role=\"menuitem\">Salir</a> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div><div role=\"menu\" tabindex=\"-1\" id=\"admin-menu-dropdown\" aria-orientation=\"vertical\" aria-labelledby=\"admin-menu-button\" class=\"absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none\" x-cloak x-show=\"openAdmin\" x-transition:enter=\"transition ease-out duration-500\" x-transition:enter-start=\"opacity-0 translate-y-1\" x-transition:enter-end=\"opacity-100 translate-y-0\" x-transition:leave=\"transition ease-in duration-300\" x-transition:leave-start=\"opacity-100 translate-y-0\" x-transition:leave-end=\"opacity-0 translate-y-1\" @click.away=\"openAdmin = false\"><a href=\"/volunteer/mycodes\" class=\"block p-4 text-sm\" role=\"menuitem\">Mis Codigos</a> <a href=\"/volunteer/myorders\" class=\"block p-4 text-sm\" role=\"menuitem\">Mis Ordenes</a> <a href=\"/logout\" class=\"block p-4 text-sm\" role=\"menuitem\">Salir</a> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -196,7 +196,7 @@ func Nav() templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><!-- Mobile menu, show/hide based on menu state. --><div role=\"menu\" id=\"mobile-menu-container\" class=\"transition bg-white absolute w-full z-50\" data-transition-state=\"closed\" data-transition-closed=\"ease-in duration-300 opacity-0 translate-y-1\" data-transition-open=\"ease-out duration-300 opacity-100 translate-y-0\"><div class=\"space-y-1 pb-4 pt-2\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><!-- Mobile menu, show/hide based on menu state. --><div role=\"menu\" id=\"mobile-menu-container\" class=\"bg-white absolute w-full z-50\" x-cloak x-show=\"openMenu\" x-transition:enter=\"transition ease-out duration-500\" x-transition:enter-start=\"opacity-0 translate-y-1\" x-transition:enter-end=\"opacity-100 translate-y-0\" x-transition:leave=\"transition ease-in duration-300\" x-transition:leave-start=\"opacity-100 translate-y-0\" x-transition:leave-end=\"opacity-0 translate-y-1\" @click.away=\"openMenu = false\"><div class=\"space-y-1 pb-4 pt-2\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
