@@ -1,51 +1,69 @@
 package components
 
-script OpenDialog() {
-	htmx.find('#dialog-element').showModal();
-	htmx.find('#dialog-element').setAttribute('data-transition-state', 'open');
-}
-
-script CloseDialog() {
-  htmx.find('#dialog-element').close();
-	htmx.find('#dialog-element').setAttribute('data-transition-state', 'closed');
-}
-
 templ CancelModalButton() {
 	<button
 		type="button"
-		onclick={ CloseDialog() }
 		class={ BaseSecondaryButton }
+		@click="modalOpen=false"
 	>
 		Cancel
 	</button>
 }
 
 templ Dialog() {
-	<dialog
-		role="dialog"
-		id="dialog-element"
-		aria-labelledby="modal-title"
-		class="inset-0 backdrop:bg-black backdrop:opacity-50 md:w-1/2 p-8 pt-10 rounded-lg bg-white shadow-xl transition-all"
-		data-transition-state="closed"
-		data-transition-closed="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95 ease-in duration-300"
-		data-transition-open="opacity-100 translate-y-0 sm:scale-100 ease-out duration-300"
+	<div
+		x-data="{ modalOpen: true }"
+		@keydown.escape.window="modalOpen = false"
+		class="relative z-50 w-auto h-auto"
+		x-cloak
 	>
-		<div class="absolute right-0 top-0 hidden sm:block p-4">
-			<button
-				type="button"
-				class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
-				onclick={ CloseDialog() }
+		<template x-teleport="body">
+			<div
+				role="dialog"
+				x-show="modalOpen"
+				class="fixed top-0 left-0 z-[99] flex items-center justify-center w-screen h-screen"
+				x-cloak
 			>
-				<span class="sr-only">Close</span>
-				<svg aria-hidden="true" class="h-6 w-6 fill-current">
-					<use href="/public/img/close.svg#icon"></use>
-				</svg>
-			</button>
-		</div>
-		<div
-			id="dialog-content"
-			class="text-left"
-			hx-on::after-swap={ OpenDialog() }
-		></div>
-	</dialog>
+				// Overlay
+				<div
+					x-show="modalOpen"
+					x-transition:enter="ease-out duration-300"
+					x-transition:enter-start="opacity-0"
+					x-transition:enter-end="opacity-100"
+					x-transition:leave="ease-in duration-300"
+					x-transition:leave-start="opacity-100"
+					x-transition:leave-end="opacity-0"
+					@click="modalOpen=false"
+					class="absolute inset-0 w-full h-full bg-black bg-opacity-40"
+				></div>
+				// Modal Body
+				<div
+					x-show="modalOpen"
+					x-trap.inert.noscroll="modalOpen"
+					x-transition:enter="ease-out duration-300"
+					x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+					x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+					x-transition:leave="ease-in duration-200"
+					x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+					x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+					class="relative w-full py-6 bg-white px-7 sm:max-w-lg sm:rounded-lg"
+					@click.away="modalOpen = false"
+				>
+					<div class="absolute right-0 top-0 hidden sm:block p-4">
+						<button
+							type="button"
+							class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
+							@click="modalOpen = false"
+						>
+							<span class="sr-only">Close</span>
+							<svg aria-hidden="true" class="h-6 w-6 fill-current">
+								<use href="/public/img/close.svg#icon"></use>
+							</svg>
+						</button>
+					</div>
+					{ children... }
+				</div>
+			</div>
+		</template>
+	</div>
 }

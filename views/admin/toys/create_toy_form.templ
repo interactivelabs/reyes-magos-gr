@@ -6,23 +6,24 @@ import (
 )
 
 templ CreateToyForm() {
-	<form
-		id="toy-new-form"
-		class="w-full p-8 bg-white"
-		hx-post={ string(templ.URL("/admin/toys")) }
-		hx-target="#admin-toys-table-body"
-		hx-swap="afterbegin"
-		hx-on::after-request={ components.CloseDialog() }
-	>
-		<div class="grid grid-cols-1 gap-x-6 gap-y-8">
-			@ToyForm(model.Toy{})
-			<div class="mt-6 flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-8">
-				@components.CancelModalButton()
-				<button
-					type="submit"
-					class={ components.AppPrimaryButton }
-				>Save</button>
+	@components.Dialog() {
+		<form
+			id="toy-new-form"
+			class="pt-8"
+			hx-post={ string(templ.URL("/admin/toys")) }
+			hx-target="#admin-toys-table-body"
+			hx-swap="afterbegin"
+		>
+			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
+				@ToyForm(model.Toy{})
+				<div class="mt-6 flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-8">
+					@components.CancelModalButton()
+					<button
+						type="submit"
+						class={ components.AppPrimaryButton }
+					>Save</button>
+				</div>
 			</div>
-		</div>
-	</form>
+		</form>
+	}
 }

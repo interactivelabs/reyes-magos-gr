@@ -8,28 +8,6 @@ package components
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func OpenDialog() templ.ComponentScript {
-	return templ.ComponentScript{
-		Name: `__templ_OpenDialog_877e`,
-		Function: `function __templ_OpenDialog_877e(){htmx.find('#dialog-element').showModal();
-	htmx.find('#dialog-element').setAttribute('data-transition-state', 'open');
-}`,
-		Call:       templ.SafeScript(`__templ_OpenDialog_877e`),
-		CallInline: templ.SafeScriptInline(`__templ_OpenDialog_877e`),
-	}
-}
-
-func CloseDialog() templ.ComponentScript {
-	return templ.ComponentScript{
-		Name: `__templ_CloseDialog_9edd`,
-		Function: `function __templ_CloseDialog_9edd(){htmx.find('#dialog-element').close();
-	htmx.find('#dialog-element').setAttribute('data-transition-state', 'closed');
-}`,
-		Call:       templ.SafeScript(`__templ_CloseDialog_9edd`),
-		CallInline: templ.SafeScriptInline(`__templ_CloseDialog_9edd`),
-	}
-}
-
 func CancelModalButton() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -56,33 +34,20 @@ func CancelModalButton() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, CloseDialog())
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button type=\"button\" class=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button type=\"button\" onclick=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var3 templ.ComponentScript = CloseDialog()
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3.Call)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var2).String())
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var2).String())
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/dialog.templ`, Line: 1, Col: 0}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Cancel</button>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" @click=\"modalOpen=false\">Cancel</button>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -106,46 +71,20 @@ func Dialog() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var5 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var5 == nil {
-			templ_7745c5c3_Var5 = templ.NopComponent
+		templ_7745c5c3_Var4 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var4 == nil {
+			templ_7745c5c3_Var4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<dialog role=\"dialog\" id=\"dialog-element\" aria-labelledby=\"modal-title\" class=\"inset-0 backdrop:bg-black backdrop:opacity-50 md:w-1/2 p-8 pt-10 rounded-lg bg-white shadow-xl transition-all\" data-transition-state=\"closed\" data-transition-closed=\"opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95 ease-in duration-300\" data-transition-open=\"opacity-100 translate-y-0 sm:scale-100 ease-out duration-300\"><div class=\"absolute right-0 top-0 hidden sm:block p-4\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div x-data=\"{ modalOpen: true }\" @keydown.escape.window=\"modalOpen = false\" class=\"relative z-50 w-auto h-auto\" x-cloak><template x-teleport=\"body\"><div role=\"dialog\" x-show=\"modalOpen\" class=\"fixed top-0 left-0 z-[99] flex items-center justify-center w-screen h-screen\" x-cloak><div x-show=\"modalOpen\" x-transition:enter=\"ease-out duration-300\" x-transition:enter-start=\"opacity-0\" x-transition:enter-end=\"opacity-100\" x-transition:leave=\"ease-in duration-300\" x-transition:leave-start=\"opacity-100\" x-transition:leave-end=\"opacity-0\" @click=\"modalOpen=false\" class=\"absolute inset-0 w-full h-full bg-black bg-opacity-40\"></div><div x-show=\"modalOpen\" x-trap.inert.noscroll=\"modalOpen\" x-transition:enter=\"ease-out duration-300\" x-transition:enter-start=\"opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95\" x-transition:enter-end=\"opacity-100 translate-y-0 sm:scale-100\" x-transition:leave=\"ease-in duration-200\" x-transition:leave-start=\"opacity-100 translate-y-0 sm:scale-100\" x-transition:leave-end=\"opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95\" class=\"relative w-full py-6 bg-white px-7 sm:max-w-lg sm:rounded-lg\" @click.away=\"modalOpen = false\"><div class=\"absolute right-0 top-0 hidden sm:block p-4\"><button type=\"button\" class=\"rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2\" @click=\"modalOpen = false\"><span class=\"sr-only\">Close</span> <svg aria-hidden=\"true\" class=\"h-6 w-6 fill-current\"><use href=\"/public/img/close.svg#icon\"></use></svg></button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, CloseDialog())
+		templ_7745c5c3_Err = templ_7745c5c3_Var4.Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button type=\"button\" class=\"rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2\" onclick=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var6 templ.ComponentScript = CloseDialog()
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var6.Call)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><span class=\"sr-only\">Close</span> <svg aria-hidden=\"true\" class=\"h-6 w-6 fill-current\"><use href=\"/public/img/close.svg#icon\"></use></svg></button></div>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, OpenDialog())
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"dialog-content\" class=\"text-left\" hx-on::after-swap=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var7 templ.ComponentScript = OpenDialog()
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var7.Call)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></div></dialog>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></template></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

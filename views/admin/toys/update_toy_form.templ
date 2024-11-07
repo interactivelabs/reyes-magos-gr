@@ -7,23 +7,24 @@ import (
 )
 
 templ UpdateToyForm(toy model.Toy) {
-	<form
-		id="toy-new-form"
-		class="w-full p-8 bg-white"
-		hx-put={ string(templ.URL(fmt.Sprintf("/admin/toys/%d/save", toy.ToyID))) }
-		hx-target={ fmt.Sprintf("#admin-toy-row-%d", toy.ToyID) }
-		hx-swap="outerHTML"
-		hx-on::after-request={ components.CloseDialog() }
-	>
-		<div class="grid grid-cols-1 gap-x-6 gap-y-8">
-			@ToyForm(toy)
-			<div class="mt-6 flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-8">
-				@components.CancelModalButton()
-				<button
-					type="submit"
-					class={ components.AppPrimaryButton }
-				>Save</button>
+	@components.Dialog() {
+		<form
+			id="toy-new-form"
+			class="pt-8"
+			hx-put={ string(templ.URL(fmt.Sprintf("/admin/toys/%d/save", toy.ToyID))) }
+			hx-target={ fmt.Sprintf("#admin-toy-row-%d", toy.ToyID) }
+			hx-swap="outerHTML"
+		>
+			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
+				@ToyForm(toy)
+				<div class="mt-6 flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-8">
+					@components.CancelModalButton()
+					<button
+						type="submit"
+						class={ components.AppPrimaryButton }
+					>Save</button>
+				</div>
 			</div>
-		</div>
-	</form>
+		</form>
+	}
 }

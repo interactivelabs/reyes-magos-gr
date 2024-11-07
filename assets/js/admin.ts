@@ -1,5 +1,2 @@
-import initCodes from "./admin/codes";
-import initOrders from "./admin/orders";
-
-initCodes();
-initOrders();
+import "./admin/codes";
+import "./admin/orders";
