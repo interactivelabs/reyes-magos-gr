@@ -60,9 +60,7 @@ export const showErrorToast = (props: IShowToast) =>
 
 export const hideErrorToast = () => hideToast(ToastVariants.ERROR);
 
-export default function initToast() {
-  globalThis.showToast = showToast;
-  globalThis.hideToast = hideToast;
-  globalThis.showErrorToast = showErrorToast;
-  globalThis.hideErrorToast = hideErrorToast;
-}
+globalThis.showToast = showToast;
+globalThis.hideToast = hideToast;
+globalThis.showErrorToast = showErrorToast;
+globalThis.hideErrorToast = hideErrorToast;

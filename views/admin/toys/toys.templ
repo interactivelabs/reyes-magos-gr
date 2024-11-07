@@ -21,8 +21,7 @@ templ ToyRow(toy model.Toy) {
 				type="button"
 				class={ components.BaseSecondaryButton + " w-full" }
 				hx-get={ lib.GetSafeIdUrl("/admin/toys/%d", toy.ToyID) }
-				hx-target="#dialog-content"
-				hx-swap="innerHTML"
+				hx-target="#toys-dialog-container"
 			>
 				Edit
 			</button>
@@ -52,8 +51,7 @@ templ Toys(toys []model.Toy) {
 						type="button"
 						class={ components.AppPrimaryButton }
 						hx-get="/admin/toys/create"
-						hx-target="#dialog-content"
-						hx-swap="innerHTML"
+						hx-target="#toys-dialog-container"
 					>
 						Add Toy
 					</button>
@@ -82,6 +80,7 @@ templ Toys(toys []model.Toy) {
 					</div>
 				</div>
 			</section>
+			<div id="toys-dialog-container"></div>
 		</main>
 	}
 }

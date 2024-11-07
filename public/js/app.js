@@ -37,12 +37,10 @@ var showToast = ({
 };
 var showErrorToast = (props) => showToast({ ...props, variant: "error" /* ERROR */ });
 var hideErrorToast = () => hideToast("error" /* ERROR */);
-function initToast() {
-  globalThis.showToast = showToast;
-  globalThis.hideToast = hideToast;
-  globalThis.showErrorToast = showErrorToast;
-  globalThis.hideErrorToast = hideErrorToast;
-}
+globalThis.showToast = showToast;
+globalThis.hideToast = hideToast;
+globalThis.showErrorToast = showErrorToast;
+globalThis.hideErrorToast = hideErrorToast;
 
 // assets/js/app/myCodes.ts
 var copy = async (code) => {
@@ -68,137 +66,14 @@ var share = async (code) => {
     console.error("Share failed: ", err);
   }
 };
-function initMycodes() {
-  globalThis.copyCode = copy;
-  globalThis.shareCode = async (code) => {
-    if (typeof navigator.share === "undefined") {
-      copy(code);
-    } else {
-      share(code);
-    }
-  };
-}
-
-// assets/js/tailwind/tailwind-core.ts
-var getStateClasses = (element, attribute) => {
-  const stateClasses = element.getAttribute(attribute);
-  if (!stateClasses) {
-    throw new Error(`Missing ${attribute} attribute`);
+globalThis.copyCode = copy;
+globalThis.shareCode = async (code) => {
+  if (typeof navigator.share === "undefined") {
+    copy(code);
+  } else {
+    share(code);
   }
-  const stateClassesArray = stateClasses.split(" ");
-  const afterClasses = stateClassesArray.filter(
-    (className) => className.startsWith("final:")
-  );
-  const immediateClasses = stateClassesArray.filter(
-    (className) => !className.startsWith("final:")
-  );
-  return [immediateClasses, afterClasses];
 };
-var updateStateClasses = (element, attribute, action) => {
-  const [immediateClasses, afterClasses] = getStateClasses(element, attribute);
-  const createTimeoutToAddClass = (delay, className) => {
-    setTimeout(() => {
-      element.classList.add(className);
-    }, delay);
-  };
-  immediateClasses.forEach((className) => {
-    if (action === "add" /* ADD */) {
-      element.classList.add(className);
-      createTimeoutToAddClass(10, className);
-    } else {
-      element.classList.remove(className);
-    }
-  });
-  afterClasses.forEach((className) => {
-    const props = className.split("final:")[1];
-    const [delay, afterClassName] = JSON.parse(props.replace(/'/g, '"'));
-    if (action === "add" /* ADD */) {
-      createTimeoutToAddClass(delay, afterClassName);
-    } else {
-      element.classList.remove(afterClassName);
-    }
-  });
-};
-var addStateClasses = (element, attribute) => {
-  updateStateClasses(element, attribute, "add" /* ADD */);
-};
-var removeStateClasses = (element, attribute) => {
-  updateStateClasses(element, attribute, "remove" /* REMOVE */);
-};
-var getDelayFromAttribute = (element, attribute) => {
-  const classNames = element.getAttribute(attribute);
-  if (!classNames) {
-    throw new Error(`Missing ${attribute} attribute`);
-  }
-  const classNamesArray = classNames.split(" ");
-  const delayClasses = classNamesArray.filter(
-    (className) => className.startsWith("delay-") || className.startsWith("duration-")
-  );
-  if (!delayClasses || !delayClasses.length) return 150;
-  let delay = 0;
-  delayClasses.forEach((delayClass) => {
-    const delayValue = parseInt(delayClass.split("-")[1], 10);
-    delay += delayValue;
-  });
-  return delay;
-};
-
-// assets/js/tailwind/tailwind-transitions.ts
-function initTailwindTransitions() {
-  const ATTRIBUTE = "data-transition-state";
-  const hideElement = (element) => {
-    element.style.display = "none";
-  };
-  const showElement = (element) => {
-    element.style.display = "block";
-    element.offsetHeight;
-  };
-  const transitionMutationCallback = (mutationsList) => {
-    for (const mutation of mutationsList) {
-      const { type, attributeName, oldValue, target } = mutation;
-      if (type !== "attributes" || attributeName !== ATTRIBUTE || !target) {
-        return;
-      }
-      const state = target.getAttribute(ATTRIBUTE);
-      addStateClasses(target, `data-transition-${state}`);
-      if (state === "open") {
-        showElement(target);
-      } else {
-        const delay = getDelayFromAttribute(
-          target,
-          `data-transition-${oldValue}`
-        );
-        setTimeout(() => hideElement(target), delay);
-      }
-      if (oldValue) {
-        removeStateClasses(target, `data-transition-${oldValue}`);
-      }
-    }
-  };
-  const observer = new MutationObserver(transitionMutationCallback);
-  document.addEventListener("DOMContentLoaded", function() {
-    const allElements = document.querySelectorAll(`[${ATTRIBUTE}]`);
-    allElements.forEach((transitionElement) => {
-      const state = transitionElement.getAttribute(ATTRIBUTE);
-      if (state !== "closed" && state !== "open") {
-        throw new Error(
-          `Invalid ${state} for transitions, use data-styles-[state] for non open/close transitions`
-        );
-      }
-      if (state === "closed") {
-        hideElement(transitionElement);
-      } else {
-        showElement(transitionElement);
-      }
-      addStateClasses(transitionElement, `data-transition-${state}`);
-      observer.observe(transitionElement, {
-        attributes: true,
-        attributeOldValue: true,
-        attributeFilter: [ATTRIBUTE]
-      });
-    });
-  });
-}
 
 // assets/js/app/catalogFilters.ts
 var getFilters = () => document.getElementsByName("category[]");
@@ -275,12 +150,10 @@ var setUrlFilters = () => {
     }
   }
 };
-function initCatalogFilters() {
-  globalThis.updateFilters = updateFilters;
-  globalThis.clearFilters = clearFilters;
-  globalThis.removeFilter = removeFilter;
-  setUrlFilters();
-}
+globalThis.updateFilters = updateFilters;
+globalThis.clearFilters = clearFilters;
+globalThis.removeFilter = removeFilter;
+setUrlFilters();
 
 // assets/js/shared/htmxErrorHandler.ts
 window.addEventListener("htmx:responseError", (e) => {
@@ -293,10 +166,4 @@ window.addEventListener("htmx:responseError", (e) => {
     });
   }
 });
-
-// assets/js/app.ts
-initTailwindTransitions();
-initMycodes();
-initToast();
-initCatalogFilters();
 //# sourceMappingURL=app.js.map

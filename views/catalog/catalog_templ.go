@@ -339,7 +339,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"catalog\" class=\"relative isolate px-6 py-20 lg:px-8\"><h1 class=\"text-4xl font-display font-bold tracking-tight text-center mb-20\">Escoje un juguete</h1><div class=\"mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8\"><!-- Filters --><section x-data=\"{ open: false }\" aria-labelledby=\"filter-heading\" class=\"grid items-center border-b border-t border-gray-200\"><h2 id=\"filter-heading\" class=\"sr-only\">Filtros</h2><div class=\"relative col-start-1 row-start-1 py-4\"><div class=\"mx-auto flex max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8\"><div><button type=\"button\" aria-controls=\"filters-panel\" aria-expanded=\"false\" @click=\"open = !open\" class=\"group flex items-center font-medium text-gray-700\"><svg aria-hidden=\"true\" class=\"h-4 w-4 mr-4 fill-current\"><use href=\"/public/img/filter_empty.svg#icon\"></use></svg> Filtros</button></div><div class=\"pl-6\"><button type=\"button\" class=\"text-gray-500\" onclick=\"clearFilters()\">Limpiar Filtros</button></div></div></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"catalog\" class=\"relative isolate px-6 py-20 lg:px-8\"><h1 class=\"text-4xl font-display font-bold tracking-tight text-center mb-20\">Escoje un juguete</h1><div class=\"mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8\"><!-- Filters --><section x-data=\"{ expanded: false }\" aria-labelledby=\"filter-heading\" class=\"grid items-center border-b border-t border-gray-200\"><h2 id=\"filter-heading\" class=\"sr-only\">Filtros</h2><div class=\"relative col-start-1 row-start-1 py-4\"><div class=\"mx-auto flex max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8\"><div><button type=\"button\" aria-controls=\"filters-panel\" aria-expanded=\"false\" @click=\"expanded = !expanded\" class=\"group flex items-center font-medium text-gray-700\"><svg aria-hidden=\"true\" class=\"h-4 w-4 mr-4 fill-current\"><use href=\"/public/img/filter_empty.svg#icon\"></use></svg> Filtros</button></div><div class=\"pl-6\"><button type=\"button\" class=\"text-gray-500\" onclick=\"clearFilters()\">Limpiar Filtros</button></div></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -371,7 +371,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"filters-panel\" class=\"border-t border-gray-200 py-8\" x-cloak x-show=\"open\" x-transition:enter=\"transition ease-out duration-500\" x-transition:enter-start=\"translate-y-1\" x-transition:enter-end=\"translate-y-0\" x-transition:leave=\"transition ease-in duration-300\" x-transition:leave-start=\"translate-y-0\" x-transition:leave-end=\"translate-y-1\"><form id=\"filters-form\" onsubmit=\"event.preventDefault();updateFilters();\"><div class=\"mx-auto max-w-7xl gap-x-6 px-4 text-sm sm:flex sm:px-6 md:gap-x-8 lg:px-8\"><div class=\"w-full sm:w-auto\"><div class=\"space-y-6 sm:space-y-4 relative\"><label for=\"age_min\" class=\"block mb-2 font-bold\">Edad Minima</label>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"filters-panel\" class=\"border-t border-gray-200 py-8\" x-show=\"expanded\" x-collapse><form id=\"filters-form\" onsubmit=\"event.preventDefault();updateFilters();\"><div class=\"mx-auto max-w-7xl gap-x-6 px-4 text-sm sm:flex sm:px-6 md:gap-x-8 lg:px-8\"><div class=\"w-full sm:w-auto\"><div class=\"space-y-6 sm:space-y-4 relative\"><label for=\"age_min\" class=\"block mb-2 font-bold\">Edad Minima</label>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -399,7 +399,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				var templ_7745c5c3_Var21 string
 				templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(category)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 151, Col: 30}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 140, Col: 30}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
 				if templ_7745c5c3_Err != nil {
@@ -412,7 +412,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				var templ_7745c5c3_Var22 string
 				templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("category-%d", i))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 152, Col: 48}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 141, Col: 48}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 				if templ_7745c5c3_Err != nil {
@@ -425,7 +425,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				var templ_7745c5c3_Var23 string
 				templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("category-%d", i))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 155, Col: 55}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 144, Col: 55}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 				if templ_7745c5c3_Err != nil {
@@ -438,7 +438,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				var templ_7745c5c3_Var24 string
 				templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(category)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 156, Col: 24}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 145, Col: 24}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 				if templ_7745c5c3_Err != nil {
@@ -492,7 +492,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				var templ_7745c5c3_Var28 string
 				templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(toy.Image1)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 174, Col: 31}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 163, Col: 31}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 				if templ_7745c5c3_Err != nil {
@@ -505,7 +505,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				var templ_7745c5c3_Var29 string
 				templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyDescription)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 174, Col: 58}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 163, Col: 58}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
 				if templ_7745c5c3_Err != nil {
@@ -518,7 +518,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				var templ_7745c5c3_Var30 string
 				templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinStringErrs(toy.ToyName)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 179, Col: 24}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 168, Col: 24}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
 				if templ_7745c5c3_Err != nil {
@@ -531,7 +531,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				var templ_7745c5c3_Var31 string
 				templ_7745c5c3_Var31, templ_7745c5c3_Err = templ.JoinStringErrs(toy.Category)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 183, Col: 31}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 172, Col: 31}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var31))
 				if templ_7745c5c3_Err != nil {
@@ -544,7 +544,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				var templ_7745c5c3_Var32 string
 				templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(toy.AgeMin))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 189, Col: 41}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 178, Col: 41}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var32))
 				if templ_7745c5c3_Err != nil {
@@ -557,7 +557,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				var templ_7745c5c3_Var33 string
 				templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(toy.AgeMax))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 189, Col: 70}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 178, Col: 70}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
 				if templ_7745c5c3_Err != nil {
@@ -568,7 +568,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><nav class=\"flex items-center justify-between border-t border-gray-200 px-4 pt-2 sm:px-0\"><div class=\"-mt-px flex w-0 flex-1\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><nav class=\"flex items-center justify-between border-t border-gray-200 px-4 sm:px-0\"><div class=\"-mt-px flex w-0 flex-1\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -582,7 +582,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"inline-flex items-center border-t-2 border-transparent pr-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700\"><svg class=\"mr-3 h-5 w-5 text-gray-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M18 10a.75.75 0 01-.75.75H4.66l2.1 1.95a.75.75 0 11-1.02 1.1l-3.5-3.25a.75.75 0 010-1.1l3.5-3.25a.75.75 0 111.02 1.1l-2.1 1.95h12.59A.75.75 0 0118 10z\" clip-rule=\"evenodd\"></path></svg> Previous</a>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"inline-flex items-center border-t-2 border-transparent pr-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700\"><svg class=\"mr-3 h-5 w-5 text-gray-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M18 10a.75.75 0 01-.75.75H4.66l2.1 1.95a.75.75 0 11-1.02 1.1l-3.5-3.25a.75.75 0 010-1.1l3.5-3.25a.75.75 0 111.02 1.1l-2.1 1.95h12.59A.75.75 0 0118 10z\" clip-rule=\"evenodd\"></path></svg> Anterior</a>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -626,7 +626,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				var templ_7745c5c3_Var38 string
 				templ_7745c5c3_Var38, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(i))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 216, Col: 24}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 205, Col: 24}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var38))
 				if templ_7745c5c3_Err != nil {
@@ -676,7 +676,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				var templ_7745c5c3_Var40 string
 				templ_7745c5c3_Var40, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(i))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 229, Col: 67}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 218, Col: 67}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var40))
 				if templ_7745c5c3_Err != nil {
@@ -689,7 +689,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				var templ_7745c5c3_Var41 string
 				templ_7745c5c3_Var41, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(i))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 229, Col: 85}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 218, Col: 85}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var41))
 				if templ_7745c5c3_Err != nil {
@@ -714,25 +714,25 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"inline-flex items-center border-t-2 border-transparent pl-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700\">Next <svg class=\"ml-3 h-5 w-5 text-gray-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M2 10a.75.75 0 01.75-.75h12.59l-2.1-1.95a.75.75 0 111.02-1.1l3.5 3.25a.75.75 0 010 1.1l-3.5 3.25a.75.75 0 11-1.02-1.1l2.1-1.95H2.75A.75.75 0 012 10z\" clip-rule=\"evenodd\"></path></svg></a>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"inline-flex items-center border-t-2 border-transparent pl-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700\">Siguiente <svg class=\"ml-3 h-5 w-5 text-gray-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\" aria-hidden=\"true\"><path fill-rule=\"evenodd\" d=\"M2 10a.75.75 0 01.75-.75h12.59l-2.1-1.95a.75.75 0 111.02-1.1l3.5 3.25a.75.75 0 010 1.1l-3.5 3.25a.75.75 0 11-1.02-1.1l2.1-1.95H2.75A.75.75 0 012 10z\" clip-rule=\"evenodd\"></path></svg></a>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></nav><div class=\"mt-6 text-center text-sm font-medium text-gray-500\">Showing <span class=\"text-base font-bold text-brand-blue\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></nav><div class=\"mt-6 text-center text-sm font-medium text-gray-500\">Mostrando del <span class=\"text-base font-bold text-brand-blue\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var43 string
 			templ_7745c5c3_Var43, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(((page - 1) * pageSize) + 1))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 248, Col: 105}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 239, Col: 48}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var43))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> to <span class=\"text-base font-bold text-brand-blue\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> a <span class=\"text-base font-bold text-brand-blue\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -740,7 +740,7 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				var templ_7745c5c3_Var44 string
 				templ_7745c5c3_Var44, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(count))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 252, Col: 27}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 244, Col: 27}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var44))
 				if templ_7745c5c3_Err != nil {
@@ -750,27 +750,27 @@ func Catalog(toys []model.Toy, categories []string, page int64, pages int64, pag
 				var templ_7745c5c3_Var45 string
 				templ_7745c5c3_Var45, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(page * pageSize))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 254, Col: 37}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 246, Col: 37}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var45))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> of <span class=\"text-base font-bold text-brand-blue\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> de <span class=\"text-base font-bold text-brand-blue\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var46 string
 			templ_7745c5c3_Var46, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprint(count))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 257, Col: 78}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/catalog/catalog.templ`, Line: 249, Col: 78}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var46))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> results</div></div></section></main>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> resultados</div></div></section></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

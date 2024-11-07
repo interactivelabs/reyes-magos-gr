@@ -256,7 +256,7 @@ func VolunteerRow(volunteer model.Volunteer) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#dialog-content\" hx-swap=\"innerHTML\">Edit</button> ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#volunteer-dialog-container\" hx-swap=\"innerHTML\">Edit</button> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -367,7 +367,7 @@ func AdminVolunteers(groupedVolunteers map[string][]model.Volunteer) templ.Compo
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/admin/volunteers/create\" hx-target=\"#volunteer-new-container\">Add Volunteer</button></div></div><div id=\"volunteer-new-container\" class=\"md:w-1/2 my-4 mx-auto\"></div><section id=\"admin_volunteers\" class=\"mt-8 flow-root\"><div class=\"-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8\"><div class=\"inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8\"><table class=\"min-w-full rounded-md shadow-sm border\"><thead class=\"bg-white\"><tr><th scope=\"col\" class=\"py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3\">Name</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Email</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Phone</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Address</th><th scope=\"col\" class=\"relative py-3.5 pl-3 pr-4 sm:pr-3\"><span class=\"sr-only\">Actions</span></th></tr></thead> <tbody class=\"bg-white\" id=\"admin-volunteers-table-body\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/admin/volunteers/create\" hx-target=\"#volunteer-dialog-container\" hx-swap=\"innerHTML\">Add Volunteer</button></div></div><section id=\"admin_volunteers\" class=\"mt-8 flow-root\"><div class=\"-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8\"><div class=\"inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8\"><table class=\"min-w-full rounded-md shadow-sm border\"><thead class=\"bg-white\"><tr><th scope=\"col\" class=\"py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3\">Name</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Email</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Phone</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Address</th><th scope=\"col\" class=\"relative py-3.5 pl-3 pr-4 sm:pr-3\"><span class=\"sr-only\">Actions</span></th></tr></thead> <tbody class=\"bg-white\" id=\"admin-volunteers-table-body\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -398,7 +398,7 @@ func AdminVolunteers(groupedVolunteers map[string][]model.Volunteer) templ.Compo
 					}
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table></div></div></section></main>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table></div></div></section><div id=\"volunteer-dialog-container\"></div></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

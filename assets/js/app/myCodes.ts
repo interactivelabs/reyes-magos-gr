@@ -26,13 +26,11 @@ const share = async (code: string) => {
   }
 };
 
-export default function initMycodes() {
-  globalThis.copyCode = copy;
-  globalThis.shareCode = async (code: string) => {
-    if (typeof navigator.share === "undefined") {
-      copy(code);
-    } else {
-      share(code);
-    }
-  };
-}
+globalThis.copyCode = copy;
+globalThis.shareCode = async (code: string) => {
+  if (typeof navigator.share === "undefined") {
+    copy(code);
+  } else {
+    share(code);
+  }
+};

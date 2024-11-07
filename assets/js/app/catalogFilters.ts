@@ -95,9 +95,7 @@ const setUrlFilters = () => {
   }
 };
 
-export default function initCatalogFilters() {
-  globalThis.updateFilters = updateFilters;
-  globalThis.clearFilters = clearFilters;
-  globalThis.removeFilter = removeFilter;
-  setUrlFilters();
-}
+globalThis.updateFilters = updateFilters;
+globalThis.clearFilters = clearFilters;
+globalThis.removeFilter = removeFilter;
+setUrlFilters();

@@ -7,21 +7,23 @@ import (
 )
 
 templ UpdateVolunteerForm(volunteer model.Volunteer) {
-	<form
-		hx-put={ string(templ.URL(fmt.Sprintf("/admin/volunteers/%d/save", volunteer.VolunteerID))) }
-		hx-target={ fmt.Sprintf("#admin-volunteer-row-%d", volunteer.VolunteerID) }
-		hx-swap="outerHTML"
-		hx-on::after-request={ components.CloseDialog() }
-	>
-		<div class="grid grid-cols-1 gap-x-6 gap-y-8">
-			@VolunteerForm(volunteer)
-			<div class="mt-6 flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-8">
-				@components.CancelModalButton()
-				<button
-					type="submit"
-					class={ components.AppPrimaryButton }
-				>Save</button>
+	@components.Dialog() {
+		<form
+			class="pt-8"
+			hx-put={ string(templ.URL(fmt.Sprintf("/admin/volunteers/%d/save", volunteer.VolunteerID))) }
+			hx-target={ fmt.Sprintf("#admin-volunteer-row-%d", volunteer.VolunteerID) }
+			hx-swap="outerHTML"
+		>
+			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
+				@VolunteerForm(volunteer)
+				<div class="mt-6 flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-8">
+					@components.CancelModalButton()
+					<button
+						type="submit"
+						class={ components.AppPrimaryButton }
+					>Save</button>
+				</div>
 			</div>
-		</div>
-	</form>
+		</form>
+	}
 }

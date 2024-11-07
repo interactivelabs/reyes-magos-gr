@@ -6,28 +6,30 @@ import (
 )
 
 templ CreateVolunteerForm() {
-	<form
-		id="volunteer-new-form"
-		class="w-full p-8 bg-white rounded-md shadow-sm border"
-		hx-post={ string(templ.URL("/admin/volunteers")) }
-		hx-target="#admin-volunteers-table-body"
-		hx-swap="afterbegin"
-	>
-		<div class="grid grid-cols-1 gap-x-6 gap-y-8">
-			@VolunteerForm(model.Volunteer{})
-			<div class="mt-6 flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-8">
-				<button
-					type="button"
-					onclick="htmx.remove(htmx.find('#volunteer-new-form'));"
-					class={ components.BaseSecondaryButton }
-				>
-					Cancel
-				</button>
-				<button
-					type="submit"
-					class={ components.AppPrimaryButton }
-				>Save</button>
+	@components.Dialog() {
+		<form
+			id="volunteer-new-form"
+			class="pt-8"
+			hx-post={ string(templ.URL("/admin/volunteers")) }
+			hx-target="#admin-volunteers-table-body"
+			hx-swap="afterbegin"
+		>
+			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
+				@VolunteerForm(model.Volunteer{})
+				<div class="mt-6 flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-8">
+					<button
+						type="button"
+						onclick="htmx.remove(htmx.find('#volunteer-new-form'));"
+						class={ components.BaseSecondaryButton }
+					>
+						Cancel
+					</button>
+					<button
+						type="submit"
+						class={ components.AppPrimaryButton }
+					>Save</button>
+				</div>
 			</div>
-		</div>
-	</form>
+		</form>
+	}
 }
