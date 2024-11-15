@@ -40,7 +40,7 @@ templ Nav() {
 							<a href="/#hero" class={ desktopMenuLink }>Inicio</a>
 							<a href="/#why" class={ desktopMenuLink }>Porque?</a>
 							<a href="/#volunteers" class={ desktopMenuLink }>Voluntarios</a>
-							<a href="/catalog" class={ desktopMenuLink }>Juguetes</a>
+							<a href="/catalog" class={ desktopMenuLink }>Catálogo</a>
 						</div>
 					</div>
 					if lib.GetProfile(ctx).Email != "" {
@@ -87,10 +87,10 @@ templ Nav() {
 									<a href="/logout" class="block p-4 text-sm" role="menuitem">Salir</a>
 									if lib.GetProfile(ctx).IsAdmin {
 										<div class="block p-4 text-sm border-b-2 text-center">Admin</div>
-										<a href="/admin/codes" class="block p-4 text-sm" role="menuitem">Codes</a>
-										<a href="/admin/orders" class="block p-4 text-sm" role="menuitem">Orders</a>
-										<a href="/admin/volunteers" class="block p-4 text-sm" role="menuitem">Volunteers</a>
-										<a href="/admin/toys" class="block p-4 text-sm" role="menuitem">Toys</a>
+										<a href="/admin/codes" class="block p-4 text-sm" role="menuitem">Codigos</a>
+										<a href="/admin/orders" class="block p-4 text-sm" role="menuitem">Ordenes</a>
+										<a href="/admin/volunteers" class="block p-4 text-sm" role="menuitem">Voluntarios</a>
+										<a href="/admin/toys" class="block p-4 text-sm" role="menuitem">Juguetes</a>
 									}
 								</div>
 							</div>
@@ -117,7 +117,7 @@ templ Nav() {
 					<a href="/#hero" role="menuitem" class={ mobileMenuLink }>Inicio</a>
 					<a href="/#why" role="menuitem" class={ mobileMenuLink }>Porque?</a>
 					<a href="/#volunteers" role="menuitem" class={ mobileMenuLink }>Voluntarios</a>
-					<a href="/catalog" role="menuitem" class={ mobileMenuLink }>Juguetes</a>
+					<a href="/catalog" role="menuitem" class={ mobileMenuLink }>Catálogo</a>
 				</div>
 			</div>
 		</nav>
