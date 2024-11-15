@@ -1,11 +1,12 @@
-import { showToast } from "../shared/toast";
+import { showToast } from "../shared/toasts";
 
 const copy = async (code: string) => {
   try {
     await navigator.clipboard.writeText(code);
     showToast({
+      variant: "error",
       title: "Copiado!",
-      subTitle: "El codigo ha sido copiado al portapapeles.",
+      message: "El codigo ha sido copiado al portapapeles.",
     });
   } catch (err) {
     console.error("Failed to copy: ", err);

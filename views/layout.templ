@@ -29,18 +29,17 @@ templ Base() {
 			@shared.Nav()
 			{ children... }
 			@shared.Footer()
-			@components.Toast()
-			@components.ToastError()
+			@components.Toasts()
 		</body>
+		<!-- App Code -->
+		<script type="module" src="/public/js/app.js"></script>
+		<!-- Htmx Plugins -->
+		<script defer src="https://unpkg.com/htmx-ext-preload@2.0.0/preload.js"></script>
+		<script defer src="https://unpkg.com/htmx-ext-remove-me@2.0.0/remove-me.js"></script>
 		<!-- Alpine Plugins -->
 		<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
 		<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
 		<!-- Alpine Core -->
 		<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-		<!-- Htmx Plugins -->
-		<script defer src="https://unpkg.com/htmx-ext-preload@2.0.0/preload.js"></script>
-		<script defer src="https://unpkg.com/htmx-ext-remove-me@2.0.0/remove-me.js"></script>
-		<!-- App Code -->
-		<script defer type="module" src="/public/js/app.js"></script>
 	</html>
 }

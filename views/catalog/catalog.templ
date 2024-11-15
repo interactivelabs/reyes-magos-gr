@@ -65,12 +65,6 @@ func getPaginationLink(currentQuery string, page int) string {
 	return fmt.Sprintf("/catalog?%s&page=%d", currentQuery, page)
 }
 
-script goToPage(currentQuery string) {
-  console.log(currentQuery);
-  console.log(this);
-  window.location.href = url;
-}
-
 templ Catalog(toys []model.Toy, categories []string, page int64, pages int64, pageSize int64, count int64, currentQuery string, categoryFilters []string, ageMin int64, ageMax int64) {
 	@layout.Base() {
 		<main>
@@ -86,7 +80,7 @@ templ Catalog(toys []model.Toy, categories []string, page int64, pages int64, pa
 									<button
 										type="button"
 										aria-controls="filters-panel"
-										aria-expanded="false"
+										:aria-expanded="expanded"
 										@click="expanded = !expanded"
 										class="group flex items-center font-medium text-gray-700"
 									>
@@ -182,7 +176,7 @@ templ Catalog(toys []model.Toy, categories []string, page int64, pages int64, pa
 							</a>
 						}
 					</div>
-					<nav class="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0">
+					<nav class="flex justify-between border-t border-gray-200 px-4 sm:px-0">
 						<div class="-mt-px flex w-0 flex-1">
 							if page > 1 {
 								<a
@@ -207,17 +201,49 @@ templ Catalog(toys []model.Toy, categories []string, page int64, pages int64, pa
 							}
 						</div>
 						<div class="flex md:hidden">
-							<select
-								id="page"
-								name="page"
-								aria-label="Pagina actual"
-								class="block w-full rounded-md border-0 text-center py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-brand-orange sm:text-sm sm:leading-6"
-								onchange={ goToPage(currentQuery) }
-							>
-								for i := 1; i <= int(pages); i++ {
-									<option selected?={ i == int(page) } value={ fmt.Sprint(i) }>{ fmt.Sprint(i) }</option>
-								}
-							</select>
+							<div class="relative mt-2" x-data="{ expandedPagesOptions: false }" x-cloak>
+								<button
+									type="button"
+									class="relative w-full cursor-default rounded-md py-1.5 px-6 text-left shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-orange sm:text-sm/6"
+									aria-haspopup="listbox"
+									:aria-expanded="expandedPagesOptions"
+									aria-label={ fmt.Sprintf("Pagina %d de %d", page, pages) }
+									@click="expandedPagesOptions = !expandedPagesOptions"
+								>
+									{ fmt.Sprint(page) }
+								</button>
+								<ul
+									class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+									tabindex="-1"
+									role="listbox"
+									aria-labelledby="listbox-label"
+									aria-activedescendant={ fmt.Sprintf("listbox-option-%d", page) }
+									x-show="expandedPagesOptions"
+									x-transition:enter="ease-out duration-100"
+									x-transition:enter-start="opacity-0"
+									x-transition:enter-end="opacity-100"
+									x-transition:leave="ease-in duration-100"
+									x-transition:leave-start="opacity-100"
+									x-transition:leave-end="opacity-0"
+									@click.away="expandedPagesOptions = false"
+								>
+									for i := 1; i <= int(pages); i++ {
+										<li
+											class="relative cursor-default select-none my-2"
+											id={ fmt.Sprintf("listbox-option-%d", i) }
+											role="option"
+										>
+											<a
+												class="inline-block w-full py-2 px-3 text-gray-900 text-center"
+												href={ templ.URL(getPaginationLink(currentQuery, int(i))) }
+												aria-label={ fmt.Sprintf("Ir a la pagina %d de %d", i, pages) }
+											>
+												{ fmt.Sprint(i) }
+											</a>
+										</li>
+									}
+								</ul>
+							</div>
 						</div>
 						<div class="-mt-px flex w-0 flex-1 justify-end">
 							if page < pages {
