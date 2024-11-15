@@ -1,54 +1,36 @@
-// assets/js/shared/toast.ts
-var hideToast = (variant = "" /* SUCCESS */) => {
-  const variantSelector = variant ? `${variant}-` : "";
-  const toastContainer = document.getElementById(
-    `toast-${variantSelector}container`
-  );
-  const toastPanel = document.getElementById(`toast-${variantSelector}panel`);
-  toastPanel?.classList.remove("show-toast");
-  toastPanel?.classList.add("hide-toast");
-  setTimeout(() => {
-    toastContainer?.classList.remove("flex");
-    toastContainer?.classList.add("hidden");
-  }, 300);
-};
-var showToast = ({
-  title,
-  subTitle,
-  duration = 5e3,
-  variant = "" /* SUCCESS */
-}) => {
-  const variantSelector = variant ? `${variant}-` : "";
-  const toastContainer = document.getElementById(
-    `toast-${variantSelector}container`
-  );
-  const toastPanel = document.getElementById(`toast-${variantSelector}panel`);
-  toastContainer?.classList.remove("hidden");
-  toastContainer?.classList.add("flex");
-  toastPanel?.classList.remove("hide-toast");
-  toastPanel?.classList.add("show-toast");
-  const toastTitle = document.getElementById(`toast-${variantSelector}title`);
-  const toastSubTitle = document.getElementById(
-    `toast-${variantSelector}subtitle`
-  );
-  toastTitle.innerText = title;
-  toastSubTitle.innerText = subTitle;
-  setTimeout(() => hideToast(variant), duration);
-};
-var showErrorToast = (props) => showToast({ ...props, variant: "error" /* ERROR */ });
-var hideErrorToast = () => hideToast("error" /* ERROR */);
-globalThis.showToast = showToast;
-globalThis.hideToast = hideToast;
-globalThis.showErrorToast = showErrorToast;
-globalThis.hideErrorToast = hideErrorToast;
+// assets/js/shared/toasts.ts
+document.addEventListener("alpine:init", () => {
+  Alpine.data("toasts", () => ({
+    notifications: [],
+    displayDuration: 5e3,
+    addNotification(notification) {
+      const id = Date.now();
+      if (this.notifications.length >= 20) {
+        this.notifications.splice(0, this.notifications.length - 19);
+      }
+      this.notifications.push({ ...notification, id });
+    },
+    removeNotification(id) {
+      setTimeout(() => {
+        this.notifications = this.notifications.filter(
+          (notification) => notification.id !== id
+        );
+      }, 400);
+    }
+  }));
+});
+function showToast(toast) {
+  window.dispatchEvent(new CustomEvent("notify", { detail: toast }));
+}
 
 // assets/js/app/myCodes.ts
 var copy = async (code) => {
   try {
     await navigator.clipboard.writeText(code);
     showToast({
+      variant: "error",
       title: "Copiado!",
-      subTitle: "El codigo ha sido copiado al portapapeles."
+      message: "El codigo ha sido copiado al portapapeles."
     });
   } catch (err) {
     console.error("Failed to copy: ", err);
@@ -160,9 +142,10 @@ window.addEventListener("htmx:responseError", (e) => {
   console.log(e);
   const code = e.detail.xhr.status;
   if (code === 500) {
-    showErrorToast({
+    showToast({
+      variant: "error",
       title: "Error del servidor",
-      subTitle: "Ha ocurrido un error inesperado. Por favor intenta de nuevo."
+      message: "Ha ocurrido un error inesperado. Por favor intenta de nuevo."
     });
   }
 });

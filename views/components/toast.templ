@@ -1,55 +1,111 @@
 package components
 
-templ Toast() {
-	<div id="toast-container" aria-live="assertive" class="pointer-events-none fixed inset-0 hidden items-end px-4 py-6 sm:items-start sm:p-6">
-		<div class="flex w-full flex-col items-center space-y-4 sm:items-end">
-			<div id="toast-panel" class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hide-toast">
-				<div class="p-4">
-					<div class="flex items-start">
-						<div class="flex-shrink-0">
-							<svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-							</svg>
-						</div>
-						<div class="ml-3 w-0 flex-1 pt-0.5">
-							<p id="toast-title" class="text-sm font-medium text-gray-900">Title</p>
-							<p id="toast-subtitle" class="mt-1 text-sm text-gray-500">Subtitle</p>
-						</div>
-						<div class="ml-4 flex flex-shrink-0">
-							<button type="button" class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2" onclick="hideToast()">
-								<span class="sr-only">Close</span>
-								<svg aria-hidden="true" class="h-4 w-4 ml-4 fill-current">
-									<use href="/public/img/close.svg#icon"></use>
-								</svg>
-							</button>
-						</div>
-					</div>
+import "fmt"
+
+var variants = []string{"info", "success", "warning", "error"}
+
+templ Toasts() {
+	<div
+		x-data="toasts"
+		@notify.window="addNotification({
+			variant: $event.detail.variant,
+			title: $event.detail.title,
+			message: $event.detail.message,
+		})"
+	>
+		<div
+			x-on:mouseenter="$dispatch('pause-auto-dismiss')"
+			x-on:mouseleave="$dispatch('resume-auto-dismiss')"
+			class="group pointer-events-none fixed inset-x-8 top-0 z-[99] flex max-w-full flex-col gap-2 bg-transparent px-6 py-6 md:right-0 md:left-[unset] md:max-w-sm"
+		>
+			<template
+				x-for="(notification, index) in notifications"
+				x-bind:key="notification.id"
+			>
+				<div>
+					for _, variant := range variants {
+						@ToastTemplate(variant)
+					}
 				</div>
-			</div>
+			</template>
 		</div>
 	</div>
 }
 
-templ ToastError() {
-	<div id="toast-error-container" aria-live="assertive" class="pointer-events-none fixed inset-0 hidden items-end px-4 py-6 sm:items-start sm:p-6">
-		<div class="flex w-full flex-col items-center space-y-4 sm:items-end">
-			<div id="toast-error-panel" class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-red-50 shadow-lg ring-1 ring-black ring-opacity-5 hide-toast">
-				<div class="p-4">
-					<div class="rounded-md p-4">
-						<div class="flex">
-							<div class="flex-shrink-0">
-								<svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-									<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"></path>
-								</svg>
-							</div>
-							<div class="ml-3">
-								<p id="toast-error-title" class="text-sm font-medium text-gray-900">Title</p>
-								<p id="toast-error-subtitle" class="mt-1 text-sm text-gray-500">Subtitle</p>
-							</div>
-						</div>
-					</div>
+templ ToastTemplate(variant string) {
+	<template x-if={ fmt.Sprintf("notification.variant === '%s'", variant) }>
+		<div
+			x-data="{ isVisible: false, timeout: null }"
+			x-cloak
+			x-show="isVisible"
+			class={ getToastVariantClasses(variant)["container"] }
+			role="alert"
+			x-on:pause-auto-dismiss.window="clearTimeout(timeout)"
+			x-on:resume-auto-dismiss.window=" timeout = setTimeout(() => {(isVisible = false), removeNotification(notification.id) }, displayDuration)"
+			x-init="$nextTick(() => { isVisible = true }), (timeout = setTimeout(() => { isVisible = false, removeNotification(notification.id)}, displayDuration))"
+			x-transition:enter="transition duration-300 ease-out"
+			x-transition:enter-end="translate-y-0"
+			x-transition:enter-start="translate-y-8"
+			x-transition:leave="transition duration-300 ease-in"
+			x-transition:leave-end="-translate-x-24 opacity-0 md:translate-x-24"
+			x-transition:leave-start="translate-x-0 opacity-100"
+		>
+			<div class={ getToastVariantClasses(variant)["wrapper"] }>
+				<!-- Icon -->
+				<div class={ getToastVariantClasses(variant)["icon"] } aria-hidden="true">
+					<svg aria-hidden="true" class="h-4 w-4 ml-4 fill-current">
+						<use href="/public/img/checkCircle.svg#icon"></use>
+					</svg>
 				</div>
+				<!-- Title & Message -->
+				<div class="flex flex-col gap-2">
+					<h3 x-cloak x-show="notification.title" class={ getToastVariantClasses(variant)["title"] } x-text="notification.title"></h3>
+					<p x-cloak x-show="notification.message" class="text-pretty text-sm" x-text="notification.message"></p>
+				</div>
+				<!--Dismiss Button -->
+				<button type="button" class="ml-auto" aria-label="dismiss notification" x-on:click="(isVisible = false), removeNotification(notification.id)">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" class="size-5 shrink-0" aria-hidden="true">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+					</svg>
+				</button>
 			</div>
 		</div>
-	</div>
+	</template>
+}
+
+func getToastVariantClasses(variant string) map[string]string {
+	baseContainer := "pointer-events-auto relative rounded-md border bg-white text-neutral-600 border-%s-500"
+	baseWrapper := "flex w-full items-center gap-2.5 bg-%s-500/10 rounded-md p-4 transition-all duration-300"
+	baseIcon := "rounded-full bg-%s-500/15 p-0.5 text-%s-500"
+	baseTitle := "text-sm font-semibold text-%s-500"
+	switch variant {
+	case "success":
+		return map[string]string{
+			"container": fmt.Sprintf(baseContainer, "green"),
+			"wrapper":   fmt.Sprintf(baseWrapper, "green"),
+			"icon":      fmt.Sprintf(baseIcon, "green", "green"),
+			"title":     fmt.Sprintf(baseTitle, "green"),
+		}
+	case "warning":
+		return map[string]string{
+			"container": fmt.Sprintf(baseContainer, "amber"),
+			"wrapper":   fmt.Sprintf(baseWrapper, "amber"),
+			"icon":      fmt.Sprintf(baseIcon, "amber", "amber"),
+			"title":     fmt.Sprintf(baseTitle, "amber"),
+		}
+	case "error":
+		return map[string]string{
+			"container": fmt.Sprintf(baseContainer, "red"),
+			"wrapper":   fmt.Sprintf(baseWrapper, "red"),
+			"icon":      fmt.Sprintf(baseIcon, "red", "red"),
+			"title":     fmt.Sprintf(baseTitle, "red"),
+		}
+	default:
+		return map[string]string{
+			"container": fmt.Sprintf(baseContainer, "sky"),
+			"wrapper":   fmt.Sprintf(baseWrapper, "sky"),
+			"icon":      fmt.Sprintf(baseIcon, "sky", "sky"),
+			"title":     fmt.Sprintf(baseTitle, "sky"),
+		}
+	}
 }

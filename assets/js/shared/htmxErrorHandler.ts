@@ -1,5 +1,5 @@
 import { HtmxResponseInfo } from "../../@types/htmx.esm";
-import { showErrorToast } from "./toast";
+import { showToast } from "./toasts";
 
 interface HtmxResponseErrorEvent extends Event {
   detail: HtmxResponseInfo;
@@ -15,9 +15,10 @@ window.addEventListener<"htmx:responseError">("htmx:responseError", (e) => {
   console.log(e);
   const code = e.detail.xhr.status;
   if (code === 500) {
-    showErrorToast({
+    showToast({
+      variant: "error",
       title: "Error del servidor",
-      subTitle: "Ha ocurrido un error inesperado. Por favor intenta de nuevo.",
+      message: "Ha ocurrido un error inesperado. Por favor intenta de nuevo.",
     });
   }
 });
