@@ -13,7 +13,7 @@ require (
 	github.com/labstack/echo-contrib v0.17.1
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/stretchr/testify v1.9.0
-	github.com/tursodatabase/go-libsql v0.0.0-20241011135853-3effbb6dea5c
+	github.com/tursodatabase/go-libsql v0.0.0-20241113154718-293fe7f21b08
 	golang.org/x/oauth2 v0.24.0
 	golang.org/x/time v0.8.0
 )
