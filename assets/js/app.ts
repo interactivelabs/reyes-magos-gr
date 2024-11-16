@@ -5,7 +5,8 @@ declare global {
   var Alpine: AlpineType;
 }
 
-import "./app/myCodes";
-import "./shared/toasts";
-import "./app/catalogFilters";
 import "./shared/htmxErrorHandler";
+import "./shared/toasts";
+
+import "./app/myCodes";
+import "./app/catalog";

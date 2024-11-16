@@ -1,3 +1,10 @@
+/// <reference types="alpinejs" />
+import type { Alpine as AlpineType } from "alpinejs";
+
+declare global {
+  var Alpine: AlpineType;
+}
+
 export interface Toast {
   variant: "info" | "success" | "warning" | "error";
   title: string | null;
