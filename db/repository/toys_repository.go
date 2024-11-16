@@ -84,7 +84,7 @@ func getFilteredQuery(ageMin int64, ageMax int64, category []string, countOnly b
 	}
 
 	var ageMaxFiler int64
-	ageMaxFiler = 100
+	ageMaxFiler = 99
 	if ageMax > 0 {
 		ageMaxFiler = ageMax
 	}
