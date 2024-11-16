@@ -23,6 +23,19 @@ function showToast(toast) {
   window.dispatchEvent(new CustomEvent("notify", { detail: toast }));
 }
 
+// assets/js/shared/htmxErrorHandler.ts
+window.addEventListener("htmx:responseError", (e) => {
+  console.log(e);
+  const code = e.detail.xhr.status;
+  if (code === 500) {
+    showToast({
+      variant: "error",
+      title: "Error del servidor",
+      message: "Ha ocurrido un error inesperado. Por favor intenta de nuevo."
+    });
+  }
+});
+
 // assets/js/app/myCodes.ts
 var copy = async (code) => {
   try {
@@ -57,7 +70,21 @@ globalThis.shareCode = async (code) => {
   }
 };
 
-// assets/js/app/catalogFilters.ts
+// assets/js/utils/debounce.ts
+function debounce(func, wait) {
+  let timeout;
+  return function(...args) {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => {
+      func.apply(this, args);
+    }, wait);
+  };
+}
+var debounce_default = debounce;
+
+// assets/js/app/catalog.ts
 var getFilters = () => document.getElementsByName("category[]");
 var updateUrlFilters = (params) => {
   params.delete("page");
@@ -136,17 +163,13 @@ globalThis.updateFilters = updateFilters;
 globalThis.clearFilters = clearFilters;
 globalThis.removeFilter = removeFilter;
 setUrlFilters();
-
-// assets/js/shared/htmxErrorHandler.ts
-window.addEventListener("htmx:responseError", (e) => {
-  console.log(e);
-  const code = e.detail.xhr.status;
-  if (code === 500) {
-    showToast({
-      variant: "error",
-      title: "Error del servidor",
-      message: "Ha ocurrido un error inesperado. Por favor intenta de nuevo."
-    });
+var handleBackToTopScroll = () => {
+  if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+    window.dispatchEvent(new CustomEvent("showbacktotopbtn"));
+  } else {
+    window.dispatchEvent(new CustomEvent("hidebacktotopbtn"));
   }
-});
+};
+var scrollHandler = debounce_default(handleBackToTopScroll, 250);
+window.addEventListener("scroll", scrollHandler);
 //# sourceMappingURL=app.js.map

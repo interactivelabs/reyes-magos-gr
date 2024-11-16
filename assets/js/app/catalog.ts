@@ -1,3 +1,5 @@
+import debounce from "../utils/debounce";
+
 const getFilters = () =>
   document.getElementsByName("category[]") as NodeListOf<HTMLInputElement>;
 
@@ -99,3 +101,19 @@ globalThis.updateFilters = updateFilters;
 globalThis.clearFilters = clearFilters;
 globalThis.removeFilter = removeFilter;
 setUrlFilters();
+
+// Back to top button display
+const handleBackToTopScroll = () => {
+  if (
+    document.body.scrollTop > 300 ||
+    document.documentElement.scrollTop > 300
+  ) {
+    window.dispatchEvent(new CustomEvent("showbacktotopbtn"));
+  } else {
+    window.dispatchEvent(new CustomEvent("hidebacktotopbtn"));
+  }
+};
+
+const scrollHandler = debounce(handleBackToTopScroll, 250);
+
+window.addEventListener("scroll", scrollHandler);

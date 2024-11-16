@@ -68,7 +68,7 @@ func getPaginationLink(currentQuery string, page int) string {
 templ Catalog(toys []model.Toy, categories []string, page int64, pages int64, pageSize int64, count int64, currentQuery string, categoryFilters []string, ageMin int64, ageMax int64) {
 	@layout.Base() {
 		<main>
-			<section id="catalog" class="relative isolate px-6 py-20 lg:px-8">
+			<section id="catalog" class="relative isolate py-20 lg:px-8">
 				<h1 class="text-4xl font-display font-bold tracking-tight text-center mb-20">Escoje un juguete</h1>
 				<div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
 					<!-- Filters -->
@@ -276,6 +276,33 @@ templ Catalog(toys []model.Toy, categories []string, page int64, pages int64, pa
 					</div>
 				</div>
 			</section>
+			<div
+				x-data="{ showBackToTop: false }"
+				@showbacktotopbtn.window="showBackToTop = true"
+				@hidebacktotopbtn.window="showBackToTop = false"
+			>
+				<div
+					x-show="showBackToTop"
+					x-transition:enter="ease-out duration-100"
+					x-transition:enter-start="opacity-0"
+					x-transition:enter-end="opacity-100"
+					x-transition:leave="ease-in duration-100"
+					x-transition:leave-start="opacity-100"
+					x-transition:leave-end="opacity-0"
+					class="fixed bottom-6 right-2 md:right-6 z-10"
+				>
+					<button
+						type="button"
+						onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+						aria-hidden="true"
+						title="Back to Top"
+					>
+						<svg aria-hidden="true" class="h-8 w-8 fill-current">
+							<use href="/public/img/arrow-to-top.svg#icon"></use>
+						</svg>
+					</button>
+				</div>
+			</div>
 		</main>
 	}
 }
