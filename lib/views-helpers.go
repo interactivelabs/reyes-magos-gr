@@ -43,3 +43,10 @@ func GetHTMLErrorCode(err error) (code int) {
 	}
 	return 0
 }
+
+func GetPaginationLink(currentQuery string, page int, pageSize int64) string {
+	if currentQuery == "" {
+		return fmt.Sprintf("/catalog?page=%d&page_size=%d", page, pageSize)
+	}
+	return fmt.Sprintf("/catalog?page=%d&page_size=%d&%s", page, pageSize, currentQuery)
+}
