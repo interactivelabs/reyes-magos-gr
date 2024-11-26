@@ -65,12 +65,22 @@ func (h CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
 	currentQueryVlues.Del("page_size")
 	currentQuery := currentQueryVlues.Encode()
 
-	links := make([]dtos.CatalogLink, 0)
+	pageNumberlinks := make([]dtos.CatalogLink, 0)
 	for i := 1; i <= int(pages); i++ {
-		links = append(links, dtos.CatalogLink{
+		pageNumberlinks = append(pageNumberlinks, dtos.CatalogLink{
 			Text:  fmt.Sprintf("%d", i),
 			Url:   lib.GetPaginationLink(currentQuery, i, pageSize),
 			Label: fmt.Sprintf("Ir a la pagina %d de %d", i, pages),
+		})
+	}
+
+	pageSizeLinks := make([]dtos.CatalogLink, 0)
+	pageSizes := []int64{6, 12, 24, 48}
+	for _, size := range pageSizes {
+		pageSizeLinks = append(pageSizeLinks, dtos.CatalogLink{
+			Text:  fmt.Sprintf("%d", size),
+			Url:   lib.GetPaginationLink(currentQuery, int(page), size),
+			Label: fmt.Sprintf("Mostrar %d juguetes por pagina", size),
 		})
 	}
 
@@ -87,6 +97,7 @@ func (h CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
 			cr.Category,
 			int64(cr.AgeMin),
 			int64(cr.AgeMax),
-			links,
+			pageNumberlinks,
+			pageSizeLinks,
 		))
 }

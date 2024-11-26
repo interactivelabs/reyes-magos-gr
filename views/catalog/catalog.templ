@@ -71,7 +71,8 @@ templ Catalog(
 	categoryFilters []string,
 	ageMin int64,
 	ageMax int64,
-	links []dtos.CatalogLink,
+	pageNumberlinks []dtos.CatalogLink,
+	pageSizeLinks []dtos.CatalogLink,
 ) {
 	@layout.Base() {
 		<main>
@@ -125,11 +126,11 @@ templ Catalog(
 							<form id="filters-form" onsubmit="event.preventDefault();updateFilters();">
 								<div class="mx-auto max-w-7xl gap-x-6 px-4 text-sm sm:flex sm:px-6 md:gap-x-8 lg:px-8">
 									<div class="w-full sm:w-auto">
-										<div class="space-y-6 sm:space-y-4 relative">
+										<div class="space-y-6 mb-8 sm:space-y-4 relative">
 											<label for="age_min" class="block mb-2 font-bold">Edad Minima</label>
 											@AgeRangeFields("age_min", ageMin)
 										</div>
-										<div class="space-y-6 pt-8 sm:space-y-4 relative">
+										<div class="space-y-6 mb-8 sm:space-y-4 relative">
 											<label for="age_max" class="block mb-2 font-bold">Edad Maxima</label>
 											@AgeRangeFields("age_max", ageMax)
 										</div>
@@ -154,10 +155,10 @@ templ Catalog(
 										</div>
 									</div>
 								</div>
-								<div class="w-full px-4">
+								<div class="w-full py-4 px-4 sm:px-6 lg:px-8">
 									<label for="page" class="text-sm font-bold mb-6">
-										Numero de resultados:
-										@components.LinksListbox(fmt.Sprint(pageSize), "", fmt.Sprint(page), links)
+										<span class="inline-block mr-2">Numero de resultados:</span>
+										@components.LinksListbox(fmt.Sprint(pageSize), fmt.Sprintf("%d Resultados por pagina", pageSize), fmt.Sprint(pageSize), pageSizeLinks)
 									</label>
 								</div>
 								<div class="text-right">
@@ -222,7 +223,7 @@ templ Catalog(
 							}
 						</div>
 						<div class="flex mt-2 md:hidden">
-							@components.LinksListbox(fmt.Sprint(page), fmt.Sprintf("Pagina %d de %d", page, pages), fmt.Sprint(page), links)
+							@components.LinksListbox(fmt.Sprint(page), fmt.Sprintf("Pagina %d de %d", page, pages), fmt.Sprint(page), pageNumberlinks)
 						</div>
 						<div class="-mt-px flex w-0 flex-1 justify-end">
 							if page < pages {
@@ -255,7 +256,7 @@ templ Catalog(
 								{ fmt.Sprint(page * pageSize) }
 							}
 						</div>
-						de 
+						de
 						<div class="text-base font-bold text-brand-blue mx-2 inline-block">
 							{ fmt.Sprint(count) }
 						</div>
