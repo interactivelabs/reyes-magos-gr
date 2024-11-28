@@ -56,7 +56,7 @@ func Error404() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" alt=\"\" class=\"absolute inset-0 -z-10 h-full w-full object-cover object-top brightness-50\"><div class=\"mx-auto max-w-7xl px-6 py-32 text-center sm:py-40 lg:px-8 backdrop-opacity-10\"><p class=\"text-base font-semibold leading-8 text-white\">404</p><h1 class=\"mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl\">Page not found</h1><p class=\"mt-4 text-base text-white/70 sm:mt-6\">Sorry, we couldn’t find the page you’re looking for.</p><div class=\"mt-10 flex justify-center\"><a href=\"/\" class=\"text-sm font-semibold leading-7 text-white\"><span aria-hidden=\"true\">&larr;</span> Back to home</a></div></div></main>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" alt=\"\" class=\"absolute inset-0 -z-10 h-full w-full object-cover object-top brightness-50\"><div class=\"mx-auto max-w-7xl px-6 py-32 text-center sm:py-40 lg:px-8 backdrop-opacity-10\"><p class=\"text-base font-semibold leading-8 text-white\">404</p><h1 class=\"mt-4 text-3xl font-extralight tracking-tight text-white sm:text-5xl\">Page not found</h1><p class=\"mt-4 text-base text-white/70 sm:mt-6\">Sorry, we couldn’t find the page you’re looking for.</p><div class=\"mt-10 flex justify-center\"><a href=\"/\" class=\"text-sm font-semibold leading-7 text-white\"><span aria-hidden=\"true\">&larr;</span> Back to home</a></div></div></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

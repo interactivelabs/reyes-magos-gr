@@ -10,7 +10,18 @@ module.exports = {
           "url('https://static.dl-toys.com/img/footer_bg.webp')",
       },
       fontFamily: {
-        display: ['"Indie Flower"', "cursive"],
+        sans: [
+          "Cabin",
+          "ui-sans-serif",
+          "system-ui",
+          "sans-serif",
+          "Apple Color Emoji",
+          "Segoe UI Emoji",
+          "Segoe UI Symbol",
+          "Noto Color Emoji",
+        ],
+        display: ["Raleway", "ui-sans-serif", "system-ui", "sans-serif"],
+        decorative: ["Indie Flower", "cursive"],
       },
       colors: {
         "brand-orange": "#F4673D",

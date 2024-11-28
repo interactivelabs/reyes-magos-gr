@@ -172,7 +172,7 @@ func RedeemToy(toy model.Toy) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><div class=\"mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8\"><h1 class=\"text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl\">El juguete que escojiste</h1><div class=\"mx-auto mt-8 max-w-2xl lg:max-w-7xl\"><div class=\"lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8\"><div class=\"lg:col-span-5 lg:col-start-8\"><h2 class=\"text-xl font-medium text-gray-900\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><div class=\"mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8\"><h1 class=\"text-3xl font-extralight tracking-tight text-gray-900 sm:text-4xl\">El juguete que escojiste</h1><div class=\"mx-auto mt-8 max-w-2xl lg:max-w-7xl\"><div class=\"lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8\"><div class=\"lg:col-span-5 lg:col-start-8\"><h2 class=\"text-xl font-medium text-gray-900\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
