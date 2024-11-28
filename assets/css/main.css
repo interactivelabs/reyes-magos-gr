@@ -2,21 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Image by <a href="https://www.freepik.com/free-photo/abstract-watercolor-background-copy-space_11750980.htm#query=pastel%20paper%20background&position=8&from_view=keyword&track=ais&uuid=a0a860a8-c84c-4197-8433-8bb9e246ee01">Freepik</a> */
-/* Image by <a href="https://www.freepik.com/free-photo/unique-watercolor-art-paper-texture_16137609.htm#query=pastel%20paper%20background&position=13&from_view=keyword&track=ais&uuid=a0a860a8-c84c-4197-8433-8bb9e246ee01">Freepik</a> */
-/* Image by <a href="https://www.freepik.com/free-photo/top-view-monochrome-paper_17193859.htm#page=4&query=pastel%20paper%20background&position=22&from_view=search&track=ais&uuid=d8295a69-ce46-4c62-8b1f-84cc9dbf8e9e">Freepik</a> */
-
 @layer base {
   html {
-    font-family: "Metrophobic", system-ui, sans-serif;
+    font-family: "Cabin", system-ui, sans-serif;
   }
-}
 
-@layer components {
-  .show-toast {
-    @apply transform ease-out duration-300 transition translate-y-0 opacity-100 sm:translate-x-0;
-  }
-  .hide-toast {
-    @apply transition ease-in duration-100 translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Raleway", system-ui, sans-serif;
   }
 }

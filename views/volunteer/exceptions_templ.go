@@ -43,7 +43,7 @@ func NotVolunteer() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"not-volunteer\" class=\"relative isolate px-6 py-20 lg:px-8\"><div class=\"mx-auto\"><div class=\"text-center mt-12\"><h1 class=\"text-3xl font-display font-bold tracking-tight sm:text-4xl\">No estas registrado como voluntario.</h1><p class=\"text-xl mt-12 font-semibold leading-6\">Si te interesa unirte al ezfuerso por favor contactanos en <a href=\"mailto:support@dl-toys.com\" class=\"inline-block text-xl font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></div></div></section></main>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"not-volunteer\" class=\"relative isolate px-6 py-20 lg:px-8\"><div class=\"mx-auto\"><div class=\"text-center mt-12\"><h1 class=\"text-3xl font-extralight tracking-tight sm:text-4xl\">No estas registrado como voluntario.</h1><p class=\"text-xl mt-12 font-semibold leading-6\">Si te interesa unirte al ezfuerso por favor contactanos en <a href=\"mailto:support@dl-toys.com\" class=\"inline-block text-xl font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></div></div></section></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -90,7 +90,7 @@ func VerifyEmail() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"not-volunteer\" class=\"relative isolate px-6 py-20 lg:px-8\"><div class=\"mx-auto\"><div class=\"text-center mt-12\"><h1 class=\"text-3xl font-display font-bold tracking-tight sm:text-4xl\">Por favor verifica tu correo electronigo, debes <a href=\"/logout\" class=\"underline\">Salir</a> y volver a <a href=\"/login\" class=\"underline\">Entrar</a> para accessar.</h1><p class=\"text-xl mt-12 font-semibold leading-6\">Si tienes problemas contactanos en <a href=\"mailto:support@dl-toys.com\" class=\"inline-block text-xl font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></div></div></section></main>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"not-volunteer\" class=\"relative isolate px-6 py-20 lg:px-8\"><div class=\"mx-auto\"><div class=\"text-center mt-12\"><h1 class=\"text-3xl font-extralight tracking-tight sm:text-4xl\">Por favor verifica tu correo electronigo, debes <a href=\"/logout\" class=\"underline\">Salir</a> y volver a <a href=\"/login\" class=\"underline\">Entrar</a> para accessar.</h1><p class=\"text-xl mt-12 font-semibold leading-6\">Si tienes problemas contactanos en <a href=\"mailto:support@dl-toys.com\" class=\"inline-block text-xl font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></div></div></section></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

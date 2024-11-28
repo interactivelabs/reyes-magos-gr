@@ -43,7 +43,7 @@ func Support() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"support\" class=\"relative isolate px-6 py-20 lg:px-8\"><div class=\"mx-auto\"><div class=\"text-center mt-12\"><h1 class=\"text-3xl font-display font-bold tracking-tight sm:text-4xl\">If you need support please reach out to</h1><a href=\"mailto:support@dl-toys.com\" class=\"inline-block text-xl mt-12 font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></div></div></section></main>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"support\" class=\"relative isolate px-6 py-20 lg:px-8\"><div class=\"mx-auto\"><div class=\"text-center mt-12\"><h1 class=\"text-3xl font-extralight tracking-tight sm:text-4xl\">If you need support please reach out to</h1><a href=\"mailto:support@dl-toys.com\" class=\"inline-block text-xl mt-12 font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></div></div></section></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
