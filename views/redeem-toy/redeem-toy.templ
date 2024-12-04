@@ -45,60 +45,55 @@ script swapImage(imageId string) {
 templ RedeemToy(toy model.Toy) {
 	@layout.Base() {
 		<main>
-			<div class="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
-				<h1 class="text-3xl font-extralight tracking-tight text-gray-900 sm:text-4xl">El juguete que escojiste</h1>
-				<div class="mx-auto mt-8 max-w-2xl lg:max-w-7xl">
-					<div class="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
-						<div class="lg:col-span-5 lg:col-start-8">
-							<h2 class="text-xl font-medium text-gray-900">{ toy.ToyName }</h2>
+			<div class="mx-auto max-w-2xl pb-24 pt-8 sm:px-6 lg:max-w-7xl lg:px-8">
+				<div class="lg:grid lg:auto-rows-min lg:grid-cols-2 lg:gap-x-8">
+					<div class="mt-8 lg:mt-0 lg:col-start-1 lg:row-span-3 lg:row-start-1">
+						<h3 class="sr-only">Images</h3>
+						<div class="grid grid-cols-2 gap-4 lg:gap-8 justify-items-center">
+							<img
+								id="toy-image-1"
+								src={ toy.Image1 }
+								alt={ toy.ToyDescription }
+								class="w-full col-span-2 lg:row-span-2 cursor-pointer"
+							/>
+							<img
+								id="toy-image-2"
+								src={ toy.Image2 }
+								alt={ toy.ToyDescription }
+								class="rounded-lg cursor-pointer max-h-[250px]"
+								onclick={ swapImage("2") }
+							/>
+							<img
+								id="toy-image-3"
+								src={ toy.Image3 }
+								alt={ toy.ToyDescription }
+								class="rounded-lg cursor-pointer max-h-[250px]"
+								onclick={ swapImage("3") }
+							/>
 						</div>
-						<div class="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0">
-							<h3 class="sr-only">Images</h3>
-							<div class="grid grid-cols-2 gap-4 lg:gap-8">
-								<img
-									id="toy-image-1"
-									src={ toy.Image1 }
-									alt={ toy.ToyDescription }
-									class="rounded-lg w-full col-span-2 lg:row-span-2 cursor-pointer"
-								/>
-								<img
-									id="toy-image-2"
-									src={ toy.Image2 }
-									alt={ toy.ToyDescription }
-									class="rounded-lg cursor-pointer"
-									onclick={ swapImage("2") }
-								/>
-								<img
-									id="toy-image-3"
-									src={ toy.Image3 }
-									alt={ toy.ToyDescription }
-									class="rounded-lg cursor-pointer"
-									onclick={ swapImage("3") }
-								/>
-							</div>
-						</div>
-						<div class="lg:col-span-5">
-							@RedeemToyForm(toy.ToyID, "")
-							<div class="mt-10 flex justify-between">
-								<div class="mr-4">
-									<h3 class="text-sm font-medium text-gray-900">Categoria:</h3>
-									<p class="mt-2">{ toy.Category }</p>
-								</div>
-								<div>
-									<h3 class="text-sm font-medium text-gray-900">Edades (años):</h3>
-									<p class="mt-2">{ fmt.Sprint(toy.AgeMin) } - { fmt.Sprint(toy.AgeMax) }</p>
-								</div>
-							</div>
-							<div class="mt-4">
-								<h3 class="text-sm font-medium text-gray-900">Descripción:</h3>
-								<p class="mt-2">
-									<ul>
+					</div>
+					<div class="mt-16 md:mt-0 text-center px-4 md:px-0">
+						<h2 class="text-xl font-medium text-gray-900 line-clamp-3">{ toy.ToyName }</h2>
+					</div>
+					<div class="px-4 md:px-0">
+						@RedeemToyForm(toy.ToyID, "")
+						<div class="mt-16">
+							@components.Accordion() {
+								@components.AccordionRow("Edades (años)", true) {
+									<p>{ fmt.Sprint(toy.AgeMin) } - { fmt.Sprint(toy.AgeMax) }</p>
+								}
+								@components.AccordionRow("Categoria", true) {
+									<p>{ toy.Category }</p>
+								}
+								@components.AccordionRow("Descripción", false) {
+									<p>{ toy.ToyName }</p>
+									<ul class="mt-4">
 										for _, item := range strings.Split(toy.ToyDescription, "\n") {
 											<li class="mt-4">{ item }</li>
 										}
 									</ul>
-								</p>
-							</div>
+								}
+							}
 						</div>
 					</div>
 				</div>

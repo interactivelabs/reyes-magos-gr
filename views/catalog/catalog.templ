@@ -167,9 +167,10 @@ templ Catalog(
 							</form>
 						</div>
 					</section>
-					<div class="columns md:columns-4 gap-6 md:gap-8 space-y-8 my-8">
+					<!-- Catalog -->
+					<div class="columns md:columns-4 gap-12 space-y-12 my-8">
 						for _, toy := range toys {
-							<a class="inline-block mt-8 border" href={ templ.URL(fmt.Sprintf("redeem/%d", toy.ToyID)) }>
+							<a class="inline-block mt-8" href={ templ.URL(fmt.Sprintf("redeem/%d", toy.ToyID)) }>
 								<div class="group relative flex flex-col overflow-hidden">
 									<div class="group-hover:opacity-75">
 										<img src={ toy.Image1 } alt={ toy.ToyDescription } class="w-full"/>
@@ -179,21 +180,22 @@ templ Catalog(
 											<span aria-hidden="true" class="absolute inset-0"></span>
 											{ toy.ToyName }
 										</h3>
-										<div class="flex-1 mt-4">
-											<span class="text-sm italic text-gray-500 text-right">Categoria: </span>
-											<span>{ toy.Category }</span>
-										</div>
-										<div class="flex-1 mt-4">
-											<span class="text-sm italic text-gray-500 text-right">
-												Edades:
-											</span>
-											<span>{ fmt.Sprint(toy.AgeMin) } a { fmt.Sprint(toy.AgeMax) } años</span>
+										<div class="flex-1 flex justify-between mt-4">
+											<div class="text-center">
+												<div class="text-xs text-gray-500 font-extralight">Categoria</div>
+												<div>{ toy.Category }</div>
+											</div>
+											<div class="text-center">
+												<div class="text-xs text-gray-500 font-extralight">Edades</div>
+												<div>{ fmt.Sprint(toy.AgeMin) } a { fmt.Sprint(toy.AgeMax) } años</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</a>
 						}
 					</div>
+					<!-- Paging -->
 					<nav class="flex justify-between border-t border-gray-200 px-4 sm:px-0">
 						<div class="-mt-px flex w-0 flex-1">
 							if page > 1 {
@@ -243,6 +245,7 @@ templ Catalog(
 							}
 						</div>
 					</nav>
+					<!-- Paging labels -->
 					<div class="mt-6 text-center text-sm font-medium text-gray-500">
 						Mostrando del
 						<div class="text-base font-bold text-brand-blue mx-2 inline-block">
@@ -264,6 +267,7 @@ templ Catalog(
 					</div>
 				</div>
 			</section>
+			<!-- Back to top btn -->
 			<div
 				x-data="{ showBackToTop: false }"
 				@showbacktotopbtn.window="showBackToTop = true"
