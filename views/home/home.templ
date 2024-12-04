@@ -5,13 +5,20 @@ import layout "reyes-magos-gr/views"
 templ Home() {
 	@layout.Base() {
 		<main>
-			<section id="hero" class="bg-hero-paper relative isolate px-6 pt-14 lg:px-8">
+			<section id="hero" class="relative isolate overflow-hidden pt-14">
+				<img
+					src="/public/img/media/hero_v5.webp"
+					srcset="/public/img/media/hero_v5_sm.webp 768w, /public/img/media/hero_v5_md.webp 1280w, /public/img/media/hero_v5_lg.webp 1920w"
+					alt=""
+					class="absolute inset-0 -z-10 size-full object-cover"
+				/>
 				<div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-					<div class="text-center">
-						<h1 class="text-4xl font-decorative font-bold tracking-tight sm:text-6xl">La inocente sonrisa de los niños es el lenguage universal de la bondad</h1>
+					<div class="bg-neutral-50/90 text-center px-4 py-6 sm:px-8 sm:py-8 shadow">
+						<h1 class="text-3xl font-decorative font-bold tracking-tight sm:text-4xl">La inocente sonrisa de los niños es el lenguage universal de la bondad</h1>
+						<div class="w-full text-right text-sm">- William Arthur Ward</div>
 						<p class="mt-6 text-lg leading-8 text-brand-orange">En este sitio podras recibir un juguete gratuito para un niño</p>
 						<div class="mt-10 flex items-center justify-center gap-x-6">
-							<a href="/catalog" class="rounded-full border-2 border-brand-orange bg-brand-orange px-5 py-4 text-sm font-semibold text-white shadow-sm hover:bg-transparent hover:text-brand-orange">Recibe un juguete</a>
+							<a href="/catalog" class="border-2 border-brand-orange px-5 py-4 text-sm font-semibold text-brand-orange shadow-sm hover:bg-brand-orange hover:text-white">Recibe un juguete</a>
 							<a href="#steps" class="text-sm font-semibold leading-6 text-brand-orange">Ver como <span aria-hidden="true">→</span></a>
 						</div>
 					</div>
@@ -60,7 +67,7 @@ templ Home() {
 			<section id="bottom-cta" class="relative isolate px-6 py-20 lg:px-8">
 				<div class="mx-auto">
 					<div class="text-center">
-						<a href="/catalog" class="rounded-full border-2 border-brand-orange bg-brand-orange px-5 py-4 text-sm font-semibold text-white shadow-sm hover:bg-transparent hover:text-brand-orange">Recibe un juguete</a>
+						<a href="/catalog" class="border-2 border-brand-orange px-5 py-4 text-sm font-semibold text-brand-orange shadow-sm hover:bg-brand-orange hover:text-white">Recibe un juguete</a>
 					</div>
 				</div>
 			</section>

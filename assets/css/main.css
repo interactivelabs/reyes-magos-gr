@@ -16,3 +16,26 @@
     font-family: "Raleway", system-ui, sans-serif;
   }
 }
+
+@layer components {
+  .cardboard-bg {
+    background-color: #f4673d;
+    background-image: url("/public/img/cardboard-flat.png");
+  }
+}
+
+/* Photo by Photo By: Kaboompics.com: https://www.pexels.com/photo/child-playing-with-toy-blocks-on-floor-7269709/ */
+/* Photo by Markus Spiske: https://www.pexels.com/photo/green-red-and-yellow-lego-blocks-168866/ */
+/* Photo by Suzy Hazelwood: https://www.pexels.com/photo/conceptual-photo-of-word-play-spelled-by-wooden-blocks-1275235/ */
+/* Photo by Ivan Samkov: https://www.pexels.com/photo/opening-a-present-9628045/ */
+/* Photo by Photo By: Kaboompics.com: https://www.pexels.com/photo/close-up-shot-of-a-person-holding-a-christmas-present-5469186/ */
+/* Photo by Photo By: Kaboompics.com: https://www.pexels.com/photo/woman-wrapping-gift-box-5469246/ */
+/* Photo by cottonbro studio: https://www.pexels.com/photo/woman-packing-a-gift-6074058/ */
+/* Photo by Photo By: Kaboompics.com: https://www.pexels.com/photo/a-person-in-checkered-long-sleeves-holding-a-christmas-present-5467180/ */
+/* Photo by Photo By: Kaboompics.com: https://www.pexels.com/photo/woman-in-red-and-black-striped-long-sleeve-shirt-holding-green-and-brown-gift-box-5979397/ */
+/* Photo by Kindel Media: https://www.pexels.com/photo/2-children-sitting-on-orange-chair-7979757/ */
+/* Photo by Thais  Araujo: https://www.pexels.com/photo/close-up-photo-of-green-gift-box-on-brown-wooden-surface-1681147/ */
+/* Photo by Photo By: Kaboompics.com: https://www.pexels.com/photo/women-wrapping-christmas-presents-5979449/ */
+/* Photo by Photo By: Kaboompics.com: https://www.pexels.com/photo/woman-wrapping-a-christmas-gift-5979443/ */
+/* Photo by cottonbro studio: https://www.pexels.com/photo/women-s-white-collared-long-sleeved-shirt-3170928/ */
+/* Photo by Irina Iriser: https://www.pexels.com/photo/brown-gift-box-under-green-christmas-tree-1734427/ */

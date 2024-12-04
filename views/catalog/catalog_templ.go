@@ -335,7 +335,7 @@ func Catalog(
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"catalog\" class=\"relative isolate py-20 lg:px-8\"><h1 class=\"text-4xl font-extralight tracking-tight text-center mb-20\">Escoje un juguete</h1><div class=\"mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8\"><!-- Filters --><section x-data=\"{ expanded: false }\" aria-labelledby=\"filter-heading\" class=\"grid items-center border-b border-t border-gray-200\"><h2 id=\"filter-heading\" class=\"sr-only\">Filtros</h2><div class=\"relative col-start-1 row-start-1 py-4\"><div class=\"mx-auto flex max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8\"><div><button type=\"button\" aria-controls=\"filters-panel\" :aria-expanded=\"expanded\" @click=\"expanded = !expanded\" class=\"group flex items-center font-medium text-gray-700\"><svg aria-hidden=\"true\" class=\"h-4 w-4 mr-4 fill-current\"><use href=\"/public/img/filter_empty.svg#icon\"></use></svg> Filtros</button></div><div class=\"pl-6\"><button type=\"button\" class=\"text-gray-500\" onclick=\"clearFilters()\">Limpiar Filtros</button></div></div></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"catalog\" class=\"relative isolate py-20 lg:px-8 bg-white\"><h1 class=\"text-4xl font-extralight tracking-tight text-center mb-20\">Escoje un juguete</h1><div class=\"mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8\"><!-- Filters --><section x-data=\"{ expanded: false }\" aria-labelledby=\"filter-heading\" class=\"grid items-center border-b border-t border-gray-200\"><h2 id=\"filter-heading\" class=\"sr-only\">Filtros</h2><div class=\"relative col-start-1 row-start-1 py-4\"><div class=\"mx-auto flex max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8\"><div><button type=\"button\" aria-controls=\"filters-panel\" :aria-expanded=\"expanded\" @click=\"expanded = !expanded\" class=\"group flex items-center font-medium text-gray-700\"><svg aria-hidden=\"true\" class=\"h-4 w-4 mr-4 fill-current\"><use href=\"/public/img/filter_empty.svg#icon\"></use></svg> Filtros</button></div><div class=\"pl-6\"><button type=\"button\" class=\"text-gray-500\" onclick=\"clearFilters()\">Limpiar Filtros</button></div></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -475,12 +475,12 @@ func Catalog(
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Aplicar Filtros</button></div></form></div></section><div class=\"py-8 grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Aplicar Filtros</button></div></form></div></section><div class=\"columns md:columns-4 gap-6 md:gap-8 space-y-8 my-8\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			for _, toy := range toys {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a href=\"")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a class=\"inline-block mt-8 border\" href=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -489,7 +489,7 @@ func Catalog(
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"group relative flex flex-col overflow-hidden\"><div class=\"m-4 group-hover:opacity-75\"><img src=\"")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"group relative flex flex-col overflow-hidden\"><div class=\"group-hover:opacity-75\"><img src=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -515,7 +515,7 @@ func Catalog(
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"w-full\"></div><div class=\"flex flex-1 flex-col m-4\"><h3 class=\"text-lg font-bold\"><span aria-hidden=\"true\" class=\"absolute inset-0\"></span> ")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"w-full\"></div><div class=\"flex flex-1 flex-col mt-6\"><h3 class=\"text-lg font-bold line-clamp-2\"><span aria-hidden=\"true\" class=\"absolute inset-0\"></span> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -528,7 +528,7 @@ func Catalog(
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h3><div class=\"flex-1\"><span class=\"text-sm italic text-gray-500 text-right\">Categoria: </span> <span>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h3><div class=\"flex-1 mt-4\"><span class=\"text-sm italic text-gray-500 text-right\">Categoria: </span> <span>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -541,7 +541,7 @@ func Catalog(
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></div><div class=\"flex-1\"><span class=\"text-sm italic text-gray-500 text-right\">Edades:</span> <span>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></div><div class=\"flex-1 mt-4\"><span class=\"text-sm italic text-gray-500 text-right\">Edades:</span> <span>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

@@ -76,7 +76,7 @@ templ Catalog(
 ) {
 	@layout.Base() {
 		<main>
-			<section id="catalog" class="relative isolate py-20 lg:px-8">
+			<section id="catalog" class="relative isolate py-20 lg:px-8 bg-white">
 				<h1 class="text-4xl font-extralight tracking-tight text-center mb-20">Escoje un juguete</h1>
 				<div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
 					<!-- Filters -->
@@ -167,23 +167,23 @@ templ Catalog(
 							</form>
 						</div>
 					</section>
-					<div class="py-8 grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8">
+					<div class="columns md:columns-4 gap-6 md:gap-8 space-y-8 my-8">
 						for _, toy := range toys {
-							<a href={ templ.URL(fmt.Sprintf("redeem/%d", toy.ToyID)) }>
+							<a class="inline-block mt-8 border" href={ templ.URL(fmt.Sprintf("redeem/%d", toy.ToyID)) }>
 								<div class="group relative flex flex-col overflow-hidden">
-									<div class="m-4 group-hover:opacity-75">
+									<div class="group-hover:opacity-75">
 										<img src={ toy.Image1 } alt={ toy.ToyDescription } class="w-full"/>
 									</div>
-									<div class="flex flex-1 flex-col m-4">
-										<h3 class="text-lg font-bold">
+									<div class="flex flex-1 flex-col mt-6">
+										<h3 class="text-lg font-bold line-clamp-2">
 											<span aria-hidden="true" class="absolute inset-0"></span>
 											{ toy.ToyName }
 										</h3>
-										<div class="flex-1">
+										<div class="flex-1 mt-4">
 											<span class="text-sm italic text-gray-500 text-right">Categoria: </span>
 											<span>{ toy.Category }</span>
 										</div>
-										<div class="flex-1">
+										<div class="flex-1 mt-4">
 											<span class="text-sm italic text-gray-500 text-right">
 												Edades:
 											</span>
