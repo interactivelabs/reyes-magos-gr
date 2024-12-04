@@ -21,6 +21,8 @@ const BaseInputStyles string = "block w-full rounded-md border-0 p-2 text-gray-9
 const BaseToggleButtonStyles string = "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2 "
 const BaseToggleInsertStyles string = "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out "
 
+const BrandPrimaryButtonInverted string = "border-2 border-brand-orange px-5 py-4 text-sm font-semibold text-brand-orange shadow-sm hover:bg-brand-orange hover:text-white "
+
 func ToggleButtonStyles(completed int64) string {
 	if completed == 1 {
 		return BaseToggleButtonStyles + "bg-brand-orange"
