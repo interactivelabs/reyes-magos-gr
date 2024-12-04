@@ -97,7 +97,7 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Recibe un juguete</a> <a href=\"#steps\" class=\"text-sm font-semibold leading-6 text-brand-orange\">Ver como <span aria-hidden=\"true\">→</span></a></div></div></div></section><section id=\"steps\" class=\"text-center mx-6 my-24 max-w-screen-md md:mx-auto\"><div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">1. Obtener un codigo de regalo</h2><p class=\"mt-4 text-lg leading-8\">Un voluntario te podra dar un codigo gratuito para poder recibir un juguete.</p><img src=\"/public/img/code.svg\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto\"></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Recibe un juguete</a> <a href=\"#steps\" class=\"text-sm font-semibold leading-6 text-brand-orange\">Ver como <span aria-hidden=\"true\">→</span></a></div></div></div></section><section id=\"steps\" class=\"text-center mx-6 my-24 max-w-screen-md md:mx-auto\"><div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">1. Obtener un codigo de regalo</h2><p class=\"mt-4 text-lg leading-8\">Un voluntario te podra dar un codigo gratuito para poder recibir un juguete.</p><img id=\"home-ilustracion-1\" src=\"/public/img/code.svg\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto opacity-0\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -105,7 +105,7 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">2. Usa el codigo</h2><p class=\"mt-4 text-lg leading-8\">Entra a este sitio y ve a la seccion de <a href=\"/catalog\" class=\"font-semibold leading-6 text-brand-orange underline\">catálogo</a>, donde podras ordernar el juguete gratuito.</p><p class=\"mt-4 text-lg leading-8\">Si no tienes accesso a internet la persona voluntaria podra ayudarte en el momento.</p><img src=\"/public/img/shop.svg\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto\"></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">2. Usa el codigo</h2><p class=\"mt-4 text-lg leading-8\">Entra a este sitio y ve a la seccion de <a href=\"/catalog\" class=\"font-semibold leading-6 text-brand-orange underline\">catálogo</a>, donde podras ordernar el juguete gratuito.</p><p class=\"mt-4 text-lg leading-8\">Si no tienes accesso a internet la persona voluntaria podra ayudarte en el momento.</p><img id=\"home-ilustracion-2\" src=\"/public/img/shop.svg\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto opacity-0\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -113,7 +113,7 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">3. Recibe el juegue</h2><p class=\"mt-4 text-lg leading-8\">Una vez que se ordeno el juguete tomara unos dias para llegar al voluntario quien se encargara de hacertelo llegar.</p><img src=\"/public/img/open_gift.svg\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto\"></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">3. Recibe el juegue</h2><p class=\"mt-4 text-lg leading-8\">Una vez que se ordeno el juguete tomara unos dias para llegar al voluntario quien se encargara de hacertelo llegar.</p><img id=\"home-ilustracion-3\" src=\"/public/img/open_gift.svg\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto opacity-0\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -143,7 +143,7 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Recibe un juguete</a></section></main>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Recibe un juguete</a></section></main><script defer src=\"https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js\"></script> <script defer src=\"https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js\"></script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

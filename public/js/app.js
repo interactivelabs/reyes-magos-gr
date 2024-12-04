@@ -172,4 +172,18 @@ var handleBackToTopScroll = () => {
 };
 var scrollHandler = debounce_default(handleBackToTopScroll, 250);
 window.addEventListener("scroll", scrollHandler);
+
+// assets/js/app/homeAnnimations.ts
+gsap.registerPlugin(ScrollTrigger);
+for (let i = 1; i <= 3; i++) {
+  gsap.to(`#home-ilustracion-${i}`, {
+    scrollTrigger: {
+      trigger: `#home-ilustracion-${i}`,
+      toggleActions: "play pause resume reset",
+      start: "top 80%"
+    },
+    duration: 1,
+    opacity: 1
+  });
+}
 //# sourceMappingURL=app.js.map
