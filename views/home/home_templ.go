@@ -8,9 +8,12 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import layout "reyes-magos-gr/views"
+import (
+	layout "reyes-magos-gr/views"
+	"reyes-magos-gr/views/components"
+)
 
-func Home() templ.Component {
+func Divider() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -31,7 +34,36 @@ func Home() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Var2 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"relative\"><div class=\"absolute inset-0 flex items-center\" aria-hidden=\"true\"><div class=\"w-full border-t border-gray-300\"></div></div><div class=\"relative flex justify-center\"><span class=\"bg-neutral-50 px-2 text-gray-500\"><svg class=\"size-5 text-gray-500\" viewBox=\"0 0 20 20\" fill=\"currentColor\" aria-hidden=\"true\" data-slot=\"icon\"><path d=\"M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z\"></path></svg></span></div></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return templ_7745c5c3_Err
+	})
+}
+
+func Home() templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var2 == nil {
+			templ_7745c5c3_Var2 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Var3 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 			if !templ_7745c5c3_IsBuffer {
@@ -43,13 +75,81 @@ func Home() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"hero\" class=\"relative isolate overflow-hidden pt-14\"><img src=\"/public/img/media/hero_v5.webp\" srcset=\"/public/img/media/hero_v5_sm.webp 768w, /public/img/media/hero_v5_md.webp 1280w, /public/img/media/hero_v5_lg.webp 1920w\" alt=\"\" class=\"absolute inset-0 -z-10 size-full object-cover\"><div class=\"mx-auto max-w-2xl py-32 sm:py-48 lg:py-56\"><div class=\"bg-neutral-50/90 text-center px-4 py-6 sm:px-8 sm:py-8 shadow\"><h1 class=\"text-3xl font-decorative font-bold tracking-tight sm:text-4xl\">La inocente sonrisa de los niños es el lenguage universal de la bondad</h1><div class=\"w-full text-right text-sm\">- William Arthur Ward</div><p class=\"mt-6 text-lg leading-8 text-brand-orange\">En este sitio podras recibir un juguete gratuito para un niño</p><div class=\"mt-10 flex items-center justify-center gap-x-6\"><a href=\"/catalog\" class=\"border-2 border-brand-orange px-5 py-4 text-sm font-semibold text-brand-orange shadow-sm hover:bg-brand-orange hover:text-white\">Recibe un juguete</a> <a href=\"#steps\" class=\"text-sm font-semibold leading-6 text-brand-orange\">Ver como <span aria-hidden=\"true\">→</span></a></div></div></div></section><section id=\"steps\" class=\"relative isolate px-6 py-20 lg:px-8\"><div class=\"mx-auto\"><div class=\"text-center mt-12\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">1. Obtener un codigo de regalo</h2><p class=\"mt-4 text-lg leading-8\">Un voluntario te podra dar un codigo gratuito para poder recibir un juguete.</p></div><div class=\"text-center mt-12\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">2. Usa el codigo</h2><p class=\"mt-4 text-lg leading-8\">Entra a este sitio y ve a la seccion de <a href=\"#\" class=\"font-semibold leading-6 text-brand-orange underline\">Recibe un juguete</a>, donde podras ordernar el juguete gratuito.</p><p class=\"mt-4 text-lg leading-8\">Si no tienes accesso a internet la persona voluntaria podra ayudarte en el momento.</p></div><div class=\"text-center mt-12\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">3. Recibe el juegue</h2><p class=\"mt-4 text-lg leading-8\">Una vez que se ordeno el juguete tomara unos dias para llegar al voluntario quien se encargara de hacertelo llegar.</p></div><div class=\"text-center mt-12\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">!! Completamente Gratuito !!</h2><p class=\"mt-4 text-lg leading-8\">El recivir un juegue es comopletamente gratuito, no debes remunerar de ninguna manera al voluntario de lo contrario por favor reporta a la persona a <a href=\"mailto:support@dl-toys.com\" class=\"font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></div></div></section><section id=\"why\" class=\"relative isolate px-6 py-20 lg:px-8\"><div class=\"mx-auto\"><div class=\"text-center\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">Porque?</h2><p class=\"mt-4 text-lg leading-8\">Somos un grupo de voluntarios que queremos ayudar a los niños a tener una sonrisa, simple y sencillamente porque creemos que es de las mejores cosas que tiene el mundo.</p><p class=\"mt-4 text-lg leading-8\">De antemano agradecemos tu participasion ya sea como voluntario o como padre, si tienes alguna otra pregunta u ocupas reportar algo por favor escribenos a <a href=\"mailto:support@dl-toys.com\" class=\"font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></div></div></section><section id=\"volunteers\"><div class=\"mx-auto px-6 py-20 lg:px-8\"><div class=\"text-center\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">Voluntarios</h2><p class=\"mt-4 text-lg leading-8\">Las personas que nos ayudan a ordenar y distribuir los juguetges (los voluntarios), son individuos que nos ayudan sin fines de lucro, ellos no tienen la posibilidad de crear codigos y/o ordenar muchos juguetges a la vez</p><p class=\"mt-4 text-lg leading-8\">por favor respetalos y respeta su tiempo y su ezfuerso</p><p class=\"mt-4 text-lg leading-8\">Si quieres ser voluntario por favor escribenos a <a href=\"mailto:support@dl-toys.com\" class=\"font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></div></div></section><section id=\"bottom-cta\" class=\"relative isolate px-6 py-20 lg:px-8\"><div class=\"mx-auto\"><div class=\"text-center\"><a href=\"/catalog\" class=\"border-2 border-brand-orange px-5 py-4 text-sm font-semibold text-brand-orange shadow-sm hover:bg-brand-orange hover:text-white\">Recibe un juguete</a></div></div></section></main>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><section id=\"hero\" class=\"relative isolate overflow-hidden pt-14\"><img src=\"/public/img/media/hero_v5.webp\" srcset=\"/public/img/media/hero_v5_sm.webp 768w, /public/img/media/hero_v5_md.webp 1280w, /public/img/media/hero_v5_lg.webp 1920w\" alt=\"\" class=\"absolute inset-0 -z-10 size-full object-cover\"><div class=\"mx-auto max-w-2xl my-32 sm:my-48 lg:my-56\"><div class=\"bg-neutral-50/90 text-center px-4 py-6 sm:px-8 sm:py-8 shadow\"><h1 class=\"text-3xl font-decorative font-bold tracking-tight sm:text-4xl\">La inocente sonrisa de los niños es el lenguage universal de la bondad</h1><div class=\"w-full text-right text-sm\">- William Arthur Ward</div><p class=\"mt-6 text-lg leading-8 text-brand-orange\">En este sitio podras recibir un juguete gratuito para un niño</p><div class=\"mt-10 flex items-center justify-center gap-x-6\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var4 = []any{components.BrandPrimaryButtonInverted}
+			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var4...)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a href=\"/catalog\" class=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var5 string
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var4).String())
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/home/home.templ`, Line: 1, Col: 0}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Recibe un juguete</a> <a href=\"#steps\" class=\"text-sm font-semibold leading-6 text-brand-orange\">Ver como <span aria-hidden=\"true\">→</span></a></div></div></div></section><section id=\"steps\" class=\"text-center mx-6 my-24 max-w-screen-md md:mx-auto\"><div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">1. Obtener un codigo de regalo</h2><p class=\"mt-4 text-lg leading-8\">Un voluntario te podra dar un codigo gratuito para poder recibir un juguete.</p><img src=\"/public/img/code.svg\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto\"></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = Divider().Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">2. Usa el codigo</h2><p class=\"mt-4 text-lg leading-8\">Entra a este sitio y ve a la seccion de <a href=\"/catalog\" class=\"font-semibold leading-6 text-brand-orange underline\">catálogo</a>, donde podras ordernar el juguete gratuito.</p><p class=\"mt-4 text-lg leading-8\">Si no tienes accesso a internet la persona voluntaria podra ayudarte en el momento.</p><img src=\"/public/img/shop.svg\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto\"></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = Divider().Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">3. Recibe el juegue</h2><p class=\"mt-4 text-lg leading-8\">Una vez que se ordeno el juguete tomara unos dias para llegar al voluntario quien se encargara de hacertelo llegar.</p><img src=\"/public/img/open_gift.svg\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto\"></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = Divider().Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">!! Completamente Gratuito !!</h2><p class=\"mt-4 text-lg leading-8\">El recivir un juegue es comopletamente gratuito, no debes remunerar de ninguna manera al voluntario de lo contrario por favor reporta a la persona a  <a href=\"mailto:support@dl-toys.com\" class=\"font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></div></section><section id=\"why\" class=\"text-center my-24 max-w-screen-md md:mx-auto md:columns-2\"><img src=\"/public/img/gift_wrap_md.webp\" alt=\"Dos personas envolviendo un regalo\" class=\"w-full object-cover my-24 md:my-0\"><div class=\"text-center mx-6\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">Porque?</h2><p class=\"mt-4 text-lg leading-8\">Somos un grupo de voluntarios que queremos ayudar a los niños a tener una sonrisa, simple y sencillamente porque creemos que es de las mejores cosas que tiene el mundo.</p><p class=\"mt-4 text-lg leading-8\">De antemano agradecemos tu participasion ya sea como voluntario o como padre, si tienes alguna otra pregunta u ocupas reportar algo por favor escribenos a  <a href=\"mailto:support@dl-toys.com\" class=\"font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></div></section><section id=\"volunteers\" class=\"text-center mx-6 my-24 max-w-screen-md md:mx-auto\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">Voluntarios</h2><p class=\"mt-4 text-lg leading-8\">Las personas que nos ayudan a ordenar y distribuir los juguetges (los voluntarios), son individuos que nos ayudan sin fines de lucro, ellos no tienen la posibilidad de crear codigos y/o ordenar muchos juguetges a la vez</p><p class=\"mt-4 text-lg leading-8\">Por favor respetalos y respeta su tiempo y su ezfuerso</p><p class=\"mt-4 text-lg leading-8\">Si quieres ser voluntario por favor escribenos a <a href=\"mailto:support@dl-toys.com\" class=\"font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></section><section id=\"bottom-cta\" class=\"text-center mx-6 my-24 max-w-screen-md md:mx-auto\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var6 = []any{components.BrandPrimaryButtonInverted}
+			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var6...)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a href=\"/catalog\" class=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var7 string
+			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var6).String())
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/home/home.templ`, Line: 1, Col: 0}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Recibe un juguete</a></section></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = layout.Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layout.Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
