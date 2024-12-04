@@ -8,6 +8,8 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+import "reyes-magos-gr/lib"
+
 func OrderCreatedSucessBanner(name string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -29,20 +31,33 @@ func OrderCreatedSucessBanner(name string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"rounded-md bg-green-50 p-4 mt-8\"><div class=\"flex\"><div class=\"flex-shrink-0\"><svg viewBox=\"0 0 20 20\" fill=\"currentColor\" aria-hidden=\"true\" class=\"h-5 w-5 text-green-400\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z\"></path></svg></div><div class=\"ml-3\"><h3 class=\"text-lg text-green-800\">La orden se creo exitosamente</h3><div class=\"mt-2 text-green-700\"><p>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"bg-green-50 p-8 mt-12\"><h3 class=\"text-lg text-green-800\">La orden se creo exitosamente</h3><div class=\"mt-4 text-green-700\"><p>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/orders/order-created-success-banner.templ`, Line: 23, Col: 14}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/orders/order-created-success-banner.templ`, Line: 9, Col: 12}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" te contactara cuando el juguete este listo para ti.</p></div><div class=\"mt-4\"><div class=\"-mx-2 -my-1.5 flex\"><a href=\"/catalog\" class=\"underline font-medium text-green-800\">Regresar al catalogo</a> <a href=\"/\" class=\"ml-3 underline font-medium text-green-800\">Ir a la pagina principal</a></div></div></div></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" te contactara cuando el juguete este listo para ti.</p></div><img src=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetAssetUrl("img/celebration.svg"))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/orders/order-created-success-banner.templ`, Line: 12, Col: 47}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" alt=\"Celebracion de la order completada exitosamente\" class=\"mt-8 motion-preset-confetti motion-duration-1000\"><div class=\"mt-8 flex justify-between\"><a href=\"/catalog\" class=\"underline font-medium text-green-800\">Regresar al catalogo</a> <a href=\"/\" class=\"ml-3 underline font-medium text-green-800\">Ir a la pagina principal</a></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -1,0 +1,35 @@
+package components
+
+import "fmt"
+
+templ Accordion() {
+	<div class="relative w-full">
+		{ children... }
+	</div>
+}
+
+templ AccordionRow(title string, expanded bool) {
+	<div x-data={ fmt.Sprintf("{ isExpanded: %t }", expanded) } class="duration-200 ease-out cursor-pointer group border-b-2" x-cloak>
+		<button
+			@click="isExpanded = ! isExpanded"
+			aria-controls="accordionItem"
+			:aria-expanded="isExpanded ? 'true' : 'false'"
+			class="flex items-center justify-between w-full py-4 text-left select-none font-extralight text-lg"
+		>
+			<span>{ title }</span>
+			<div
+				:class="{ 'rotate-90': isExpanded }"
+				class="relative flex items-center justify-center w-2.5 h-2.5 duration-300 ease-out"
+			>
+				<div class="absolute w-0.5 h-full bg-neutral-500 group-hover:bg-neutral-800 rounded-full"></div>
+				<div
+					:class="{ 'rotate-90': isExpanded }"
+					class="absolute w-full h-0.5 ease duration-500 bg-neutral-500 group-hover:bg-neutral-800 rounded-full"
+				></div>
+			</div>
+		</button>
+		<div x-show="isExpanded" x-collapse x-cloak class="pb-4">
+			{ children... }
+		</div>
+	</div>
+}
