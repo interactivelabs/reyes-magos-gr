@@ -50,13 +50,3 @@ func GetPaginationLink(currentQuery string, page int, pageSize int64) string {
 	}
 	return fmt.Sprintf("/catalog?page=%d&page_size=%d&%s", page, pageSize, currentQuery)
 }
-
-func ReadSylesFromFile() string {
-	styles, err := os.ReadFile("/public/css/main.css")
-	if err != nil {
-		// handle error
-		return ""
-	}
-
-	return string(styles)
-}
