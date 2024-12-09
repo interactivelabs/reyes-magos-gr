@@ -47,18 +47,16 @@ func main() {
 		CookieSameSite: http.SameSiteStrictMode,
 	}))
 
+	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(rate.Limit(10))))
+	e.Use(middleware.Gzip())
+
 	allowOrigins := []string{"https://dl-toys.com", "https://www.dl-toys.com", "https://static.dl-toys.com"}
 	if env == "development" {
 		allowOrigins = append(allowOrigins, "http://localhost:8080")
 	}
-
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: allowOrigins,
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
-
-	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(rate.Limit(10))))
-	e.Use(middleware.Gzip())
 
 	// Initialize DB
 	db, connector, dir, err := database.New()
