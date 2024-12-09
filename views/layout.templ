@@ -16,15 +16,15 @@ templ Head() {
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 		<link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"/>
 		<link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet"/>
-		<link rel="icon" type="image/x-icon" href={ lib.GetAssetUrl("img/favicon.ico") }/>
 		<link rel="stylesheet" href={ lib.GetAssetUrl("css/main.css") }/>
+		<link rel="icon" type="image/x-icon" href={ lib.GetAssetUrl("img/favicon.ico") }/>
 		<style>[x-cloak]{display:none}</style>
 	</head>
 }
 
 templ Base() {
 	<!DOCTYPE html>
-	<html lang="es_MX" class="bg-neutral-50">
+	<html lang="es" class="bg-neutral-50">
 		@Head()
 		<body class="text-brand-blue" hx-ext="preload">
 			@shared.Nav()

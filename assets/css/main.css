@@ -20,7 +20,7 @@
 @layer components {
   .cardboard-bg {
     background-color: #f4673d;
-    background-image: url("/img/cardboard-flat.png");
+    background-image: url("/img/cardboard-flat.webp");
   }
 }
 
