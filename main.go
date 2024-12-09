@@ -47,7 +47,7 @@ func main() {
 		CookieSameSite: http.SameSiteStrictMode,
 	}))
 
-	allowOrigins := []string{"https://dl-toys.com", "https://www.dl-toys.com"}
+	allowOrigins := []string{"https://dl-toys.com", "https://www.dl-toys.com", "https://static.dl-toys.com"}
 	if env == "development" {
 		allowOrigins = append(allowOrigins, "http://localhost:8080")
 	}
