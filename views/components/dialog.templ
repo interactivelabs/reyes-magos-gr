@@ -1,5 +1,7 @@
 package components
 
+import svg "reyes-magos-gr/views/components/svg"
+
 templ CancelModalButton() {
 	<button
 		type="button"
@@ -56,9 +58,7 @@ templ Dialog() {
 							@click="modalOpen = false"
 						>
 							<span class="sr-only">Close</span>
-							<svg aria-hidden="true" class="h-6 w-6 fill-current">
-								<use href="/public/img/close.svg#icon"></use>
-							</svg>
+							@svg.Close("h-6 w-6 fill-current")
 						</button>
 					</div>
 					{ children... }

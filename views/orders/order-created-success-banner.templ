@@ -1,6 +1,6 @@
 package pages
 
-import "reyes-magos-gr/lib"
+import svg "reyes-magos-gr/views/components/svg"
 
 templ OrderCreatedSucessBanner(name string) {
 	<div class="bg-green-50 p-8 mt-12">
@@ -8,11 +8,7 @@ templ OrderCreatedSucessBanner(name string) {
 		<div class="mt-4 text-green-700">
 			<p>{ name } te contactara cuando el juguete este listo para ti.</p>
 		</div>
-		<img
-			src={ lib.GetAssetUrl("img/celebration.svg") }
-			alt="Celebracion de la order completada exitosamente"
-			class="mt-8 motion-preset-confetti motion-duration-1000"
-		/>
+		@svg.Celebration("mt-8 motion-preset-confetti motion-duration-1000")
 		<div class="mt-8 flex justify-between">
 			<a href="/catalog" class="underline font-medium text-green-800">
 				Regresar al catalogo

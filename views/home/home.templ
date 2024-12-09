@@ -4,6 +4,7 @@ import (
 	"reyes-magos-gr/lib"
 	layout "reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
+	svg "reyes-magos-gr/views/components/svg"
 )
 
 templ Divider() {
@@ -47,20 +48,26 @@ templ Home() {
 				<div class="text-center mt-12 my-24">
 					<h2 class="text-3xl font-display font-extralight tracking-tight sm:text-4xl">1. Obtener un codigo de regalo</h2>
 					<p class="mt-4 text-lg leading-8">Un voluntario te podra dar un codigo gratuito para poder recibir un juguete.</p>
-					<img id="home-ilustracion-1" src={ lib.GetAssetUrl("img/code.svg") } alt="Ilustracion de una persona dando un papel con un codigo" class="mt-8 w-1/2 mx-auto opacity-0"/>
+					<div id="home-ilustracion-1" class="opacity-0">
+						@svg.Code("mt-8 w-1/2 mx-auto")
+					</div>
 				</div>
 				@Divider()
 				<div class="text-center mt-12 my-24">
 					<h2 class="text-3xl font-display font-extralight tracking-tight sm:text-4xl">2. Usa el codigo</h2>
 					<p class="mt-4 text-lg leading-8">Entra a este sitio y ve a la seccion de <a href="/catalog" class="font-semibold leading-6 text-brand-orange underline">catálogo</a>, donde podras ordernar el juguete gratuito.</p>
 					<p class="mt-4 text-lg leading-8">Si no tienes accesso a internet la persona voluntaria podra ayudarte en el momento.</p>
-					<img id="home-ilustracion-2" src={ lib.GetAssetUrl("img/shop.svg") } alt="Ilustracion de una persona dando un papel con un codigo" class="mt-8 w-1/2 mx-auto opacity-0"/>
+					<div id="home-ilustracion-2" class="opacity-0">
+						@svg.Shop("mt-8 w-1/2 mx-auto")
+					</div>
 				</div>
 				@Divider()
 				<div class="text-center mt-12 my-24">
 					<h2 class="text-3xl font-display font-extralight tracking-tight sm:text-4xl">3. Recibe el juegue</h2>
 					<p class="mt-4 text-lg leading-8">Una vez que se ordeno el juguete tomara unos dias para llegar al voluntario quien se encargara de hacertelo llegar.</p>
-					<img id="home-ilustracion-3" src={ lib.GetAssetUrl("img/open_gift.svg") } alt="Ilustracion de una persona dando un papel con un codigo" class="mt-8 w-1/2 mx-auto opacity-0"/>
+					<div id="home-ilustracion-3" class="opacity-0">
+						@svg.OpenGift("mt-8 w-1/2 mx-auto")
+					</div>
 				</div>
 				@Divider()
 				<div class="text-center mt-12 my-24">

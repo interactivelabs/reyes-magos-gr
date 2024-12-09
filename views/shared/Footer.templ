@@ -1,6 +1,7 @@
 package shared
 
 import (
+	svg "reyes-magos-gr/views/components/svg"
 	"strconv"
 	"time"
 )
@@ -23,9 +24,7 @@ templ Footer() {
 				</div>
 				<div class="pb-6">
 					<a href="/login" class="text-sm leading-6">
-						<svg aria-hidden="true" class="h-4 w-4 fill-current inline-block">
-							<use href="/public/img/lock.svg#icon"></use>
-						</svg>
+						@svg.Lock("h-4 w-4 fill-current inline-block")
 						Accesso Voluntarios
 					</a>
 				</div>

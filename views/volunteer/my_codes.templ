@@ -6,6 +6,7 @@ import (
 	"reyes-magos-gr/lib"
 	layout "reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
+	svg "reyes-magos-gr/views/components/svg"
 )
 
 script onShareHandler(code string) {
@@ -34,9 +35,7 @@ templ MyCodeItem(code model.Code) {
 					onclick={ onCopyHandler(code.Code) }
 				>
 					Copiar
-					<svg aria-hidden="true" class="h-4 w-4 ml-4 fill-current">
-						<use href="/public/img/clipboard.svg#icon"></use>
-					</svg>
+					@svg.Clipboard("h-4 w-4 ml-4 fill-current")
 				</button>
 				<button
 					type="button"
@@ -44,9 +43,7 @@ templ MyCodeItem(code model.Code) {
 					onclick={ onShareHandler(code.Code) }
 				>
 					Comparitr
-					<svg aria-hidden="true" class="h-4 w-4 ml-4 fill-current">
-						<use href="/public/img/share.svg#icon"></use>
-					</svg>
+					@svg.Share("h-4 w-4 ml-4 fill-current")
 				</button>
 				<button
 					type="button"
@@ -55,9 +52,7 @@ templ MyCodeItem(code model.Code) {
 					hx-target={ fmt.Sprintf("#volunteer-code-%d", code.CodeID) }
 				>
 					Regalar
-					<svg aria-hidden="true" class="h-4 w-4 ml-4 fill-current">
-						<use href="/public/img/gift.svg#icon"></use>
-					</svg>
+					@svg.Gift("h-4 w-4 ml-4 fill-current")
 				</button>
 			</div>
 		}

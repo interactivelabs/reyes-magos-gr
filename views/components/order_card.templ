@@ -3,7 +3,8 @@ package components
 import (
 	"fmt"
 	"reyes-magos-gr/db/model"
-	"reyes-magos-gr/lib"
+	lib "reyes-magos-gr/lib"
+	svg "reyes-magos-gr/views/components/svg"
 )
 
 func HasOrderShipped(order model.Order) string {
@@ -40,9 +41,7 @@ templ OrderCard(order model.Order) {
 						hx-swap="outerHTML"
 					>
 						Completar
-						<svg aria-hidden="true" class="h-4 w-4 ml-4 fill-current">
-							<use href="/public/img/checkCircle.svg#icon"></use>
-						</svg>
+						@svg.CheckCircle("h-4 w-4 ml-4 fill-current")
 					</button>
 				</div>
 			}

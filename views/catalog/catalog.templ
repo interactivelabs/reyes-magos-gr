@@ -7,6 +7,7 @@ import (
 	"reyes-magos-gr/lib"
 	layout "reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
+	svg "reyes-magos-gr/views/components/svg"
 )
 
 script onRemoveFilter(filterValue string) {
@@ -96,9 +97,7 @@ templ Catalog(
 										@click="expanded = !expanded"
 										class="group flex items-center font-medium text-gray-700"
 									>
-										<svg aria-hidden="true" class="h-4 w-4 mr-4 fill-current">
-											<use href="/public/img/filter_empty.svg#icon"></use>
-										</svg>
+										@svg.FilterEmpty("h-4 w-4 mr-4 fill-current")
 										Filtros
 									</button>
 								</div>
@@ -289,9 +288,7 @@ templ Catalog(
 						aria-hidden="true"
 						title="Back to Top"
 					>
-						<svg aria-hidden="true" class="h-8 w-8 fill-current">
-							<use href="/public/img/arrow-to-top.svg#icon"></use>
-						</svg>
+						@svg.ArrowToTop("h-8 w-8 fill-current")
 					</button>
 				</div>
 			</div>

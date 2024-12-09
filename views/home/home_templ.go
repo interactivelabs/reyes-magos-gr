@@ -12,6 +12,7 @@ import (
 	"reyes-magos-gr/lib"
 	layout "reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
+	svg "reyes-magos-gr/views/components/svg"
 )
 
 func Divider() templ.Component {
@@ -98,20 +99,15 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Recibe un juguete</a> <a href=\"#steps\" class=\"text-sm font-semibold leading-6 text-brand-orange\">Ver como <span aria-hidden=\"true\">→</span></a></div></div></div></section><section id=\"steps\" class=\"text-center mx-6 my-24 max-w-screen-md md:mx-auto\"><div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">1. Obtener un codigo de regalo</h2><p class=\"mt-4 text-lg leading-8\">Un voluntario te podra dar un codigo gratuito para poder recibir un juguete.</p><img id=\"home-ilustracion-1\" src=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Recibe un juguete</a> <a href=\"#steps\" class=\"text-sm font-semibold leading-6 text-brand-orange\">Ver como <span aria-hidden=\"true\">→</span></a></div></div></div></section><section id=\"steps\" class=\"text-center mx-6 my-24 max-w-screen-md md:mx-auto\"><div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">1. Obtener un codigo de regalo</h2><p class=\"mt-4 text-lg leading-8\">Un voluntario te podra dar un codigo gratuito para poder recibir un juguete.</p><div id=\"home-ilustracion-1\" class=\"opacity-0\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var6 string
-			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetAssetUrl("img/code.svg"))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/home/home.templ`, Line: 50, Col: 71}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+			templ_7745c5c3_Err = svg.Code("mt-8 w-1/2 mx-auto").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto opacity-0\"></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -119,20 +115,15 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">2. Usa el codigo</h2><p class=\"mt-4 text-lg leading-8\">Entra a este sitio y ve a la seccion de <a href=\"/catalog\" class=\"font-semibold leading-6 text-brand-orange underline\">catálogo</a>, donde podras ordernar el juguete gratuito.</p><p class=\"mt-4 text-lg leading-8\">Si no tienes accesso a internet la persona voluntaria podra ayudarte en el momento.</p><img id=\"home-ilustracion-2\" src=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">2. Usa el codigo</h2><p class=\"mt-4 text-lg leading-8\">Entra a este sitio y ve a la seccion de <a href=\"/catalog\" class=\"font-semibold leading-6 text-brand-orange underline\">catálogo</a>, donde podras ordernar el juguete gratuito.</p><p class=\"mt-4 text-lg leading-8\">Si no tienes accesso a internet la persona voluntaria podra ayudarte en el momento.</p><div id=\"home-ilustracion-2\" class=\"opacity-0\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var7 string
-			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetAssetUrl("img/shop.svg"))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/home/home.templ`, Line: 57, Col: 71}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+			templ_7745c5c3_Err = svg.Shop("mt-8 w-1/2 mx-auto").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto opacity-0\"></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -140,20 +131,15 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">3. Recibe el juegue</h2><p class=\"mt-4 text-lg leading-8\">Una vez que se ordeno el juguete tomara unos dias para llegar al voluntario quien se encargara de hacertelo llegar.</p><img id=\"home-ilustracion-3\" src=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">3. Recibe el juegue</h2><p class=\"mt-4 text-lg leading-8\">Una vez que se ordeno el juguete tomara unos dias para llegar al voluntario quien se encargara de hacertelo llegar.</p><div id=\"home-ilustracion-3\" class=\"opacity-0\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var8 string
-			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetAssetUrl("img/open_gift.svg"))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/home/home.templ`, Line: 63, Col: 76}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+			templ_7745c5c3_Err = svg.OpenGift("mt-8 w-1/2 mx-auto").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto opacity-0\"></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -165,12 +151,12 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var9 string
-			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetAssetUrl("img/gift_wrap_md.webp"))
+			var templ_7745c5c3_Var6 string
+			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetAssetUrl("img/gift_wrap_md.webp"))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/home/home.templ`, Line: 75, Col: 55}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/home/home.templ`, Line: 82, Col: 55}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -178,8 +164,8 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var10 = []any{components.BrandPrimaryButtonInverted}
-			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var10...)
+			var templ_7745c5c3_Var7 = []any{components.BrandPrimaryButtonInverted}
+			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var7...)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -187,12 +173,12 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var11 string
-			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var10).String())
+			var templ_7745c5c3_Var8 string
+			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var7).String())
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/home/home.templ`, Line: 1, Col: 0}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

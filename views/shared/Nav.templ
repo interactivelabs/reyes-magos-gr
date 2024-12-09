@@ -1,6 +1,9 @@
 package shared
 
-import "reyes-magos-gr/lib"
+import (
+	"reyes-magos-gr/lib"
+	"reyes-magos-gr/views/components/svg"
+)
 
 const desktopMenuLink = "inline-flex items-center border-b-4 border-transparent px-1 pt-1 -mb-2 text-sm font-medium hover:border-brand-orange"
 const mobileMenuLink = "block border-l-4 border-transparent p-4 font-medium hover:border-brand-orange hover:bg-gray-50"
@@ -61,7 +64,7 @@ templ Nav() {
 										if lib.GetProfile(ctx).Picture != "" {
 											<img class="h-6 w-6 rounded-full" src={ lib.GetProfile(ctx).Picture } alt="" role="presentation"/>
 										} else {
-											<img class="h-6 w-6 rounded-full" src={ lib.GetAssetUrl("img/fingerprint.svg") } alt="" role="presentation"/>
+											@svg.FingerPrint("h-6 w-6 rounded-full")
 										}
 									</button>
 								</div>
