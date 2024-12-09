@@ -9,6 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
+	"reyes-magos-gr/lib"
 	layout "reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
 )
@@ -97,7 +98,20 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Recibe un juguete</a> <a href=\"#steps\" class=\"text-sm font-semibold leading-6 text-brand-orange\">Ver como <span aria-hidden=\"true\">→</span></a></div></div></div></section><section id=\"steps\" class=\"text-center mx-6 my-24 max-w-screen-md md:mx-auto\"><div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">1. Obtener un codigo de regalo</h2><p class=\"mt-4 text-lg leading-8\">Un voluntario te podra dar un codigo gratuito para poder recibir un juguete.</p><img id=\"home-ilustracion-1\" src=\"/public/img/code.svg\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto opacity-0\"></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Recibe un juguete</a> <a href=\"#steps\" class=\"text-sm font-semibold leading-6 text-brand-orange\">Ver como <span aria-hidden=\"true\">→</span></a></div></div></div></section><section id=\"steps\" class=\"text-center mx-6 my-24 max-w-screen-md md:mx-auto\"><div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">1. Obtener un codigo de regalo</h2><p class=\"mt-4 text-lg leading-8\">Un voluntario te podra dar un codigo gratuito para poder recibir un juguete.</p><img id=\"home-ilustracion-1\" src=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var6 string
+			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetAssetUrl("img/code.svg"))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/home/home.templ`, Line: 50, Col: 71}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto opacity-0\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -105,7 +119,20 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">2. Usa el codigo</h2><p class=\"mt-4 text-lg leading-8\">Entra a este sitio y ve a la seccion de <a href=\"/catalog\" class=\"font-semibold leading-6 text-brand-orange underline\">catálogo</a>, donde podras ordernar el juguete gratuito.</p><p class=\"mt-4 text-lg leading-8\">Si no tienes accesso a internet la persona voluntaria podra ayudarte en el momento.</p><img id=\"home-ilustracion-2\" src=\"/public/img/shop.svg\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto opacity-0\"></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">2. Usa el codigo</h2><p class=\"mt-4 text-lg leading-8\">Entra a este sitio y ve a la seccion de <a href=\"/catalog\" class=\"font-semibold leading-6 text-brand-orange underline\">catálogo</a>, donde podras ordernar el juguete gratuito.</p><p class=\"mt-4 text-lg leading-8\">Si no tienes accesso a internet la persona voluntaria podra ayudarte en el momento.</p><img id=\"home-ilustracion-2\" src=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var7 string
+			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetAssetUrl("img/shop.svg"))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/home/home.templ`, Line: 57, Col: 71}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto opacity-0\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -113,7 +140,20 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">3. Recibe el juegue</h2><p class=\"mt-4 text-lg leading-8\">Una vez que se ordeno el juguete tomara unos dias para llegar al voluntario quien se encargara de hacertelo llegar.</p><img id=\"home-ilustracion-3\" src=\"/public/img/open_gift.svg\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto opacity-0\"></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">3. Recibe el juegue</h2><p class=\"mt-4 text-lg leading-8\">Una vez que se ordeno el juguete tomara unos dias para llegar al voluntario quien se encargara de hacertelo llegar.</p><img id=\"home-ilustracion-3\" src=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var8 string
+			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetAssetUrl("img/open_gift.svg"))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/home/home.templ`, Line: 63, Col: 76}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" alt=\"Ilustracion de una persona dando un papel con un codigo\" class=\"mt-8 w-1/2 mx-auto opacity-0\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -121,12 +161,25 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">!! Completamente Gratuito !!</h2><p class=\"mt-4 text-lg leading-8\">El recivir un juegue es comopletamente gratuito, no debes remunerar de ninguna manera al voluntario de lo contrario por favor reporta a la persona a  <a href=\"mailto:support@dl-toys.com\" class=\"font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></div></section><section id=\"why\" class=\"text-center my-24 max-w-screen-md md:mx-auto md:columns-2\"><img src=\"/public/img/gift_wrap_md.webp\" alt=\"Dos personas envolviendo un regalo\" class=\"w-full object-cover my-24 md:my-0\"><div class=\"text-center mx-6\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">Porque?</h2><p class=\"mt-4 text-lg leading-8\">Somos un grupo de voluntarios que queremos ayudar a los niños a tener una sonrisa, simple y sencillamente porque creemos que es de las mejores cosas que tiene el mundo.</p><p class=\"mt-4 text-lg leading-8\">De antemano agradecemos tu participasion ya sea como voluntario o como padre, si tienes alguna otra pregunta u ocupas reportar algo por favor escribenos a  <a href=\"mailto:support@dl-toys.com\" class=\"font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></div></section><section id=\"volunteers\" class=\"text-center mx-6 my-24 max-w-screen-md md:mx-auto\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">Voluntarios</h2><p class=\"mt-4 text-lg leading-8\">Las personas que nos ayudan a ordenar y distribuir los juguetges (los voluntarios), son individuos que nos ayudan sin fines de lucro, ellos no tienen la posibilidad de crear codigos y/o ordenar muchos juguetges a la vez</p><p class=\"mt-4 text-lg leading-8\">Por favor respetalos y respeta su tiempo y su ezfuerso</p><p class=\"mt-4 text-lg leading-8\">Si quieres ser voluntario por favor escribenos a <a href=\"mailto:support@dl-toys.com\" class=\"font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></section><section id=\"bottom-cta\" class=\"text-center mx-6 my-24 max-w-screen-md md:mx-auto\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">!! Completamente Gratuito !!</h2><p class=\"mt-4 text-lg leading-8\">El recivir un juegue es comopletamente gratuito, no debes remunerar de ninguna manera al voluntario de lo contrario por favor reporta a la persona a  <a href=\"mailto:support@dl-toys.com\" class=\"font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></div></section><section id=\"why\" class=\"text-center my-24 max-w-screen-md md:mx-auto md:columns-2\"><img src=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var6 = []any{components.BrandPrimaryButtonInverted}
-			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var6...)
+			var templ_7745c5c3_Var9 string
+			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetAssetUrl("img/gift_wrap_md.webp"))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/home/home.templ`, Line: 75, Col: 55}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" alt=\"Dos personas envolviendo un regalo\" class=\"w-full object-cover my-24 md:my-0\"><div class=\"text-center mx-6\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">Porque?</h2><p class=\"mt-4 text-lg leading-8\">Somos un grupo de voluntarios que queremos ayudar a los niños a tener una sonrisa, simple y sencillamente porque creemos que es de las mejores cosas que tiene el mundo.</p><p class=\"mt-4 text-lg leading-8\">De antemano agradecemos tu participasion ya sea como voluntario o como padre, si tienes alguna otra pregunta u ocupas reportar algo por favor escribenos a  <a href=\"mailto:support@dl-toys.com\" class=\"font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></div></section><section id=\"volunteers\" class=\"text-center mx-6 my-24 max-w-screen-md md:mx-auto\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">Voluntarios</h2><p class=\"mt-4 text-lg leading-8\">Las personas que nos ayudan a ordenar y distribuir los juguetges (los voluntarios), son individuos que nos ayudan sin fines de lucro, ellos no tienen la posibilidad de crear codigos y/o ordenar muchos juguetges a la vez</p><p class=\"mt-4 text-lg leading-8\">Por favor respetalos y respeta su tiempo y su ezfuerso</p><p class=\"mt-4 text-lg leading-8\">Si quieres ser voluntario por favor escribenos a <a href=\"mailto:support@dl-toys.com\" class=\"font-semibold leading-6 text-brand-orange underline\">support@dl-toys.com</a></p></section><section id=\"bottom-cta\" class=\"text-center mx-6 my-24 max-w-screen-md md:mx-auto\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var10 = []any{components.BrandPrimaryButtonInverted}
+			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var10...)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -134,12 +187,12 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var7 string
-			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var6).String())
+			var templ_7745c5c3_Var11 string
+			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var10).String())
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/home/home.templ`, Line: 1, Col: 0}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
