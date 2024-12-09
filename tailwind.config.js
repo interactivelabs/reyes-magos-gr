@@ -18,7 +18,9 @@ module.exports = {
         decorative: ["Indie Flower", "cursive"],
       },
       colors: {
-        "brand-orange": "#9D2B0B",
+        "brand-orange": "#C15230",
+        "brand-purple-light": "#9E78B3",
+        "brand-purple-dark": "#501C6C",
         "brand-blue": "#2A3245",
       },
     },

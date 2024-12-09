@@ -677,7 +677,7 @@ func Catalog(
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></nav><!-- Paging labels --><div class=\"mt-6 text-center text-sm font-medium text-gray-500\">Mostrando del<div class=\"text-base font-bold text-brand-blue mx-2 inline-block\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></nav><!-- Paging labels --><div class=\"mt-6 text-center text-sm font-medium text-gray-500\">Mostrando del<div class=\"text-base font-bold mx-2 inline-block\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -690,7 +690,7 @@ func Catalog(
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>a<div class=\"text-base font-bold text-brand-blue mx-2 inline-block\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>a<div class=\"text-base font-bold mx-2 inline-block\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -715,7 +715,7 @@ func Catalog(
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>de<div class=\"text-base font-bold text-brand-blue mx-2 inline-block\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>de<div class=\"text-base font-bold mx-2 inline-block\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

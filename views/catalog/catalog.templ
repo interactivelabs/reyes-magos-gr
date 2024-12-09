@@ -247,11 +247,11 @@ templ Catalog(
 					<!-- Paging labels -->
 					<div class="mt-6 text-center text-sm font-medium text-gray-500">
 						Mostrando del
-						<div class="text-base font-bold text-brand-blue mx-2 inline-block">
+						<div class="text-base font-bold mx-2 inline-block">
 							{ fmt.Sprint(((page - 1) * pageSize) + 1) }
 						</div>
 						a
-						<div class="text-base font-bold text-brand-blue mx-2 inline-block">
+						<div class="text-base font-bold mx-2 inline-block">
 							if count <= (page * pageSize) {
 								{ fmt.Sprint(count) }
 							} else {
@@ -259,7 +259,7 @@ templ Catalog(
 							}
 						</div>
 						de
-						<div class="text-base font-bold text-brand-blue mx-2 inline-block">
+						<div class="text-base font-bold mx-2 inline-block">
 							{ fmt.Sprint(count) }
 						</div>
 						resultados

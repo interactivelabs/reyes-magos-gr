@@ -7,7 +7,7 @@ import (
 )
 
 templ Footer() {
-	<footer class="cardboard-bg text-white">
+	<footer class="cardboard-bg bg-brand-orange text-white">
 		<div class="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
 			<nav class="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12" aria-label="Footer">
 				<div class="pb-6">
@@ -23,9 +23,9 @@ templ Footer() {
 					<a href="/catalog" class="text-sm leading-6">Catálogo</a>
 				</div>
 				<div class="pb-6">
-					<a href="/login" class="text-sm leading-6">
+					<a href="/login" class="text-sm leading-6 flex items-center">
 						@svg.Lock("h-4 w-4 fill-current inline-block")
-						Accesso Voluntarios
+						<span class="inline-block ml-2">Accesso Voluntarios</span>
 					</a>
 				</div>
 			</nav>
