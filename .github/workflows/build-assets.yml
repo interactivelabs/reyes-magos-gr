@@ -31,5 +31,5 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: |
-            r2 object put ${{ vars.BUCKET_NAME }}/js/app.js --file public/js/app.js --ct text/javascript \;
-            r2 object put ${{ vars.BUCKET_NAME }}/css/main.css --file public/css/main.jcss --ct text/css" \;
+            r2 object put ${{ vars.BUCKET_NAME }}/js/app.js --file public/js/app.js --ct text/javascript
+            r2 object put ${{ vars.BUCKET_NAME }}/css/main.css --file public/css/main.jcss --ct text/css"
