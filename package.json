@@ -5,7 +5,7 @@
   "scripts": {
     "build:css": "tailwindcss -i ./assets/css/main.css -o ./public/css/main.css --minify",
     "build:js": "esbuild assets/js/app.ts assets/js/admin.ts  --outdir=public/js --bundle --format=esm --tree-shaking=true --minify",
-    "build": "npm run build:js",
+    "build": "npm run build:js && npm run build:css",
     "dev:css": "tailwindcss -i ./assets/css/main.css -o ./public/css/main.css --watch",
     "dev:js": "esbuild assets/js/app.ts assets/js/admin.ts  --outdir=public/js --bundle --format=esm --tree-shaking=true --sourcemap --watch",
     "dev": "npm run dev:js"
