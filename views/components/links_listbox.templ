@@ -3,50 +3,77 @@ package components
 import (
 	"fmt"
 	"reyes-magos-gr/handlers/dtos"
+	"reyes-magos-gr/views/components/svg"
 )
+
+const ListBoxBtnClassBase = "flex items-center text-left shadow-sm rounded-md ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-orange sm:text-sm/6 "
+const ListBoxBtnClass = ListBoxBtnClassBase + " py-1.5 px-6 "
+const ListBoxBtnClassSmall = ListBoxBtnClassBase + " py-1 px-4 "
+
+templ OptionsList(selectedLink string, links []dtos.CatalogLink) {
+	<ul
+		class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+		tabindex="-1"
+		role="listbox"
+		aria-labelledby="listbox-label"
+		aria-activedescendant={ fmt.Sprintf("listbox-option-%s", selectedLink) }
+		x-show="expandedPagesOptions"
+		x-transition:enter="ease-out duration-100"
+		x-transition:enter-start="opacity-0"
+		x-transition:enter-end="opacity-100"
+		x-transition:leave="ease-in duration-100"
+		x-transition:leave-start="opacity-100"
+		x-transition:leave-end="opacity-0"
+		@click.away="expandedPagesOptions = false"
+	>
+		for i, link := range links {
+			<li
+				class="relative cursor-default select-none my-2"
+				id={ fmt.Sprintf("listbox-option-%d", i) }
+				role="option"
+			>
+				<a
+					class="inline-block w-full py-2 px-3 text-gray-900 text-center"
+					href={ templ.URL(link.Url) }
+					aria-label={ link.Label }
+				>
+					{ link.Text }
+				</a>
+			</li>
+		}
+	</ul>
+}
 
 templ LinksListbox(btnText string, btnLabel string, selectedLink string, links []dtos.CatalogLink) {
 	<div class="relative inline-block" x-data="{ expandedPagesOptions: false }" x-cloak>
 		<button
 			type="button"
-			class="relative w-full cursor-default rounded-md py-1.5 px-6 text-left shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-orange sm:text-sm/6"
+			class={ ListBoxBtnClass }
 			aria-haspopup="listbox"
 			:aria-expanded="expandedPagesOptions"
 			aria-label={ btnLabel }
 			@click="expandedPagesOptions = !expandedPagesOptions"
 		>
-			{ btnText }
+			<span class="inline-block mr-1">{ btnText }</span>
+			@svg.ChevronDown("-mr-1 size-5 text-gray-400 fill-current")
 		</button>
-		<ul
-			class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-			tabindex="-1"
-			role="listbox"
-			aria-labelledby="listbox-label"
-			aria-activedescendant={ fmt.Sprintf("listbox-option-%s", selectedLink) }
-			x-show="expandedPagesOptions"
-			x-transition:enter="ease-out duration-100"
-			x-transition:enter-start="opacity-0"
-			x-transition:enter-end="opacity-100"
-			x-transition:leave="ease-in duration-100"
-			x-transition:leave-start="opacity-100"
-			x-transition:leave-end="opacity-0"
-			@click.away="expandedPagesOptions = false"
+		@OptionsList(selectedLink, links)
+	</div>
+}
+
+templ LinksListboxSmall(btnText string, btnLabel string, selectedLink string, links []dtos.CatalogLink) {
+	<div class="relative inline-block" x-data="{ expandedPagesOptions: false }" x-cloak>
+		<button
+			type="button"
+			class={ ListBoxBtnClassSmall }
+			aria-haspopup="listbox"
+			:aria-expanded="expandedPagesOptions"
+			aria-label={ btnLabel }
+			@click="expandedPagesOptions = !expandedPagesOptions"
 		>
-			for i, link := range links {
-				<li
-					class="relative cursor-default select-none my-2"
-					id={ fmt.Sprintf("listbox-option-%d", i) }
-					role="option"
-				>
-					<a
-						class="inline-block w-full py-2 px-3 text-gray-900 text-center"
-						href={ templ.URL(link.Url) }
-						aria-label={ link.Label }
-					>
-						{ link.Text }
-					</a>
-				</li>
-			}
-		</ul>
+			<span class="inline-block mr-1">{ btnText }</span>
+			@svg.ChevronDown("-mr-1 size-5 text-gray-400 fill-current")
+		</button>
+		@OptionsList(selectedLink, links)
 	</div>
 }

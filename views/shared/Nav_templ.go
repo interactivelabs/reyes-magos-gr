@@ -143,19 +143,19 @@ func Nav() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if lib.GetProfile(ctx).Email != "" {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0\"><!-- Profile dropdown --><div class=\"relative ml-3\" x-data=\"{ openAdmin: false }\"><div><button type=\"button\" id=\"admin-menu-button\" aria-expanded=\"false\" aria-haspopup=\"true\" @click=\"openAdmin = !openAdmin\" class=\"relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2\"><span class=\"absolute -inset-1.5\"></span> <span class=\"sr-only\">Open admin menu</span> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0\"><!-- Profile dropdown --><div class=\"relative ml-3\" x-data=\"{ openAdmin: false }\"><button type=\"button\" id=\"admin-menu-button\" aria-expanded=\"false\" aria-haspopup=\"true\" @click=\"openAdmin = !openAdmin\" class=\"relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2\"><span class=\"absolute -inset-1.5\"></span> <span class=\"sr-only\">Open admin menu</span> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if lib.GetProfile(ctx).Picture != "" {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<img class=\"h-6 w-6 rounded-full\" src=\"")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<img class=\"h-10 w-10 rounded-full\" src=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var11 string
 				templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetProfile(ctx).Picture)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/shared/Nav.templ`, Line: 65, Col: 78}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/shared/Nav.templ`, Line: 64, Col: 79}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 				if templ_7745c5c3_Err != nil {
@@ -166,12 +166,12 @@ func Nav() templ.Component {
 					return templ_7745c5c3_Err
 				}
 			} else {
-				templ_7745c5c3_Err = svg.FingerPrint("h-6 w-6 rounded-full").Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = svg.FingerPrint("h-10 w-10 rounded-full").Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button></div><div role=\"menu\" tabindex=\"-1\" id=\"admin-menu-dropdown\" aria-orientation=\"vertical\" aria-labelledby=\"admin-menu-button\" class=\"absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none\" x-cloak x-show=\"openAdmin\" x-transition:enter=\"transition ease-out duration-500\" x-transition:enter-start=\"opacity-0 translate-y-1\" x-transition:enter-end=\"opacity-100 translate-y-0\" x-transition:leave=\"transition ease-in duration-300\" x-transition:leave-start=\"opacity-100 translate-y-0\" x-transition:leave-end=\"opacity-0 translate-y-1\" @click.away=\"openAdmin = false\"><a href=\"/volunteer/mycodes\" class=\"block p-4 text-sm\" role=\"menuitem\">Mis Codigos</a> <a href=\"/volunteer/myorders\" class=\"block p-4 text-sm\" role=\"menuitem\">Mis Ordenes</a> <a href=\"/logout\" class=\"block p-4 text-sm\" role=\"menuitem\">Salir</a> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button><div role=\"menu\" tabindex=\"-1\" id=\"admin-menu-dropdown\" aria-orientation=\"vertical\" aria-labelledby=\"admin-menu-button\" class=\"absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none\" x-cloak x-show=\"openAdmin\" x-transition:enter=\"transition ease-out duration-500\" x-transition:enter-start=\"opacity-0 translate-y-1\" x-transition:enter-end=\"opacity-100 translate-y-0\" x-transition:leave=\"transition ease-in duration-300\" x-transition:leave-start=\"opacity-100 translate-y-0\" x-transition:leave-end=\"opacity-0 translate-y-1\" @click.away=\"openAdmin = false\"><a href=\"/volunteer/mycodes\" class=\"block p-4 text-sm\" role=\"menuitem\">Mis Codigos</a> <a href=\"/volunteer/myorders\" class=\"block p-4 text-sm\" role=\"menuitem\">Mis Ordenes</a> <a href=\"/logout\" class=\"block p-4 text-sm\" role=\"menuitem\">Salir</a> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

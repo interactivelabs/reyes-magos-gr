@@ -5,6 +5,7 @@ import (
 	"reyes-magos-gr/db/model"
 	layout "reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
+	"reyes-magos-gr/views/components/svg"
 	"strings"
 )
 
@@ -16,15 +17,27 @@ templ RedeemToyForm(toyId int64, errorMsg string) {
 				id="code"
 				type="code"
 				name="code"
-				class={ components.BaseInputStyles }
 				pattern="[A-Z|1-9]+"
 				placeholder="A1B2C3"
+				class={ components.BaseInputStyles }
 				onkeyup="this.value = this.value.toUpperCase();"
 			/>
 			<input type="hidden" name="toy_id" value={ fmt.Sprint(toyId) }/>
 		</div>
 		if errorMsg != "" {
-			<p class="mt-2 text-red-600">{ errorMsg }, <a href="/#steps" class="underline font-bold">Ve aqui como obeter un codigo</a></p>
+			<div class="rounded-md drop-shadow-sm bg-red-50 p-4 mt-2">
+				<div class="flex">
+					<div class="shrink-0">
+						@svg.ErrorIcon("size-5 text-red-400")
+					</div>
+					<div class="ml-3">
+						<h3 class="text-sm font-medium text-red-800">
+							{ errorMsg },
+							<a href="/#steps" class=" inline-block ml-1 underline font-bold">Ve aqui como obeter un codigo</a>
+						</h3>
+					</div>
+				</div>
+			</div>
 		}
 		<div class="mt-6 text-right">
 			<button type="submit" class={ components.BrandPrimaryButton + " w-full lg:w-auto" }>
@@ -34,46 +47,54 @@ templ RedeemToyForm(toyId int64, errorMsg string) {
 	</form>
 }
 
-script swapImage(imageId string) {
-	const largeImg = htmx.find('#toy-image-1');
-	const smallImg = htmx.find('#toy-image-' + imageId);
-	const tmpSrc = largeImg.src;
-	largeImg.src = smallImg.src;
-	smallImg.src = tmpSrc;
-}
-
 templ RedeemToy(toy model.Toy) {
 	@layout.Base() {
-		<main>
+		<main class="min-h-screen">
 			<div class="mx-auto max-w-2xl pb-24 pt-8 sm:px-6 lg:max-w-7xl lg:px-8">
+				<div class="px-4 md:px-0">
+					<button class={ components.BrandPrimaryButtonSmall + " flex items-center" } onclick="history.back()">
+						@svg.ArrowToLeft("h-5 w-5 fill-current")
+						<span class="inline-block ml-1 tracking-widest">Regresar</span>
+					</button>
+				</div>
 				<div class="lg:grid lg:auto-rows-min lg:grid-cols-2 lg:gap-x-8">
-					<div class="mt-8 lg:mt-0 lg:col-start-1 lg:row-span-3 lg:row-start-1">
+					<div x-data={ fmt.Sprintf("{ selected: 1, src: '%s' }", toy.Image1) } class="mt-8 lg:col-start-1 lg:row-span-3 lg:row-start-1">
 						<h3 class="sr-only">Images</h3>
-						<div class="grid grid-cols-2 gap-4 lg:gap-8 justify-items-center">
+						<img
+							id="toy-image-0"
+							:src="src"
+							alt={ toy.ToyDescription }
+							class="max-h-[600px] m-auto"
+						/>
+						<div class="px-2 md:px-0 mt-4 grid grid-cols-3 gap-4 lg:gap-8 justify-items-center">
 							<img
 								id="toy-image-1"
 								src={ toy.Image1 }
 								alt={ toy.ToyDescription }
-								class="w-full col-span-2 lg:row-span-2 cursor-pointer"
+								class="rounded-lg cursor-pointer max-h-[150px]"
+								x-bind:class="{ 'border-4 border-brand-orange brightness-90': selected === 1 }"
+								@click={ fmt.Sprintf("selected = 1; src = '%s'", toy.Image1) }
 							/>
 							<img
 								id="toy-image-2"
 								src={ toy.Image2 }
 								alt={ toy.ToyDescription }
-								class="rounded-lg cursor-pointer max-h-[250px]"
-								onclick={ swapImage("2") }
+								class="rounded-lg cursor-pointer max-h-[150px]"
+								x-bind:class="{ 'border-4 border-brand-orange brightness-90': selected === 2 }"
+								@click={ fmt.Sprintf("selected = 2, src = '%s'", toy.Image2) }
 							/>
 							<img
 								id="toy-image-3"
 								src={ toy.Image3 }
 								alt={ toy.ToyDescription }
-								class="rounded-lg cursor-pointer max-h-[250px]"
-								onclick={ swapImage("3") }
+								class="rounded-lg cursor-pointer max-h-[150px]"
+								x-bind:class="{ 'border-4 border-brand-orange brightness-90': selected === 3 }"
+								@click={ fmt.Sprintf("selected = 3, src = '%s'", toy.Image3) }
 							/>
 						</div>
 					</div>
 					<div class="mt-16 md:mt-0 text-center px-4 md:px-0">
-						<h2 class="text-xl font-medium text-gray-900 line-clamp-3">{ toy.ToyName }</h2>
+						<h2 class="text-xl font-medium text-gray-900">{ toy.ToyName }</h2>
 					</div>
 					<div class="px-4 md:px-0">
 						@RedeemToyForm(toy.ToyID, "")
