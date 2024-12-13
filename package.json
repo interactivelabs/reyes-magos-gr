@@ -29,7 +29,8 @@
     "@types/alpinejs": "^3.13.11",
     "esbuild": "^0.24.0",
     "gsap": "^3.12.5",
+    "prettier": "^3.4.2",
     "tailwindcss": "^3.4.16",
-    "tailwindcss-motion": "^0.4.5-beta"
+    "tailwindcss-motion": "^1.0.0"
   }
 }
