@@ -16,6 +16,9 @@ templ ToyRow(toy model.Toy) {
 		<td class="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">{ toy.ToyName }</td>
 		<td class="px-3 py-4 text-sm text-gray-500">{ toy.Category }</td>
 		<td class="px-3 py-4 text-sm text-gray-500 text-ellipsis">{ toy.ToyDescription }</td>
+		<td class="px-3 py-4 text-sm text-gray-500 text-ellipsis">
+			<a href={ templ.URL(toy.SourceURL) } target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Link</a>
+		</td>
 		<td class="relative py-4 pl-3 pr-4 sm:pr-3">
 			<button
 				type="button"
@@ -66,6 +69,7 @@ templ Toys(toys []model.Toy) {
 									<th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">Toy Name</th>
 									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Category</th>
 									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Link</th>
 									<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3">
 										<span class="sr-only">Actions</span>
 									</th>
