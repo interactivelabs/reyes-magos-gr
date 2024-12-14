@@ -256,7 +256,7 @@ func VolunteerRow(volunteer model.Volunteer) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#volunteer-dialog-container\" hx-swap=\"innerHTML\">Edit</button> ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#volunteer-dialog-container\" hx-swap=\"innerHTML\" x-on:htmx:after-swap.window=\"modalOpen = true\">Edit</button> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -285,7 +285,7 @@ func VolunteerRow(volunteer model.Volunteer) templ.Component {
 		var templ_7745c5c3_Var19 string
 		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetSafeIdUrl("/admin/volunteers/%d/delete", volunteer.VolunteerID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/volunteers.templ`, Line: 48, Col: 86}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/volunteers.templ`, Line: 49, Col: 86}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 		if templ_7745c5c3_Err != nil {
@@ -298,7 +298,7 @@ func VolunteerRow(volunteer model.Volunteer) templ.Component {
 		var templ_7745c5c3_Var20 string
 		templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("#admin-volunteer-row-%d", volunteer.VolunteerID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/volunteers.templ`, Line: 49, Col: 77}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/volunteers.templ`, Line: 50, Col: 77}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 		if templ_7745c5c3_Err != nil {
@@ -345,11 +345,11 @@ func AdminVolunteers(groupedVolunteers map[string][]model.Volunteer) templ.Compo
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main class=\"container mx-auto p-4\"><h1 class=\"text-center pt-8 text-2xl\">Volunteers</h1><div class=\"sm:flex sm:items-center\"><div class=\"sm:flex-auto\"><h1 class=\"text-base font-semibold leading-6 text-gray-900\">Volunteers</h1><p class=\"mt-2 text-sm\">A list of all the active Volunteers.</p></div><div class=\"mt-4 sm:ml-16 sm:mt-0 sm:flex-none\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main class=\"container mx-auto p-4 min-h-screen\"><h1 class=\"text-center pt-8 text-2xl\">Volunteers</h1><div class=\"sm:flex sm:items-center\"><div class=\"sm:flex-auto\"><h1 class=\"text-base font-semibold leading-6 text-gray-900\">Volunteers</h1><p class=\"mt-2 text-sm\">A list of all the active Volunteers.</p></div><div class=\"mt-4 sm:ml-16 sm:mt-0 sm:flex-none\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var23 = []any{components.AppPrimaryButton}
+			var templ_7745c5c3_Var23 = []any{components.BrandPrimaryButton}
 			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var23...)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -367,7 +367,7 @@ func AdminVolunteers(groupedVolunteers map[string][]model.Volunteer) templ.Compo
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/admin/volunteers/create\" hx-target=\"#volunteer-dialog-container\" hx-swap=\"innerHTML\">Add Volunteer</button></div></div><section id=\"admin_volunteers\" class=\"mt-8 flow-root\"><div class=\"-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8\"><div class=\"inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8\"><table class=\"min-w-full rounded-md shadow-sm border\"><thead class=\"bg-white\"><tr><th scope=\"col\" class=\"py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3\">Name</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Email</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Phone</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Address</th><th scope=\"col\" class=\"relative py-3.5 pl-3 pr-4 sm:pr-3\"><span class=\"sr-only\">Actions</span></th></tr></thead> <tbody class=\"bg-white\" id=\"admin-volunteers-table-body\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/admin/volunteers/create\" hx-target=\"#volunteer-dialog-container\" hx-swap=\"innerHTML\" x-on:htmx:after-swap.window=\"modalOpen = true\">Add Volunteer</button></div></div><section id=\"admin_volunteers\" class=\"mt-8 flow-root\"><div class=\"-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8\"><div class=\"inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8\"><table class=\"min-w-full rounded-md shadow-sm border\"><thead class=\"bg-white\"><tr><th scope=\"col\" class=\"py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3\">Name</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Email</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Phone</th><th scope=\"col\" class=\"px-3 py-3.5 text-left text-sm font-semibold text-gray-900\">Address</th><th scope=\"col\" class=\"relative py-3.5 pl-3 pr-4 sm:pr-3\"><span class=\"sr-only\">Actions</span></th></tr></thead> <tbody class=\"bg-white\" id=\"admin-volunteers-table-body\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -380,7 +380,7 @@ func AdminVolunteers(groupedVolunteers map[string][]model.Volunteer) templ.Compo
 					var templ_7745c5c3_Var25 string
 					templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(location)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/volunteers.templ`, Line: 102, Col: 22}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/volunteers.templ`, Line: 104, Col: 22}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
 					if templ_7745c5c3_Err != nil {

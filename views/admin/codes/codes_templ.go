@@ -49,7 +49,7 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><div class=\"w-full\"><div class=\"relative w-full\"><div class=\"p-8 text-center\"><h1 class=\"text-2xl\">Available Codes</h1></div><div class=\"flex justify-around\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><div class=\"container mx-auto lg:max-w-7xl lg:px-8\"><div class=\"relative w-full\"><div class=\"p-8 text-center\"><h1 class=\"text-2xl\">Codes</h1></div><div class=\"flex flex-col justify-around\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -178,7 +178,7 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var11 = []any{components.AppPrimaryButton}
+				var templ_7745c5c3_Var11 = []any{components.BrandPrimaryButton}
 				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var11...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -205,7 +205,7 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var13 = []any{components.AppPrimaryButton}
+				var templ_7745c5c3_Var13 = []any{components.BrandPrimaryButton}
 				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var13...)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -228,6 +228,10 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 					return templ_7745c5c3_Err
 				}
 			}
+			templ_7745c5c3_Err = components.Divider().Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"pb-6\"><form method=\"post\" action=\"/admin/codes/remove\" id=\"remove_code_form\"><h2 class=\"text-xl text-center py-6\">Assigned Not Used</h2><table class=\"w-full caption-bottom text-sm\"><thead class=\"[&amp;_tr]:border-b\"><tr class=\"border-b transition-colors hover:bg-muted/50\"><th class=\"h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]\">Remove</th><th class=\"h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]\">Volunteer</th><th class=\"h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]\">Code</th><th class=\"h-12 px-4 text-left align-middle font-medium text-muted-foreground\">Expiration</th></tr></thead> <tbody class=\"[&amp;_tr:last-child]:border-0\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -240,7 +244,7 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 				var templ_7745c5c3_Var15 string
 				templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(templ.EscapeString(fmt.Sprint(code.VolunteerCodeID)))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/codes/codes.templ`, Line: 142, Col: 74}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/codes/codes.templ`, Line: 143, Col: 74}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 				if templ_7745c5c3_Err != nil {
@@ -253,7 +257,7 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 				var templ_7745c5c3_Var16 string
 				templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(templ.EscapeString(fmt.Sprint(code.Code.CodeID)))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/codes/codes.templ`, Line: 145, Col: 107}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/codes/codes.templ`, Line: 146, Col: 107}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 				if templ_7745c5c3_Err != nil {
@@ -266,7 +270,7 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 				var templ_7745c5c3_Var17 string
 				templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(code.Volunteer.Name)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/codes/codes.templ`, Line: 147, Col: 74}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/codes/codes.templ`, Line: 148, Col: 74}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 				if templ_7745c5c3_Err != nil {
@@ -279,7 +283,7 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 				var templ_7745c5c3_Var18 string
 				templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(code.Code.Code)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/codes/codes.templ`, Line: 148, Col: 69}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/codes/codes.templ`, Line: 149, Col: 69}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 				if templ_7745c5c3_Err != nil {
@@ -292,7 +296,7 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 				var templ_7745c5c3_Var19 string
 				templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(lib.FormatDate(code.Code.Expiration))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/codes/codes.templ`, Line: 149, Col: 79}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/codes/codes.templ`, Line: 150, Col: 79}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 				if templ_7745c5c3_Err != nil {
@@ -307,7 +311,7 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var20 = []any{components.AppPrimaryButton}
+			var templ_7745c5c3_Var20 = []any{components.BrandPrimaryButton}
 			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var20...)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err

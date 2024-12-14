@@ -39,6 +39,7 @@ templ VolunteerRow(volunteer model.Volunteer) {
 				hx-get={ lib.GetSafeIdUrl("/admin/volunteers/%d", volunteer.VolunteerID) }
 				hx-target="#volunteer-dialog-container"
 				hx-swap="innerHTML"
+				x-on:htmx:after-swap.window="modalOpen = true"
 			>
 				Edit
 			</button>
@@ -56,7 +57,7 @@ templ VolunteerRow(volunteer model.Volunteer) {
 
 templ AdminVolunteers(groupedVolunteers map[string][]model.Volunteer) {
 	@admin.AdminLayout() {
-		<main class="container mx-auto p-4">
+		<main class="container mx-auto p-4 min-h-screen">
 			<h1 class="text-center pt-8 text-2xl">Volunteers</h1>
 			<div class="sm:flex sm:items-center">
 				<div class="sm:flex-auto">
@@ -66,10 +67,11 @@ templ AdminVolunteers(groupedVolunteers map[string][]model.Volunteer) {
 				<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
 					<button
 						type="button"
-						class={ components.AppPrimaryButton }
+						class={ components.BrandPrimaryButton }
 						hx-get="/admin/volunteers/create"
 						hx-target="#volunteer-dialog-container"
 						hx-swap="innerHTML"
+						x-on:htmx:after-swap.window="modalOpen = true"
 					>
 						Add Volunteer
 					</button>

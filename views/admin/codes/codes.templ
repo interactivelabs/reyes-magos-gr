@@ -11,12 +11,12 @@ import (
 templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers []model.Volunteer) {
 	@admin.AdminLayout() {
 		<main>
-			<div class="w-full">
+			<div class="container mx-auto lg:max-w-7xl lg:px-8">
 				<div class="relative w-full">
 					<div class="p-8 text-center">
-						<h1 class="text-2xl">Available Codes</h1>
+						<h1 class="text-2xl">Codes</h1>
 					</div>
-					<div class="flex justify-around">
+					<div class="flex flex-col justify-around">
 						if len(codes) > 0 {
 							<div class="pb-6">
 								<form method="post" action="/admin/codes/assign" id="assign-codes-form">
@@ -76,7 +76,7 @@ templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers
 									<div class="flex justify-center py-6">
 										<button
 											type="submit"
-											class={ components.AppPrimaryButton }
+											class={ components.BrandPrimaryButton }
 										>
 											Assign
 										</button>
@@ -103,7 +103,7 @@ templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers
 										<div class="flex justify-center py-6">
 											<button
 												type="submit"
-												class={ components.AppPrimaryButton }
+												class={ components.BrandPrimaryButton }
 											>
 												Create
 											</button>
@@ -112,6 +112,7 @@ templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers
 								</form>
 							</div>
 						}
+						@components.Divider()
 						<div class="pb-6">
 							<form method="post" action="/admin/codes/remove" id="remove_code_form">
 								<h2 class="text-xl text-center py-6">Assigned Not Used</h2>
@@ -154,7 +155,7 @@ templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers
 								<div class="flex justify-center py-6">
 									<button
 										type="submit"
-										class={ components.AppPrimaryButton }
+										class={ components.BrandPrimaryButton }
 									>
 										Remove
 									</button>

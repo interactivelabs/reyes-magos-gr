@@ -59,7 +59,7 @@ func CreateToyForm() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#admin-toys-table-body\" hx-swap=\"afterbegin\"><div class=\"grid grid-cols-1 gap-x-6 gap-y-8\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-target=\"#admin-toys-table-body\" hx-swap=\"afterbegin\" x-on:htmx:after-request=\"modalOpen = false\"><div class=\"grid grid-cols-1 gap-x-6 gap-y-8\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -75,7 +75,7 @@ func CreateToyForm() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var4 = []any{components.AppPrimaryButton}
+			var templ_7745c5c3_Var4 = []any{components.BrandPrimaryButton}
 			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var4...)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
