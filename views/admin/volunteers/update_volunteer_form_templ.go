@@ -73,7 +73,7 @@ func UpdateVolunteerForm(volunteer model.Volunteer) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\"><div class=\"grid grid-cols-1 gap-x-6 gap-y-8\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\" x-on:htmx:after-request=\"modalOpen = false\"><div class=\"grid grid-cols-1 gap-x-6 gap-y-8\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -89,7 +89,7 @@ func UpdateVolunteerForm(volunteer model.Volunteer) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var5 = []any{components.AppPrimaryButton}
+			var templ_7745c5c3_Var5 = []any{components.BrandPrimaryButton}
 			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var5...)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err

@@ -13,20 +13,15 @@ templ CreateVolunteerForm() {
 			hx-post={ string(templ.URL("/admin/volunteers")) }
 			hx-target="#admin-volunteers-table-body"
 			hx-swap="afterbegin"
+			x-on:htmx:after-request="modalOpen = false"
 		>
 			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
 				@VolunteerForm(model.Volunteer{})
 				<div class="mt-6 flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-8">
-					<button
-						type="button"
-						onclick="htmx.remove(htmx.find('#volunteer-new-form'));"
-						class={ components.BaseSecondaryButton }
-					>
-						Cancel
-					</button>
+					@components.CancelModalButton()
 					<button
 						type="submit"
-						class={ components.AppPrimaryButton }
+						class={ components.BrandPrimaryButton }
 					>Save</button>
 				</div>
 			</div>

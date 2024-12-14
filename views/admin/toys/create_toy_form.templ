@@ -13,6 +13,7 @@ templ CreateToyForm() {
 			hx-post={ string(templ.URL("/admin/toys")) }
 			hx-target="#admin-toys-table-body"
 			hx-swap="afterbegin"
+			x-on:htmx:after-request="modalOpen = false"
 		>
 			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
 				@ToyForm(model.Toy{})
@@ -20,7 +21,7 @@ templ CreateToyForm() {
 					@components.CancelModalButton()
 					<button
 						type="submit"
-						class={ components.AppPrimaryButton }
+						class={ components.BrandPrimaryButton }
 					>Save</button>
 				</div>
 			</div>
