@@ -10,19 +10,28 @@ import (
 )
 
 templ RedeemToyForm(toyId int64, errorMsg string) {
-	<form class="mt-10" hx-post="/orders/create" hx-target="this" hx-swap="outerHTML">
+	<form
+		class="mt-10"
+		hx-post="/orders/create"
+		hx-on::before-request="beforeRequestHandler(event)"
+		hx-target="this"
+		hx-swap="outerHTML"
+		x-data="codeForm"
+		@submit="submit"
+	>
 		<label class="text-lg leading-6 font-medium text-gray-900">Codigo</label>
 		<div class="mt-2">
 			<input
 				id="code"
-				type="code"
+				type="text"
 				name="code"
-				pattern="[A-Z|1-9]+"
-				placeholder="A1B2C3"
+				pattern="[A-Z1-9]+"
 				class={ components.BaseInputStyles }
-				onkeyup="this.value = this.value.toUpperCase();"
+				@blur="update"
+				required
 			/>
 			<input type="hidden" name="toy_id" value={ fmt.Sprint(toyId) }/>
+			<p class="mt-2 text-sm text-red-600" x-show="!valid">Un codigo valido es requerido (e.g. A1B2C3)</p>
 		</div>
 		if errorMsg != "" {
 			<div class="rounded-md drop-shadow-xs bg-red-50 p-4 mt-2">
