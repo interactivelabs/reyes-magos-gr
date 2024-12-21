@@ -1,3 +1,5 @@
+import "gsap";
+
 if (typeof gsap !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
   for (let i = 1; i <= 3; i++) {

@@ -188,4 +188,38 @@ if (typeof gsap !== "undefined") {
     });
   }
 }
+
+// assets/js/app/redeem.ts
+function validateCodeInput() {
+  const codeInput = document.getElementById("code");
+  const code = codeInput.value.toUpperCase().trim();
+  return code.length > 5;
+}
+function beforeRequestHandler(evt) {
+  if (!validateCodeInput()) {
+    evt.preventDefault();
+  }
+}
+document.addEventListener("alpine:init", () => {
+  Alpine.data("codeForm", () => ({
+    valid: true,
+    init() {
+      this.valid = true;
+    },
+    submit(evt) {
+      this.valid = validateCodeInput();
+      evt.preventDefault();
+      evt.stopPropagation();
+    },
+    update() {
+      const codeInput = document.getElementById("code");
+      const code = codeInput.value.toUpperCase().trim();
+      codeInput.value = code;
+      if (code.length > 5) {
+        this.valid = true;
+      }
+    }
+  }));
+});
+globalThis.beforeRequestHandler = beforeRequestHandler;
 //# sourceMappingURL=app.js.map
