@@ -57,7 +57,7 @@ templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers
 															type="checkbox"
 															value={ templ.EscapeString(fmt.Sprint(code.CodeID)) }
 															name="code_ids"
-															class="h-4 w-4 rounded border-gray-300 text-brand-orange focus:ring-brand-orange"
+															class="h-4 w-4 rounded-sm border-gray-300 text-brand-orange focus:ring-brand-orange"
 														/>
 													</td>
 													<td class="p-4 align-middle font-medium">{ code.Code }</td>
@@ -90,7 +90,7 @@ templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers
 									<div class="py-8">
 										<label for="count" class="block text-sm font-medium leading-6">Count</label>
 										<div class="mt-2">
-											<div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-brand-orange sm:max-w-md">
+											<div class="flex rounded-md shadow-xs ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-brand-orange sm:max-w-md">
 												<input
 													type="number"
 													name="count"
@@ -138,7 +138,7 @@ templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers
 											<tr class="border-b transition-colors hover:bg-muted/50">
 												<td class="p-4 align-middle">
 													<input
-														class="h-4 w-4 rounded border-gray-300 text-brand-orange focus:ring-brand-orange"
+														class="h-4 w-4 rounded-sm border-gray-300 text-brand-orange focus:ring-brand-orange"
 														type="checkbox"
 														value={ templ.EscapeString(fmt.Sprint(code.VolunteerCodeID)) }
 														name="volunteer_code_ids"

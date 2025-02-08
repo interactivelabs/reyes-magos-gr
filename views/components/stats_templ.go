@@ -52,7 +52,7 @@ func Stats(title string, stats []Stat) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		for _, stat := range stats {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6\"><dt class=\"truncate text-sm font-medium text-gray-500\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"overflow-hidden rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6\"><dt class=\"truncate text-sm font-medium text-gray-500\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

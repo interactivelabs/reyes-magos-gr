@@ -32,7 +32,7 @@ templ Orders(orders []model.Order, completedOrders []model.Order) {
 						<h2 class="text-lg font-semibold leading-6 text-gray-900">Open Orders</h2>
 						<ul class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
 							for _, order := range orders {
-								<li class="col-span-1 flex rounded-lg shadow" id={ fmt.Sprintf("admin-order-%d", order.OrderID) }>
+								<li class="col-span-1 flex rounded-lg shadow-sm" id={ fmt.Sprintf("admin-order-%d", order.OrderID) }>
 									@LinkOrderCard(order)
 								</li>
 							}
@@ -44,7 +44,7 @@ templ Orders(orders []model.Order, completedOrders []model.Order) {
 						<h2 class="text-lg font-semibold leading-6 text-gray-900">Completed Orders</h2>
 						<ul class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
 							for _, order := range completedOrders {
-								<li class="col-span-1 flex rounded-lg shadow" id={ fmt.Sprintf("admin-order-%d", order.OrderID) }>
+								<li class="col-span-1 flex rounded-lg shadow-sm" id={ fmt.Sprintf("admin-order-%d", order.OrderID) }>
 									@LinkOrderCard(order)
 								</li>
 							}

@@ -22,7 +22,7 @@ templ Dialog() {
 			<div
 				role="dialog"
 				x-show="modalOpen"
-				class="fixed top-0 left-0 z-[99] flex items-center justify-center w-screen h-screen"
+				class="fixed top-0 left-0 z-99 flex items-center justify-center w-screen h-screen"
 				x-cloak
 			>
 				// Overlay
@@ -54,7 +54,7 @@ templ Dialog() {
 					<div class="absolute right-0 top-0 hidden sm:block p-4">
 						<button
 							type="button"
-							class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
+							class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-offset-2"
 							@click="modalOpen = false"
 						>
 							<span class="sr-only">Close</span>

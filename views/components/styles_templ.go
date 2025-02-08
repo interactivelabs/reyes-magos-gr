@@ -8,18 +8,18 @@ package components
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-const BaseButton = "px-3 py-2 text-sm font-semibold shadow-sm "
+const BaseButton = "px-3 py-2 text-sm font-semibold shadow-xs "
 const BaseSecondaryButton string = BaseButton + "rounded-md bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
 const BasePrimaryButton string = BaseButton + "border-2 border-brand-orange bg-brand-orange text-white hover:bg-transparent hover:text-brand-orange focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-orange "
 const BrandPrimaryButton string = BasePrimaryButton
 
 const BaseLabelStyles string = "block text-sm font-medium leading-6 text-gray-900 "
-const BaseInputStyles string = "block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-orange sm:text-sm sm:leading-6 "
+const BaseInputStyles string = "block w-full rounded-md border-0 p-2 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand-orange sm:text-sm sm:leading-6 "
 
-const BaseToggleButtonStyles string = "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2 "
-const BaseToggleInsertStyles string = "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out "
+const BaseToggleButtonStyles string = "relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-brand-orange focus:ring-offset-2 "
+const BaseToggleInsertStyles string = "pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out "
 
-const BrandPrimaryButtonInverted string = "border-2 border-brand-orange px-5 py-4 text-sm font-semibold text-brand-orange shadow-sm hover:bg-brand-orange hover:text-white "
+const BrandPrimaryButtonInverted string = "border-2 border-brand-orange px-5 py-4 text-sm font-semibold text-brand-orange shadow-xs hover:bg-brand-orange hover:text-white "
 
 func ToggleButtonStyles(completed int64) string {
 	if completed == 1 {

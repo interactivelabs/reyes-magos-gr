@@ -25,7 +25,7 @@ templ RedeemToyForm(toyId int64, errorMsg string) {
 			<input type="hidden" name="toy_id" value={ fmt.Sprint(toyId) }/>
 		</div>
 		if errorMsg != "" {
-			<div class="rounded-md drop-shadow-sm bg-red-50 p-4 mt-2">
+			<div class="rounded-md drop-shadow-xs bg-red-50 p-4 mt-2">
 				<div class="flex">
 					<div class="shrink-0">
 						@svg.ErrorIcon("size-5 text-red-400")

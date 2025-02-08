@@ -10,7 +10,7 @@ const mobileMenuLink = "block border-l-4 border-transparent p-4 font-medium hove
 
 templ Nav() {
 	<header>
-		<nav class="bg-white shadow border-b-2" x-data="{ openMenu: false }">
+		<nav class="bg-white shadow-sm border-b-2" x-data="{ openMenu: false }">
 			<div class="mx-auto max-w-7xl px-2 py-2 sm:px-6 lg:px-8">
 				<div class="relative flex h-16 justify-between">
 					<div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -20,7 +20,7 @@ templ Nav() {
 							id="mobile-menu-button"
 							aria-controls="mobile-menu"
 							aria-expanded="false"
-							class="relative inline-flex items-center justify-center rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-orange"
+							class="relative inline-flex items-center justify-center rounded-md p-2 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-brand-orange"
 							@click="openMenu = !openMenu"
 						>
 							<span class="absolute -inset-0.5"></span>
@@ -34,7 +34,7 @@ templ Nav() {
 						</button>
 					</div>
 					<div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-						<div class="flex flex-shrink-0 items-center">
+						<div class="flex shrink-0 items-center">
 							<a href="/">
 								<img class="h-16 w-auto" src={ lib.GetAssetUrl("img/logo01_sm.webp") } alt="D-L Toys logo"/>
 							</a>
@@ -56,7 +56,7 @@ templ Nav() {
 									aria-expanded="false"
 									aria-haspopup="true"
 									@click="openAdmin = !openAdmin"
-									class="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
+									class="relative flex rounded-full bg-white text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
 								>
 									<span class="absolute -inset-1.5"></span>
 									<span class="sr-only">Open admin menu</span>
@@ -72,7 +72,7 @@ templ Nav() {
 									id="admin-menu-dropdown"
 									aria-orientation="vertical"
 									aria-labelledby="admin-menu-button"
-									class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+									class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden"
 									x-cloak
 									x-show="openAdmin"
 									x-transition:enter="transition ease-out duration-500"

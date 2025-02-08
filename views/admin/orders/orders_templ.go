@@ -116,7 +116,7 @@ func Orders(orders []model.Order, completedOrders []model.Order) templ.Component
 					return templ_7745c5c3_Err
 				}
 				for _, order := range orders {
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"col-span-1 flex rounded-lg shadow\" id=\"")
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"col-span-1 flex rounded-lg shadow-sm\" id=\"")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -153,7 +153,7 @@ func Orders(orders []model.Order, completedOrders []model.Order) templ.Component
 					return templ_7745c5c3_Err
 				}
 				for _, order := range completedOrders {
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"col-span-1 flex rounded-lg shadow\" id=\"")
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"col-span-1 flex rounded-lg shadow-sm\" id=\"")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}

@@ -14,7 +14,7 @@ import (
 	"reyes-magos-gr/views/components/svg"
 )
 
-const ListBoxBtnClassBase = "flex items-center text-left shadow-sm rounded-md ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-orange sm:text-sm/6 "
+const ListBoxBtnClassBase = "flex items-center text-left shadow-xs rounded-md ring-1 ring-inset ring-gray-300 focus:outline-hidden focus:ring-2 focus:ring-brand-orange sm:text-sm/6 "
 const ListBoxBtnClass = ListBoxBtnClassBase + " py-1.5 px-6 "
 const ListBoxBtnClassSmall = ListBoxBtnClassBase + " py-1 px-4 "
 
@@ -39,7 +39,7 @@ func OptionsList(selectedLink string, links []dtos.CatalogLink) templ.Component 
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<ul class=\"absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm\" tabindex=\"-1\" role=\"listbox\" aria-labelledby=\"listbox-label\" aria-activedescendant=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<ul class=\"absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden sm:text-sm\" tabindex=\"-1\" role=\"listbox\" aria-labelledby=\"listbox-label\" aria-activedescendant=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -10,7 +10,7 @@ templ Stats(title string, stats []Stat) {
 		<h2 class="text-lg font-semibold leading-6 text-gray-900">{ title }</h2>
 		<dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
 			for _, stat := range stats {
-				<div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+				<div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6">
 					<dt class="truncate text-sm font-medium text-gray-500">{ stat.Name }</dt>
 					<dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{ stat.Value }</dd>
 				</div>

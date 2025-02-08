@@ -18,8 +18,8 @@ script onCopyHandler(code string) {
 }
 
 templ MyCodeItem(code model.Code) {
-	<li class="col-span-1 flex flex-col first-line: rounded-lg shadow" id={ fmt.Sprintf("volunteer-code-%d", code.CodeID) }>
-		<div class="p-4 flex-1 rounded-lg border-gray-400 bg-white shadow">
+	<li class="col-span-1 flex flex-col first-line: rounded-lg shadow-sm" id={ fmt.Sprintf("volunteer-code-%d", code.CodeID) }>
+		<div class="p-4 flex-1 rounded-lg border-gray-400 bg-white shadow-sm">
 			<p class="text-lg text-gray-900 hover:text-gray-600">{ code.Code }</p>
 			<p class="text-gray-500">Exp: { lib.FormatDate(code.Expiration) }</p>
 		</div>

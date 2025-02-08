@@ -50,7 +50,7 @@ templ FilterPill(filter_label string, filter_value string) {
 			<button
 				type="button"
 				onclick={ onRemoveFilter(filter_value) }
-				class="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
+				class="ml-1 inline-flex h-4 w-4 shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
 			>
 				<span class="sr-only">Remove filter for { filter_label }</span>
 				<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
@@ -148,7 +148,7 @@ templ Catalog(
 												type="checkbox"
 												value={ category }
 												id={ fmt.Sprintf("category-%d", i) }
-												class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-orange focus:ring-brand-orange"
+												class="h-4 w-4 shrink-0 rounded-sm border-gray-300 text-brand-orange focus:ring-brand-orange"
 											/>
 											<label for={ fmt.Sprintf("category-%d", i) } class="ml-3 min-w-0 flex-1 text-gray-600">
 												{ category }

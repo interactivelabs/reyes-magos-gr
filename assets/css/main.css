@@ -1,25 +1,34 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  html {
-    font-family: "Cabin", system-ui, sans-serif;
-  }
+@plugin '@tailwindcss/aspect-ratio';
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: "Raleway", system-ui, sans-serif;
-  }
+@theme {
+  --font-sans: Cabin, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji,
+    Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  --font-display: Raleway, ui-sans-serif, system-ui, sans-serif;
+  --font-decorative: Indie Flower, cursive;
+
+  --color-brand-orange: #c15230;
+  --color-brand-purple-light: #9e78b3;
+  --color-brand-purple-dark: #501c6c;
+  --color-brand-blue: #2a3245;
 }
 
-@layer components {
-  .cardboard-bg {
-    background-image: url("/img/cardboard-flat.webp");
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
   }
 }
 
@@ -38,3 +47,18 @@
 /* Photo by Photo By: Kaboompics.com: https://www.pexels.com/photo/woman-wrapping-a-christmas-gift-5979443/ */
 /* Photo by cottonbro studio: https://www.pexels.com/photo/women-s-white-collared-long-sleeved-shirt-3170928/ */
 /* Photo by Irina Iriser: https://www.pexels.com/photo/brown-gift-box-under-green-christmas-tree-1734427/ */
+
+@layer base {
+  html {
+    font-family: "Cabin", system-ui, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Raleway", system-ui, sans-serif;
+  }
+}
