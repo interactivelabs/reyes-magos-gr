@@ -35,7 +35,7 @@ func Footer() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<footer class=\"cardboard-bg bg-brand-orange text-white\"><div class=\"mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8\"><nav class=\"-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12\" aria-label=\"Footer\"><div class=\"pb-6\"><a href=\"/#hero\" class=\"text-sm leading-6\">Inicio</a></div><div class=\"pb-6\"><a href=\"/#why\" class=\"text-sm leading-6\">Porque?</a></div><div class=\"pb-6\"><a href=\"/#volunteers\" class=\"text-sm leading-6\">Voluntarios</a></div><div class=\"pb-6\"><a href=\"/catalog\" class=\"text-sm leading-6\">Catálogo</a></div><div class=\"pb-6\"><a href=\"/login\" class=\"text-sm leading-6 flex items-center\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<footer class=\"bg-brand-orange text-white\"><div class=\"mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8\"><nav class=\"-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12\" aria-label=\"Footer\"><div class=\"pb-6\"><a href=\"/#hero\" class=\"text-sm leading-6\">Inicio</a></div><div class=\"pb-6\"><a href=\"/#why\" class=\"text-sm leading-6\">Porque?</a></div><div class=\"pb-6\"><a href=\"/#volunteers\" class=\"text-sm leading-6\">Voluntarios</a></div><div class=\"pb-6\"><a href=\"/catalog\" class=\"text-sm leading-6\">Catálogo</a></div><div class=\"pb-6\"><a href=\"/login\" class=\"text-sm leading-6 flex items-center\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
