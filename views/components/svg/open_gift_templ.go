@@ -34,7 +34,7 @@ func OpenGift(class string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<svg xmlns=\"http://www.w3.org/2000/svg\" data-name=\"Layer 1\" width=\"856.74612\" height=\"690.55273\" viewBox=\"0 0 856.74612 690.55273\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" class=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" data-name=\"Layer 1\" width=\"856.74612\" height=\"690.55273\" viewBox=\"0 0 856.74612 690.55273\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" class=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
