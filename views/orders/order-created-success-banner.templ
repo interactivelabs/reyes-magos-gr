@@ -6,9 +6,11 @@ templ OrderCreatedSucessBanner(name string) {
 	<div class="bg-green-50 p-8 mt-12">
 		<h3 class="text-lg text-green-800">La orden se creo exitosamente</h3>
 		<div class="mt-4 text-green-700">
-			<p>{ name } te contactara cuando el juguete este listo para ti.</p>
+			<p>{ name } te contactara cuando el regalo este listo para ti.</p>
 		</div>
-		@svg.Celebration("mt-8 motion-preset-confetti motion-duration-1000")
+		<div class="w-full p-2">
+			@svg.Celebration("w-full h-1/2 mt-8 motion-preset-confetti motion-duration-1000")
+		</div>
 		<div class="mt-8 flex justify-between">
 			<a href="/catalog" class="underline font-medium text-green-800">
 				Regresar al catalogo

@@ -81,7 +81,7 @@ func AccordionRow(title string, expanded bool) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" class=\"duration-200 ease-out cursor-pointer group border-b-2\" x-cloak><button @click=\"isExpanded = ! isExpanded\" aria-controls=\"accordionItem\" :aria-expanded=\"isExpanded ? &#39;true&#39; : &#39;false&#39;\" class=\"flex items-center justify-between w-full py-4 text-left select-none font-extralight text-lg\"><span>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" class=\"duration-200 ease-out cursor-pointer group border-b\" x-cloak><button @click=\"isExpanded = ! isExpanded\" aria-controls=\"accordionItem\" :aria-expanded=\"isExpanded ? &#39;true&#39; : &#39;false&#39;\" class=\"flex items-center justify-between w-full py-4 text-left select-none font-extralight text-lg\"><span>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

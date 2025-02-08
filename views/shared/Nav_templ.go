@@ -13,7 +13,7 @@ import (
 	"reyes-magos-gr/views/components/svg"
 )
 
-const desktopMenuLink = "inline-flex items-center border-b-4 border-transparent px-1 pt-1 -mb-2 text-sm font-medium hover:border-brand-orange"
+const desktopMenuLink = "inline-flex items-center border-b-2 border-transparent px-1 pt-1 -mb-2 text-sm font-medium hover:border-brand-orange"
 const mobileMenuLink = "block border-l-4 border-transparent p-4 font-medium hover:border-brand-orange hover:bg-gray-50"
 
 func Nav() templ.Component {
@@ -176,7 +176,7 @@ func Nav() templ.Component {
 				return templ_7745c5c3_Err
 			}
 			if lib.GetProfile(ctx).IsAdmin {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "<div class=\"block p-4 text-sm border-b-2 text-center\">Admin</div><a href=\"/admin/codes\" class=\"block p-4 text-sm\" role=\"menuitem\">Codigos</a> <a href=\"/admin/orders\" class=\"block p-4 text-sm\" role=\"menuitem\">Ordenes</a> <a href=\"/admin/volunteers\" class=\"block p-4 text-sm\" role=\"menuitem\">Voluntarios</a> <a href=\"/admin/toys\" class=\"block p-4 text-sm\" role=\"menuitem\">Juguetes</a>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "<div class=\"block p-4 text-sm border-b text-center\">Admin</div><a href=\"/admin/codes\" class=\"block p-4 text-sm\" role=\"menuitem\">Codigos</a> <a href=\"/admin/orders\" class=\"block p-4 text-sm\" role=\"menuitem\">Ordenes</a> <a href=\"/admin/volunteers\" class=\"block p-4 text-sm\" role=\"menuitem\">Voluntarios</a> <a href=\"/admin/toys\" class=\"block p-4 text-sm\" role=\"menuitem\">Juguetes</a>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

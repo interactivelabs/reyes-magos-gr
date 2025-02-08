@@ -9,7 +9,7 @@ templ Accordion() {
 }
 
 templ AccordionRow(title string, expanded bool) {
-	<div x-data={ fmt.Sprintf("{ isExpanded: %t }", expanded) } class="duration-200 ease-out cursor-pointer group border-b-2" x-cloak>
+	<div x-data={ fmt.Sprintf("{ isExpanded: %t }", expanded) } class="duration-200 ease-out cursor-pointer group border-b" x-cloak>
 		<button
 			@click="isExpanded = ! isExpanded"
 			aria-controls="accordionItem"

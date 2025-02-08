@@ -44,15 +44,15 @@ func OrderCreatedSucessBanner(name string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " te contactara cuando el juguete este listo para ti.</p></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " te contactara cuando el regalo este listo para ti.</p></div><div class=\"w-full p-2\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = svg.Celebration("mt-8 motion-preset-confetti motion-duration-1000").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = svg.Celebration("w-full h-1/2 mt-8 motion-preset-confetti motion-duration-1000").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"mt-8 flex justify-between\"><a href=\"/catalog\" class=\"underline font-medium text-green-800\">Regresar al catalogo</a> <a href=\"/\" class=\"ml-3 underline font-medium text-green-800\">Ir a la pagina principal</a></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div><div class=\"mt-8 flex justify-between\"><a href=\"/catalog\" class=\"underline font-medium text-green-800\">Regresar al catalogo</a> <a href=\"/\" class=\"ml-3 underline font-medium text-green-800\">Ir a la pagina principal</a></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

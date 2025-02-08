@@ -15,7 +15,7 @@ templ AccordionSingle() {
 }
 
 templ AccordionSingleRow(title string) {
-	<div x-data="{ id: $id('accordion') }" class="duration-200 ease-out cursor-pointer group border-b-2" x-cloak>
+	<div x-data="{ id: $id('accordion') }" class="duration-200 ease-out cursor-pointer group border-b" x-cloak>
 		<button @click="setActiveAccordion(id)" class="flex items-center justify-between w-full py-4 text-left select-none">
 			<span>{ title }</span>
 			<div :class="{ 'rotate-90': activeAccordion==id }" class="relative flex items-center justify-center w-2.5 h-2.5 duration-300 ease-out">
