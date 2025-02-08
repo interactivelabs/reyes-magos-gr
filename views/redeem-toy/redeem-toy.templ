@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-templ RedeemToyForm(toyId int64, errorMsg string) {
+templ RedeemToyForm(toyId int64, code string, errorMsg string) {
 	<form
 		class="mt-10"
 		hx-post="/orders/create"
@@ -29,6 +29,7 @@ templ RedeemToyForm(toyId int64, errorMsg string) {
 				class={ components.BaseInputStyles }
 				@blur="update"
 				required
+				value={ code }
 			/>
 			<input type="hidden" name="toy_id" value={ fmt.Sprint(toyId) }/>
 			<p class="mt-2 text-sm text-red-600" x-show="!valid">Un codigo valido es requerido (e.g. A1B2C3)</p>
@@ -56,7 +57,7 @@ templ RedeemToyForm(toyId int64, errorMsg string) {
 	</form>
 }
 
-templ RedeemToy(toy model.Toy) {
+templ RedeemToy(toy model.Toy, code string) {
 	@layout.Base() {
 		<main class="min-h-screen">
 			<div class="mx-auto max-w-2xl pb-24 pt-8 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -106,7 +107,7 @@ templ RedeemToy(toy model.Toy) {
 						<h2 class="text-xl font-medium text-gray-900">{ toy.ToyName }</h2>
 					</div>
 					<div class="px-4 md:px-0">
-						@RedeemToyForm(toy.ToyID, "")
+						@RedeemToyForm(toy.ToyID, code, "")
 						<div class="mt-16">
 							@components.Accordion() {
 								@components.AccordionRow("Edades (años)", true) {
