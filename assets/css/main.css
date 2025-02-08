@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @plugin '@tailwindcss/aspect-ratio';
-@plugin 'tailwindcss-motion'
+@plugin 'tailwindcss-motion';
 
 @theme {
   --font-sans: Cabin, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji,
@@ -33,6 +33,21 @@
   }
 }
 
+@layer base {
+  html {
+    font-family: "Cabin", system-ui, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Raleway", system-ui, sans-serif;
+  }
+}
+
 /* Photo by Photo By: Kaboompics.com: https://www.pexels.com/photo/child-playing-with-toy-blocks-on-floor-7269709/ */
 /* Photo by Markus Spiske: https://www.pexels.com/photo/green-red-and-yellow-lego-blocks-168866/ */
 /* Photo by Suzy Hazelwood: https://www.pexels.com/photo/conceptual-photo-of-word-play-spelled-by-wooden-blocks-1275235/ */
@@ -48,18 +63,3 @@
 /* Photo by Photo By: Kaboompics.com: https://www.pexels.com/photo/woman-wrapping-a-christmas-gift-5979443/ */
 /* Photo by cottonbro studio: https://www.pexels.com/photo/women-s-white-collared-long-sleeved-shirt-3170928/ */
 /* Photo by Irina Iriser: https://www.pexels.com/photo/brown-gift-box-under-green-christmas-tree-1734427/ */
-
-@layer base {
-  html {
-    font-family: "Cabin", system-ui, sans-serif;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: "Raleway", system-ui, sans-serif;
-  }
-}
