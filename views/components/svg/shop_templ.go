@@ -34,7 +34,7 @@ func Shop(class string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<svg xmlns=\"http://www.w3.org/2000/svg\" data-name=\"Layer 1\" width=\"836.79488\" height=\"447.54331\" viewBox=\"0 0 836.79488 447.54331\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" class=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<svg width=\"100%\" height=\"100%\" xmlns=\"http://www.w3.org/2000/svg\" data-name=\"Layer 1\" width=\"836.79488\" height=\"447.54331\" viewBox=\"0 0 836.79488 447.54331\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" class=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
