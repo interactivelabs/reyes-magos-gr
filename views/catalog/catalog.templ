@@ -26,6 +26,13 @@ func getPagingStyles(page int64, i int) string {
 	return fmt.Sprintf("inline-flex items-center border-t-2 px-4 pt-4 text-sm font-medium %s", selected)
 }
 
+func getRedeemToyLink(toyID int64, code string) string {
+	if code == "" {
+		return fmt.Sprintf("redeem/%d", toyID)
+	}
+	return fmt.Sprintf("redeem/%d?code=%s", toyID, code)
+}
+
 templ AgeRangeFields(name string, value int64) {
 	<input
 		min="1"
@@ -74,6 +81,7 @@ templ Catalog(
 	ageMax int64,
 	pageNumberlinks []dtos.CatalogLink,
 	pageSizeLinks []dtos.CatalogLink,
+	code string,
 ) {
 	@layout.Base() {
 		<main id="catalog" class="relative isolate py-20 lg:px-8 bg-white min-h-screen">
@@ -174,7 +182,7 @@ templ Catalog(
 				} else {
 					<div class="columns md:columns-4 gap-12 space-y-12 my-8">
 						for _, toy := range toys {
-							<a class="inline-block mt-8" href={ templ.URL(fmt.Sprintf("redeem/%d", toy.ToyID)) }>
+							<a class="inline-block mt-8" href={ templ.URL(getRedeemToyLink(toy.ToyID, code)) }>
 								<div class="group relative flex flex-col overflow-hidden">
 									<div class="group-hover:opacity-75">
 										<img src={ toy.Image1 } alt={ toy.ToyDescription } class="w-full"/>

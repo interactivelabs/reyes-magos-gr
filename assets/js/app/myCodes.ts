@@ -17,7 +17,7 @@ const share = async (code: string) => {
   const data = {
     title: "Comparte la alegria!",
     text: `Utiliza este codigo para obtener un regalo: ${code}`,
-    url: `${window.location.origin}/catalog`,
+    url: `${window.location.origin}/catalog?code=${code}`,
   };
 
   try {

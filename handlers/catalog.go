@@ -24,6 +24,7 @@ type CatalogHandlerRequest struct {
 	Category []string `query:"category"`
 	Page     int64    `query:"page"`
 	PageSize int64    `query:"page_size"`
+	Code     string   `query:"code"`
 }
 
 func (h CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
@@ -84,6 +85,8 @@ func (h CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
 		})
 	}
 
+	code := cr.Code
+
 	return lib.Render(
 		ctx,
 		catalog.Catalog(
@@ -99,5 +102,6 @@ func (h CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
 			int64(cr.AgeMax),
 			pageNumberlinks,
 			pageSizeLinks,
+			code,
 		))
 }
