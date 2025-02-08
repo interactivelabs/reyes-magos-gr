@@ -36,7 +36,7 @@ func Toasts() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div x-data=\"toasts\" @notify.window=\"addNotification({\n\t\t\tvariant: $event.detail.variant,\n\t\t\ttitle: $event.detail.title,\n\t\t\tmessage: $event.detail.message,\n\t\t})\"><div x-on:mouseenter=\"$dispatch(&#39;pause-auto-dismiss&#39;)\" x-on:mouseleave=\"$dispatch(&#39;resume-auto-dismiss&#39;)\" class=\"group pointer-events-none fixed inset-x-8 top-0 z-[99] flex max-w-full flex-col gap-2 bg-transparent px-6 py-6 md:right-0 md:left-[unset] md:max-w-sm\"><template x-for=\"(notification, index) in notifications\" x-bind:key=\"notification.id\"><div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div x-data=\"toasts\" @notify.window=\"addNotification({\n\t\t\tvariant: $event.detail.variant,\n\t\t\ttitle: $event.detail.title,\n\t\t\tmessage: $event.detail.message,\n\t\t})\"><div x-on:mouseenter=\"$dispatch(&#39;pause-auto-dismiss&#39;)\" x-on:mouseleave=\"$dispatch(&#39;resume-auto-dismiss&#39;)\" class=\"group pointer-events-none fixed inset-x-8 top-0 z-99 flex max-w-full flex-col gap-2 bg-transparent px-6 py-6 md:right-0 md:left-[unset] md:max-w-sm\"><template x-for=\"(notification, index) in notifications\" x-bind:key=\"notification.id\"><div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

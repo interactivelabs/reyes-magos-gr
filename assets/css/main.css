@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @plugin '@tailwindcss/aspect-ratio';
+@plugin 'tailwindcss-motion'
 
 @theme {
   --font-sans: Cabin, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji,

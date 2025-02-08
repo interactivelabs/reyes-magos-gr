@@ -121,7 +121,7 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" name=\"code_ids\" class=\"h-4 w-4 rounded border-gray-300 text-brand-orange focus:ring-brand-orange\"></td><td class=\"p-4 align-middle font-medium\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\" name=\"code_ids\" class=\"h-4 w-4 rounded-sm border-gray-300 text-brand-orange focus:ring-brand-orange\"></td><td class=\"p-4 align-middle font-medium\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -201,7 +201,7 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 					return templ_7745c5c3_Err
 				}
 			} else {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<div class=\"pb-6\"><form method=\"post\" action=\"/admin/codes/create\"><h2 class=\"text-xl text-center\">Create Codes</h2><div class=\"py-8\"><label for=\"count\" class=\"block text-sm font-medium leading-6\">Count</label><div class=\"mt-2\"><div class=\"flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-brand-orange sm:max-w-md\"><input type=\"number\" name=\"count\" class=\"w-full block flex-1 border-0 bg-transparent py-1.5 pl-1 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6\" placeholder=\"10\" required></div></div><div class=\"flex justify-center py-6\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<div class=\"pb-6\"><form method=\"post\" action=\"/admin/codes/create\"><h2 class=\"text-xl text-center\">Create Codes</h2><div class=\"py-8\"><label for=\"count\" class=\"block text-sm font-medium leading-6\">Count</label><div class=\"mt-2\"><div class=\"flex rounded-md shadow-xs ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-brand-orange sm:max-w-md\"><input type=\"number\" name=\"count\" class=\"w-full block flex-1 border-0 bg-transparent py-1.5 pl-1 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6\" placeholder=\"10\" required></div></div><div class=\"flex justify-center py-6\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -237,7 +237,7 @@ func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers 
 				return templ_7745c5c3_Err
 			}
 			for _, code := range volunteerCodes {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "<tr class=\"border-b transition-colors hover:bg-muted/50\"><td class=\"p-4 align-middle\"><input class=\"h-4 w-4 rounded border-gray-300 text-brand-orange focus:ring-brand-orange\" type=\"checkbox\" value=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "<tr class=\"border-b transition-colors hover:bg-muted/50\"><td class=\"p-4 align-middle\"><input class=\"h-4 w-4 rounded-sm border-gray-300 text-brand-orange focus:ring-brand-orange\" type=\"checkbox\" value=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
