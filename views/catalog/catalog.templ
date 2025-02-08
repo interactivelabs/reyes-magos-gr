@@ -86,8 +86,8 @@ templ Catalog(
 			>
 				<h2 id="filter-heading" class="sr-only">Filtros</h2>
 				<div class="relative col-start-1 row-start-1 py-4">
-					<div class="mx-auto flex items-center max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8">
-						<div>
+					<div class="mx-auto flex items-center max-w-7xl divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8">
+						<div class="px-2 md:px-6">
 							<button
 								type="button"
 								aria-controls="filters-panel"
@@ -99,10 +99,10 @@ templ Catalog(
 								Filtros
 							</button>
 						</div>
-						<div class="pl-2 md:pl-6">
+						<div class="px-2 md:px-6">
 							<button type="button" class="text-gray-500" onclick="clearFilters()">Limpiar Filtros</button>
 						</div>
-						<div class="pl-2 md:pl-6 flex-1 text-right">
+						<div class="px-2 md:px-6 flex-1 text-right">
 							<label for="page" class="text-sm">
 								<span class="inline-block mr-2 text-gray-500">Resultados:</span>
 								@components.LinksListboxSmall(fmt.Sprint(pageSize), fmt.Sprintf("%d Resultados por pagina", pageSize), fmt.Sprint(pageSize), pageSizeLinks)
