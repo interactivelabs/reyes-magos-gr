@@ -10,13 +10,13 @@ templ ToyForm(toy model.Toy) {
 	<div>
 		<label for="toy_name" class={ components.BaseLabelStyles }>Name</label>
 		<div class="mt-2">
-			<input type="text" name="name" class={ components.BaseInputStyles } value={ toy.ToyName }/>
+			<input type="text" name="toy_name" class={ components.BaseInputStyles } value={ toy.ToyName }/>
 		</div>
 	</div>
 	<div>
 		<label for="toy_description" class={ components.BaseLabelStyles }>Description</label>
 		<div class="mt-2">
-			<textarea name="description" class={ components.BaseInputStyles } value={ toy.ToyDescription }></textarea>
+			<textarea name="toy_description" class={ components.BaseInputStyles } value={ toy.ToyDescription }></textarea>
 		</div>
 	</div>
 	<div>
