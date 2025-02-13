@@ -13,10 +13,10 @@ document.addEventListener("alpine:init", () => {
     removeNotification(id) {
       setTimeout(() => {
         this.notifications = this.notifications.filter(
-          (notification) => notification.id !== id,
+          (notification) => notification.id !== id
         );
       }, 400);
-    },
+    }
   }));
 });
 function showToast(toast) {
@@ -31,7 +31,7 @@ window.addEventListener("htmx:responseError", (e) => {
     showToast({
       variant: "error",
       title: "Error del servidor",
-      message: "Ha ocurrido un error inesperado. Por favor intenta de nuevo.",
+      message: "Ha ocurrido un error inesperado. Por favor intenta de nuevo."
     });
   }
 });
@@ -43,7 +43,7 @@ var copy = async (code) => {
     showToast({
       variant: "error",
       title: "Copiado!",
-      message: "El codigo ha sido copiado al portapapeles.",
+      message: "El codigo ha sido copiado al portapapeles."
     });
   } catch (err) {
     console.error("Failed to copy: ", err);
@@ -53,7 +53,7 @@ var share = async (code) => {
   const data = {
     title: "Comparte la alegria!",
     text: `Utiliza este codigo para obtener un regalo: ${code}`,
-    url: `${window.location.origin}/catalog`,
+    url: `${window.location.origin}/catalog?code=${code}`
   };
   try {
     await navigator.share(data);
@@ -73,7 +73,7 @@ globalThis.shareCode = async (code) => {
 // assets/js/utils/debounce.ts
 function debounce(func, wait) {
   let timeout;
-  return function (...args) {
+  return function(...args) {
     if (timeout) {
       clearTimeout(timeout);
     }
@@ -99,7 +99,7 @@ var getAgeFilters = () => {
 var updateFilters = () => {
   const filters = getFilters();
   const selectedFilters = Array.from(filters).filter(
-    (filter) => filter.checked,
+    (filter) => filter.checked
   );
   const selectedFiltersValues = selectedFilters.map((filter) => filter.value);
   const params = new URLSearchParams(window.location.search);
@@ -164,10 +164,7 @@ globalThis.clearFilters = clearFilters;
 globalThis.removeFilter = removeFilter;
 setUrlFilters();
 var handleBackToTopScroll = () => {
-  if (
-    document.body.scrollTop > 300 ||
-    document.documentElement.scrollTop > 300
-  ) {
+  if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
     window.dispatchEvent(new CustomEvent("showbacktotopbtn"));
   } else {
     window.dispatchEvent(new CustomEvent("hidebacktotopbtn"));
@@ -184,10 +181,10 @@ if (typeof gsap !== "undefined") {
       scrollTrigger: {
         trigger: `#home-ilustracion-${i}`,
         toggleActions: "play pause resume reset",
-        start: "top 80%",
+        start: "top 80%"
       },
       duration: 1,
-      opacity: 1,
+      opacity: 1
     });
   }
 }
@@ -221,7 +218,7 @@ document.addEventListener("alpine:init", () => {
       if (code.length > 5) {
         this.valid = true;
       }
-    },
+    }
   }));
 });
 globalThis.beforeRequestHandler = beforeRequestHandler;
