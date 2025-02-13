@@ -11,7 +11,7 @@ templ UpdateToyForm(toy model.Toy) {
 		<form
 			class="pt-8"
 			hx-put={ string(templ.URL(fmt.Sprintf("/admin/toys/%d/save", toy.ToyID))) }
-			hx-target={ fmt.Sprintf("#admin-toy-row-%d", toy.ToyID) }
+			hx-target={ fmt.Sprintf("#admin-toys-row-%d", toy.ToyID) }
 			hx-swap="outerHTML"
 			x-on:htmx:after-request="modalOpen = false"
 		>

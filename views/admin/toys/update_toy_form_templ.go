@@ -65,9 +65,9 @@ func UpdateToyForm(toy model.Toy) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("#admin-toy-row-%d", toy.ToyID))
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("#admin-toys-row-%d", toy.ToyID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/toys/update_toy_form.templ`, Line: 14, Col: 58}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/toys/update_toy_form.templ`, Line: 14, Col: 59}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
