@@ -1,4 +1,4 @@
-// assets/js/shared/toasts.ts
+// assets/js/components/toasts.ts
 document.addEventListener("alpine:init", () => {
   Alpine.data("toasts", () => ({
     notifications: [],
@@ -22,6 +22,73 @@ document.addEventListener("alpine:init", () => {
 function showToast(toast) {
   window.dispatchEvent(new CustomEvent("notify", { detail: toast }));
 }
+
+// assets/js/components/search-box.ts
+document.addEventListener("alpine:init", () => {
+  Alpine.data("SearchBox", (url) => ({
+    async init() {
+      this.$watch("Search", () => this.SearchItems());
+      this.$watch("ItemSelected", function(item) {
+        if (item) console.log("item:", item);
+      });
+      this.Items = await (await fetch(url)).json();
+    },
+    Items: [],
+    ItemsFiltered: [],
+    ItemActive: null,
+    ItemSelected: null,
+    Id: "" + Date.now().toString(),
+    Search: "",
+    SearchIsEmpty() {
+      return this.Search.length == 0;
+    },
+    ItemIsActive(item) {
+      return this.ItemActive && this.ItemActive.Value == item.Value;
+    },
+    ItemActiveNext() {
+      let index = this.ItemsFiltered.indexOf(this.ItemActive);
+      if (index < this.ItemsFiltered.length - 1) {
+        this.ItemActive = this.ItemsFiltered[index + 1];
+        this.ScrollToActiveItem();
+      }
+    },
+    ItemActivePrevious() {
+      let index = this.ItemsFiltered.indexOf(this.ItemActive);
+      if (index > 0) {
+        this.ItemActive = this.ItemsFiltered[index - 1];
+        this.ScrollToActiveItem();
+      }
+    },
+    ScrollToActiveItem() {
+      if (this.ItemActive) {
+        const activeElement = document.getElementById(
+          this.ItemActive.Value + "-" + this.Id
+        );
+        if (!activeElement) return;
+        const newScrollPos = activeElement.offsetTop + activeElement.offsetHeight - this.$refs.ItemsList.offsetHeight;
+        if (newScrollPos > 0) {
+          this.$refs.ItemsList.scrollTop = newScrollPos;
+        } else {
+          this.$refs.ItemsList.scrollTop = 0;
+        }
+      }
+    },
+    SearchItems() {
+      if (!this.SearchIsEmpty()) {
+        const searchTerm = this.Search.replace(/\*/g, "").toLowerCase();
+        console.log(this.Items);
+        this.ItemsFiltered = this.Items.filter((item) => {
+          console.log(item);
+          return item.Label.toLowerCase().startsWith(searchTerm);
+        });
+        this.ScrollToActiveItem();
+      } else {
+        this.ItemsFiltered = this.Items.filter((item) => item.default);
+      }
+      this.ItemActive = this.ItemsFiltered[0];
+    }
+  }));
+});
 
 // assets/js/shared/htmxErrorHandler.ts
 window.addEventListener("htmx:responseError", (e) => {

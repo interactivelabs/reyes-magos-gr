@@ -32,6 +32,7 @@ func (h ToysHandler) CreateToyFormHandler(ctx echo.Context) error {
 type CreateToyRequest struct {
 	ToyName        string `form:"toy_name" validate:"required"`
 	ToyDescription string `form:"toy_description"`
+	Category       string `form:"category" validate:"required"`
 	AgeMin         int64  `form:"age_min" validate:"required,min=1,max=16"`
 	AgeMax         int64  `form:"age_max" validate:"required,max=16"`
 	Image1         string `form:"image1" validate:"required,url"`
@@ -123,4 +124,24 @@ func (h ToysHandler) DeleteToyHandler(ctx echo.Context) error {
 	}
 
 	return ctx.NoContent(http.StatusOK)
+}
+
+type SearchBoxItem struct {
+	Value string
+	Label string
+}
+
+func (h ToysHandler) ToysCategoriesViewHandler(ctx echo.Context) error {
+	categories, err := h.ToysRepository.GetCategories()
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	var objects []SearchBoxItem
+	for _, str := range categories {
+		obj := SearchBoxItem{Value: str, Label: str}
+		objects = append(objects, obj)
+	}
+
+	return ctx.JSON(http.StatusOK, objects)
 }

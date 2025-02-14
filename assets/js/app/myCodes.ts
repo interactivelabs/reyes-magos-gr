@@ -1,4 +1,4 @@
-import { showToast } from "../shared/toasts";
+import { showToast } from "../components/toasts";
 
 const copy = async (code: string) => {
   try {

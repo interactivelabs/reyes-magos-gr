@@ -105,13 +105,29 @@ func getFilteredQuery(ageMin int64, ageMax int64, category []string, countOnly b
 			AND age_max <= ?`
 
 	if len(category) > 0 {
-		query += ` AND category in ( ` + strings.Join(strings.Split(strings.Repeat("?", len(category)), ""), ",") + ` )`
-		for _, v := range category {
-			params = append(params, v)
-		}
+		query += " AND ("
+		query += buildCategoryWhereSQL(category)
+		query += ")"
 	}
 
 	return query, params
+}
+
+func buildCategoryWhereSQL(categories []string) string {
+	count := len(categories)
+	if count <= 0 {
+		return ""
+	}
+
+	var builder strings.Builder
+	for i := 0; i < count; i++ {
+		s := "category LIKE '%" + categories[i] + "%'"
+		builder.WriteString(s)
+		if i < count-1 {
+			builder.WriteString(" OR ")
+		}
+	}
+	return builder.String()
 }
 
 func (r ToysRepository) GetToysWithFiltersPaged(page int64, pageSize int64, ageMin int64, ageMax int64, category []string) (toys []model.Toy, err error) {
@@ -223,13 +239,14 @@ func (r ToysRepository) GetCategories() (categories []string, err error) {
 	}(rows)
 
 	for rows.Next() {
-		var category string
-		err = rows.Scan(&category)
+		var category_sql string
+		err = rows.Scan(&category_sql)
 		if err != nil {
 			return nil, err
 		}
 
-		categories = append(categories, category)
+		category := strings.Split(strings.TrimSpace(category_sql), ",")
+		categories = append(categories, category...)
 	}
 
 	return categories, nil
