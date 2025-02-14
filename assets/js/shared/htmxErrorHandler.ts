@@ -1,5 +1,5 @@
 import { HtmxResponseInfo } from "../../@types/htmx.esm";
-import { showToast } from "./toasts";
+import { showToast } from "../components/toasts";
 
 interface HtmxResponseErrorEvent extends Event {
   detail: HtmxResponseInfo;

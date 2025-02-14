@@ -224,6 +224,7 @@ func main() {
 	ag.GET("/toys/:toy_id", toysHandler.UpdateToyFormHandler)
 	ag.PUT("/toys/:toy_id/save", toysHandler.UpdateToyPutHandler)
 	ag.DELETE("/toys/:toy_id/delete", toysHandler.DeleteToyHandler)
+	ag.GET("/toys/categories", toysHandler.ToysCategoriesViewHandler)
 
 	e.HTTPErrorHandler = reyes_middleware.CustomHTTPErrorHandler
 
