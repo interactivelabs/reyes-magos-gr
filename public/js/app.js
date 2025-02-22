@@ -24,41 +24,77 @@ function showToast(toast) {
 }
 
 // assets/js/components/search-box.ts
-document.addEventListener("alpine:init", () => {
-  Alpine.data("SearchBox", (url) => ({
+function getSearchBoxClass() {
+  return class SearchBox {
+    // MAGIC METHODS
+    // Alpine magic properties and methods
+    $data;
+    $dispatch;
+    $el;
+    $id;
+    $nextTick;
+    $refs;
+    $root;
+    $store;
+    $watch;
+    destroy;
+    // CLASS PROPERTIES
+    name;
+    Id;
+    Items;
+    ItemsFiltered;
+    ItemActive;
+    ItemSelected;
+    Search;
+    fetchItemsUrl;
+    // Constructor, initialize properties
+    constructor(url, name) {
+      this.Id = name + Date.now().toString();
+      this.name = name;
+      this.Items = [];
+      this.ItemsFiltered = [];
+      this.ItemActive = null;
+      this.ItemSelected = null;
+      this.Search = "";
+      this.fetchItemsUrl = url;
+    }
+    // Alphine lifecycle methods
     async init() {
       this.$watch("Search", () => this.SearchItems());
-      this.$watch("ItemSelected", function(item) {
-        if (item) console.log("item:", item);
-      });
-      this.Items = await (await fetch(url)).json();
-    },
-    Items: [],
-    ItemsFiltered: [],
-    ItemActive: null,
-    ItemSelected: null,
-    Id: "" + Date.now().toString(),
-    Search: "",
+      this.$watch(
+        "ItemSelected",
+        (item) => this.SelectItem(item)
+      );
+      this.Items = await (await fetch(this.fetchItemsUrl)).json();
+    }
+    // CLASS METHODS
     SearchIsEmpty() {
       return this.Search.length == 0;
-    },
+    }
     ItemIsActive(item) {
-      return this.ItemActive && this.ItemActive.Value == item.Value;
-    },
+      return !!(this.ItemActive && this.ItemActive.Value == item.Value);
+    }
+    ClearState() {
+      this.ItemsFiltered = [];
+      this.ItemActive = null;
+      this.Search = "";
+    }
     ItemActiveNext() {
+      if (!this.ItemActive) return;
       let index = this.ItemsFiltered.indexOf(this.ItemActive);
       if (index < this.ItemsFiltered.length - 1) {
         this.ItemActive = this.ItemsFiltered[index + 1];
         this.ScrollToActiveItem();
       }
-    },
+    }
     ItemActivePrevious() {
+      if (!this.ItemActive) return;
       let index = this.ItemsFiltered.indexOf(this.ItemActive);
       if (index > 0) {
         this.ItemActive = this.ItemsFiltered[index - 1];
         this.ScrollToActiveItem();
       }
-    },
+    }
     ScrollToActiveItem() {
       if (this.ItemActive) {
         const activeElement = document.getElementById(
@@ -72,27 +108,44 @@ document.addEventListener("alpine:init", () => {
           this.$refs.ItemsList.scrollTop = 0;
         }
       }
-    },
+    }
     SearchItems() {
+      if (this.SearchIsEmpty()) {
+        this.ClearState();
+        return;
+      }
       if (!this.SearchIsEmpty()) {
         const searchTerm = this.Search.replace(/\*/g, "").toLowerCase();
-        console.log(this.Items);
-        this.ItemsFiltered = this.Items.filter((item) => {
-          console.log(item);
-          return item.Label.toLowerCase().startsWith(searchTerm);
-        });
+        this.ItemsFiltered = this.Items.filter(
+          (item) => item.Label.toLowerCase().includes(searchTerm)
+        );
         this.ScrollToActiveItem();
-      } else {
-        this.ItemsFiltered = this.Items.filter((item) => item.default);
       }
-      this.ItemActive = this.ItemsFiltered[0];
     }
-  }));
+    SelectItem(item) {
+      if (!item) return;
+      this.$dispatch(`searchbox-item-selected-${this.name}`, { item });
+      this.ClearState();
+    }
+    AddItem() {
+      if (this.SearchIsEmpty()) return;
+      const item = { Label: this.Search, Value: this.Search };
+      this.Items.push(item);
+      this.$dispatch(`searchbox-item-selected-${this.name}`, { item });
+      this.ClearState();
+    }
+  };
+}
+document.addEventListener("alpine:init", () => {
+  const createSearchBox = (url, name) => {
+    const SearchBox = getSearchBoxClass();
+    return new SearchBox(url, name);
+  };
+  Alpine.data("SearchBox", createSearchBox);
 });
 
 // assets/js/shared/htmxErrorHandler.ts
 window.addEventListener("htmx:responseError", (e) => {
-  console.log(e);
   const code = e.detail.xhr.status;
   if (code === 500) {
     showToast({

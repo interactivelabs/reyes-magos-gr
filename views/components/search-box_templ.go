@@ -10,7 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "fmt"
 
-func SearchBox(url string) templ.Component {
+func SearchBox(url string, name string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -36,15 +36,15 @@ func SearchBox(url string) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("SearchBox('%s')", url))
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("SearchBox('%s', '%s')", url, name))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/search-box.templ`, Line: 8, Col: 46}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/components/search-box.templ`, Line: 8, Col: 58}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" @keydown.down=\"event.preventDefault(); ItemActiveNext();\" @keydown.up=\"event.preventDefault(); ItemActivePrevious()\" @keydown.enter=\"ItemSelected=ItemActive;\" class=\"flex justify-center w-full max-w-xl items-start relative\"><div class=\"w-full h-full rounded-lg relative\"><div class=\"flex items-center\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" @keydown.down=\"event.preventDefault(); ItemActiveNext();\" @keydown.up=\"event.preventDefault(); ItemActivePrevious()\" @keydown.enter=\"event.preventDefault(); ItemSelected=ItemActive;\" class=\"flex justify-center w-full max-w-xl items-start relative\"><div class=\"w-full h-full rounded-lg relative\"><div class=\"flex items-center\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -66,7 +66,7 @@ func SearchBox(url string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" placeholder=\"Search...\" autocomplete=\"off\" autocorrect=\"off\" spellcheck=\"false\"></div><ul class=\"absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm\" id=\"options\" role=\"listbox\" x-ref=\"ItemsList\" x-show=\"ItemsFiltered.length &gt; 0\"><template x-for=\"(Item, index) in ItemsFiltered\" :key=\"&#39;Item-&#39; + index\"><li class=\"relative cursor-pointer select-none py-2 pl-8 pr-4 text-gray-900\" role=\"option\" tabindex=\"-1\" :id=\"Item.Value + &#39;-&#39; + Id\" :class=\"{ &#39;text-white bg-brand-orange outline-none&#39; : ItemIsActive(Item) }\" @mousemove=\"ItemActive=Item\" @click=\"ItemSelected=Item\"><span class=\"block truncate\" x-text=\"Item.Label\"></span></li></template></ul></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" placeholder=\"Search...\" autocomplete=\"off\" autocorrect=\"off\" spellcheck=\"false\"><div class=\"absolute right-0\" x-show=\"Search.length &gt; 0\"><button type=\"button\" class=\"p-2 border border-gray-300 text-gray-500 shadow-sm text-sm font-medium rounded-md hover:bg-gray-50\" aria-label=\"Add item\" @click=\"AddItem\">Add</button></div></div><ul class=\"absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm\" id=\"options\" role=\"listbox\" x-ref=\"ItemsList\" x-show=\"ItemsFiltered.length &gt; 0\"><template x-for=\"(Item, index) in ItemsFiltered\" :key=\"&#39;Item-&#39; + index\"><li class=\"relative cursor-pointer select-none py-2 pl-8 pr-4 text-gray-900\" role=\"option\" tabindex=\"-1\" :id=\"Item.Value + &#39;-&#39; + Id\" :class=\"{ &#39;text-white bg-brand-orange outline-none&#39; : ItemIsActive(Item) }\" @mousemove=\"ItemActive=Item\" @click=\"ItemSelected=Item\"><span class=\"block truncate\" x-text=\"Item.Label\"></span></li></template></ul></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
