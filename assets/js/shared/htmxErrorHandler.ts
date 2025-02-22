@@ -12,7 +12,6 @@ declare global {
 }
 
 window.addEventListener<"htmx:responseError">("htmx:responseError", (e) => {
-  console.log(e);
   const code = e.detail.xhr.status;
   if (code === 500) {
     showToast({

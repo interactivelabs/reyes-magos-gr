@@ -27,4 +27,39 @@ globalThis.orderCompletedToggleClick = (btn) => {
   const completedInput = btn.previousElementSibling;
   completedInput.value = completedInput.value === "1" ? "0" : "1";
 };
+
+// assets/js/admin/toys_form.ts
+window.addEventListener("SearchBox:ItemSelected:category", (event) => {
+  const searchBoxEvent = event;
+  const item = searchBoxEvent.detail?.item;
+  if (!item) return;
+  const categoryInput = document.getElementById("category");
+  const category = item.Value;
+  const currentCategories = categoryInput.value.split(",");
+  if (currentCategories.includes(category)) return;
+  const newCategories = [...currentCategories, category];
+  categoryInput.value = newCategories.join(",");
+});
+document.addEventListener("alpine:init", () => {
+  Alpine.data("CategoryWithSearch", (currentValue) => ({
+    category: currentValue,
+    setNewCategory(event) {
+      const item = event.detail?.item;
+      if (!item) return;
+      const newCategory = item.Value;
+      const currentCategories = !!this.category ? this.category.split(",") : [];
+      if (currentCategories.includes(newCategory)) return;
+      const newCategories = [...currentCategories, newCategory];
+      this.category = newCategories.join(",");
+    },
+    removeCategory(category) {
+      const newCategories = this.category.split(",").filter((c) => c !== category);
+      if (newCategories.length > 0) {
+        this.category = newCategories.join(",");
+        return;
+      }
+      this.category = "";
+    }
+  }));
+});
 //# sourceMappingURL=admin.js.map
