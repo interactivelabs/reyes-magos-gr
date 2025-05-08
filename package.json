@@ -29,7 +29,7 @@
     "@tailwindcss/cli": "^4.1.5",
     "@tailwindcss/vite": "^4.1.5",
     "@types/alpinejs": "^3.13.11",
-    "esbuild": "^0.25.3",
+    "esbuild": "^0.25.4",
     "gsap": "^3.13.0",
     "prettier": "^3.5.3",
     "tailwindcss": "^4.1.4",
