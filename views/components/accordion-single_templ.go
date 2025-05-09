@@ -79,7 +79,7 @@ func AccordionSingleRow(title string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</span><div :class=\"{ &#39;rotate-90&#39;: activeAccordion==id }\" class=\"relative flex items-center justify-center w-2.5 h-2.5 duration-300 ease-out\"><div class=\"absolute w-0.5 h-full bg-neutral-500 group-hover:bg-neutral-800 rounded-full\"></div><div :class=\"{ &#39;rotate-90&#39;: activeAccordion==id }\" class=\"absolute w-full h-0.5 ease duration-500 bg-neutral-500 group-hover:bg-neutral-800 rounded-full\"></div></div></button><div x-show=\"activeAccordion==id\" x-collapse x-cloak>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</span><div :class=\"{ &#39;rotate-90&#39;: activeAccordion==id }\" class=\"relative flex items-center justify-center w-2.5 h-2.5 duration-300 ease-out\"><div class=\"absolute w-0.5 h-full bg-neutral-500 group-hover:bg-neutral-800 rounded-full\"></div><div :class=\"{ &#39;rotate-90&#39;: activeAccordion==id }\" class=\"absolute w-full h-0.5 ease duration-300 bg-neutral-500 group-hover:bg-neutral-800 rounded-full\"></div></div></button><div x-show=\"activeAccordion==id\" x-collapse x-cloak>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

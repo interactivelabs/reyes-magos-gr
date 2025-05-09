@@ -33,6 +33,7 @@ templ ToyRow(toy model.Toy) {
 				type="button"
 				class={ components.BaseSecondaryButton + " w-full mt-4" }
 				hx-delete={ lib.GetSafeIdUrl("/admin/toys/%d/delete", toy.ToyID) }
+				hx-confirm="Are you sure you want to delete the toy?"
 				hx-target={ fmt.Sprintf("#admin-toys-row-%d", toy.ToyID) }
 			>
 				Delete

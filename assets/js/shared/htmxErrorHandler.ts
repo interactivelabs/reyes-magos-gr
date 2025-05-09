@@ -20,4 +20,7 @@ window.addEventListener<"htmx:responseError">("htmx:responseError", (e) => {
       message: "Ha ocurrido un error inesperado. Por favor intenta de nuevo.",
     });
   }
+  if (code === 400) {
+    console.error(e);
+  }
 });
