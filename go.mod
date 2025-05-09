@@ -10,7 +10,7 @@ require (
 	github.com/dranikpg/dto-mapper v0.2.1
 	github.com/go-playground/validator/v10 v10.26.0
 	github.com/gorilla/sessions v1.4.0
-	github.com/labstack/echo-contrib v0.17.3
+	github.com/labstack/echo-contrib v0.17.4
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/stretchr/testify v1.10.0
 	github.com/tursodatabase/go-libsql v0.0.0-20250416102726-983f7e9acb0e
