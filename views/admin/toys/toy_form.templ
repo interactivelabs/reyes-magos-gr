@@ -52,13 +52,13 @@ templ ToyForm(toy model.Toy) {
 	<div>
 		<label for="age_min" class={ components.BaseLabelStyles }>Minimum Age</label>
 		<div class="mt-2">
-			<input type="number" name="age_min" class={ components.BaseInputStyles } value={ fmt.Sprint(toy.AgeMin) }/>
+			<input type="number" name="age_min" class={ components.BaseInputStyles } value={ fmt.Sprint(toy.AgeMin) } min="1" max="16" />
 		</div>
 	</div>
 	<div>
 		<label for="age_max" class={ components.BaseLabelStyles }>Maximum Age</label>
 		<div class="mt-2">
-			<input type="number" name="age_max" class={ components.BaseInputStyles } value={ fmt.Sprint(toy.AgeMax) }/>
+			<input type="number" name="age_max" class={ components.BaseInputStyles } value={ fmt.Sprint(toy.AgeMax) } min="1" max="16" />
 		</div>
 	</div>
 	<div>
