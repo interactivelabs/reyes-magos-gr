@@ -53,7 +53,7 @@ templ ToastTemplate(variant string) {
 			x-transition:leave-end="-translate-x-24 opacity-0 md:translate-x-24"
 			x-transition:leave-start="translate-x-0 opacity-100"
 		>
-			<div class={ getToastVariantClasses(variant)["wrapper"] }>
+			<div class={ getToastVariantClasses(variant)["wrapper"] } x-trap="isVisible">
 				<!-- Icon -->
 				<div class={ getToastVariantClasses(variant)["icon"] } aria-hidden="true">
 					@svg.CheckCircle("h-4 w-4 ml-4 fill-current")

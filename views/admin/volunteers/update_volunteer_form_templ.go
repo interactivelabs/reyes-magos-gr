@@ -73,7 +73,7 @@ func UpdateVolunteerForm(volunteer model.Volunteer) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" hx-swap=\"outerHTML\" hx-on:htmx:after-load=\"modalOpen = false\"><div class=\"grid grid-cols-1 gap-x-6 gap-y-8\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" hx-swap=\"outerHTML\" x-on:htmx:after-on-load=\"modalOpen = false\"><div class=\"grid grid-cols-1 gap-x-6 gap-y-8\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
