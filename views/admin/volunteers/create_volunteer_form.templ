@@ -13,7 +13,7 @@ templ CreateVolunteerForm() {
 			hx-post={ string(templ.URL("/admin/volunteers")) }
 			hx-target="#admin-volunteers-table-body"
 			hx-swap="afterbegin"
-			x-on:htmx:after-load="modalOpen = false"
+			hx-on:htmx:after-load="modalOpen = false"
 		>
 			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
 				@VolunteerForm(model.Volunteer{})
