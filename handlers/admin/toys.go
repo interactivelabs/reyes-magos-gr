@@ -7,6 +7,7 @@ import (
 	"reyes-magos-gr/lib"
 	toys_view "reyes-magos-gr/views/admin/toys"
 	"strconv"
+	"strings"
 
 	"github.com/dranikpg/dto-mapper"
 	"github.com/labstack/echo/v4"
@@ -102,6 +103,14 @@ func (h ToysHandler) UpdateToyPutHandler(ctx echo.Context) error {
 	}
 
 	toy.ToyID = toyID
+
+	var categories = strings.Split(toy.Category, ",")
+	if len(categories) > 0 {
+		for i, category := range categories {
+			categories[i] = strings.TrimSpace(category)
+		}
+		toy.Category = strings.Join(categories, ",")
+	}
 
 	err = h.ToysRepository.UpdateToy(toy)
 	if err != nil {

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"reyes-magos-gr/db/model"
 	utils "reyes-magos-gr/db/repository/utils"
+	"slices"
 	"strings"
 )
 
@@ -246,8 +247,14 @@ func (r ToysRepository) GetCategories() (categories []string, err error) {
 		}
 
 		category := strings.Split(strings.TrimSpace(category_sql), ",")
+		for i := range category {
+			category[i] = strings.TrimSpace(category[i])
+		}
 		categories = append(categories, category...)
 	}
+
+	slices.Sort(categories)
+	categories = slices.Compact(categories)
 
 	return categories, nil
 }
