@@ -1,0 +1,189 @@
+package router
+
+import (
+	"net/http"
+	"os"
+	"reyes-magos-gr/api"
+	"reyes-magos-gr/app"
+	"reyes-magos-gr/handlers"
+	"reyes-magos-gr/handlers/admin"
+	"reyes-magos-gr/handlers/volunteers"
+	reyes_middleware "reyes-magos-gr/middleware"
+	"reyes-magos-gr/platform/authenticator"
+
+	"github.com/gorilla/sessions"
+	"github.com/labstack/echo-contrib/session"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"golang.org/x/time/rate"
+)
+
+func SetupRouter(app *app.App, auth *authenticator.Authenticator) *echo.Echo {
+	e := echo.New()
+
+	// Middleware
+	e.Validator = reyes_middleware.NewValidator()
+
+	// Security and session configuration
+	cookieSecret := os.Getenv("REYES_COOKIE_SECRET")
+	e.Use(session.Middleware(sessions.NewCookieStore([]byte(cookieSecret))))
+
+	env := os.Getenv("ENV")
+	csrfDomain := "dl-toys.com"
+	if env == "development" {
+		csrfDomain = "localhost"
+	}
+
+	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+		TokenLookup:    "cookie:_csrf",
+		CookiePath:     "/",
+		CookieDomain:   csrfDomain,
+		CookieSecure:   true,
+		CookieHTTPOnly: true,
+		CookieSameSite: http.SameSiteStrictMode,
+	}))
+
+	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(rate.Limit(10))))
+	e.Use(middleware.Gzip())
+
+	allowOrigins := []string{"https://dl-toys.com", "https://www.dl-toys.com", "https://static.dl-toys.com"}
+	if env == "development" {
+		allowOrigins = append(allowOrigins, "http://localhost:8080")
+	}
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: allowOrigins,
+	}))
+
+	// PUBLIC ENDPOINTS
+	homeHandler := handlers.HomeHandler{}
+	e.GET("/", homeHandler.HomeViewHandler)
+	e.GET("/support", homeHandler.SupportViewHandler)
+	e.GET("/401", homeHandler.Error401)
+	e.GET("/404", homeHandler.Error404)
+	e.GET("/500", homeHandler.Error500)
+	e.GET("/health", homeHandler.HealthViewHandler)
+	e.GET("/verifyemail", homeHandler.VerifyEmailHandler)
+	e.GET("/notvolunteer", homeHandler.NotVolunteerHandler)
+
+	loginHandler := handlers.LoginHandler{
+		Auth: auth,
+	}
+	e.GET("/login", loginHandler.LoginRedirectHandler)
+	e.GET("/callback", loginHandler.LoginCallbackHandler)
+	e.GET("/logout", loginHandler.LogoutRedirectHandler)
+
+	catalogHandler := handlers.CatalogHandler{
+		ToysRepository: app.ToysRepository,
+	}
+	e.GET("/catalog", catalogHandler.CatalogViewHandler)
+
+	redeemToyHandler := handlers.RedeemToyHandler{
+		ToysRepository: app.ToysRepository,
+	}
+	e.GET("/redeem/:toy_id", redeemToyHandler.RedeemToyViewHandler)
+
+	ordersHandler := handlers.OrdersHandler{
+		OrdersService:        app.OrderService,
+		VolunteersRepository: app.VolunteersRepository,
+	}
+	e.POST("/orders/create", ordersHandler.CreateOrderViewHandler)
+
+	// Serve static files (css, js, images)
+	e.Static("/public", "public")
+
+	// VOLUNTEER ENDPOINTS
+	vg := e.Group("/volunteer")
+
+	vg.Use(reyes_middleware.IsAuthenticated())
+
+	myCodesHandler := volunteers.MyCodesHandler{
+		VolunteersService: app.VolunteersService,
+		CodesRepository:   app.CodesRepository,
+	}
+	vg.GET("/mycodes", myCodesHandler.MyCodesViewHandler)
+	vg.POST("/mycodes/give/:code_id", myCodesHandler.GiveCode)
+
+	myOrdersHandler := volunteers.MyOrdersHandler{
+		VolunteersService: app.VolunteersService,
+		Ordersrepository:  app.OrdersRepository,
+	}
+	vg.GET("/myorders", myOrdersHandler.MyOrdersViewHandler)
+	vg.POST("/myorders/:order_id/completed", myOrdersHandler.MyOrdersCompleteHandler)
+
+	myCartHandler := volunteers.CartHandler{
+		VolunteersService: app.VolunteersService,
+	}
+	vg.GET("/mycart", myCartHandler.CartViewHandler)
+
+	// ADMIN ENDPOINTS
+	ag := e.Group("/admin")
+
+	ag.Use(reyes_middleware.IsAdmin())
+
+	toyHandler := api.ToyHandler{
+		ToysRepository: app.ToysRepository,
+	}
+	ag.POST("/api/toy", toyHandler.CreateToyApiHandler)
+	ag.POST("/api/toys", toyHandler.CreateBatchToysApiHandler)
+	ag.PUT("/api/toy", toyHandler.UpdateToyApiHandler)
+	ag.DELETE("/api/toy/:toy_id", toyHandler.DeleteToyApiHandler)
+
+	volunteerHandler := api.VolunteerHandler{
+		VolunteersRepository: app.VolunteersRepository,
+	}
+	ag.POST("/api/volunteer", volunteerHandler.CreateVolunteerApiHandler)
+	ag.PUT("/api/volunteer", volunteerHandler.UpdateVolunteerApiHandler)
+	ag.DELETE("/api/volunteer/:volunteer_id", volunteerHandler.DeleteVolunteerApiHandler)
+
+	codeHandler := api.CodeHandler{
+		CodesService: app.CodesService,
+	}
+	ag.POST("/api/code", codeHandler.CreateCodeApiHandler)
+	ag.POST("/api/code/batch", codeHandler.CreateCodeBatchApiHandler)
+
+	// ADMIN VIEWS
+	codesHandler := admin.CodesHandler{
+		CodesRepository:          app.CodesRepository,
+		VolunteersRepository:     app.VolunteersRepository,
+		VolunteerCodesRepository: app.VolunteerCodesRepository,
+		CodesService:             app.CodesService,
+	}
+	ag.GET("/codes", codesHandler.CodesViewHandler)
+	ag.POST("/codes/assign", codesHandler.AssignCodesHandler)
+	ag.POST("/codes/remove", codesHandler.RemoveCodesHandler)
+	ag.POST("/codes/create", codesHandler.CreateCodesHandler)
+
+	adminOrdersHandler := admin.OrdersHandler{
+		OrdersRepository:     app.OrdersRepository,
+		ToysRepository:       app.ToysRepository,
+		VolunteersRepository: app.VolunteersRepository,
+	}
+	ag.GET("/orders", adminOrdersHandler.OrdersViewHandler)
+	ag.GET("/order/:order_id", adminOrdersHandler.OrderCardViewHandler)
+	ag.GET("/order/:order_id/edit", adminOrdersHandler.UpdateOrderViewHandler)
+	ag.PUT("/order/:order_id/save", adminOrdersHandler.SaveOrderChangesHandler)
+
+	volunteersHandler := admin.VolunteersHandler{
+		VolunteersService:    app.VolunteersService,
+		VolunteersRepository: app.VolunteersRepository,
+	}
+	ag.GET("/volunteers", volunteersHandler.VolunteersViewHandler)
+	ag.GET("/volunteers/create", volunteersHandler.VolunteersCreateHandler)
+	ag.POST("/volunteers", volunteersHandler.VolunteersCreatePostHandler)
+	ag.GET("/volunteers/:volunteer_id", volunteersHandler.VolunteersUpdateViewHandler)
+	ag.PUT("/volunteers/:volunteer_id/save", volunteersHandler.VolunteersUpdatePutHandler)
+	ag.DELETE("/volunteers/:volunteer_id/delete", volunteersHandler.VolunteersDeleteHandler)
+
+	toysHandler := admin.ToysHandler{
+		ToysRepository: app.ToysRepository,
+	}
+	ag.GET("/toys", toysHandler.ToysViewHandler)
+	ag.GET("/toys/create", toysHandler.CreateToyFormHandler)
+	ag.POST("/toys", toysHandler.CreateToyPostHandler)
+	ag.GET("/toys/:toy_id", toysHandler.UpdateToyFormHandler)
+	ag.PUT("/toys/:toy_id/save", toysHandler.UpdateToyPutHandler)
+	ag.DELETE("/toys/:toy_id/delete", toysHandler.DeleteToyHandler)
+	ag.GET("/toys/categories", toysHandler.ToysCategoriesViewHandler)
+
+	return e
+}

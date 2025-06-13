@@ -111,11 +111,7 @@ const volunteerAllFields string = `
 	zip_code,
 	deleted`
 
-type VolunteerScanner interface {
-	Scan(dest ...interface{}) error
-}
-
-func scanAllVolunteer(s VolunteerScanner) (volunteer model.Volunteer, err error) {
+func scanAllVolunteer(s utils.Scanner) (volunteer model.Volunteer, err error) {
 	err = s.Scan(
 		&volunteer.VolunteerID,
 		&volunteer.Name,

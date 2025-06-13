@@ -87,3 +87,15 @@ create table volunteer_codes
     deleted           integer default 0 not null
 );
 
+
+CREATE TABLE `carts` (
+  `cart_id` integer PRIMARY KEY,
+  `volunteer_id` integer NOT NULL,
+  `toy_id` integer NOT NULL,
+  `volunteer_code_id` integer,
+  'used' integer DEFAULT '0' NOT NULL,
+  `deleted` integer DEFAULT '0' NOT NULL,
+  FOREIGN KEY (`volunteer_id`) REFERENCES `volunteers` (`volunteer_id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  FOREIGN KEY (`toy_id`) REFERENCES `toys` (`toy_id`) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  FOREIGN KEY (`volunteer_code_id`) REFERENCES `volunteer_codes` (`volunteer_code_id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+);

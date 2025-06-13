@@ -19,7 +19,7 @@ type MyOrdersHandler struct {
 }
 
 func (h MyOrdersHandler) MyOrdersViewHandler(ctx echo.Context) error {
-	profile, perr := GetProfileView(ctx, h.VolunteersService)
+	profile, perr := GetProfileHandler(ctx, h.VolunteersService)
 	if perr != nil && perr.Code == http.StatusUnauthorized {
 		return perr
 	}

@@ -77,60 +77,6 @@ func (r ToysRepository) GetToys() (toys []model.Toy, err error) {
 	return toys, nil
 }
 
-func getFilteredQuery(ageMin int64, ageMax int64, category []string, countOnly bool) (query string, params []interface{}) {
-	var ageMinFiler int64
-	ageMinFiler = 0
-	if ageMin > 0 {
-		ageMinFiler = ageMin
-	}
-
-	var ageMaxFiler int64
-	ageMaxFiler = 99
-	if ageMax > 0 {
-		ageMaxFiler = ageMax
-	}
-
-	params = append(params, ageMinFiler, ageMaxFiler)
-
-	var selectFields = toyAllFields
-	if countOnly {
-		selectFields = "COUNT(*)"
-	}
-
-	query = `
-		SELECT ` + selectFields + `
-		FROM toys
-		WHERE
-			deleted = 0
-			AND age_min >= ?
-			AND age_max <= ?`
-
-	if len(category) > 0 {
-		query += " AND ("
-		query += buildCategoryWhereSQL(category)
-		query += ")"
-	}
-
-	return query, params
-}
-
-func buildCategoryWhereSQL(categories []string) string {
-	count := len(categories)
-	if count <= 0 {
-		return ""
-	}
-
-	var builder strings.Builder
-	for i := 0; i < count; i++ {
-		s := "category LIKE '%" + categories[i] + "%'"
-		builder.WriteString(s)
-		if i < count-1 {
-			builder.WriteString(" OR ")
-		}
-	}
-	return builder.String()
-}
-
 func (r ToysRepository) GetToysWithFiltersPaged(page int64, pageSize int64, ageMin int64, ageMax int64, category []string) (toys []model.Toy, err error) {
 
 	query, params := getFilteredQuery(ageMin, ageMax, category, false)
@@ -193,39 +139,6 @@ func (r ToysRepository) GetToyByID(toyID int64) (toy model.Toy, err error) {
 	return toy, nil
 }
 
-const toyAllFields string = `
-	toy_id,
-	toy_name,
-	COALESCE(toy_description, ''),
-	COALESCE(category, ''),
-	age_min,
-	age_max,
-	image1,
-	image2,
-	image3,
-	source_url,
-	deleted`
-
-type ToyScanner interface {
-	Scan(dest ...interface{}) error
-}
-
-func scanAllToy(s ToyScanner) (toy model.Toy, err error) {
-	err = s.Scan(
-		&toy.ToyID,
-		&toy.ToyName,
-		&toy.ToyDescription,
-		&toy.Category,
-		&toy.AgeMin,
-		&toy.AgeMax,
-		&toy.Image1,
-		&toy.Image2,
-		&toy.Image3,
-		&toy.SourceURL,
-		&toy.Deleted)
-	return toy, err
-}
-
 func (r ToysRepository) GetCategories() (categories []string, err error) {
 	rows, err := r.DB.Query(`
 		SELECT DISTINCT category
@@ -271,4 +184,87 @@ func (r ToysRepository) GetToysCount() (count int64, err error) {
 	}
 
 	return count, nil
+}
+
+func getFilteredQuery(ageMin int64, ageMax int64, category []string, countOnly bool) (query string, params []interface{}) {
+	var ageMinFiler int64
+	ageMinFiler = 0
+	if ageMin > 0 {
+		ageMinFiler = ageMin
+	}
+
+	var ageMaxFiler int64
+	ageMaxFiler = 99
+	if ageMax > 0 {
+		ageMaxFiler = ageMax
+	}
+
+	params = append(params, ageMinFiler, ageMaxFiler)
+
+	var selectFields = toyAllFields
+	if countOnly {
+		selectFields = "COUNT(*)"
+	}
+
+	query = `
+		SELECT ` + selectFields + `
+		FROM toys
+		WHERE
+			deleted = 0
+			AND age_min >= ?
+			AND age_max <= ?`
+
+	if len(category) > 0 {
+		query += " AND ("
+		query += buildCategoryWhereSQL(category)
+		query += ")"
+	}
+
+	return query, params
+}
+
+func buildCategoryWhereSQL(categories []string) string {
+	count := len(categories)
+	if count <= 0 {
+		return ""
+	}
+
+	var builder strings.Builder
+	for i := 0; i < count; i++ {
+		s := "category LIKE '%" + categories[i] + "%'"
+		builder.WriteString(s)
+		if i < count-1 {
+			builder.WriteString(" OR ")
+		}
+	}
+	return builder.String()
+}
+
+const toyAllFields string = `
+	toy_id,
+	toy_name,
+	COALESCE(toy_description, ''),
+	COALESCE(category, ''),
+	age_min,
+	age_max,
+	image1,
+	image2,
+	image3,
+	source_url,
+	deleted`
+
+func scanAllToy(s utils.Scanner) (toy model.Toy, err error) {
+	err = s.Scan(
+		&toy.ToyID,
+		&toy.ToyName,
+		&toy.ToyDescription,
+		&toy.Category,
+		&toy.AgeMin,
+		&toy.AgeMax,
+		&toy.Image1,
+		&toy.Image2,
+		&toy.Image3,
+		&toy.SourceURL,
+		&toy.Deleted)
+	return toy, err
 }

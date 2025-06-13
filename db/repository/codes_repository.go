@@ -148,11 +148,7 @@ func (r CodesRepository) GetUnassignedCodes() (codes []model.Code, err error) {
 	return codes, nil
 }
 
-type CodeScanner interface {
-	Scan(dest ...interface{}) error
-}
-
-func scanAllCode(s CodeScanner) (code model.Code, err error) {
+func scanAllCode(s utils.Scanner) (code model.Code, err error) {
 	err = s.Scan(
 		&code.CodeID,
 		&code.Code,

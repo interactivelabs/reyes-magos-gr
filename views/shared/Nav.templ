@@ -46,7 +46,7 @@ templ Nav() {
 							<a href="/catalog" class={ desktopMenuLink }>Catálogo</a>
 						</div>
 					</div>
-					if lib.GetProfile(ctx).Email != "" {
+					if lib.GetProfile(ctx).IsLoggedIn == true {
 						<div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 							<!-- Profile dropdown -->
 							<div class="relative ml-3" x-data="{ openAdmin: false }">

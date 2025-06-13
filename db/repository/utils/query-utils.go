@@ -106,3 +106,7 @@ func BuildDeleteQuery(idValue int64, tableName string, idFieldName string) (quer
 
 	return query.String(), params, nil
 }
+
+type Scanner interface {
+	Scan(dest ...interface{}) error
+}
