@@ -1,6 +1,7 @@
 package services
 
 import (
+	"reyes-magos-gr/app/dtos"
 	"reyes-magos-gr/db/model"
 	"reyes-magos-gr/db/repository"
 
@@ -8,6 +9,7 @@ import (
 )
 
 type VolunteersService struct {
+	CartsRepository          repository.CartsRepository
 	CodesRepository          repository.CodesRepository
 	OrdersRepository         repository.OrdersRepository
 	VolunteersRepository     repository.VolunteersRepository
@@ -49,6 +51,20 @@ func (s VolunteersService) GetVolunteerOrdersByEmail(email string) (orders []mod
 	}
 
 	return orders, nil
+}
+
+func (s VolunteersService) GetVolunteerCartByEmail(email string) (cartItems []dtos.CartItem, err error) {
+	volunteer, err := s.VolunteersRepository.GetVolunteerByEmail(email)
+	if err != nil {
+		return nil, err
+	}
+
+	cartItems, err = s.CartsRepository.GetCartToys(volunteer.VolunteerID)
+	if err != nil {
+		return nil, err
+	}
+
+	return cartItems, nil
 }
 
 func GroupVolunteersByLocation(volunteers []model.Volunteer) (groupedVolunteers map[string][]model.Volunteer) {

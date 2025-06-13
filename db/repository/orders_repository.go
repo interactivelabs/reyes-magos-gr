@@ -58,21 +58,6 @@ func (r OrdersRepository) GetOrderByID(orderID int64) (order model.Order, err er
 	return scanAllOrder(row)
 }
 
-func GetOrdersFromQuery(rows *sql.Rows) (orders []model.Order, err error) {
-	defer func(rows *sql.Rows) {
-		_ = rows.Close()
-	}(rows)
-
-	for rows.Next() {
-		order, err := scanAllOrder(rows)
-		if err != nil {
-			return nil, err
-		}
-		orders = append(orders, order)
-	}
-	return orders, nil
-}
-
 func (r OrdersRepository) GetPendingOrdersByVolunteerID(volunteerID int64) (orders []model.Order, err error) {
 	rows, err := r.DB.Query(`
 		SELECT `+orderAllFields+`
@@ -112,6 +97,21 @@ func (r OrdersRepository) GetCompletedOrders() (orders []model.Order, err error)
 	return GetOrdersFromQuery(rows)
 }
 
+func GetOrdersFromQuery(rows *sql.Rows) (orders []model.Order, err error) {
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
+
+	for rows.Next() {
+		order, err := scanAllOrder(rows)
+		if err != nil {
+			return nil, err
+		}
+		orders = append(orders, order)
+	}
+	return orders, nil
+}
+
 const orderAllFields string = `
 	order_id,
 	toy_id,
@@ -125,11 +125,7 @@ const orderAllFields string = `
 	cancelled,
 	deleted`
 
-type OrderScanner interface {
-	Scan(dest ...interface{}) error
-}
-
-func scanAllOrder(s OrderScanner) (order model.Order, err error) {
+func scanAllOrder(s utils.Scanner) (order model.Order, err error) {
 	err = s.Scan(
 		&order.OrderID,
 		&order.ToyID,

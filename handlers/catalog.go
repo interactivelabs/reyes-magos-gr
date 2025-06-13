@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"math"
 	"net/http"
+	"reyes-magos-gr/app/dtos"
 	"reyes-magos-gr/db/repository"
-	"reyes-magos-gr/handlers/dtos"
 	"reyes-magos-gr/lib"
 	catalog "reyes-magos-gr/views/catalog"
 

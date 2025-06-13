@@ -3,6 +3,7 @@ package lib
 import (
 	"context"
 	"encoding/json"
+	"reyes-magos-gr/app/dtos"
 
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
@@ -69,18 +70,13 @@ const (
 	profileKey contextKey = "profile"
 )
 
-type ProfileView struct {
-	IsAdmin  bool
-	Nickname string
-	Email    string
-	Picture  string
-}
-
-func GetProfileView(ctx echo.Context) (profile ProfileView) {
+func GetCtxProfile(ctx echo.Context) (profile dtos.Profile) {
 	sessionProfile, err := GetSessionProfile(ctx)
 	if err != nil || sessionProfile == nil {
 		return profile
 	}
+
+	profile.IsLoggedIn = true
 
 	if sessionProfile["dl_admin"] == "true" {
 		profile.IsAdmin = true
@@ -101,9 +97,9 @@ func GetProfileView(ctx echo.Context) (profile ProfileView) {
 	return profile
 }
 
-func GetProfile(ctx context.Context) (profile ProfileView) {
-	if profile, ok := ctx.Value(profileKey).(ProfileView); ok {
+func GetProfile(ctx context.Context) (profile dtos.Profile) {
+	if profile, ok := ctx.Value(profileKey).(dtos.Profile); ok {
 		return profile
 	}
-	return ProfileView{}
+	return dtos.Profile{}
 }

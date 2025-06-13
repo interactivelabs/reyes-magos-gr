@@ -3,6 +3,7 @@ package pages
 import (
 	"fmt"
 	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/lib"
 	layout "reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
 	"reyes-magos-gr/views/components/svg"
@@ -49,12 +50,26 @@ templ RedeemToyForm(toyId int64, code string, errorMsg string) {
 				</div>
 			</div>
 		}
-		<div class="mt-6 text-right">
+		<div class="mt-8 text-right">
 			<button type="submit" class={ components.BrandPrimaryButton + " w-full lg:w-auto" }>
 				Ordernar Regalo
 			</button>
 		</div>
 	</form>
+}
+
+templ AddToCartButton(toyId int64) {
+	<div class="mt-8 text-center">
+		<button
+			class={ components.BrandPrimaryButton }
+			hx-post="/admin/cart/add"
+			hx-target="this"
+			hx-swap="outerHTML"
+		>
+			Agregar al Carrito
+			<input type="hidden" name="toy_id" value={ fmt.Sprint(toyId) }/>
+		</button>
+	</div>
 }
 
 templ RedeemToy(toy model.Toy, code string) {
@@ -107,7 +122,11 @@ templ RedeemToy(toy model.Toy, code string) {
 						<h2 class="text-xl font-medium text-gray-900">{ toy.ToyName }</h2>
 					</div>
 					<div class="px-4 md:px-0">
-						@RedeemToyForm(toy.ToyID, code, "")
+						if lib.GetProfile(ctx).IsLoggedIn == true {
+							@AddToCartButton(toy.ToyID)
+						} else {
+							@RedeemToyForm(toy.ToyID, code, "")
+						}
 						<div class="mt-16">
 							@components.Accordion() {
 								@components.AccordionRow("Edades (años)", true) {

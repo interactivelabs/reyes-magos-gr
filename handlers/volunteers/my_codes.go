@@ -2,6 +2,7 @@ package volunteers
 
 import (
 	"net/http"
+	"reyes-magos-gr/app/dtos"
 	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
@@ -17,7 +18,7 @@ type MyCodesHandler struct {
 }
 
 func (h MyCodesHandler) MyCodesViewHandler(ctx echo.Context) error {
-	profile, perr := GetProfileView(ctx, h.VolunteersService)
+	profile, perr := GetProfileHandler(ctx, h.VolunteersService)
 	if perr != nil && perr.Code == http.StatusUnauthorized {
 		return perr
 	}
@@ -55,15 +56,15 @@ func (h MyCodesHandler) GiveCode(ctx echo.Context) error {
 	return lib.Render(ctx, volunteer.MyCodeItem(code))
 }
 
-func GetProfileView(ctx echo.Context, volunteersService services.VolunteersService) (lib.ProfileView, *echo.HTTPError) {
-	profile := lib.GetProfileView(ctx)
+func GetProfileHandler(ctx echo.Context, volunteersService services.VolunteersService) (dtos.Profile, *echo.HTTPError) {
+	profile := lib.GetCtxProfile(ctx)
 	if profile.Email == "" {
-		return lib.ProfileView{}, echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+		return dtos.Profile{}, echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
 	}
 
 	_, err := volunteersService.GetVolunteerByEmail(profile.Email)
 	if err != nil {
-		return lib.ProfileView{}, echo.NewHTTPError(http.StatusForbidden, "Not a volunteer")
+		return dtos.Profile{}, echo.NewHTTPError(http.StatusForbidden, "Not a volunteer")
 	}
 
 	return profile, nil
