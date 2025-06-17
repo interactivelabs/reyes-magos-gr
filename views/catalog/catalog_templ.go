@@ -11,7 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"fmt"
 	"reyes-magos-gr/app/dtos"
-	"reyes-magos-gr/db/models"
+	"reyes-magos-gr/store/models"
 
 	"reyes-magos-gr/lib"
 	layout "reyes-magos-gr/views"

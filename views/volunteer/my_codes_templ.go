@@ -10,8 +10,8 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"fmt"
-	"reyes-magos-gr/db/models"
 	"reyes-magos-gr/lib"
+	"reyes-magos-gr/store/models"
 	layout "reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
 	svg "reyes-magos-gr/views/components/svg"
