@@ -17,7 +17,13 @@ type ToysHandler struct {
 	ToysStore store.ToysStore
 }
 
-func (h ToysHandler) ToysViewHandler(ctx echo.Context) error {
+func NewToysHandler(toysStore store.ToysStore) *ToysHandler {
+	return &ToysHandler{
+		ToysStore: toysStore,
+	}
+}
+
+func (h *ToysHandler) ToysViewHandler(ctx echo.Context) error {
 	toys, err := h.ToysStore.GetToys()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -26,23 +32,23 @@ func (h ToysHandler) ToysViewHandler(ctx echo.Context) error {
 	return lib.Render(ctx, toys_view.Toys(toys))
 }
 
-func (h ToysHandler) CreateToyFormHandler(ctx echo.Context) error {
+func (h *ToysHandler) CreateToyFormHandler(ctx echo.Context) error {
 	return lib.Render(ctx, toys_view.CreateToyForm())
 }
 
 type CreateToyRequest struct {
-	ToyName        string `form:"toy_name" validate:"required"`
+	ToyName        string `form:"toy_name"        validate:"required"`
 	ToyDescription string `form:"toy_description"`
-	Category       string `form:"category" validate:"required"`
-	AgeMin         int64  `form:"age_min" validate:"required,min=1,max=16"`
-	AgeMax         int64  `form:"age_max" validate:"required,max=16"`
-	Image1         string `form:"image1" validate:"required,url"`
-	Image2         string `form:"image2" validate:"required,url"`
-	Image3         string `form:"image3" validate:"required,url"`
-	SourceURL      string `form:"source_url" validate:"required,url"`
+	Category       string `form:"category"        validate:"required"`
+	AgeMin         int64  `form:"age_min"         validate:"required,min=1,max=16"`
+	AgeMax         int64  `form:"age_max"         validate:"required,max=16"`
+	Image1         string `form:"image1"          validate:"required,url"`
+	Image2         string `form:"image2"          validate:"required,url"`
+	Image3         string `form:"image3"          validate:"required,url"`
+	SourceURL      string `form:"source_url"      validate:"required,url"`
 }
 
-func (h ToysHandler) CreateToyPostHandler(ctx echo.Context) error {
+func (h *ToysHandler) CreateToyPostHandler(ctx echo.Context) error {
 	tr := new(CreateToyRequest)
 	if err := ctx.Bind(tr); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -67,7 +73,7 @@ func (h ToysHandler) CreateToyPostHandler(ctx echo.Context) error {
 	return lib.Render(ctx, toys_view.ToyRow(toy))
 }
 
-func (h ToysHandler) UpdateToyFormHandler(ctx echo.Context) error {
+func (h *ToysHandler) UpdateToyFormHandler(ctx echo.Context) error {
 	toyID, err := strconv.ParseInt(ctx.Param("toy_id"), 10, 64)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -81,7 +87,7 @@ func (h ToysHandler) UpdateToyFormHandler(ctx echo.Context) error {
 	return lib.Render(ctx, toys_view.UpdateToyForm(toy))
 }
 
-func (h ToysHandler) UpdateToyPutHandler(ctx echo.Context) error {
+func (h *ToysHandler) UpdateToyPutHandler(ctx echo.Context) error {
 	toyIDStr := ctx.Param("toy_id")
 	toyID, err := strconv.ParseInt(toyIDStr, 10, 64)
 	if err != nil {
@@ -120,7 +126,7 @@ func (h ToysHandler) UpdateToyPutHandler(ctx echo.Context) error {
 	return lib.Render(ctx, toys_view.ToyRow(toy))
 }
 
-func (h ToysHandler) DeleteToyHandler(ctx echo.Context) error {
+func (h *ToysHandler) DeleteToyHandler(ctx echo.Context) error {
 	toyIDStr := ctx.Param("toy_id")
 	toyID, err := strconv.ParseInt(toyIDStr, 10, 64)
 	if err != nil {
@@ -140,7 +146,7 @@ type SearchBoxItem struct {
 	Label string
 }
 
-func (h ToysHandler) ToysCategoriesViewHandler(ctx echo.Context) error {
+func (h *ToysHandler) ToysCategoriesViewHandler(ctx echo.Context) error {
 	categories, err := h.ToysStore.GetCategories()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())

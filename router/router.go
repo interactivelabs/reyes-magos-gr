@@ -45,7 +45,11 @@ func SetupRouter(app *app.App, auth *authenticator.Authenticator) *echo.Echo {
 	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(rate.Limit(10))))
 	e.Use(middleware.Gzip())
 
-	allowOrigins := []string{"https://dl-toys.com", "https://www.dl-toys.com", "https://static.dl-toys.com"}
+	allowOrigins := []string{
+		"https://dl-toys.com",
+		"https://www.dl-toys.com",
+		"https://static.dl-toys.com",
+	}
 	if env == "development" {
 		allowOrigins = append(allowOrigins, "http://localhost:8080")
 	}
@@ -54,7 +58,7 @@ func SetupRouter(app *app.App, auth *authenticator.Authenticator) *echo.Echo {
 	}))
 
 	// PUBLIC ENDPOINTS
-	homeHandler := handlers.HomeHandler{}
+	homeHandler := handlers.NewHomeHandler()
 	e.GET("/", homeHandler.HomeViewHandler)
 	e.GET("/support", homeHandler.SupportViewHandler)
 	e.GET("/401", homeHandler.Error401)
@@ -64,27 +68,19 @@ func SetupRouter(app *app.App, auth *authenticator.Authenticator) *echo.Echo {
 	e.GET("/verifyemail", homeHandler.VerifyEmailHandler)
 	e.GET("/notvolunteer", homeHandler.NotVolunteerHandler)
 
-	loginHandler := handlers.LoginHandler{
-		Auth: auth,
-	}
+	loginHandler := handlers.NewLoginHandler(auth)
+	e.GET("/login/redirect", loginHandler.LoginRedirectHandler)
 	e.GET("/login", loginHandler.LoginRedirectHandler)
 	e.GET("/callback", loginHandler.LoginCallbackHandler)
 	e.GET("/logout", loginHandler.LogoutRedirectHandler)
 
-	catalogHandler := handlers.CatalogHandler{
-		ToysStore: app.ToysStore,
-	}
+	catalogHandler := handlers.NewCatalogHandler(app.ToysStore)
 	e.GET("/catalog", catalogHandler.CatalogViewHandler)
 
-	redeemToyHandler := handlers.RedeemToyHandler{
-		ToysStore: app.ToysStore,
-	}
+	redeemToyHandler := handlers.NewRedeemToyHandler(app.ToysStore)
 	e.GET("/redeem/:toy_id", redeemToyHandler.RedeemToyViewHandler)
 
-	ordersHandler := handlers.OrdersHandler{
-		OrdersService:        app.OrderService,
-		VolunteersStore: app.VolunteersStore,
-	}
+	ordersHandler := handlers.NewOrdersHandler(app.VolunteersStore, app.OrderService)
 	e.POST("/orders/create", ordersHandler.CreateOrderViewHandler)
 
 	// Serve static files (css, js, images)
@@ -95,23 +91,15 @@ func SetupRouter(app *app.App, auth *authenticator.Authenticator) *echo.Echo {
 
 	vg.Use(reyes_middleware.IsAuthenticated())
 
-	myCodesHandler := volunteers.MyCodesHandler{
-		VolunteersService: app.VolunteersService,
-		CodesStore:   app.CodesStore,
-	}
+	myCodesHandler := volunteers.NewMyCodesHandler(app.CodesStore, app.VolunteersService)
 	vg.GET("/mycodes", myCodesHandler.MyCodesViewHandler)
 	vg.POST("/mycodes/give/:code_id", myCodesHandler.GiveCode)
 
-	myOrdersHandler := volunteers.MyOrdersHandler{
-		VolunteersService: app.VolunteersService,
-		Ordersrepository:  app.OrdersStore,
-	}
+	myOrdersHandler := volunteers.NewMyOrdersHandler(app.OrdersStore, app.VolunteersService)
 	vg.GET("/myorders", myOrdersHandler.MyOrdersViewHandler)
 	vg.POST("/myorders/:order_id/completed", myOrdersHandler.MyOrdersCompleteHandler)
 
-	myCartHandler := volunteers.CartHandler{
-		VolunteersService: app.VolunteersService,
-	}
+	myCartHandler := volunteers.NewCartHandler(app.VolunteersService)
 	vg.GET("/mycart", myCartHandler.CartViewHandler)
 
 	// ADMIN ENDPOINTS
@@ -119,31 +107,28 @@ func SetupRouter(app *app.App, auth *authenticator.Authenticator) *echo.Echo {
 
 	ag.Use(reyes_middleware.IsAdmin())
 
-	codesHandler := admin.CodesHandler{
-		CodesStore:          app.CodesStore,
-		VolunteersStore:     app.VolunteersStore,
-		VolunteerCodesStore: app.VolunteerCodesStore,
-		CodesService:             app.CodesService,
-	}
+	codesHandler := admin.NewCodesHandler(
+		app.CodesStore,
+		app.VolunteersStore,
+		app.VolunteerCodesStore,
+		app.CodesService,
+	)
 	ag.GET("/codes", codesHandler.CodesViewHandler)
 	ag.POST("/codes/assign", codesHandler.AssignCodesHandler)
 	ag.POST("/codes/remove", codesHandler.RemoveCodesHandler)
 	ag.POST("/codes/create", codesHandler.CreateCodesHandler)
 
-	adminOrdersHandler := admin.OrdersHandler{
-		OrdersStore:     app.OrdersStore,
-		ToysStore:       app.ToysStore,
-		VolunteersStore: app.VolunteersStore,
-	}
+	adminOrdersHandler := admin.NewOrdersHandler(
+		app.OrdersStore,
+		app.ToysStore,
+		app.VolunteersStore,
+	)
 	ag.GET("/orders", adminOrdersHandler.OrdersViewHandler)
 	ag.GET("/order/:order_id", adminOrdersHandler.OrderCardViewHandler)
 	ag.GET("/order/:order_id/edit", adminOrdersHandler.UpdateOrderViewHandler)
 	ag.PUT("/order/:order_id/save", adminOrdersHandler.SaveOrderChangesHandler)
 
-	volunteersHandler := admin.VolunteersHandler{
-		VolunteersService:    app.VolunteersService,
-		VolunteersStore: app.VolunteersStore,
-	}
+	volunteersHandler := admin.NewVolunteersHandler(app.VolunteersStore, app.VolunteersService)
 	ag.GET("/volunteers", volunteersHandler.VolunteersViewHandler)
 	ag.GET("/volunteers/create", volunteersHandler.VolunteersCreateHandler)
 	ag.POST("/volunteers", volunteersHandler.VolunteersCreatePostHandler)
@@ -151,9 +136,7 @@ func SetupRouter(app *app.App, auth *authenticator.Authenticator) *echo.Echo {
 	ag.PUT("/volunteers/:volunteer_id/save", volunteersHandler.VolunteersUpdatePutHandler)
 	ag.DELETE("/volunteers/:volunteer_id/delete", volunteersHandler.VolunteersDeleteHandler)
 
-	toysHandler := admin.ToysHandler{
-		ToysStore: app.ToysStore,
-	}
+	toysHandler := admin.NewToysHandler(app.ToysStore)
 	ag.GET("/toys", toysHandler.ToysViewHandler)
 	ag.GET("/toys/create", toysHandler.CreateToyFormHandler)
 	ag.POST("/toys", toysHandler.CreateToyPostHandler)

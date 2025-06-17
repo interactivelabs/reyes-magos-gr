@@ -11,7 +11,13 @@ type CartHandler struct {
 	VolunteersService services.VolunteersService
 }
 
-func (h CartHandler) CartViewHandler(ctx echo.Context) error {
+func NewCartHandler(volunteersService services.VolunteersService) *CartHandler {
+	return &CartHandler{
+		VolunteersService: volunteersService,
+	}
+}
+
+func (h *CartHandler) CartViewHandler(ctx echo.Context) error {
 	profile, perr := GetProfileHandler(ctx, h.VolunteersService)
 	if perr != nil && perr.Code == http.StatusUnauthorized {
 		return perr

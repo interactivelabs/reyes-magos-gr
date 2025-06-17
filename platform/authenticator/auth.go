@@ -40,7 +40,10 @@ func New() (*Authenticator, error) {
 }
 
 // VerifyIDToken verifies that an *oauth2.Token is a valid *oidc.IDToken.
-func (a *Authenticator) VerifyIDToken(ctx context.Context, token *oauth2.Token) (*oidc.IDToken, error) {
+func (a *Authenticator) VerifyIDToken(
+	ctx context.Context,
+	token *oauth2.Token,
+) (*oidc.IDToken, error) {
 	rawIDToken, ok := token.Extra("id_token").(string)
 	if !ok {
 		return nil, errors.New("no id_token field in oauth2 token")

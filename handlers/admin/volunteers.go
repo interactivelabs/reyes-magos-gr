@@ -14,11 +14,21 @@ import (
 )
 
 type VolunteersHandler struct {
-	VolunteersService services.VolunteersService
 	VolunteersStore   store.VolunteersStore
+	VolunteersService services.VolunteersService
 }
 
-func (h VolunteersHandler) VolunteersViewHandler(ctx echo.Context) error {
+func NewVolunteersHandler(
+	volunteersStore store.VolunteersStore,
+	volunteersService services.VolunteersService,
+) *VolunteersHandler {
+	return &VolunteersHandler{
+		VolunteersStore:   volunteersStore,
+		VolunteersService: volunteersService,
+	}
+}
+
+func (h *VolunteersHandler) VolunteersViewHandler(ctx echo.Context) error {
 	volunteers, err := h.VolunteersService.GetActiveVolunteersGrupedByLocation()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -27,7 +37,7 @@ func (h VolunteersHandler) VolunteersViewHandler(ctx echo.Context) error {
 	return lib.Render(ctx, views.AdminVolunteers(volunteers))
 }
 
-func (h VolunteersHandler) VolunteersCreateHandler(ctx echo.Context) error {
+func (h *VolunteersHandler) VolunteersCreateHandler(ctx echo.Context) error {
 	return lib.Render(ctx, views.CreateVolunteerForm())
 }
 
@@ -44,7 +54,7 @@ type CreateVolunteerRequest struct {
 	ZipCode  string `form:"zip_code" validate:"required"`
 }
 
-func (h VolunteersHandler) VolunteersCreatePostHandler(ctx echo.Context) error {
+func (h *VolunteersHandler) VolunteersCreatePostHandler(ctx echo.Context) error {
 	tr := new(CreateVolunteerRequest)
 	if err := ctx.Bind(tr); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -68,7 +78,7 @@ func (h VolunteersHandler) VolunteersCreatePostHandler(ctx echo.Context) error {
 	return lib.Render(ctx, views.NewVolunteerRow(volunteer))
 }
 
-func (h VolunteersHandler) VolunteersUpdateViewHandler(ctx echo.Context) error {
+func (h *VolunteersHandler) VolunteersUpdateViewHandler(ctx echo.Context) error {
 	volunteerID, err := strconv.ParseInt(ctx.Param("volunteer_id"), 10, 64)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -82,7 +92,7 @@ func (h VolunteersHandler) VolunteersUpdateViewHandler(ctx echo.Context) error {
 	return lib.Render(ctx, views.UpdateVolunteerForm(volunteer))
 }
 
-func (h VolunteersHandler) VolunteersUpdatePutHandler(ctx echo.Context) error {
+func (h *VolunteersHandler) VolunteersUpdatePutHandler(ctx echo.Context) error {
 	volunteerIDStr := ctx.Param("volunteer_id")
 	volunteerID, err := strconv.ParseInt(volunteerIDStr, 10, 64)
 	if err != nil {
@@ -113,7 +123,7 @@ func (h VolunteersHandler) VolunteersUpdatePutHandler(ctx echo.Context) error {
 	return lib.Render(ctx, views.VolunteerRow(volunteer))
 }
 
-func (h VolunteersHandler) VolunteersDeleteHandler(ctx echo.Context) error {
+func (h *VolunteersHandler) VolunteersDeleteHandler(ctx echo.Context) error {
 	volunteerIDStr := ctx.Param("volunteer_id")
 	volunteerID, err := strconv.ParseInt(volunteerIDStr, 10, 64)
 	if err != nil {

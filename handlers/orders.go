@@ -12,16 +12,27 @@ import (
 )
 
 type OrdersHandler struct {
-	OrdersService        services.OrdersService
 	VolunteersStore store.VolunteersStore
+	OrdersService   services.OrdersService
+}
+
+func NewOrdersHandler(
+	volunteersStore store.VolunteersStore,
+	ordersService services.OrdersService,
+
+) *OrdersHandler {
+	return &OrdersHandler{
+		VolunteersStore: volunteersStore,
+		OrdersService:   ordersService,
+	}
 }
 
 type CreateOrderRequest struct {
 	ToyID int64  `form:"toy_id" validate:"required"`
-	Code  string `form:"code" validate:"required"`
+	Code  string `form:"code"   validate:"required"`
 }
 
-func (h OrdersHandler) CreateOrderViewHandler(ctx echo.Context) error {
+func (h *OrdersHandler) CreateOrderViewHandler(ctx echo.Context) error {
 	acr := new(CreateOrderRequest)
 	if err := ctx.Bind(acr); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -32,7 +43,8 @@ func (h OrdersHandler) CreateOrderViewHandler(ctx echo.Context) error {
 
 	order, err := h.OrdersService.CreateOrder(acr.ToyID, acr.Code)
 	if err != nil {
-		if lib.GetHTMLErrorCode(err) == http.StatusBadRequest || lib.GetHTMLErrorCode(err) == http.StatusConflict {
+		if lib.GetHTMLErrorCode(err) == http.StatusBadRequest ||
+			lib.GetHTMLErrorCode(err) == http.StatusConflict {
 			return lib.Render(ctx, redeem.RedeemToyForm(acr.ToyID, acr.Code, "Codigo invalido"))
 		}
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())

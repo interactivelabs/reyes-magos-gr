@@ -13,11 +13,21 @@ import (
 )
 
 type MyCodesHandler struct {
+	CodesStore        store.CodesStore
 	VolunteersService services.VolunteersService
-	CodesStore   store.CodesStore
 }
 
-func (h MyCodesHandler) MyCodesViewHandler(ctx echo.Context) error {
+func NewMyCodesHandler(
+	codesStore store.CodesStore,
+	volunteersService services.VolunteersService,
+) *MyCodesHandler {
+	return &MyCodesHandler{
+		CodesStore:        codesStore,
+		VolunteersService: volunteersService,
+	}
+}
+
+func (h *MyCodesHandler) MyCodesViewHandler(ctx echo.Context) error {
 	profile, perr := GetProfileHandler(ctx, h.VolunteersService)
 	if perr != nil && perr.Code == http.StatusUnauthorized {
 		return perr
@@ -34,7 +44,7 @@ func (h MyCodesHandler) MyCodesViewHandler(ctx echo.Context) error {
 	return lib.Render(ctx, volunteer.MyCodes(codes, givenCodes))
 }
 
-func (h MyCodesHandler) GiveCode(ctx echo.Context) error {
+func (h *MyCodesHandler) GiveCode(ctx echo.Context) error {
 	codeIDStr := ctx.Param("code_id")
 	codeID, err := strconv.ParseInt(codeIDStr, 10, 64)
 	if err != nil {
@@ -56,7 +66,10 @@ func (h MyCodesHandler) GiveCode(ctx echo.Context) error {
 	return lib.Render(ctx, volunteer.MyCodeItem(code))
 }
 
-func GetProfileHandler(ctx echo.Context, volunteersService services.VolunteersService) (dtos.Profile, *echo.HTTPError) {
+func GetProfileHandler(
+	ctx echo.Context,
+	volunteersService services.VolunteersService,
+) (dtos.Profile, *echo.HTTPError) {
 	profile := lib.GetCtxProfile(ctx)
 	if profile.Email == "" {
 		return dtos.Profile{}, echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")

@@ -18,6 +18,12 @@ type CatalogHandler struct {
 	ToysStore store.ToysStore
 }
 
+func NewCatalogHandler(toysStore store.ToysStore) *CatalogHandler {
+	return &CatalogHandler{
+		ToysStore: toysStore,
+	}
+}
+
 type CatalogHandlerRequest struct {
 	AgeMin   int64    `query:"age_min"`
 	AgeMax   int64    `query:"age_max"`
@@ -27,7 +33,7 @@ type CatalogHandlerRequest struct {
 	Code     string   `query:"code"`
 }
 
-func (h CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
+func (h *CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
 	cr := new(CatalogHandlerRequest)
 	if err := ctx.Bind(cr); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -43,7 +49,13 @@ func (h CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
 		pageSize = cr.PageSize
 	}
 
-	toys, err := h.ToysStore.GetToysWithFiltersPaged(page, pageSize, cr.AgeMin, cr.AgeMax, cr.Category)
+	toys, err := h.ToysStore.GetToysWithFiltersPaged(
+		page,
+		pageSize,
+		cr.AgeMin,
+		cr.AgeMax,
+		cr.Category,
+	)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
