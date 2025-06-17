@@ -2,10 +2,10 @@ package volunteers
 
 import (
 	"net/http"
-	"reyes-magos-gr/app/dtos"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
 	"reyes-magos-gr/store"
+	"reyes-magos-gr/store/dtos"
 	volunteer "reyes-magos-gr/views/volunteer"
 	"strconv"
 

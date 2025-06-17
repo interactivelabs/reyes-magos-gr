@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"math"
 	"net/http"
-	"reyes-magos-gr/app/dtos"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/store"
+	"reyes-magos-gr/store/dtos"
 	catalog "reyes-magos-gr/views/catalog"
 
 	"github.com/labstack/echo/v4"

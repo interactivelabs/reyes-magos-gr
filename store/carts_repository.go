@@ -2,7 +2,7 @@ package store
 
 import (
 	"database/sql"
-	"reyes-magos-gr/app/dtos"
+	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/utils"
 )
 

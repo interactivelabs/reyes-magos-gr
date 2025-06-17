@@ -3,7 +3,7 @@ package lib
 import (
 	"context"
 	"encoding/json"
-	"reyes-magos-gr/app/dtos"
+	"reyes-magos-gr/store/dtos"
 
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
