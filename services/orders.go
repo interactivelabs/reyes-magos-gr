@@ -9,13 +9,29 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type OrdersService struct {
+type OrdersServiceApp struct {
 	CodesRepository          store.CodesRepository
 	OrdersRepository         store.OrdersRepository
 	VolunteerCodesRepository store.VolunteerCodesRepository
 }
 
-func (s OrdersService) CreateOrder(toyID int64, code string) (order models.Order, err error) {
+func NewOrdersService(
+	codesRepository store.CodesRepository,
+	ordersRepository store.OrdersRepository,
+	volunteerCodesRepository store.VolunteerCodesRepository,
+) *OrdersServiceApp {
+	return &OrdersServiceApp{
+		CodesRepository:          codesRepository,
+		OrdersRepository:         ordersRepository,
+		VolunteerCodesRepository: volunteerCodesRepository,
+	}
+}
+
+type OrdersService interface {
+	CreateOrder(toyID int64, code string) (order models.Order, err error)
+}
+
+func (s OrdersServiceApp) CreateOrder(toyID int64, code string) (order models.Order, err error) {
 	codeResult, err := s.CodesRepository.GetCode(code)
 	if err != nil {
 		return order, echo.NewHTTPError(http.StatusBadRequest, "Code Not Found")
