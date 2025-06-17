@@ -9,7 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"reyes-magos-gr/db/models"
+	"reyes-magos-gr/store/models"
 	"reyes-magos-gr/views/components"
 )
 
