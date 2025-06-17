@@ -1,9 +1,9 @@
-package repository
+package store
 
 import (
 	"database/sql"
-	"reyes-magos-gr/db/model"
-	utils "reyes-magos-gr/db/repository/utils"
+	"reyes-magos-gr/store/models"
+	utils "reyes-magos-gr/store/utils"
 	"slices"
 	"strings"
 )
@@ -12,7 +12,7 @@ type ToysRepository struct {
 	DB *sql.DB
 }
 
-func (r ToysRepository) CreateToy(toy model.Toy) (id int64, err error) {
+func (r ToysRepository) CreateToy(toy models.Toy) (id int64, err error) {
 	queryStr, params, err := utils.BuildInsertQuery(toy, "toys")
 	if err != nil {
 		return 0, err
@@ -25,7 +25,7 @@ func (r ToysRepository) CreateToy(toy model.Toy) (id int64, err error) {
 	return res.LastInsertId()
 }
 
-func (r ToysRepository) UpdateToy(toy model.Toy) error {
+func (r ToysRepository) UpdateToy(toy models.Toy) error {
 	queryStr, params, err := utils.BuildUpdateQuery(toy, "toys", "toy_id")
 	if err != nil {
 		return err
@@ -51,7 +51,7 @@ func (r ToysRepository) DeleteToy(toyID int64) error {
 	return nil
 }
 
-func (r ToysRepository) GetToys() (toys []model.Toy, err error) {
+func (r ToysRepository) GetToys() (toys []models.Toy, err error) {
 	rows, err := r.DB.Query(`
 		SELECT ` + toyAllFields + `
 		FROM toys
@@ -65,7 +65,7 @@ func (r ToysRepository) GetToys() (toys []model.Toy, err error) {
 	}(rows)
 
 	for rows.Next() {
-		var toy model.Toy
+		var toy models.Toy
 		toy, err = scanAllToy(rows)
 		if err != nil {
 			return nil, err
@@ -77,7 +77,7 @@ func (r ToysRepository) GetToys() (toys []model.Toy, err error) {
 	return toys, nil
 }
 
-func (r ToysRepository) GetToysWithFiltersPaged(page int64, pageSize int64, ageMin int64, ageMax int64, category []string) (toys []model.Toy, err error) {
+func (r ToysRepository) GetToysWithFiltersPaged(page int64, pageSize int64, ageMin int64, ageMax int64, category []string) (toys []models.Toy, err error) {
 
 	query, params := getFilteredQuery(ageMin, ageMax, category, false)
 
@@ -98,7 +98,7 @@ func (r ToysRepository) GetToysWithFiltersPaged(page int64, pageSize int64, ageM
 	}(rows)
 
 	for rows.Next() {
-		var toy model.Toy
+		var toy models.Toy
 		toy, err = scanAllToy(rows)
 		if err != nil {
 			return nil, err
@@ -122,7 +122,7 @@ func (r ToysRepository) GetToysCountWithFilters(ageMin int64, ageMax int64, cate
 	return count, nil
 }
 
-func (r ToysRepository) GetToyByID(toyID int64) (toy model.Toy, err error) {
+func (r ToysRepository) GetToyByID(toyID int64) (toy models.Toy, err error) {
 	row := r.DB.QueryRow(`
 		SELECT `+toyAllFields+`
 		FROM toys
@@ -133,7 +133,7 @@ func (r ToysRepository) GetToyByID(toyID int64) (toy model.Toy, err error) {
 
 	toy, err = scanAllToy(row)
 	if err != nil {
-		return model.Toy{}, err
+		return models.Toy{}, err
 	}
 
 	return toy, nil
@@ -253,7 +253,7 @@ const toyAllFields string = `
 	source_url,
 	deleted`
 
-func scanAllToy(s utils.Scanner) (toy model.Toy, err error) {
+func scanAllToy(s utils.Scanner) (toy models.Toy, err error) {
 	err = s.Scan(
 		&toy.ToyID,
 		&toy.ToyName,

@@ -2,11 +2,11 @@ package pages
 
 import (
 	"fmt"
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	"reyes-magos-gr/views/components"
 )
 
-templ UpdateOrder(order model.Order, toy model.Toy, volunteer model.Volunteer) {
+templ UpdateOrder(order models.Order, toy models.Toy, volunteer models.Volunteer) {
 	<form
 		class="w-full p-8 bg-white"
 		hx-put={ string(templ.URL(fmt.Sprintf("/admin/order/%d/save", order.OrderID))) }

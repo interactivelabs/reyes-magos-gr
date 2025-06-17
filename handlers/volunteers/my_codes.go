@@ -3,9 +3,9 @@ package volunteers
 import (
 	"net/http"
 	"reyes-magos-gr/app/dtos"
-	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
+	"reyes-magos-gr/store"
 	volunteer "reyes-magos-gr/views/volunteer"
 	"strconv"
 
@@ -14,7 +14,7 @@ import (
 
 type MyCodesHandler struct {
 	VolunteersService services.VolunteersService
-	CodesRepository   repository.CodesRepository
+	CodesRepository   store.CodesRepository
 }
 
 func (h MyCodesHandler) MyCodesViewHandler(ctx echo.Context) error {

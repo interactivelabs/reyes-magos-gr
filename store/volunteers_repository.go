@@ -1,16 +1,16 @@
-package repository
+package store
 
 import (
 	"database/sql"
-	"reyes-magos-gr/db/model"
-	utils "reyes-magos-gr/db/repository/utils"
+	"reyes-magos-gr/store/models"
+	utils "reyes-magos-gr/store/utils"
 )
 
 type VolunteersRepository struct {
 	DB *sql.DB
 }
 
-func (r VolunteersRepository) CreateVolunteer(volunteer model.Volunteer) (int64, error) {
+func (r VolunteersRepository) CreateVolunteer(volunteer models.Volunteer) (int64, error) {
 	queryStr, params, err := utils.BuildInsertQuery(volunteer, "volunteers")
 	if err != nil {
 		return 0, err
@@ -23,7 +23,7 @@ func (r VolunteersRepository) CreateVolunteer(volunteer model.Volunteer) (int64,
 	return res.LastInsertId()
 }
 
-func (r VolunteersRepository) UpdateVolunteer(volunteer model.Volunteer) error {
+func (r VolunteersRepository) UpdateVolunteer(volunteer models.Volunteer) error {
 	queryStr, params, err := utils.BuildUpdateQuery(volunteer, "volunteers", "volunteer_id")
 	if err != nil {
 		return err
@@ -49,7 +49,7 @@ func (r VolunteersRepository) DeleteVolunteer(volunteerID int64) error {
 	return nil
 }
 
-func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (volubnteer model.Volunteer, err error) {
+func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (volubnteer models.Volunteer, err error) {
 	row := r.DB.QueryRow(`
 		SELECT `+volunteerAllFields+`
 		FROM volunteers
@@ -61,7 +61,7 @@ func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (volubnteer mo
 	return scanAllVolunteer(row)
 }
 
-func (r VolunteersRepository) GetVolunteerByEmail(email string) (voluntgeer model.Volunteer, err error) {
+func (r VolunteersRepository) GetVolunteerByEmail(email string) (voluntgeer models.Volunteer, err error) {
 	row := r.DB.QueryRow(`
 		SELECT `+volunteerAllFields+`
 		FROM volunteers
@@ -73,7 +73,7 @@ func (r VolunteersRepository) GetVolunteerByEmail(email string) (voluntgeer mode
 	return scanAllVolunteer(row)
 }
 
-func (r VolunteersRepository) GetActiveVolunteers() (volunteers []model.Volunteer, err error) {
+func (r VolunteersRepository) GetActiveVolunteers() (volunteers []models.Volunteer, err error) {
 	rows, err := r.DB.Query(`
 		SELECT ` + volunteerAllFields + `
 		FROM volunteers
@@ -111,7 +111,7 @@ const volunteerAllFields string = `
 	zip_code,
 	deleted`
 
-func scanAllVolunteer(s utils.Scanner) (volunteer model.Volunteer, err error) {
+func scanAllVolunteer(s utils.Scanner) (volunteer models.Volunteer, err error) {
 	err = s.Scan(
 		&volunteer.VolunteerID,
 		&volunteer.Name,

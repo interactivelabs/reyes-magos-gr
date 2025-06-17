@@ -1,16 +1,16 @@
-package repository
+package store
 
 import (
 	"database/sql"
-	"reyes-magos-gr/db/model"
-	utils "reyes-magos-gr/db/repository/utils"
+	"reyes-magos-gr/store/models"
+	utils "reyes-magos-gr/store/utils"
 )
 
 type OrdersRepository struct {
 	DB *sql.DB
 }
 
-func (r OrdersRepository) CreateOrder(order model.Order) (id int64, err error) {
+func (r OrdersRepository) CreateOrder(order models.Order) (id int64, err error) {
 	queryStr, params, err := utils.BuildInsertQuery(order, "orders")
 	if err != nil {
 		return 0, err
@@ -23,7 +23,7 @@ func (r OrdersRepository) CreateOrder(order model.Order) (id int64, err error) {
 	return res.LastInsertId()
 }
 
-func (r OrdersRepository) UpdateOrder(order model.Order) error {
+func (r OrdersRepository) UpdateOrder(order models.Order) error {
 	queryStr, params, err := utils.BuildUpdateQuery(order, "orders", "order_id")
 	if err != nil {
 		return err
@@ -49,7 +49,7 @@ func (r OrdersRepository) DeleteOrder(orderID int64) error {
 	return nil
 }
 
-func (r OrdersRepository) GetOrderByID(orderID int64) (order model.Order, err error) {
+func (r OrdersRepository) GetOrderByID(orderID int64) (order models.Order, err error) {
 	row := r.DB.QueryRow(`
 		SELECT `+orderAllFields+`
 		FROM orders
@@ -58,7 +58,7 @@ func (r OrdersRepository) GetOrderByID(orderID int64) (order model.Order, err er
 	return scanAllOrder(row)
 }
 
-func (r OrdersRepository) GetPendingOrdersByVolunteerID(volunteerID int64) (orders []model.Order, err error) {
+func (r OrdersRepository) GetPendingOrdersByVolunteerID(volunteerID int64) (orders []models.Order, err error) {
 	rows, err := r.DB.Query(`
 		SELECT `+orderAllFields+`
 		FROM orders
@@ -73,7 +73,7 @@ func (r OrdersRepository) GetPendingOrdersByVolunteerID(volunteerID int64) (orde
 	return GetOrdersFromQuery(rows)
 }
 
-func (r OrdersRepository) GetAllActiveOrders() (orders []model.Order, err error) {
+func (r OrdersRepository) GetAllActiveOrders() (orders []models.Order, err error) {
 	rows, err := r.DB.Query(`
 		SELECT ` + orderAllFields + `
 		FROM orders
@@ -85,7 +85,7 @@ func (r OrdersRepository) GetAllActiveOrders() (orders []model.Order, err error)
 	return GetOrdersFromQuery(rows)
 }
 
-func (r OrdersRepository) GetCompletedOrders() (orders []model.Order, err error) {
+func (r OrdersRepository) GetCompletedOrders() (orders []models.Order, err error) {
 	rows, err := r.DB.Query(`
 		SELECT ` + orderAllFields + `
 		FROM orders
@@ -97,7 +97,7 @@ func (r OrdersRepository) GetCompletedOrders() (orders []model.Order, err error)
 	return GetOrdersFromQuery(rows)
 }
 
-func GetOrdersFromQuery(rows *sql.Rows) (orders []model.Order, err error) {
+func GetOrdersFromQuery(rows *sql.Rows) (orders []models.Order, err error) {
 	defer func(rows *sql.Rows) {
 		_ = rows.Close()
 	}(rows)
@@ -125,7 +125,7 @@ const orderAllFields string = `
 	cancelled,
 	deleted`
 
-func scanAllOrder(s utils.Scanner) (order model.Order, err error) {
+func scanAllOrder(s utils.Scanner) (order models.Order, err error) {
 	err = s.Scan(
 		&order.OrderID,
 		&order.ToyID,

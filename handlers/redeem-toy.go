@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"net/http"
-	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
+	"reyes-magos-gr/store"
 	redeem "reyes-magos-gr/views/redeem-toy"
 	"strconv"
 
@@ -11,7 +11,7 @@ import (
 )
 
 type RedeemToyHandler struct {
-	ToysRepository repository.ToysRepository
+	ToysRepository store.ToysRepository
 }
 
 type RedeemToyViewRequest struct {

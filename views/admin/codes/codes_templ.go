@@ -10,13 +10,13 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"fmt"
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/views/admin"
 	"reyes-magos-gr/views/components"
 )
 
-func Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers []model.Volunteer) templ.Component {
+func Codes(codes []models.Code, volunteerCodes []models.VolunteerCode, volunteers []models.Volunteer) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {

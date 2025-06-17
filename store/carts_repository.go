@@ -1,9 +1,9 @@
-package repository
+package store
 
 import (
 	"database/sql"
 	"reyes-magos-gr/app/dtos"
-	"reyes-magos-gr/db/repository/utils"
+	"reyes-magos-gr/store/utils"
 )
 
 type CartsRepository struct {

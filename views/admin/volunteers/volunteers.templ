@@ -2,20 +2,20 @@ package pages
 
 import (
 	"fmt"
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/views/admin"
 	"reyes-magos-gr/views/components"
 )
 
-templ NewVolunteerRow(volunteer model.Volunteer) {
+templ NewVolunteerRow(volunteer models.Volunteer) {
 	@VolunteerRow(volunteer)
 	<div id="volunteer-new-form" hx-swap-oob="true">
 		@components.AlertSuccess("Saved Succesfully!")
 	</div>
 }
 
-templ VolunteerRow(volunteer model.Volunteer) {
+templ VolunteerRow(volunteer models.Volunteer) {
 	<tr
 		class="border-t border-gray-300"
 		id={ fmt.Sprintf("admin-volunteer-row-%d", volunteer.VolunteerID) }
@@ -56,7 +56,7 @@ templ VolunteerRow(volunteer model.Volunteer) {
 	</tr>
 }
 
-templ AdminVolunteers(groupedVolunteers map[string][]model.Volunteer) {
+templ AdminVolunteers(groupedVolunteers map[string][]models.Volunteer) {
 	@admin.AdminLayout() {
 		<main class="container mx-auto p-4 min-h-screen">
 			<h1 class="text-center pt-8 text-2xl">Volunteers</h1>

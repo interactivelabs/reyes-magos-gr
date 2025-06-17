@@ -9,11 +9,11 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	"reyes-magos-gr/views/components"
 )
 
-func VolunteerForm(volunteer model.Volunteer) templ.Component {
+func VolunteerForm(volunteer models.Volunteer) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {

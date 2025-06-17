@@ -1,16 +1,16 @@
-package repository
+package store
 
 import (
 	"database/sql"
-	"reyes-magos-gr/db/model"
-	utils "reyes-magos-gr/db/repository/utils"
+	"reyes-magos-gr/store/models"
+	utils "reyes-magos-gr/store/utils"
 )
 
 type VolunteerCodesRepository struct {
 	DB *sql.DB
 }
 
-func (r VolunteerCodesRepository) CreateVolunteerCode(volunteerCode model.VolunteerCode) (id int64, err error) {
+func (r VolunteerCodesRepository) CreateVolunteerCode(volunteerCode models.VolunteerCode) (id int64, err error) {
 	queryStr, params, err := utils.BuildInsertQuery(volunteerCode, "volunteer_codes")
 	if err != nil {
 		return 0, err
@@ -23,7 +23,7 @@ func (r VolunteerCodesRepository) CreateVolunteerCode(volunteerCode model.Volunt
 	return res.LastInsertId()
 }
 
-func (r VolunteerCodesRepository) UpdateVolunteerCode(volunteerCode model.VolunteerCode) error {
+func (r VolunteerCodesRepository) UpdateVolunteerCode(volunteerCode models.VolunteerCode) error {
 	queryStr, params, err := utils.BuildUpdateQuery(volunteerCode, "volunteer_codes", "volunteer_code_id")
 	if err != nil {
 		return err
@@ -60,7 +60,7 @@ const baseQueryVolunteerCodesByVolunteerID string = `
 		AND codes.deleted = 0
 		AND volunteer_codes.deleted = 0 `
 
-func (r VolunteerCodesRepository) GetAllVolunteerCodesByVolunteerID(query string, volunteerCodeID int64) (codes []model.Code, err error) {
+func (r VolunteerCodesRepository) GetAllVolunteerCodesByVolunteerID(query string, volunteerCodeID int64) (codes []models.Code, err error) {
 	rows, err := r.DB.Query(query, volunteerCodeID)
 	if err != nil {
 		return nil, err
@@ -73,7 +73,7 @@ func (r VolunteerCodesRepository) GetAllVolunteerCodesByVolunteerID(query string
 	for rows.Next() {
 		var code, err = scanAllCode(rows)
 		if err != nil {
-			return []model.Code{}, err
+			return []models.Code{}, err
 		}
 		codes = append(codes, code)
 	}
@@ -81,7 +81,7 @@ func (r VolunteerCodesRepository) GetAllVolunteerCodesByVolunteerID(query string
 	return codes, nil
 }
 
-func (r VolunteerCodesRepository) GetActiveVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []model.Code, err error) {
+func (r VolunteerCodesRepository) GetActiveVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []models.Code, err error) {
 	query := baseQueryVolunteerCodesByVolunteerID + `
 		AND date(codes.expiration) > date('now')
 		AND codes.used = 0
@@ -90,14 +90,14 @@ func (r VolunteerCodesRepository) GetActiveVolunteerCodesByVolunteerID(volunteer
 	return r.GetAllVolunteerCodesByVolunteerID(query, volunteerCodeID)
 }
 
-func (r VolunteerCodesRepository) GetUsedVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []model.Code, err error) {
+func (r VolunteerCodesRepository) GetUsedVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []models.Code, err error) {
 	query := baseQueryVolunteerCodesByVolunteerID + `
 		AND codes.used = 1;`
 
 	return r.GetAllVolunteerCodesByVolunteerID(query, volunteerCodeID)
 }
 
-func (r VolunteerCodesRepository) GetGivenVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []model.Code, err error) {
+func (r VolunteerCodesRepository) GetGivenVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []models.Code, err error) {
 	query := baseQueryVolunteerCodesByVolunteerID + `
 		AND codes.used = 0
 		AND codes.given = 1;`
@@ -105,7 +105,7 @@ func (r VolunteerCodesRepository) GetGivenVolunteerCodesByVolunteerID(volunteerC
 	return r.GetAllVolunteerCodesByVolunteerID(query, volunteerCodeID)
 }
 
-func (r VolunteerCodesRepository) GetAllVolunteersCodes() (volunteerCodes []model.VolunteerCode, err error) {
+func (r VolunteerCodesRepository) GetAllVolunteersCodes() (volunteerCodes []models.VolunteerCode, err error) {
 	rows, err := r.DB.Query(`
 		SELECT
 			volunteer_code_id,
@@ -134,9 +134,9 @@ func (r VolunteerCodesRepository) GetAllVolunteersCodes() (volunteerCodes []mode
 	}(rows)
 
 	for rows.Next() {
-		var volunteerCode model.VolunteerCode
-		var volunteer model.Volunteer
-		var code model.Code
+		var volunteerCode models.VolunteerCode
+		var volunteer models.Volunteer
+		var code models.Code
 		err := rows.Scan(
 			&volunteerCode.VolunteerCodeID,
 			&code.CodeID,

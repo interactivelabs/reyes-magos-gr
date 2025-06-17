@@ -1,29 +1,29 @@
-package repository
+package store
 
 import (
 	"database/sql"
-	"reyes-magos-gr/db/model"
-	utils "reyes-magos-gr/db/repository/utils"
+	"reyes-magos-gr/store/models"
+	utils "reyes-magos-gr/store/utils"
 )
 
 type CodesRepository struct {
 	DB *sql.DB
 }
 
-func (r CodesRepository) CreateCode(code model.Code) (int64, model.Code, error) {
+func (r CodesRepository) CreateCode(code models.Code) (int64, models.Code, error) {
 	queryStr, params, err := utils.BuildInsertQuery(code, "codes")
 	if err != nil {
-		return 0, model.Code{}, err
+		return 0, models.Code{}, err
 	}
 
 	res, err := utils.ExecuteMutationQuery(r.DB, queryStr, params...)
 	if err != nil {
-		return 0, model.Code{}, err
+		return 0, models.Code{}, err
 	}
 
 	id, err := res.LastInsertId()
 	if err != nil {
-		return 0, model.Code{}, err
+		return 0, models.Code{}, err
 	}
 
 	var row = r.DB.QueryRow(`
@@ -31,16 +31,16 @@ func (r CodesRepository) CreateCode(code model.Code) (int64, model.Code, error) 
 		FROM codes
 		WHERE code_id = ?
 	`, id)
-	var codeResult model.Code
+	var codeResult models.Code
 	codeResult, err = scanAllCode(row)
 	if err != nil {
-		return 0, model.Code{}, err
+		return 0, models.Code{}, err
 	}
 
 	return id, codeResult, nil
 }
 
-func (r CodesRepository) UpdateCode(code model.Code) error {
+func (r CodesRepository) UpdateCode(code models.Code) error {
 	queryStr, params, err := utils.BuildUpdateQuery(code, "codes", "code_id")
 	if err != nil {
 		return err
@@ -66,7 +66,7 @@ func (r CodesRepository) DeleteCode(codeID int64) error {
 	return nil
 }
 
-func (r CodesRepository) GetCodeByID(codeID int64) (code model.Code, err error) {
+func (r CodesRepository) GetCodeByID(codeID int64) (code models.Code, err error) {
 	var row = r.DB.QueryRow(`
 		SELECT *
 		FROM codes
@@ -78,7 +78,7 @@ func (r CodesRepository) GetCodeByID(codeID int64) (code model.Code, err error) 
 	return scanAllCode(row)
 }
 
-func (r CodesRepository) GetCode(code string) (model.Code, error) {
+func (r CodesRepository) GetCode(code string) (models.Code, error) {
 	var row = r.DB.QueryRow(`
 		SELECT *
 		FROM codes
@@ -90,7 +90,7 @@ func (r CodesRepository) GetCode(code string) (model.Code, error) {
 	return scanAllCode(row)
 }
 
-func (r CodesRepository) GetActiveCodes() (codes []model.Code, err error) {
+func (r CodesRepository) GetActiveCodes() (codes []models.Code, err error) {
 	rows, err := r.DB.Query(`
 		SELECT *
 		FROM codes
@@ -100,7 +100,7 @@ func (r CodesRepository) GetActiveCodes() (codes []model.Code, err error) {
 			AND cancelled = 0
 			AND date(expiration) > date('now');`)
 	if err != nil {
-		return []model.Code{}, err
+		return []models.Code{}, err
 	}
 
 	defer func(rows *sql.Rows) {
@@ -110,7 +110,7 @@ func (r CodesRepository) GetActiveCodes() (codes []model.Code, err error) {
 	for rows.Next() {
 		var code, err = scanAllCode(rows)
 		if err != nil {
-			return []model.Code{}, err
+			return []models.Code{}, err
 		}
 		codes = append(codes, code)
 	}
@@ -118,7 +118,7 @@ func (r CodesRepository) GetActiveCodes() (codes []model.Code, err error) {
 	return codes, nil
 }
 
-func (r CodesRepository) GetUnassignedCodes() (codes []model.Code, err error) {
+func (r CodesRepository) GetUnassignedCodes() (codes []models.Code, err error) {
 	rows, err := r.DB.Query(`
 		SELECT codes.*
 		FROM codes
@@ -130,7 +130,7 @@ func (r CodesRepository) GetUnassignedCodes() (codes []model.Code, err error) {
 			AND codes.deleted = 0
 			AND date(codes.expiration) > date('now');`)
 	if err != nil {
-		return []model.Code{}, err
+		return []models.Code{}, err
 	}
 
 	defer func(rows *sql.Rows) {
@@ -140,7 +140,7 @@ func (r CodesRepository) GetUnassignedCodes() (codes []model.Code, err error) {
 	for rows.Next() {
 		var code, err = scanAllCode(rows)
 		if err != nil {
-			return []model.Code{}, err
+			return []models.Code{}, err
 		}
 		codes = append(codes, code)
 	}
@@ -148,7 +148,7 @@ func (r CodesRepository) GetUnassignedCodes() (codes []model.Code, err error) {
 	return codes, nil
 }
 
-func scanAllCode(s utils.Scanner) (code model.Code, err error) {
+func scanAllCode(s utils.Scanner) (code models.Code, err error) {
 	err = s.Scan(
 		&code.CodeID,
 		&code.Code,

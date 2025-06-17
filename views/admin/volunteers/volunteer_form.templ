@@ -1,11 +1,11 @@
 package pages
 
 import (
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	"reyes-magos-gr/views/components"
 )
 
-templ VolunteerForm(volunteer model.Volunteer) {
+templ VolunteerForm(volunteer models.Volunteer) {
 	<div>
 		<label for="name" class={ components.BaseLabelStyles }>Name</label>
 		<div class="mt-2">

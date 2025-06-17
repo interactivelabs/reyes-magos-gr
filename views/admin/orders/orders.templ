@@ -2,12 +2,12 @@ package pages
 
 import (
 	"fmt"
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	"reyes-magos-gr/views/admin"
 	"reyes-magos-gr/views/components"
 )
 
-templ LinkOrderCard(order model.Order) {
+templ LinkOrderCard(order models.Order) {
 	<a
 		hx-swap="outerHTML"
 		hx-get={ string(templ.URL(fmt.Sprintf("/admin/order/%d/edit", order.OrderID))) }
@@ -17,7 +17,7 @@ templ LinkOrderCard(order model.Order) {
 	</a>
 }
 
-templ Orders(orders []model.Order, completedOrders []model.Order) {
+templ Orders(orders []models.Order, completedOrders []models.Order) {
 	@admin.AdminLayout() {
 		<main>
 			<h1 class="text-center pt-8 text-2xl">Orders</h1>

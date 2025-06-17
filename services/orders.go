@@ -2,20 +2,20 @@ package services
 
 import (
 	"net/http"
-	"reyes-magos-gr/db/model"
-	"reyes-magos-gr/db/repository"
+	"reyes-magos-gr/store"
+	"reyes-magos-gr/store/models"
 	"time"
 
 	"github.com/labstack/echo/v4"
 )
 
 type OrdersService struct {
-	CodesRepository          repository.CodesRepository
-	OrdersRepository         repository.OrdersRepository
-	VolunteerCodesRepository repository.VolunteerCodesRepository
+	CodesRepository          store.CodesRepository
+	OrdersRepository         store.OrdersRepository
+	VolunteerCodesRepository store.VolunteerCodesRepository
 }
 
-func (s OrdersService) CreateOrder(toyID int64, code string) (order model.Order, err error) {
+func (s OrdersService) CreateOrder(toyID int64, code string) (order models.Order, err error) {
 	codeResult, err := s.CodesRepository.GetCode(code)
 	if err != nil {
 		return order, echo.NewHTTPError(http.StatusBadRequest, "Code Not Found")
@@ -30,7 +30,7 @@ func (s OrdersService) CreateOrder(toyID int64, code string) (order model.Order,
 		return order, echo.NewHTTPError(http.StatusBadRequest, "Code not assigned to volunteer")
 	}
 
-	order = model.Order{
+	order = models.Order{
 		ToyID:       toyID,
 		CodeID:      codeResult.CodeID,
 		VolunteerID: volunteerID,

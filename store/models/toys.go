@@ -1,4 +1,4 @@
-package model
+package models
 
 type Toy struct {
 	ToyID          int64  `json:"toy_id"`

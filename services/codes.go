@@ -2,34 +2,34 @@ package services
 
 import (
 	"math/rand"
-	"reyes-magos-gr/db/model"
-	"reyes-magos-gr/db/repository"
+	"reyes-magos-gr/store"
+	"reyes-magos-gr/store/models"
 	"strings"
 	"time"
 )
 
 type CodesService struct {
-	CodesRepository repository.CodesRepository
+	CodesRepository store.CodesRepository
 }
 
-func NewCode() model.Code {
-	return model.Code{
+func NewCode() models.Code {
+	return models.Code{
 		Code:       generateRandomString(6),
 		Expiration: time.Now().AddDate(0, 0, 10).Format(time.RFC3339),
 	}
 }
 
-func (s CodesService) CreateCode() (code model.Code, err error) {
+func (s CodesService) CreateCode() (code models.Code, err error) {
 	code = NewCode()
 	_, codeRow, err := s.CodesRepository.CreateCode(code)
 	if err != nil {
-		return model.Code{}, err
+		return models.Code{}, err
 	}
 
 	return codeRow, nil
 }
 
-func (s CodesService) CreateCodeBatch(Count int64) (codes []model.Code, err error) {
+func (s CodesService) CreateCodeBatch(Count int64) (codes []models.Code, err error) {
 	for i := 0; i < int(Count); i++ {
 		code := NewCode()
 		_, codeRow, err := s.CodesRepository.CreateCode(code)

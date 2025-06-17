@@ -2,13 +2,13 @@ package pages
 
 import (
 	"fmt"
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/views/admin"
 	"reyes-magos-gr/views/components"
 )
 
-templ ToyRow(toy model.Toy) {
+templ ToyRow(toy models.Toy) {
 	<tr
 		class="border-t border-gray-300"
 		id={ fmt.Sprintf("admin-toys-row-%d", toy.ToyID) }
@@ -42,7 +42,7 @@ templ ToyRow(toy model.Toy) {
 	</tr>
 }
 
-templ Toys(toys []model.Toy) {
+templ Toys(toys []models.Toy) {
 	@admin.AdminLayout() {
 		<main class="container mx-auto p-4">
 			<h1 class="text-center pt-8 text-2xl">Toys</h1>

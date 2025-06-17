@@ -2,9 +2,9 @@ package admin
 
 import (
 	"net/http"
-	"reyes-magos-gr/db/model"
-	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
+	"reyes-magos-gr/store"
+	"reyes-magos-gr/store/models"
 	toys_view "reyes-magos-gr/views/admin/toys"
 	"strconv"
 	"strings"
@@ -14,7 +14,7 @@ import (
 )
 
 type ToysHandler struct {
-	ToysRepository repository.ToysRepository
+	ToysRepository store.ToysRepository
 }
 
 func (h ToysHandler) ToysViewHandler(ctx echo.Context) error {
@@ -51,7 +51,7 @@ func (h ToysHandler) CreateToyPostHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	var toy model.Toy
+	var toy models.Toy
 	err := dto.Map(&toy, tr)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -96,7 +96,7 @@ func (h ToysHandler) UpdateToyPutHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	var toy model.Toy
+	var toy models.Toy
 	err = dto.Map(&toy, tr)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())

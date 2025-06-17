@@ -2,25 +2,25 @@ package services
 
 import (
 	"reyes-magos-gr/app/dtos"
-	"reyes-magos-gr/db/model"
-	"reyes-magos-gr/db/repository"
+	"reyes-magos-gr/store"
+	"reyes-magos-gr/store/models"
 
 	"github.com/dranikpg/dto-mapper"
 )
 
 type VolunteersService struct {
-	CartsRepository          repository.CartsRepository
-	CodesRepository          repository.CodesRepository
-	OrdersRepository         repository.OrdersRepository
-	VolunteersRepository     repository.VolunteersRepository
-	VolunteerCodesRepository repository.VolunteerCodesRepository
+	CartsRepository          store.CartsRepository
+	CodesRepository          store.CodesRepository
+	OrdersRepository         store.OrdersRepository
+	VolunteersRepository     store.VolunteersRepository
+	VolunteerCodesRepository store.VolunteerCodesRepository
 }
 
-func (s VolunteersService) GetVolunteerByEmail(email string) (model.Volunteer, error) {
+func (s VolunteersService) GetVolunteerByEmail(email string) (models.Volunteer, error) {
 	return s.VolunteersRepository.GetVolunteerByEmail(email)
 }
 
-func (s VolunteersService) GetVolunteerCodesByEmail(email string) (codes []model.Code, givenCodes []model.Code, err error) {
+func (s VolunteersService) GetVolunteerCodesByEmail(email string) (codes []models.Code, givenCodes []models.Code, err error) {
 	volunteer, err := s.VolunteersRepository.GetVolunteerByEmail(email)
 	if err != nil {
 		return nil, nil, err
@@ -39,7 +39,7 @@ func (s VolunteersService) GetVolunteerCodesByEmail(email string) (codes []model
 	return codes, givenCodes, nil
 }
 
-func (s VolunteersService) GetVolunteerOrdersByEmail(email string) (orders []model.Order, err error) {
+func (s VolunteersService) GetVolunteerOrdersByEmail(email string) (orders []models.Order, err error) {
 	volunteer, err := s.VolunteersRepository.GetVolunteerByEmail(email)
 	if err != nil {
 		return nil, err
@@ -67,8 +67,8 @@ func (s VolunteersService) GetVolunteerCartByEmail(email string) (cartItems []dt
 	return cartItems, nil
 }
 
-func GroupVolunteersByLocation(volunteers []model.Volunteer) (groupedVolunteers map[string][]model.Volunteer) {
-	groupedVolunteers = make(map[string][]model.Volunteer)
+func GroupVolunteersByLocation(volunteers []models.Volunteer) (groupedVolunteers map[string][]models.Volunteer) {
+	groupedVolunteers = make(map[string][]models.Volunteer)
 	for _, volunteer := range volunteers {
 		location := volunteer.State + ", " + volunteer.City
 		groupedVolunteers[location] = append(groupedVolunteers[location], volunteer)
@@ -76,7 +76,7 @@ func GroupVolunteersByLocation(volunteers []model.Volunteer) (groupedVolunteers 
 	return groupedVolunteers
 }
 
-func (s VolunteersService) GetActiveVolunteersGrupedByLocation() (groupedVolunteers map[string][]model.Volunteer, err error) {
+func (s VolunteersService) GetActiveVolunteersGrupedByLocation() (groupedVolunteers map[string][]models.Volunteer, err error) {
 
 	allVolunteers, err := s.VolunteersRepository.GetActiveVolunteers()
 	if err != nil {
@@ -100,7 +100,7 @@ type CreateVolunteerRequest struct {
 }
 
 func (s VolunteersService) CreateVolunteer(tr CreateVolunteerRequest) (volunteerID int64, err error) {
-	var volunteer model.Volunteer
+	var volunteer models.Volunteer
 	err = dto.Map(&volunteer, tr)
 	if err != nil {
 		return 0, err
@@ -114,31 +114,31 @@ func (s VolunteersService) CreateVolunteer(tr CreateVolunteerRequest) (volunteer
 	return volunteerID, nil
 }
 
-func (s VolunteersService) CreateAndGetVolunteer(tr CreateVolunteerRequest) (volunteer model.Volunteer, err error) {
+func (s VolunteersService) CreateAndGetVolunteer(tr CreateVolunteerRequest) (volunteer models.Volunteer, err error) {
 	volunteerID, err := s.CreateVolunteer(tr)
 	if err != nil {
-		return model.Volunteer{}, err
+		return models.Volunteer{}, err
 	}
 
 	volunteer, err = s.VolunteersRepository.GetVolunteerByID(volunteerID)
 	if err != nil {
-		return model.Volunteer{}, err
+		return models.Volunteer{}, err
 	}
 
 	return volunteer, nil
 }
 
-func (h VolunteersService) UpdateVolunteer(tr CreateVolunteerRequest, volunteerID int64) (volunteer model.Volunteer, err error) {
+func (h VolunteersService) UpdateVolunteer(tr CreateVolunteerRequest, volunteerID int64) (volunteer models.Volunteer, err error) {
 	err = dto.Map(&volunteer, tr)
 	if err != nil {
-		return model.Volunteer{}, err
+		return models.Volunteer{}, err
 	}
 
 	volunteer.VolunteerID = volunteerID
 
 	err = h.VolunteersRepository.UpdateVolunteer(volunteer)
 	if err != nil {
-		return model.Volunteer{}, err
+		return models.Volunteer{}, err
 	}
 
 	return volunteer, nil

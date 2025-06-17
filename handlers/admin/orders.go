@@ -2,8 +2,8 @@ package admin
 
 import (
 	"net/http"
-	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
+	"reyes-magos-gr/store"
 	ordersView "reyes-magos-gr/views/admin/orders"
 	"strconv"
 	"time"
@@ -12,9 +12,9 @@ import (
 )
 
 type OrdersHandler struct {
-	OrdersRepository     repository.OrdersRepository
-	ToysRepository       repository.ToysRepository
-	VolunteersRepository repository.VolunteersRepository
+	OrdersRepository     store.OrdersRepository
+	ToysRepository       store.ToysRepository
+	VolunteersRepository store.VolunteersRepository
 }
 
 type Order interface {

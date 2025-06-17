@@ -10,7 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"fmt"
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	"reyes-magos-gr/lib"
 	layout "reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
@@ -212,7 +212,7 @@ func AddToCartButton(toyId int64) templ.Component {
 	})
 }
 
-func RedeemToy(toy model.Toy, code string) templ.Component {
+func RedeemToy(toy models.Toy, code string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
