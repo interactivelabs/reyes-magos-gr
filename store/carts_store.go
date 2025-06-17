@@ -6,11 +6,19 @@ import (
 	"reyes-magos-gr/store/utils"
 )
 
-type CartsRepository struct {
+type LibSQLCartsStore struct {
 	DB *sql.DB
 }
 
-func (r CartsRepository) GetCartToys(volunteerID int64) (cartItems []dtos.CartItem, err error) {
+func NewCartsStore(db *sql.DB) *LibSQLCartsStore {
+	return &LibSQLCartsStore{DB: db}
+}
+
+type CartsStore interface {
+	GetCartToys(volunteerID int64) (cartItems []dtos.CartItem, err error)
+}
+
+func (r LibSQLCartsStore) GetCartToys(volunteerID int64) (cartItems []dtos.CartItem, err error) {
 	rows, err := r.DB.Query(`
 		SELECT `+cartItemFields+`
 		FROM toys

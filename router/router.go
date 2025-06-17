@@ -3,7 +3,6 @@ package router
 import (
 	"net/http"
 	"os"
-	"reyes-magos-gr/api"
 	"reyes-magos-gr/app"
 	"reyes-magos-gr/handlers"
 	"reyes-magos-gr/handlers/admin"
@@ -120,28 +119,6 @@ func SetupRouter(app *app.App, auth *authenticator.Authenticator) *echo.Echo {
 
 	ag.Use(reyes_middleware.IsAdmin())
 
-	toyHandler := api.ToyHandler{
-		ToysRepository: app.ToysRepository,
-	}
-	ag.POST("/api/toy", toyHandler.CreateToyApiHandler)
-	ag.POST("/api/toys", toyHandler.CreateBatchToysApiHandler)
-	ag.PUT("/api/toy", toyHandler.UpdateToyApiHandler)
-	ag.DELETE("/api/toy/:toy_id", toyHandler.DeleteToyApiHandler)
-
-	volunteerHandler := api.VolunteerHandler{
-		VolunteersRepository: app.VolunteersRepository,
-	}
-	ag.POST("/api/volunteer", volunteerHandler.CreateVolunteerApiHandler)
-	ag.PUT("/api/volunteer", volunteerHandler.UpdateVolunteerApiHandler)
-	ag.DELETE("/api/volunteer/:volunteer_id", volunteerHandler.DeleteVolunteerApiHandler)
-
-	codeHandler := api.CodeHandler{
-		CodesService: app.CodesService,
-	}
-	ag.POST("/api/code", codeHandler.CreateCodeApiHandler)
-	ag.POST("/api/code/batch", codeHandler.CreateCodeBatchApiHandler)
-
-	// ADMIN VIEWS
 	codesHandler := admin.CodesHandler{
 		CodesRepository:          app.CodesRepository,
 		VolunteersRepository:     app.VolunteersRepository,

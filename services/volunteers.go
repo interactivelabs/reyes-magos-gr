@@ -4,23 +4,41 @@ import (
 	"reyes-magos-gr/store"
 	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/models"
-
-	"github.com/dranikpg/dto-mapper"
 )
 
-type VolunteersService struct {
-	CartsRepository          store.CartsRepository
+type VolunteersServiceApp struct {
+	CartsStore               store.CartsStore
 	CodesRepository          store.CodesRepository
 	OrdersRepository         store.OrdersRepository
 	VolunteersRepository     store.VolunteersRepository
 	VolunteerCodesRepository store.VolunteerCodesRepository
 }
 
-func (s VolunteersService) GetVolunteerByEmail(email string) (models.Volunteer, error) {
+func NewVolunteersService(cartsStore store.CartsStore, codesRepository store.CodesRepository, ordersRepository store.OrdersRepository, volunteersRepository store.VolunteersRepository, volunteerCodesRepository store.VolunteerCodesRepository) *VolunteersServiceApp {
+	return &VolunteersServiceApp{
+		CartsStore:               cartsStore,
+		CodesRepository:          codesRepository,
+		OrdersRepository:         ordersRepository,
+		VolunteersRepository:     volunteersRepository,
+		VolunteerCodesRepository: volunteerCodesRepository,
+	}
+}
+
+type VolunteersService interface {
+	GetVolunteerByEmail(email string) (models.Volunteer, error)
+	GetVolunteerCodesByEmail(email string) (codes []models.Code, givenCodes []models.Code, err error)
+	GetVolunteerOrdersByEmail(email string) (orders []models.Order, err error)
+	GetVolunteerCartByEmail(email string) (cartItems []dtos.CartItem, err error)
+	GetActiveVolunteersGrupedByLocation() (groupedVolunteers map[string][]models.Volunteer, err error)
+	CreateAndGetVolunteer(volunteer models.Volunteer) (models.Volunteer, error)
+	UpdateVolunteer(volunteer models.Volunteer, volunteerID int64) (models.Volunteer, error)
+}
+
+func (s VolunteersServiceApp) GetVolunteerByEmail(email string) (models.Volunteer, error) {
 	return s.VolunteersRepository.GetVolunteerByEmail(email)
 }
 
-func (s VolunteersService) GetVolunteerCodesByEmail(email string) (codes []models.Code, givenCodes []models.Code, err error) {
+func (s VolunteersServiceApp) GetVolunteerCodesByEmail(email string) (codes []models.Code, givenCodes []models.Code, err error) {
 	volunteer, err := s.VolunteersRepository.GetVolunteerByEmail(email)
 	if err != nil {
 		return nil, nil, err
@@ -39,7 +57,7 @@ func (s VolunteersService) GetVolunteerCodesByEmail(email string) (codes []model
 	return codes, givenCodes, nil
 }
 
-func (s VolunteersService) GetVolunteerOrdersByEmail(email string) (orders []models.Order, err error) {
+func (s VolunteersServiceApp) GetVolunteerOrdersByEmail(email string) (orders []models.Order, err error) {
 	volunteer, err := s.VolunteersRepository.GetVolunteerByEmail(email)
 	if err != nil {
 		return nil, err
@@ -53,13 +71,13 @@ func (s VolunteersService) GetVolunteerOrdersByEmail(email string) (orders []mod
 	return orders, nil
 }
 
-func (s VolunteersService) GetVolunteerCartByEmail(email string) (cartItems []dtos.CartItem, err error) {
+func (s VolunteersServiceApp) GetVolunteerCartByEmail(email string) (cartItems []dtos.CartItem, err error) {
 	volunteer, err := s.VolunteersRepository.GetVolunteerByEmail(email)
 	if err != nil {
 		return nil, err
 	}
 
-	cartItems, err = s.CartsRepository.GetCartToys(volunteer.VolunteerID)
+	cartItems, err = s.CartsStore.GetCartToys(volunteer.VolunteerID)
 	if err != nil {
 		return nil, err
 	}
@@ -67,16 +85,7 @@ func (s VolunteersService) GetVolunteerCartByEmail(email string) (cartItems []dt
 	return cartItems, nil
 }
 
-func GroupVolunteersByLocation(volunteers []models.Volunteer) (groupedVolunteers map[string][]models.Volunteer) {
-	groupedVolunteers = make(map[string][]models.Volunteer)
-	for _, volunteer := range volunteers {
-		location := volunteer.State + ", " + volunteer.City
-		groupedVolunteers[location] = append(groupedVolunteers[location], volunteer)
-	}
-	return groupedVolunteers
-}
-
-func (s VolunteersService) GetActiveVolunteersGrupedByLocation() (groupedVolunteers map[string][]models.Volunteer, err error) {
+func (s VolunteersServiceApp) GetActiveVolunteersGrupedByLocation() (groupedVolunteers map[string][]models.Volunteer, err error) {
 
 	allVolunteers, err := s.VolunteersRepository.GetActiveVolunteers()
 	if err != nil {
@@ -86,36 +95,8 @@ func (s VolunteersService) GetActiveVolunteersGrupedByLocation() (groupedVolunte
 	return GroupVolunteersByLocation(allVolunteers), nil
 }
 
-type CreateVolunteerRequest struct {
-	Name     string `form:"name" validate:"required"`
-	Email    string `form:"email" validate:"required"`
-	Phone    string `form:"phone"`
-	Address  string `form:"address" validate:"required"`
-	Address2 string `form:"address2"`
-	Country  string `form:"country" validate:"required"`
-	State    string `form:"state" validate:"required"`
-	City     string `form:"city" validate:"required"`
-	Province string `form:"province"`
-	ZipCode  string `form:"zip_code" validate:"required"`
-}
-
-func (s VolunteersService) CreateVolunteer(tr CreateVolunteerRequest) (volunteerID int64, err error) {
-	var volunteer models.Volunteer
-	err = dto.Map(&volunteer, tr)
-	if err != nil {
-		return 0, err
-	}
-
-	volunteerID, err = s.VolunteersRepository.CreateVolunteer(volunteer)
-	if err != nil {
-		return 0, err
-	}
-
-	return volunteerID, nil
-}
-
-func (s VolunteersService) CreateAndGetVolunteer(tr CreateVolunteerRequest) (volunteer models.Volunteer, err error) {
-	volunteerID, err := s.CreateVolunteer(tr)
+func (s VolunteersServiceApp) CreateAndGetVolunteer(volunteer models.Volunteer) (models.Volunteer, error) {
+	volunteerID, err := s.VolunteersRepository.CreateVolunteer(volunteer)
 	if err != nil {
 		return models.Volunteer{}, err
 	}
@@ -128,18 +109,23 @@ func (s VolunteersService) CreateAndGetVolunteer(tr CreateVolunteerRequest) (vol
 	return volunteer, nil
 }
 
-func (h VolunteersService) UpdateVolunteer(tr CreateVolunteerRequest, volunteerID int64) (volunteer models.Volunteer, err error) {
-	err = dto.Map(&volunteer, tr)
-	if err != nil {
-		return models.Volunteer{}, err
-	}
+func (h VolunteersServiceApp) UpdateVolunteer(volunteer models.Volunteer, volunteerID int64) (models.Volunteer, error) {
 
 	volunteer.VolunteerID = volunteerID
 
-	err = h.VolunteersRepository.UpdateVolunteer(volunteer)
+	err := h.VolunteersRepository.UpdateVolunteer(volunteer)
 	if err != nil {
 		return models.Volunteer{}, err
 	}
 
 	return volunteer, nil
+}
+
+func GroupVolunteersByLocation(volunteers []models.Volunteer) (groupedVolunteers map[string][]models.Volunteer) {
+	groupedVolunteers = make(map[string][]models.Volunteer)
+	for _, volunteer := range volunteers {
+		location := volunteer.State + ", " + volunteer.City
+		groupedVolunteers[location] = append(groupedVolunteers[location], volunteer)
+	}
+	return groupedVolunteers
 }
