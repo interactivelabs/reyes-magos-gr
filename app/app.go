@@ -7,7 +7,7 @@ import (
 )
 
 type App struct {
-	CartsRepository          store.CartsRepository
+	CartsStore               store.CartsStore
 	CodesRepository          store.CodesRepository
 	OrdersRepository         store.OrdersRepository
 	ToysRepository           store.ToysRepository
@@ -19,7 +19,7 @@ type App struct {
 }
 
 func NewApp(db *sql.DB) *App {
-	cartsRepository := store.CartsRepository{DB: db}
+	cartsRepository := store.NewCartsStore(db)
 	codesRepository := store.CodesRepository{DB: db}
 	toysRepository := store.ToysRepository{DB: db}
 	ordersRepository := store.OrdersRepository{DB: db}
@@ -36,13 +36,7 @@ func NewApp(db *sql.DB) *App {
 		VolunteerCodesRepository: volunteerCodesRepository,
 	}
 
-	volunteersService := services.VolunteersService{
-		CartsRepository:          cartsRepository,
-		CodesRepository:          codesRepository,
-		OrdersRepository:         ordersRepository,
-		VolunteersRepository:     volunteersRepository,
-		VolunteerCodesRepository: volunteerCodesRepository,
-	}
+	volunteersService := services.NewVolunteersService(cartsRepository, codesRepository, ordersRepository, volunteersRepository, volunteerCodesRepository)
 
 	return &App{
 		CodesRepository:          codesRepository,
