@@ -10,20 +10,20 @@ import (
 )
 
 type OrdersServiceApp struct {
-	CodesRepository          store.CodesRepository
-	OrdersRepository         store.OrdersRepository
-	VolunteerCodesRepository store.VolunteerCodesRepository
+	CodesStore          store.CodesStore
+	OrdersStore         store.OrdersStore
+	VolunteerCodesStore store.VolunteerCodesStore
 }
 
 func NewOrdersService(
-	codesRepository store.CodesRepository,
-	ordersRepository store.OrdersRepository,
-	volunteerCodesRepository store.VolunteerCodesRepository,
+	codesStore store.CodesStore,
+	ordersStore store.OrdersStore,
+	volunteerCodesStore store.VolunteerCodesStore,
 ) *OrdersServiceApp {
 	return &OrdersServiceApp{
-		CodesRepository:          codesRepository,
-		OrdersRepository:         ordersRepository,
-		VolunteerCodesRepository: volunteerCodesRepository,
+		CodesStore:          codesStore,
+		OrdersStore:         ordersStore,
+		VolunteerCodesStore: volunteerCodesStore,
 	}
 }
 
@@ -31,8 +31,8 @@ type OrdersService interface {
 	CreateOrder(toyID int64, code string) (order models.Order, err error)
 }
 
-func (s OrdersServiceApp) CreateOrder(toyID int64, code string) (order models.Order, err error) {
-	codeResult, err := s.CodesRepository.GetCode(code)
+func (s *OrdersServiceApp) CreateOrder(toyID int64, code string) (order models.Order, err error) {
+	codeResult, err := s.CodesStore.GetCode(code)
 	if err != nil {
 		return order, echo.NewHTTPError(http.StatusBadRequest, "Code Not Found")
 	}
@@ -41,7 +41,7 @@ func (s OrdersServiceApp) CreateOrder(toyID int64, code string) (order models.Or
 		return order, echo.NewHTTPError(http.StatusConflict, "Code already used")
 	}
 
-	volunteerID, err := s.VolunteerCodesRepository.GetVolunteerIdByCodeId(codeResult.CodeID)
+	volunteerID, err := s.VolunteerCodesStore.GetVolunteerIdByCodeId(codeResult.CodeID)
 	if err != nil {
 		return order, echo.NewHTTPError(http.StatusBadRequest, "Code not assigned to volunteer")
 	}
@@ -53,18 +53,18 @@ func (s OrdersServiceApp) CreateOrder(toyID int64, code string) (order models.Or
 		OrderDate:   time.Now().Format(time.RFC3339),
 	}
 
-	orderID, err := s.OrdersRepository.CreateOrder(order)
+	orderID, err := s.OrdersStore.CreateOrder(order)
 	if err != nil {
 		return order, err
 	}
 
 	codeResult.Used = 1
-	err = s.CodesRepository.UpdateCode(codeResult)
+	err = s.CodesStore.UpdateCode(codeResult)
 	if err != nil {
 		return order, err
 	}
 
-	order, err = s.OrdersRepository.GetOrderByID(orderID)
+	order, err = s.OrdersStore.GetOrderByID(orderID)
 	if err != nil {
 		return order, err
 	}

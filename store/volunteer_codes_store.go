@@ -6,11 +6,28 @@ import (
 	utils "reyes-magos-gr/store/utils"
 )
 
-type VolunteerCodesRepository struct {
+type LibSQLVolunteerCodesStore struct {
 	DB *sql.DB
 }
 
-func (r VolunteerCodesRepository) CreateVolunteerCode(volunteerCode models.VolunteerCode) (id int64, err error) {
+func NewVolunteerCodesStore(db *sql.DB) *LibSQLVolunteerCodesStore {
+	return &LibSQLVolunteerCodesStore{DB: db}
+}
+
+type VolunteerCodesStore interface {
+	CreateVolunteerCode(volunteerCode models.VolunteerCode) (int64, error)
+	UpdateVolunteerCode(volunteerCode models.VolunteerCode) error
+	DeleteVolunteerCode(volunteerCodeID int64) error
+	GetActiveVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []models.Code, err error)
+	GetUsedVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []models.Code, err error)
+	GetGivenVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []models.Code, err error)
+	GetAllVolunteersCodes() (volunteerCodes []models.VolunteerCode, err error)
+	GetVolunteerIdByCodeId(codeID int64) (volunteerID int64, err error)
+}
+
+func (r *LibSQLVolunteerCodesStore) CreateVolunteerCode(
+	volunteerCode models.VolunteerCode,
+) (id int64, err error) {
 	queryStr, params, err := utils.BuildInsertQuery(volunteerCode, "volunteer_codes")
 	if err != nil {
 		return 0, err
@@ -23,8 +40,12 @@ func (r VolunteerCodesRepository) CreateVolunteerCode(volunteerCode models.Volun
 	return res.LastInsertId()
 }
 
-func (r VolunteerCodesRepository) UpdateVolunteerCode(volunteerCode models.VolunteerCode) error {
-	queryStr, params, err := utils.BuildUpdateQuery(volunteerCode, "volunteer_codes", "volunteer_code_id")
+func (r *LibSQLVolunteerCodesStore) UpdateVolunteerCode(volunteerCode models.VolunteerCode) error {
+	queryStr, params, err := utils.BuildUpdateQuery(
+		volunteerCode,
+		"volunteer_codes",
+		"volunteer_code_id",
+	)
 	if err != nil {
 		return err
 	}
@@ -36,8 +57,12 @@ func (r VolunteerCodesRepository) UpdateVolunteerCode(volunteerCode models.Volun
 	return nil
 }
 
-func (r VolunteerCodesRepository) DeleteVolunteerCode(volunteerCodeID int64) error {
-	queryStr, params, err := utils.BuildDeleteQuery(volunteerCodeID, "volunteer_codes", "volunteer_code_id")
+func (r *LibSQLVolunteerCodesStore) DeleteVolunteerCode(volunteerCodeID int64) error {
+	queryStr, params, err := utils.BuildDeleteQuery(
+		volunteerCodeID,
+		"volunteer_codes",
+		"volunteer_code_id",
+	)
 	if err != nil {
 		return err
 	}
@@ -60,7 +85,10 @@ const baseQueryVolunteerCodesByVolunteerID string = `
 		AND codes.deleted = 0
 		AND volunteer_codes.deleted = 0 `
 
-func (r VolunteerCodesRepository) GetAllVolunteerCodesByVolunteerID(query string, volunteerCodeID int64) (codes []models.Code, err error) {
+func (r *LibSQLVolunteerCodesStore) GetAllVolunteerCodesByVolunteerID(
+	query string,
+	volunteerCodeID int64,
+) (codes []models.Code, err error) {
 	rows, err := r.DB.Query(query, volunteerCodeID)
 	if err != nil {
 		return nil, err
@@ -81,7 +109,9 @@ func (r VolunteerCodesRepository) GetAllVolunteerCodesByVolunteerID(query string
 	return codes, nil
 }
 
-func (r VolunteerCodesRepository) GetActiveVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []models.Code, err error) {
+func (r *LibSQLVolunteerCodesStore) GetActiveVolunteerCodesByVolunteerID(
+	volunteerCodeID int64,
+) (codes []models.Code, err error) {
 	query := baseQueryVolunteerCodesByVolunteerID + `
 		AND date(codes.expiration) > date('now')
 		AND codes.used = 0
@@ -90,14 +120,18 @@ func (r VolunteerCodesRepository) GetActiveVolunteerCodesByVolunteerID(volunteer
 	return r.GetAllVolunteerCodesByVolunteerID(query, volunteerCodeID)
 }
 
-func (r VolunteerCodesRepository) GetUsedVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []models.Code, err error) {
+func (r *LibSQLVolunteerCodesStore) GetUsedVolunteerCodesByVolunteerID(
+	volunteerCodeID int64,
+) (codes []models.Code, err error) {
 	query := baseQueryVolunteerCodesByVolunteerID + `
 		AND codes.used = 1;`
 
 	return r.GetAllVolunteerCodesByVolunteerID(query, volunteerCodeID)
 }
 
-func (r VolunteerCodesRepository) GetGivenVolunteerCodesByVolunteerID(volunteerCodeID int64) (codes []models.Code, err error) {
+func (r *LibSQLVolunteerCodesStore) GetGivenVolunteerCodesByVolunteerID(
+	volunteerCodeID int64,
+) (codes []models.Code, err error) {
 	query := baseQueryVolunteerCodesByVolunteerID + `
 		AND codes.used = 0
 		AND codes.given = 1;`
@@ -105,7 +139,7 @@ func (r VolunteerCodesRepository) GetGivenVolunteerCodesByVolunteerID(volunteerC
 	return r.GetAllVolunteerCodesByVolunteerID(query, volunteerCodeID)
 }
 
-func (r VolunteerCodesRepository) GetAllVolunteersCodes() (volunteerCodes []models.VolunteerCode, err error) {
+func (r *LibSQLVolunteerCodesStore) GetAllVolunteersCodes() (volunteerCodes []models.VolunteerCode, err error) {
 	rows, err := r.DB.Query(`
 		SELECT
 			volunteer_code_id,
@@ -159,7 +193,9 @@ func (r VolunteerCodesRepository) GetAllVolunteersCodes() (volunteerCodes []mode
 	return volunteerCodes, nil
 }
 
-func (r VolunteerCodesRepository) GetVolunteerIdByCodeId(codeID int64) (volunteerID int64, err error) {
+func (r *LibSQLVolunteerCodesStore) GetVolunteerIdByCodeId(
+	codeID int64,
+) (volunteerID int64, err error) {
 	err = r.DB.QueryRow(`
 		SELECT volunteer_id
 		FROM volunteer_codes

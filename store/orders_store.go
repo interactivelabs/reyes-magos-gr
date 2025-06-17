@@ -6,11 +6,25 @@ import (
 	utils "reyes-magos-gr/store/utils"
 )
 
-type OrdersRepository struct {
+type LibSQLOrdersStore struct {
 	DB *sql.DB
 }
 
-func (r OrdersRepository) CreateOrder(order models.Order) (id int64, err error) {
+func NewOrdersStore(db *sql.DB) *LibSQLOrdersStore {
+	return &LibSQLOrdersStore{DB: db}
+}
+
+type OrdersStore interface {
+	CreateOrder(order models.Order) (id int64, err error)
+	UpdateOrder(order models.Order) error
+	DeleteOrder(orderID int64) error
+	GetOrderByID(orderID int64) (order models.Order, err error)
+	GetPendingOrdersByVolunteerID(volunteerID int64) (orders []models.Order, err error)
+	GetAllActiveOrders() (orders []models.Order, err error)
+	GetCompletedOrders() (orders []models.Order, err error)
+}
+
+func (r LibSQLOrdersStore) CreateOrder(order models.Order) (id int64, err error) {
 	queryStr, params, err := utils.BuildInsertQuery(order, "orders")
 	if err != nil {
 		return 0, err
@@ -23,7 +37,7 @@ func (r OrdersRepository) CreateOrder(order models.Order) (id int64, err error) 
 	return res.LastInsertId()
 }
 
-func (r OrdersRepository) UpdateOrder(order models.Order) error {
+func (r LibSQLOrdersStore) UpdateOrder(order models.Order) error {
 	queryStr, params, err := utils.BuildUpdateQuery(order, "orders", "order_id")
 	if err != nil {
 		return err
@@ -36,7 +50,7 @@ func (r OrdersRepository) UpdateOrder(order models.Order) error {
 	return nil
 }
 
-func (r OrdersRepository) DeleteOrder(orderID int64) error {
+func (r LibSQLOrdersStore) DeleteOrder(orderID int64) error {
 	queryStr, params, err := utils.BuildDeleteQuery(orderID, "orders", "order_id")
 	if err != nil {
 		return err
@@ -49,7 +63,7 @@ func (r OrdersRepository) DeleteOrder(orderID int64) error {
 	return nil
 }
 
-func (r OrdersRepository) GetOrderByID(orderID int64) (order models.Order, err error) {
+func (r LibSQLOrdersStore) GetOrderByID(orderID int64) (order models.Order, err error) {
 	row := r.DB.QueryRow(`
 		SELECT `+orderAllFields+`
 		FROM orders
@@ -58,7 +72,9 @@ func (r OrdersRepository) GetOrderByID(orderID int64) (order models.Order, err e
 	return scanAllOrder(row)
 }
 
-func (r OrdersRepository) GetPendingOrdersByVolunteerID(volunteerID int64) (orders []models.Order, err error) {
+func (r LibSQLOrdersStore) GetPendingOrdersByVolunteerID(
+	volunteerID int64,
+) (orders []models.Order, err error) {
 	rows, err := r.DB.Query(`
 		SELECT `+orderAllFields+`
 		FROM orders
@@ -73,7 +89,7 @@ func (r OrdersRepository) GetPendingOrdersByVolunteerID(volunteerID int64) (orde
 	return GetOrdersFromQuery(rows)
 }
 
-func (r OrdersRepository) GetAllActiveOrders() (orders []models.Order, err error) {
+func (r LibSQLOrdersStore) GetAllActiveOrders() (orders []models.Order, err error) {
 	rows, err := r.DB.Query(`
 		SELECT ` + orderAllFields + `
 		FROM orders
@@ -85,7 +101,7 @@ func (r OrdersRepository) GetAllActiveOrders() (orders []models.Order, err error
 	return GetOrdersFromQuery(rows)
 }
 
-func (r OrdersRepository) GetCompletedOrders() (orders []models.Order, err error) {
+func (r LibSQLOrdersStore) GetCompletedOrders() (orders []models.Order, err error) {
 	rows, err := r.DB.Query(`
 		SELECT ` + orderAllFields + `
 		FROM orders

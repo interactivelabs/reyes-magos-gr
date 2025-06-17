@@ -7,26 +7,26 @@ import (
 )
 
 type VolunteersServiceApp struct {
-	CartsStore               store.CartsStore
-	CodesRepository          store.CodesRepository
-	OrdersRepository         store.OrdersRepository
-	VolunteersRepository     store.VolunteersRepository
-	VolunteerCodesRepository store.VolunteerCodesRepository
+	CartsStore          store.CartsStore
+	CodesStore     store.CodesStore
+	OrdersStore    store.OrdersStore
+	VolunteersStore     store.VolunteersStore
+	VolunteerCodesStore store.VolunteerCodesStore
 }
 
 func NewVolunteersService(
 	cartsStore store.CartsStore,
-	codesRepository store.CodesRepository,
-	ordersRepository store.OrdersRepository,
-	volunteersRepository store.VolunteersRepository,
-	volunteerCodesRepository store.VolunteerCodesRepository,
+	codesStore store.CodesStore,
+	ordersStore store.OrdersStore,
+	volunteersStore store.VolunteersStore,
+	volunteerCodesStore store.VolunteerCodesStore,
 ) *VolunteersServiceApp {
 	return &VolunteersServiceApp{
-		CartsStore:               cartsStore,
-		CodesRepository:          codesRepository,
-		OrdersRepository:         ordersRepository,
-		VolunteersRepository:     volunteersRepository,
-		VolunteerCodesRepository: volunteerCodesRepository,
+		CartsStore:          cartsStore,
+		CodesStore:     codesStore,
+		OrdersStore:    ordersStore,
+		VolunteersStore:     volunteersStore,
+		VolunteerCodesStore: volunteerCodesStore,
 	}
 }
 
@@ -43,25 +43,25 @@ type VolunteersService interface {
 }
 
 func (s *VolunteersServiceApp) GetVolunteerByEmail(email string) (models.Volunteer, error) {
-	return s.VolunteersRepository.GetVolunteerByEmail(email)
+	return s.VolunteersStore.GetVolunteerByEmail(email)
 }
 
 func (s *VolunteersServiceApp) GetVolunteerCodesByEmail(
 	email string,
 ) (codes []models.Code, givenCodes []models.Code, err error) {
-	volunteer, err := s.VolunteersRepository.GetVolunteerByEmail(email)
+	volunteer, err := s.VolunteersStore.GetVolunteerByEmail(email)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	codes, err = s.VolunteerCodesRepository.GetActiveVolunteerCodesByVolunteerID(
+	codes, err = s.VolunteerCodesStore.GetActiveVolunteerCodesByVolunteerID(
 		volunteer.VolunteerID,
 	)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	givenCodes, err = s.VolunteerCodesRepository.GetGivenVolunteerCodesByVolunteerID(
+	givenCodes, err = s.VolunteerCodesStore.GetGivenVolunteerCodesByVolunteerID(
 		volunteer.VolunteerID,
 	)
 	if err != nil {
@@ -74,12 +74,12 @@ func (s *VolunteersServiceApp) GetVolunteerCodesByEmail(
 func (s *VolunteersServiceApp) GetVolunteerOrdersByEmail(
 	email string,
 ) (orders []models.Order, err error) {
-	volunteer, err := s.VolunteersRepository.GetVolunteerByEmail(email)
+	volunteer, err := s.VolunteersStore.GetVolunteerByEmail(email)
 	if err != nil {
 		return nil, err
 	}
 
-	orders, err = s.OrdersRepository.GetPendingOrdersByVolunteerID(volunteer.VolunteerID)
+	orders, err = s.OrdersStore.GetPendingOrdersByVolunteerID(volunteer.VolunteerID)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +90,7 @@ func (s *VolunteersServiceApp) GetVolunteerOrdersByEmail(
 func (s *VolunteersServiceApp) GetVolunteerCartByEmail(
 	email string,
 ) (cartItems []dtos.CartItem, err error) {
-	volunteer, err := s.VolunteersRepository.GetVolunteerByEmail(email)
+	volunteer, err := s.VolunteersStore.GetVolunteerByEmail(email)
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +105,7 @@ func (s *VolunteersServiceApp) GetVolunteerCartByEmail(
 
 func (s *VolunteersServiceApp) GetActiveVolunteersGrupedByLocation() (groupedVolunteers map[string][]models.Volunteer, err error) {
 
-	allVolunteers, err := s.VolunteersRepository.GetActiveVolunteers()
+	allVolunteers, err := s.VolunteersStore.GetActiveVolunteers()
 	if err != nil {
 		return nil, err
 	}
@@ -116,12 +116,12 @@ func (s *VolunteersServiceApp) GetActiveVolunteersGrupedByLocation() (groupedVol
 func (s *VolunteersServiceApp) CreateAndGetVolunteer(
 	volunteer models.Volunteer,
 ) (models.Volunteer, error) {
-	volunteerID, err := s.VolunteersRepository.CreateVolunteer(volunteer)
+	volunteerID, err := s.VolunteersStore.CreateVolunteer(volunteer)
 	if err != nil {
 		return models.Volunteer{}, err
 	}
 
-	volunteer, err = s.VolunteersRepository.GetVolunteerByID(volunteerID)
+	volunteer, err = s.VolunteersStore.GetVolunteerByID(volunteerID)
 	if err != nil {
 		return models.Volunteer{}, err
 	}
@@ -136,7 +136,7 @@ func (s *VolunteersServiceApp) UpdateVolunteer(
 
 	volunteer.VolunteerID = volunteerID
 
-	err := s.VolunteersRepository.UpdateVolunteer(volunteer)
+	err := s.VolunteersStore.UpdateVolunteer(volunteer)
 	if err != nil {
 		return models.Volunteer{}, err
 	}

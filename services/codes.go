@@ -9,12 +9,12 @@ import (
 )
 
 type CodesServiceApp struct {
-	CodesRepository store.CodesRepository
+	CodesStore store.CodesStore
 }
 
-func NewCodesService(codesRepository store.CodesRepository) *CodesServiceApp {
+func NewCodesService(codesStore store.CodesStore) *CodesServiceApp {
 	return &CodesServiceApp{
-		CodesRepository: codesRepository,
+		CodesStore: codesStore,
 	}
 }
 
@@ -30,9 +30,9 @@ func newCode() models.Code {
 	}
 }
 
-func (s CodesServiceApp) CreateCode() (code models.Code, err error) {
+func (s *CodesServiceApp) CreateCode() (code models.Code, err error) {
 	code = newCode()
-	_, codeRow, err := s.CodesRepository.CreateCode(code)
+	_, codeRow, err := s.CodesStore.CreateCode(code)
 	if err != nil {
 		return models.Code{}, err
 	}
@@ -40,10 +40,10 @@ func (s CodesServiceApp) CreateCode() (code models.Code, err error) {
 	return codeRow, nil
 }
 
-func (s CodesServiceApp) CreateCodeBatch(Count int64) (codes []models.Code, err error) {
+func (s *CodesServiceApp) CreateCodeBatch(Count int64) (codes []models.Code, err error) {
 	for i := 0; i < int(Count); i++ {
 		code := newCode()
-		_, codeRow, err := s.CodesRepository.CreateCode(code)
+		_, codeRow, err := s.CodesStore.CreateCode(code)
 		if err != nil {
 			return nil, err
 		}

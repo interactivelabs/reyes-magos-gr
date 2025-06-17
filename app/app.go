@@ -7,49 +7,49 @@ import (
 )
 
 type App struct {
-	CartsStore               store.CartsStore
-	CodesRepository          store.CodesRepository
-	OrdersRepository         store.OrdersRepository
-	ToysRepository           store.ToysRepository
-	VolunteerCodesRepository store.VolunteerCodesRepository
-	VolunteersRepository     store.VolunteersRepository
-	CodesService             services.CodesService
-	OrderService             services.OrdersService
-	VolunteersService        services.VolunteersService
+	CartsStore          store.CartsStore
+	CodesStore          store.CodesStore
+	OrdersStore         store.OrdersStore
+	ToysStore           store.ToysStore
+	VolunteerCodesStore store.VolunteerCodesStore
+	VolunteersStore     store.VolunteersStore
+	CodesService        services.CodesService
+	OrderService        services.OrdersService
+	VolunteersService   services.VolunteersService
 }
 
 func NewApp(db *sql.DB) *App {
 	cartsRepository := store.NewCartsStore(db)
-	codesRepository := store.CodesRepository{DB: db}
-	toysRepository := store.ToysRepository{DB: db}
-	ordersRepository := store.OrdersRepository{DB: db}
-	volunteerCodesRepository := store.VolunteerCodesRepository{DB: db}
-	volunteersRepository := store.VolunteersRepository{DB: db}
+	codesStore := store.NewCodesStore(db)
+	ordersStore := store.NewOrdersStore(db)
+	toysRepository := store.NewToysStore(db)
+	volunteerCodesStore := store.NewVolunteerCodesStore(db)
+	volunteersStore := store.NewVolunteersStore(db)
 
-	codesService := services.NewCodesService(codesRepository)
+	codesService := services.NewCodesService(codesStore)
 
 	orderService := services.NewOrdersService(
-		codesRepository,
-		ordersRepository,
-		volunteerCodesRepository,
+		codesStore,
+		ordersStore,
+		volunteerCodesStore,
 	)
 
 	volunteersService := services.NewVolunteersService(
 		cartsRepository,
-		codesRepository,
-		ordersRepository,
-		volunteersRepository,
-		volunteerCodesRepository,
+		codesStore,
+		ordersStore,
+		volunteersStore,
+		volunteerCodesStore,
 	)
 
 	return &App{
-		CodesRepository:          codesRepository,
-		ToysRepository:           toysRepository,
-		OrdersRepository:         ordersRepository,
-		VolunteerCodesRepository: volunteerCodesRepository,
-		VolunteersRepository:     volunteersRepository,
-		CodesService:             codesService,
-		OrderService:             orderService,
-		VolunteersService:        volunteersService,
+		CodesStore:          codesStore,
+		OrdersStore:         ordersStore,
+		ToysStore:           toysRepository,
+		VolunteerCodesStore: volunteerCodesStore,
+		VolunteersStore:     volunteersStore,
+		CodesService:        codesService,
+		OrderService:        orderService,
+		VolunteersService:   volunteersService,
 	}
 }

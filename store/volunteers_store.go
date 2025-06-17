@@ -6,11 +6,24 @@ import (
 	utils "reyes-magos-gr/store/utils"
 )
 
-type VolunteersRepository struct {
+type LibSQLVolunteersStore struct {
 	DB *sql.DB
 }
 
-func (r VolunteersRepository) CreateVolunteer(volunteer models.Volunteer) (int64, error) {
+func NewVolunteersStore(db *sql.DB) *LibSQLVolunteersStore {
+	return &LibSQLVolunteersStore{DB: db}
+}
+
+type VolunteersStore interface {
+	CreateVolunteer(volunteer models.Volunteer) (int64, error)
+	UpdateVolunteer(volunteer models.Volunteer) error
+	DeleteVolunteer(volunteerID int64) error
+	GetVolunteerByID(volunteerID int64) (models.Volunteer, error)
+	GetVolunteerByEmail(email string) (models.Volunteer, error)
+	GetActiveVolunteers() ([]models.Volunteer, error)
+}
+
+func (r *LibSQLVolunteersStore) CreateVolunteer(volunteer models.Volunteer) (int64, error) {
 	queryStr, params, err := utils.BuildInsertQuery(volunteer, "volunteers")
 	if err != nil {
 		return 0, err
@@ -23,7 +36,7 @@ func (r VolunteersRepository) CreateVolunteer(volunteer models.Volunteer) (int64
 	return res.LastInsertId()
 }
 
-func (r VolunteersRepository) UpdateVolunteer(volunteer models.Volunteer) error {
+func (r *LibSQLVolunteersStore) UpdateVolunteer(volunteer models.Volunteer) error {
 	queryStr, params, err := utils.BuildUpdateQuery(volunteer, "volunteers", "volunteer_id")
 	if err != nil {
 		return err
@@ -36,7 +49,7 @@ func (r VolunteersRepository) UpdateVolunteer(volunteer models.Volunteer) error 
 	return nil
 }
 
-func (r VolunteersRepository) DeleteVolunteer(volunteerID int64) error {
+func (r *LibSQLVolunteersStore) DeleteVolunteer(volunteerID int64) error {
 	queryStr, params, err := utils.BuildDeleteQuery(volunteerID, "volunteers", "volunteer_id")
 	if err != nil {
 		return err
@@ -49,7 +62,9 @@ func (r VolunteersRepository) DeleteVolunteer(volunteerID int64) error {
 	return nil
 }
 
-func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (volubnteer models.Volunteer, err error) {
+func (r *LibSQLVolunteersStore) GetVolunteerByID(
+	volunteerID int64,
+) (volubnteer models.Volunteer, err error) {
 	row := r.DB.QueryRow(`
 		SELECT `+volunteerAllFields+`
 		FROM volunteers
@@ -61,7 +76,9 @@ func (r VolunteersRepository) GetVolunteerByID(volunteerID int64) (volubnteer mo
 	return scanAllVolunteer(row)
 }
 
-func (r VolunteersRepository) GetVolunteerByEmail(email string) (voluntgeer models.Volunteer, err error) {
+func (r *LibSQLVolunteersStore) GetVolunteerByEmail(
+	email string,
+) (voluntgeer models.Volunteer, err error) {
 	row := r.DB.QueryRow(`
 		SELECT `+volunteerAllFields+`
 		FROM volunteers
@@ -73,7 +90,7 @@ func (r VolunteersRepository) GetVolunteerByEmail(email string) (voluntgeer mode
 	return scanAllVolunteer(row)
 }
 
-func (r VolunteersRepository) GetActiveVolunteers() (volunteers []models.Volunteer, err error) {
+func (r *LibSQLVolunteersStore) GetActiveVolunteers() (volunteers []models.Volunteer, err error) {
 	rows, err := r.DB.Query(`
 		SELECT ` + volunteerAllFields + `
 		FROM volunteers

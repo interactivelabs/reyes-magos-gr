@@ -14,8 +14,8 @@ import (
 )
 
 type VolunteersHandler struct {
-	VolunteersService    services.VolunteersService
-	VolunteersRepository store.VolunteersRepository
+	VolunteersService services.VolunteersService
+	VolunteersStore   store.VolunteersStore
 }
 
 func (h VolunteersHandler) VolunteersViewHandler(ctx echo.Context) error {
@@ -32,14 +32,14 @@ func (h VolunteersHandler) VolunteersCreateHandler(ctx echo.Context) error {
 }
 
 type CreateVolunteerRequest struct {
-	Name     string `form:"name" validate:"required"`
-	Email    string `form:"email" validate:"required"`
+	Name     string `form:"name"     validate:"required"`
+	Email    string `form:"email"    validate:"required"`
 	Phone    string `form:"phone"`
-	Address  string `form:"address" validate:"required"`
+	Address  string `form:"address"  validate:"required"`
 	Address2 string `form:"address2"`
-	Country  string `form:"country" validate:"required"`
-	State    string `form:"state" validate:"required"`
-	City     string `form:"city" validate:"required"`
+	Country  string `form:"country"  validate:"required"`
+	State    string `form:"state"    validate:"required"`
+	City     string `form:"city"     validate:"required"`
 	Province string `form:"province"`
 	ZipCode  string `form:"zip_code" validate:"required"`
 }
@@ -74,7 +74,7 @@ func (h VolunteersHandler) VolunteersUpdateViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	volunteer, err := h.VolunteersRepository.GetVolunteerByID(volunteerID)
+	volunteer, err := h.VolunteersStore.GetVolunteerByID(volunteerID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -120,7 +120,7 @@ func (h VolunteersHandler) VolunteersDeleteHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid volunteer ID")
 	}
 
-	err = h.VolunteersRepository.DeleteVolunteer(volunteerID)
+	err = h.VolunteersStore.DeleteVolunteer(volunteerID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

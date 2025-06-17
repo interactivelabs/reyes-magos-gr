@@ -15,7 +15,7 @@ import (
 const PageSize int64 = 12
 
 type CatalogHandler struct {
-	ToysRepository store.ToysRepository
+	ToysStore store.ToysStore
 }
 
 type CatalogHandlerRequest struct {
@@ -43,17 +43,17 @@ func (h CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
 		pageSize = cr.PageSize
 	}
 
-	toys, err := h.ToysRepository.GetToysWithFiltersPaged(page, pageSize, cr.AgeMin, cr.AgeMax, cr.Category)
+	toys, err := h.ToysStore.GetToysWithFiltersPaged(page, pageSize, cr.AgeMin, cr.AgeMax, cr.Category)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	count, err := h.ToysRepository.GetToysCountWithFilters(cr.AgeMin, cr.AgeMax, cr.Category)
+	count, err := h.ToysStore.GetToysCountWithFilters(cr.AgeMin, cr.AgeMax, cr.Category)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	categories, err := h.ToysRepository.GetCategories()
+	categories, err := h.ToysStore.GetCategories()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

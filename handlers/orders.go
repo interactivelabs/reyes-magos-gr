@@ -13,7 +13,7 @@ import (
 
 type OrdersHandler struct {
 	OrdersService        services.OrdersService
-	VolunteersRepository store.VolunteersRepository
+	VolunteersStore store.VolunteersStore
 }
 
 type CreateOrderRequest struct {
@@ -38,7 +38,7 @@ func (h OrdersHandler) CreateOrderViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	volunteer, err := h.VolunteersRepository.GetVolunteerByID(order.VolunteerID)
+	volunteer, err := h.VolunteersStore.GetVolunteerByID(order.VolunteerID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

@@ -8,11 +8,32 @@ import (
 	"strings"
 )
 
-type ToysRepository struct {
+type LibSQLToysStore struct {
 	DB *sql.DB
 }
 
-func (r ToysRepository) CreateToy(toy models.Toy) (id int64, err error) {
+func NewToysStore(db *sql.DB) *LibSQLToysStore {
+	return &LibSQLToysStore{DB: db}
+}
+
+type ToysStore interface {
+	CreateToy(toy models.Toy) (id int64, err error)
+	UpdateToy(toy models.Toy) error
+	DeleteToy(toyID int64) error
+	GetToys() (toys []models.Toy, err error)
+	GetToysWithFiltersPaged(
+		page int64,
+		pageSize int64,
+		ageMin int64,
+		ageMax int64,
+		category []string,
+	) (toys []models.Toy, err error)
+	GetToysCountWithFilters(ageMin int64, ageMax int64, category []string) (count int64, err error)
+	GetToyByID(toyID int64) (toy models.Toy, err error)
+	GetCategories() (categories []string, err error)
+}
+
+func (r *LibSQLToysStore) CreateToy(toy models.Toy) (id int64, err error) {
 	queryStr, params, err := utils.BuildInsertQuery(toy, "toys")
 	if err != nil {
 		return 0, err
@@ -25,7 +46,7 @@ func (r ToysRepository) CreateToy(toy models.Toy) (id int64, err error) {
 	return res.LastInsertId()
 }
 
-func (r ToysRepository) UpdateToy(toy models.Toy) error {
+func (r *LibSQLToysStore) UpdateToy(toy models.Toy) error {
 	queryStr, params, err := utils.BuildUpdateQuery(toy, "toys", "toy_id")
 	if err != nil {
 		return err
@@ -38,7 +59,7 @@ func (r ToysRepository) UpdateToy(toy models.Toy) error {
 	return nil
 }
 
-func (r ToysRepository) DeleteToy(toyID int64) error {
+func (r *LibSQLToysStore) DeleteToy(toyID int64) error {
 	queryStr, params, err := utils.BuildDeleteQuery(toyID, "toys", "toy_id")
 	if err != nil {
 		return err
@@ -51,7 +72,7 @@ func (r ToysRepository) DeleteToy(toyID int64) error {
 	return nil
 }
 
-func (r ToysRepository) GetToys() (toys []models.Toy, err error) {
+func (r *LibSQLToysStore) GetToys() (toys []models.Toy, err error) {
 	rows, err := r.DB.Query(`
 		SELECT ` + toyAllFields + `
 		FROM toys
@@ -77,7 +98,13 @@ func (r ToysRepository) GetToys() (toys []models.Toy, err error) {
 	return toys, nil
 }
 
-func (r ToysRepository) GetToysWithFiltersPaged(page int64, pageSize int64, ageMin int64, ageMax int64, category []string) (toys []models.Toy, err error) {
+func (r *LibSQLToysStore) GetToysWithFiltersPaged(
+	page int64,
+	pageSize int64,
+	ageMin int64,
+	ageMax int64,
+	category []string,
+) (toys []models.Toy, err error) {
 
 	query, params := getFilteredQuery(ageMin, ageMax, category, false)
 
@@ -110,7 +137,11 @@ func (r ToysRepository) GetToysWithFiltersPaged(page int64, pageSize int64, ageM
 	return toys, nil
 }
 
-func (r ToysRepository) GetToysCountWithFilters(ageMin int64, ageMax int64, category []string) (count int64, err error) {
+func (r *LibSQLToysStore) GetToysCountWithFilters(
+	ageMin int64,
+	ageMax int64,
+	category []string,
+) (count int64, err error) {
 	query, params := getFilteredQuery(ageMin, ageMax, category, true)
 	row := r.DB.QueryRow(query, params...)
 
@@ -122,7 +153,7 @@ func (r ToysRepository) GetToysCountWithFilters(ageMin int64, ageMax int64, cate
 	return count, nil
 }
 
-func (r ToysRepository) GetToyByID(toyID int64) (toy models.Toy, err error) {
+func (r *LibSQLToysStore) GetToyByID(toyID int64) (toy models.Toy, err error) {
 	row := r.DB.QueryRow(`
 		SELECT `+toyAllFields+`
 		FROM toys
@@ -139,7 +170,7 @@ func (r ToysRepository) GetToyByID(toyID int64) (toy models.Toy, err error) {
 	return toy, nil
 }
 
-func (r ToysRepository) GetCategories() (categories []string, err error) {
+func (r *LibSQLToysStore) GetCategories() (categories []string, err error) {
 	rows, err := r.DB.Query(`
 		SELECT DISTINCT category
 		FROM toys
@@ -172,7 +203,7 @@ func (r ToysRepository) GetCategories() (categories []string, err error) {
 	return categories, nil
 }
 
-func (r ToysRepository) GetToysCount() (count int64, err error) {
+func (r *LibSQLToysStore) GetToysCount() (count int64, err error) {
 	row := r.DB.QueryRow(`
 		SELECT COUNT(*)
 		FROM toys
@@ -186,7 +217,12 @@ func (r ToysRepository) GetToysCount() (count int64, err error) {
 	return count, nil
 }
 
-func getFilteredQuery(ageMin int64, ageMax int64, category []string, countOnly bool) (query string, params []interface{}) {
+func getFilteredQuery(
+	ageMin int64,
+	ageMax int64,
+	category []string,
+	countOnly bool,
+) (query string, params []interface{}) {
 	var ageMinFiler int64
 	ageMinFiler = 0
 	if ageMin > 0 {
