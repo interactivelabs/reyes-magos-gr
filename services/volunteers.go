@@ -1,8 +1,8 @@
 package services
 
 import (
-	"reyes-magos-gr/app/dtos"
 	"reyes-magos-gr/store"
+	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/models"
 
 	"github.com/dranikpg/dto-mapper"
