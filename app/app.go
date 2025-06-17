@@ -26,15 +26,13 @@ func NewApp(db *sql.DB) *App {
 	volunteerCodesRepository := store.VolunteerCodesRepository{DB: db}
 	volunteersRepository := store.VolunteersRepository{DB: db}
 
-	codesService := services.CodesService{
-		CodesRepository: codesRepository,
-	}
+	codesService := services.NewCodesService(codesRepository)
 
-	orderService := services.OrdersService{
-		CodesRepository:          codesRepository,
-		OrdersRepository:         ordersRepository,
-		VolunteerCodesRepository: volunteerCodesRepository,
-	}
+	orderService := services.NewOrdersService(
+		codesRepository,
+		ordersRepository,
+		volunteerCodesRepository,
+	)
 
 	volunteersService := services.NewVolunteersService(
 		cartsRepository,
