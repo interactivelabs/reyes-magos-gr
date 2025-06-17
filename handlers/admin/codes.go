@@ -12,24 +12,24 @@ import (
 )
 
 type CodesHandler struct {
-	CodesRepository          store.CodesRepository
-	VolunteersRepository     store.VolunteersRepository
-	VolunteerCodesRepository store.VolunteerCodesRepository
+	CodesStore          store.CodesStore
+	VolunteersStore     store.VolunteersStore
+	VolunteerCodesStore store.VolunteerCodesStore
 	CodesService             services.CodesService
 }
 
 func (h CodesHandler) CodesViewHandler(ctx echo.Context) error {
-	activeCodes, err := h.CodesRepository.GetUnassignedCodes()
+	activeCodes, err := h.CodesStore.GetUnassignedCodes()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	activeVolunteers, err := h.VolunteersRepository.GetActiveVolunteers()
+	activeVolunteers, err := h.VolunteersStore.GetActiveVolunteers()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	allVolunteersCodes, err := h.VolunteerCodesRepository.GetAllVolunteersCodes()
+	allVolunteersCodes, err := h.VolunteerCodesStore.GetAllVolunteersCodes()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -56,7 +56,7 @@ func (h CodesHandler) AssignCodesHandler(ctx echo.Context) error {
 			VolunteerID: acr.VolunteerID,
 			CodeID:      codeID,
 		}
-		_, err := h.VolunteerCodesRepository.CreateVolunteerCode(volunteerCode)
+		_, err := h.VolunteerCodesStore.CreateVolunteerCode(volunteerCode)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}
@@ -81,14 +81,14 @@ func (h CodesHandler) RemoveCodesHandler(ctx echo.Context) error {
 
 	for _, volunteerCodeID := range acr.VolunteerCodeIDs {
 
-		err := h.VolunteerCodesRepository.DeleteVolunteerCode(volunteerCodeID)
+		err := h.VolunteerCodesStore.DeleteVolunteerCode(volunteerCodeID)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}
 	}
 
 	for _, codeID := range acr.CodeIDs {
-		err := h.CodesRepository.DeleteCode(codeID)
+		err := h.CodesStore.DeleteCode(codeID)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}

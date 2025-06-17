@@ -6,11 +6,25 @@ import (
 	utils "reyes-magos-gr/store/utils"
 )
 
-type CodesRepository struct {
+type LibSQLCodesStore struct {
 	DB *sql.DB
 }
 
-func (r CodesRepository) CreateCode(code models.Code) (int64, models.Code, error) {
+func NewCodesStore(db *sql.DB) *LibSQLCodesStore {
+	return &LibSQLCodesStore{DB: db}
+}
+
+type CodesStore interface {
+	CreateCode(code models.Code) (int64, models.Code, error)
+	UpdateCode(code models.Code) error
+	DeleteCode(codeID int64) error
+	GetCodeByID(codeID int64) (models.Code, error)
+	GetCode(code string) (models.Code, error)
+	GetActiveCodes() ([]models.Code, error)
+	GetUnassignedCodes() ([]models.Code, error)
+}
+
+func (r LibSQLCodesStore) CreateCode(code models.Code) (int64, models.Code, error) {
 	queryStr, params, err := utils.BuildInsertQuery(code, "codes")
 	if err != nil {
 		return 0, models.Code{}, err
@@ -40,7 +54,7 @@ func (r CodesRepository) CreateCode(code models.Code) (int64, models.Code, error
 	return id, codeResult, nil
 }
 
-func (r CodesRepository) UpdateCode(code models.Code) error {
+func (r LibSQLCodesStore) UpdateCode(code models.Code) error {
 	queryStr, params, err := utils.BuildUpdateQuery(code, "codes", "code_id")
 	if err != nil {
 		return err
@@ -53,7 +67,7 @@ func (r CodesRepository) UpdateCode(code models.Code) error {
 	return nil
 }
 
-func (r CodesRepository) DeleteCode(codeID int64) error {
+func (r LibSQLCodesStore) DeleteCode(codeID int64) error {
 	queryStr, params, err := utils.BuildDeleteQuery(codeID, "codes", "code_id")
 	if err != nil {
 		return err
@@ -66,7 +80,7 @@ func (r CodesRepository) DeleteCode(codeID int64) error {
 	return nil
 }
 
-func (r CodesRepository) GetCodeByID(codeID int64) (code models.Code, err error) {
+func (r LibSQLCodesStore) GetCodeByID(codeID int64) (code models.Code, err error) {
 	var row = r.DB.QueryRow(`
 		SELECT *
 		FROM codes
@@ -78,7 +92,7 @@ func (r CodesRepository) GetCodeByID(codeID int64) (code models.Code, err error)
 	return scanAllCode(row)
 }
 
-func (r CodesRepository) GetCode(code string) (models.Code, error) {
+func (r LibSQLCodesStore) GetCode(code string) (models.Code, error) {
 	var row = r.DB.QueryRow(`
 		SELECT *
 		FROM codes
@@ -90,7 +104,7 @@ func (r CodesRepository) GetCode(code string) (models.Code, error) {
 	return scanAllCode(row)
 }
 
-func (r CodesRepository) GetActiveCodes() (codes []models.Code, err error) {
+func (r LibSQLCodesStore) GetActiveCodes() (codes []models.Code, err error) {
 	rows, err := r.DB.Query(`
 		SELECT *
 		FROM codes
@@ -118,7 +132,7 @@ func (r CodesRepository) GetActiveCodes() (codes []models.Code, err error) {
 	return codes, nil
 }
 
-func (r CodesRepository) GetUnassignedCodes() (codes []models.Code, err error) {
+func (r LibSQLCodesStore) GetUnassignedCodes() (codes []models.Code, err error) {
 	rows, err := r.DB.Query(`
 		SELECT codes.*
 		FROM codes

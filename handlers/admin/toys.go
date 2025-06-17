@@ -14,11 +14,11 @@ import (
 )
 
 type ToysHandler struct {
-	ToysRepository store.ToysRepository
+	ToysStore store.ToysStore
 }
 
 func (h ToysHandler) ToysViewHandler(ctx echo.Context) error {
-	toys, err := h.ToysRepository.GetToys()
+	toys, err := h.ToysStore.GetToys()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -57,7 +57,7 @@ func (h ToysHandler) CreateToyPostHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	toyID, err := h.ToysRepository.CreateToy(toy)
+	toyID, err := h.ToysStore.CreateToy(toy)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -73,7 +73,7 @@ func (h ToysHandler) UpdateToyFormHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	toy, err := h.ToysRepository.GetToyByID(toyID)
+	toy, err := h.ToysStore.GetToyByID(toyID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -112,7 +112,7 @@ func (h ToysHandler) UpdateToyPutHandler(ctx echo.Context) error {
 		toy.Category = strings.Join(categories, ",")
 	}
 
-	err = h.ToysRepository.UpdateToy(toy)
+	err = h.ToysStore.UpdateToy(toy)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -127,7 +127,7 @@ func (h ToysHandler) DeleteToyHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	err = h.ToysRepository.DeleteToy(toyID)
+	err = h.ToysStore.DeleteToy(toyID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -141,7 +141,7 @@ type SearchBoxItem struct {
 }
 
 func (h ToysHandler) ToysCategoriesViewHandler(ctx echo.Context) error {
-	categories, err := h.ToysRepository.GetCategories()
+	categories, err := h.ToysStore.GetCategories()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

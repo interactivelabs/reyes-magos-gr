@@ -11,7 +11,7 @@ import (
 )
 
 type RedeemToyHandler struct {
-	ToysRepository store.ToysRepository
+	ToysStore store.ToysStore
 }
 
 type RedeemToyViewRequest struct {
@@ -21,7 +21,7 @@ type RedeemToyViewRequest struct {
 func (h RedeemToyHandler) RedeemToyViewHandler(ctx echo.Context) error {
 	toyIDStr := ctx.Param("toy_id")
 	toyID, err := strconv.ParseInt(toyIDStr, 10, 64)
-	toy, err := h.ToysRepository.GetToyByID(toyID)
+	toy, err := h.ToysStore.GetToyByID(toyID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

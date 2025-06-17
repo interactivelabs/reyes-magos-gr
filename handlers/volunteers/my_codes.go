@@ -14,7 +14,7 @@ import (
 
 type MyCodesHandler struct {
 	VolunteersService services.VolunteersService
-	CodesRepository   store.CodesRepository
+	CodesStore   store.CodesStore
 }
 
 func (h MyCodesHandler) MyCodesViewHandler(ctx echo.Context) error {
@@ -41,14 +41,14 @@ func (h MyCodesHandler) GiveCode(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid code ID")
 	}
 
-	code, err := h.CodesRepository.GetCodeByID(codeID)
+	code, err := h.CodesStore.GetCodeByID(codeID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	code.Given = 1
 
-	err = h.CodesRepository.UpdateCode(code)
+	err = h.CodesStore.UpdateCode(code)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

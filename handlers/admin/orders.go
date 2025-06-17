@@ -12,9 +12,9 @@ import (
 )
 
 type OrdersHandler struct {
-	OrdersRepository     store.OrdersRepository
-	ToysRepository       store.ToysRepository
-	VolunteersRepository store.VolunteersRepository
+	OrdersStore store.OrdersStore
+	ToysStore   store.ToysStore
+	VolunteersStore  store.VolunteersStore
 }
 
 type Order interface {
@@ -31,12 +31,12 @@ func getOrderId(o Order) (int64, error) {
 }
 
 func (h OrdersHandler) OrdersViewHandler(ctx echo.Context) error {
-	orders, err := h.OrdersRepository.GetAllActiveOrders()
+	orders, err := h.OrdersStore.GetAllActiveOrders()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	completedOrders, err := h.OrdersRepository.GetCompletedOrders()
+	completedOrders, err := h.OrdersStore.GetCompletedOrders()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -50,7 +50,7 @@ func (h OrdersHandler) OrderCardViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	order, err := h.OrdersRepository.GetOrderByID(orderID)
+	order, err := h.OrdersStore.GetOrderByID(orderID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -64,17 +64,17 @@ func (h OrdersHandler) UpdateOrderViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	order, err := h.OrdersRepository.GetOrderByID(orderID)
+	order, err := h.OrdersStore.GetOrderByID(orderID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	toy, err := h.ToysRepository.GetToyByID(order.ToyID)
+	toy, err := h.ToysStore.GetToyByID(order.ToyID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	volunteer, err := h.VolunteersRepository.GetVolunteerByID(order.VolunteerID)
+	volunteer, err := h.VolunteersStore.GetVolunteerByID(order.VolunteerID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -83,7 +83,7 @@ func (h OrdersHandler) UpdateOrderViewHandler(ctx echo.Context) error {
 }
 
 type SaveOrderChangesrRequest struct {
-	ShippedDate    string `form:"shipped_date" validate:"iso_8601_date"`
+	ShippedDate    string `form:"shipped_date"    validate:"iso_8601_date"`
 	OrderCompleted int64  `form:"order_completed" validate:"number"`
 }
 
@@ -101,7 +101,7 @@ func (h OrdersHandler) SaveOrderChangesHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	order, err := h.OrdersRepository.GetOrderByID(orderID)
+	order, err := h.OrdersStore.GetOrderByID(orderID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -119,7 +119,7 @@ func (h OrdersHandler) SaveOrderChangesHandler(ctx echo.Context) error {
 		order.CompletedDate = time.Now().Format(time.RFC3339)
 	}
 
-	err = h.OrdersRepository.UpdateOrder(order)
+	err = h.OrdersStore.UpdateOrder(order)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

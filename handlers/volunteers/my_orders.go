@@ -15,7 +15,7 @@ import (
 
 type MyOrdersHandler struct {
 	VolunteersService services.VolunteersService
-	Ordersrepository  store.OrdersRepository
+	Ordersrepository  store.OrdersStore
 }
 
 func (h MyOrdersHandler) MyOrdersViewHandler(ctx echo.Context) error {
