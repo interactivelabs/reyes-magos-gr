@@ -2,7 +2,7 @@ package pages
 
 import (
 	"fmt"
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	"reyes-magos-gr/lib"
 	layout "reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
@@ -72,7 +72,7 @@ templ AddToCartButton(toyId int64) {
 	</div>
 }
 
-templ RedeemToy(toy model.Toy, code string) {
+templ RedeemToy(toy models.Toy, code string) {
 	@layout.Base() {
 		<main class="min-h-screen">
 			<div class="mx-auto max-w-2xl pb-24 pt-8 sm:px-6 lg:max-w-7xl lg:px-8">

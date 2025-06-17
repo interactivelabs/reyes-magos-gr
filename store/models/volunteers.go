@@ -1,4 +1,4 @@
-package model
+package models
 
 type Volunteer struct {
 	VolunteerID int64  `json:"volunteer_id"`

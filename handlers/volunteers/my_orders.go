@@ -2,9 +2,9 @@ package volunteers
 
 import (
 	"net/http"
-	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
+	"reyes-magos-gr/store"
 	"reyes-magos-gr/views/components"
 	volunteer "reyes-magos-gr/views/volunteer"
 	"strconv"
@@ -15,7 +15,7 @@ import (
 
 type MyOrdersHandler struct {
 	VolunteersService services.VolunteersService
-	Ordersrepository  repository.OrdersRepository
+	Ordersrepository  store.OrdersRepository
 }
 
 func (h MyOrdersHandler) MyOrdersViewHandler(ctx echo.Context) error {

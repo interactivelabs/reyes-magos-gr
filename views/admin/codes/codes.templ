@@ -2,13 +2,13 @@ package pages
 
 import (
 	"fmt"
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/views/admin"
 	"reyes-magos-gr/views/components"
 )
 
-templ Codes(codes []model.Code, volunteerCodes []model.VolunteerCode, volunteers []model.Volunteer) {
+templ Codes(codes []models.Code, volunteerCodes []models.VolunteerCode, volunteers []models.Volunteer) {
 	@admin.AdminLayout() {
 		<main>
 			<div class="container mx-auto lg:max-w-7xl lg:px-8">

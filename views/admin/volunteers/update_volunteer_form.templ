@@ -2,11 +2,11 @@ package pages
 
 import (
 	"fmt"
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	"reyes-magos-gr/views/components"
 )
 
-templ UpdateVolunteerForm(volunteer model.Volunteer) {
+templ UpdateVolunteerForm(volunteer models.Volunteer) {
 	@components.Dialog() {
 		<form
 			class="pt-8"

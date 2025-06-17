@@ -2,7 +2,7 @@ package pages
 
 import (
 	"fmt"
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	"reyes-magos-gr/lib"
 	layout "reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
@@ -17,7 +17,7 @@ script onCopyHandler(code string) {
   copyCode(code);
 }
 
-templ MyCodeItem(code model.Code) {
+templ MyCodeItem(code models.Code) {
 	<li class="col-span-1 flex flex-col first-line: rounded-lg shadow-sm" id={ fmt.Sprintf("volunteer-code-%d", code.CodeID) }>
 		<div class="p-4 flex-1 rounded-lg border-gray-400 bg-white shadow-sm">
 			<p class="text-lg text-gray-900 hover:text-gray-600">{ code.Code }</p>
@@ -59,7 +59,7 @@ templ MyCodeItem(code model.Code) {
 	</li>
 }
 
-templ MyCodes(codes []model.Code, givenCodes []model.Code) {
+templ MyCodes(codes []models.Code, givenCodes []models.Code) {
 	@layout.Base() {
 		<main>
 			<h1 class="text-center pt-8 text-2xl">Mis Codigos</h1>

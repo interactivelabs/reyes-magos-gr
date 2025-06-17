@@ -2,29 +2,29 @@ package app
 
 import (
 	"database/sql"
-	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/services"
+	"reyes-magos-gr/store"
 )
 
 type App struct {
-	CartsRepository          repository.CartsRepository
-	CodesRepository          repository.CodesRepository
-	OrdersRepository         repository.OrdersRepository
-	ToysRepository           repository.ToysRepository
-	VolunteerCodesRepository repository.VolunteerCodesRepository
-	VolunteersRepository     repository.VolunteersRepository
+	CartsRepository          store.CartsRepository
+	CodesRepository          store.CodesRepository
+	OrdersRepository         store.OrdersRepository
+	ToysRepository           store.ToysRepository
+	VolunteerCodesRepository store.VolunteerCodesRepository
+	VolunteersRepository     store.VolunteersRepository
 	CodesService             services.CodesService
 	OrderService             services.OrdersService
 	VolunteersService        services.VolunteersService
 }
 
 func NewApp(db *sql.DB) *App {
-	cartsRepository := repository.CartsRepository{DB: db}
-	codesRepository := repository.CodesRepository{DB: db}
-	toysRepository := repository.ToysRepository{DB: db}
-	ordersRepository := repository.OrdersRepository{DB: db}
-	volunteerCodesRepository := repository.VolunteerCodesRepository{DB: db}
-	volunteersRepository := repository.VolunteersRepository{DB: db}
+	cartsRepository := store.CartsRepository{DB: db}
+	codesRepository := store.CodesRepository{DB: db}
+	toysRepository := store.ToysRepository{DB: db}
+	ordersRepository := store.OrdersRepository{DB: db}
+	volunteerCodesRepository := store.VolunteerCodesRepository{DB: db}
+	volunteersRepository := store.VolunteersRepository{DB: db}
 
 	codesService := services.CodesService{
 		CodesRepository: codesRepository,

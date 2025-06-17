@@ -10,12 +10,12 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"fmt"
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	lib "reyes-magos-gr/lib"
 	svg "reyes-magos-gr/views/components/svg"
 )
 
-func HasOrderShipped(order model.Order) string {
+func HasOrderShipped(order models.Order) string {
 	if order.Shipped == 1 {
 		if shipped, err := lib.FormatDate(order.ShippedDate); err == nil {
 			return shipped
@@ -24,7 +24,7 @@ func HasOrderShipped(order model.Order) string {
 	return "Not Shipped"
 }
 
-func OrderCard(order model.Order) templ.Component {
+func OrderCard(order models.Order) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {

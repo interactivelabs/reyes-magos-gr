@@ -2,8 +2,8 @@ package api
 
 import (
 	"net/http"
-	"reyes-magos-gr/db/model"
-	"reyes-magos-gr/db/repository"
+	"reyes-magos-gr/store"
+	"reyes-magos-gr/store/models"
 	"strconv"
 
 	"github.com/dranikpg/dto-mapper"
@@ -24,7 +24,7 @@ type CreateVolunteerRequest struct {
 }
 
 type VolunteerHandler struct {
-	VolunteersRepository repository.VolunteersRepository
+	VolunteersRepository store.VolunteersRepository
 }
 
 func (h VolunteerHandler) CreateVolunteerApiHandler(ctx echo.Context) error {
@@ -36,7 +36,7 @@ func (h VolunteerHandler) CreateVolunteerApiHandler(ctx echo.Context) error {
 		return err
 	}
 
-	var volunteer model.Volunteer
+	var volunteer models.Volunteer
 	err := dto.Map(&volunteer, tr)
 	if err != nil {
 		return err
@@ -73,7 +73,7 @@ func (h VolunteerHandler) UpdateVolunteerApiHandler(ctx echo.Context) error {
 		return err
 	}
 
-	var volunteer model.Volunteer
+	var volunteer models.Volunteer
 	err := dto.Map(&volunteer, tr)
 	if err != nil {
 		return err

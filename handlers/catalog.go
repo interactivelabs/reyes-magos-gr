@@ -5,8 +5,8 @@ import (
 	"math"
 	"net/http"
 	"reyes-magos-gr/app/dtos"
-	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
+	"reyes-magos-gr/store"
 	catalog "reyes-magos-gr/views/catalog"
 
 	"github.com/labstack/echo/v4"
@@ -15,7 +15,7 @@ import (
 const PageSize int64 = 12
 
 type CatalogHandler struct {
-	ToysRepository repository.ToysRepository
+	ToysRepository store.ToysRepository
 }
 
 type CatalogHandlerRequest struct {

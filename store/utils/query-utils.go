@@ -25,8 +25,8 @@ func ExecuteMutationQuery(db *sql.DB, query string, args ...interface{}) (result
 	return result, nil
 }
 
-func BuildUpdateQuery(model interface{}, tableName string, idFieldName string) (queryStr string, params []interface{}, err error) {
-	val := reflect.ValueOf(model)
+func BuildUpdateQuery(models interface{}, tableName string, idFieldName string) (queryStr string, params []interface{}, err error) {
+	val := reflect.ValueOf(models)
 	typeOfModel := val.Type()
 
 	var query strings.Builder
@@ -62,8 +62,8 @@ func BuildUpdateQuery(model interface{}, tableName string, idFieldName string) (
 	return queryStr, params, nil
 }
 
-func BuildInsertQuery(model interface{}, tableName string) (queryStr string, params []interface{}, err error) {
-	val := reflect.ValueOf(model)
+func BuildInsertQuery(models interface{}, tableName string) (queryStr string, params []interface{}, err error) {
+	val := reflect.ValueOf(models)
 	typeOfModel := val.Type()
 
 	var query strings.Builder

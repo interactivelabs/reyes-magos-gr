@@ -11,7 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"fmt"
 	"reyes-magos-gr/app/dtos"
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 
 	"reyes-magos-gr/lib"
 	layout "reyes-magos-gr/views"
@@ -299,7 +299,7 @@ func FilterPill(filter_label string, filter_value string) templ.Component {
 }
 
 func Catalog(
-	toys []model.Toy,
+	toys []models.Toy,
 	categories []string,
 	page int64,
 	pages int64,

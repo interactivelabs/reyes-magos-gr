@@ -2,19 +2,19 @@ package admin
 
 import (
 	"net/http"
-	"reyes-magos-gr/db/model"
-	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
+	"reyes-magos-gr/store"
+	"reyes-magos-gr/store/models"
 	codes "reyes-magos-gr/views/admin/codes"
 
 	"github.com/labstack/echo/v4"
 )
 
 type CodesHandler struct {
-	CodesRepository          repository.CodesRepository
-	VolunteersRepository     repository.VolunteersRepository
-	VolunteerCodesRepository repository.VolunteerCodesRepository
+	CodesRepository          store.CodesRepository
+	VolunteersRepository     store.VolunteersRepository
+	VolunteerCodesRepository store.VolunteerCodesRepository
 	CodesService             services.CodesService
 }
 
@@ -52,7 +52,7 @@ func (h CodesHandler) AssignCodesHandler(ctx echo.Context) error {
 	}
 
 	for _, codeID := range acr.CodeIDs {
-		volunteerCode := model.VolunteerCode{
+		volunteerCode := models.VolunteerCode{
 			VolunteerID: acr.VolunteerID,
 			CodeID:      codeID,
 		}

@@ -2,12 +2,12 @@ package pages
 
 import (
 	"fmt"
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	layout "reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
 )
 
-templ MyOrders(orders []model.Order) {
+templ MyOrders(orders []models.Order) {
 	@layout.Base() {
 		<main>
 			<h1 class="text-center pt-8 text-2xl">Mis Ordenes</h1>

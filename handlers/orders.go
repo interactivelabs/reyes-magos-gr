@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"net/http"
-	"reyes-magos-gr/db/repository"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
+	"reyes-magos-gr/store"
 	orders "reyes-magos-gr/views/orders"
 	redeem "reyes-magos-gr/views/redeem-toy"
 
@@ -13,7 +13,7 @@ import (
 
 type OrdersHandler struct {
 	OrdersService        services.OrdersService
-	VolunteersRepository repository.VolunteersRepository
+	VolunteersRepository store.VolunteersRepository
 }
 
 type CreateOrderRequest struct {

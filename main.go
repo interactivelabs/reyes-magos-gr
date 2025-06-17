@@ -24,7 +24,7 @@ func main() {
 	defer connector.Close()
 	defer db.Close()
 
-	// Initialize the application repository and services
+	// Initialize the application store and services
 	app := app.NewApp(db)
 
 	// Initialize the Auth0 authenticator

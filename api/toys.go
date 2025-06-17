@@ -2,8 +2,8 @@ package api
 
 import (
 	"net/http"
-	"reyes-magos-gr/db/model"
-	"reyes-magos-gr/db/repository"
+	"reyes-magos-gr/store"
+	"reyes-magos-gr/store/models"
 	"strconv"
 
 	"github.com/dranikpg/dto-mapper"
@@ -23,7 +23,7 @@ type CreateToyRequest struct {
 }
 
 type ToyHandler struct {
-	ToysRepository repository.ToysRepository
+	ToysRepository store.ToysRepository
 }
 
 func (h ToyHandler) CreateToyApiHandler(ctx echo.Context) error {
@@ -35,7 +35,7 @@ func (h ToyHandler) CreateToyApiHandler(ctx echo.Context) error {
 		return err
 	}
 
-	var toy model.Toy
+	var toy models.Toy
 	err := dto.Map(&toy, tr)
 	if err != nil {
 		return err
@@ -55,7 +55,7 @@ func (h ToyHandler) CreateBatchToysApiHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	var toys []model.Toy
+	var toys []models.Toy
 	err := dto.Map(&toys, tr)
 	if err != nil {
 		return err
@@ -95,7 +95,7 @@ func (h ToyHandler) UpdateToyApiHandler(ctx echo.Context) error {
 		return err
 	}
 
-	var toy model.Toy
+	var toy models.Toy
 	err := dto.Map(&toy, tr)
 	if err != nil {
 		return err

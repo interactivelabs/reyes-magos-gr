@@ -2,12 +2,12 @@ package components
 
 import (
 	"fmt"
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	lib "reyes-magos-gr/lib"
 	svg "reyes-magos-gr/views/components/svg"
 )
 
-func HasOrderShipped(order model.Order) string {
+func HasOrderShipped(order models.Order) string {
 	if order.Shipped == 1 {
 		if shipped, err := lib.FormatDate(order.ShippedDate); err == nil {
 			return shipped
@@ -16,7 +16,7 @@ func HasOrderShipped(order model.Order) string {
 	return "Not Shipped"
 }
 
-templ OrderCard(order model.Order) {
+templ OrderCard(order models.Order) {
 	<div class="flex flex-col flex-1 rounded-lg border-gray-400 bg-white" id={ fmt.Sprintf("order-card-%d", order.OrderID) }>
 		<div class="flex-1 px-4 py-2 text-sm text-left">
 			<p class="text-lg text-gray-900 hover:text-gray-600">

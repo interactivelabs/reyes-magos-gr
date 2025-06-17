@@ -1,7 +1,7 @@
 package pages
 
 import (
-	"reyes-magos-gr/db/model"
+	"reyes-magos-gr/db/models"
 	"reyes-magos-gr/views/components"
 )
 
@@ -16,7 +16,7 @@ templ CreateToyForm() {
 			x-on:htmx:after-on-load="modalOpen = false"
 		>
 			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
-				@ToyForm(model.Toy{})
+				@ToyForm(models.Toy{})
 				<div class="mt-6 flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-8">
 					@components.CancelModalButton()
 					<button

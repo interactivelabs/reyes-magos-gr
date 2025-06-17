@@ -1,4 +1,4 @@
-package model
+package models
 
 type CartItem struct {
 	CartID          int64 `json:"cart_id"`

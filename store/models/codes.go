@@ -1,4 +1,4 @@
-package model
+package models
 
 type Code struct {
 	CodeID     int64  `json:"code_id"`
