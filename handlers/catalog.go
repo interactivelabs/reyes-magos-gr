@@ -39,10 +39,7 @@ func (h *CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	page := cr.Page
-	if page < 1 {
-		page = 1
-	}
+	page := max(cr.Page, 1)
 
 	pageSize := PageSize
 	if cr.PageSize > 0 {

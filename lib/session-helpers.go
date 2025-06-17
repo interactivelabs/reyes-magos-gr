@@ -45,7 +45,7 @@ func DeleteCookieSession(ctx echo.Context, name string) error {
 	return nil
 }
 
-func GetSessionProfile(ctx echo.Context) (map[string]interface{}, error) {
+func GetSessionProfile(ctx echo.Context) (map[string]any, error) {
 	profileSession, err := session.Get("profile", ctx)
 	if err != nil {
 		return nil, err
@@ -56,7 +56,7 @@ func GetSessionProfile(ctx echo.Context) (map[string]interface{}, error) {
 		return nil, nil
 	}
 
-	var profileMap map[string]interface{}
+	var profileMap map[string]any
 	if err := json.Unmarshal([]byte(profile.(string)), &profileMap); err != nil {
 		return nil, err
 	}

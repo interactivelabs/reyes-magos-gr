@@ -63,7 +63,7 @@ func (h *LoginHandler) LoginCallbackHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnauthorized, "Failed to authenticate")
 	}
 
-	var profile map[string]interface{}
+	var profile map[string]any
 	if err := idToken.Claims(&profile); err != nil {
 		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
 	}
