@@ -56,7 +56,7 @@ func generateRandomString(length int) string {
 	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 	var sb strings.Builder
-	for i := 0; i < length; i++ {
+	for range length {
 		sb.WriteByte(chars[rand.Intn(len(chars))])
 	}
 	return sb.String()

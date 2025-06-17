@@ -222,12 +222,9 @@ func getFilteredQuery(
 	ageMax int64,
 	category []string,
 	countOnly bool,
-) (query string, params []interface{}) {
+) (query string, params []any) {
 	var ageMinFiler int64
-	ageMinFiler = 0
-	if ageMin > 0 {
-		ageMinFiler = ageMin
-	}
+	ageMinFiler = max(ageMin, 0)
 
 	var ageMaxFiler int64
 	ageMaxFiler = 99
@@ -266,7 +263,7 @@ func buildCategoryWhereSQL(categories []string) string {
 	}
 
 	var builder strings.Builder
-	for i := 0; i < count; i++ {
+	for i := range count {
 		s := "category LIKE '%" + categories[i] + "%'"
 		builder.WriteString(s)
 		if i < count-1 {

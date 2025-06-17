@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func ExecuteMutationQuery(db *sql.DB, query string, args ...interface{}) (result sql.Result, err error) {
+func ExecuteMutationQuery(db *sql.DB, query string, args ...any) (result sql.Result, err error) {
 	stmt, err := db.Prepare(query)
 	if err != nil {
 		return nil, err
@@ -25,7 +25,7 @@ func ExecuteMutationQuery(db *sql.DB, query string, args ...interface{}) (result
 	return result, nil
 }
 
-func BuildUpdateQuery(models interface{}, tableName string, idFieldName string) (queryStr string, params []interface{}, err error) {
+func BuildUpdateQuery(models any, tableName string, idFieldName string) (queryStr string, params []any, err error) {
 	val := reflect.ValueOf(models)
 	typeOfModel := val.Type()
 
@@ -62,7 +62,7 @@ func BuildUpdateQuery(models interface{}, tableName string, idFieldName string) 
 	return queryStr, params, nil
 }
 
-func BuildInsertQuery(models interface{}, tableName string) (queryStr string, params []interface{}, err error) {
+func BuildInsertQuery(models any, tableName string) (queryStr string, params []any, err error) {
 	val := reflect.ValueOf(models)
 	typeOfModel := val.Type()
 
@@ -98,7 +98,7 @@ func BuildInsertQuery(models interface{}, tableName string) (queryStr string, pa
 	return queryStr, params, nil
 }
 
-func BuildDeleteQuery(idValue int64, tableName string, idFieldName string) (queryStr string, params []interface{}, err error) {
+func BuildDeleteQuery(idValue int64, tableName string, idFieldName string) (queryStr string, params []any, err error) {
 	var query strings.Builder
 	query.WriteString(fmt.Sprintf("UPDATE %s SET deleted = 1 WHERE %s = ?;", tableName, idFieldName))
 
@@ -108,5 +108,5 @@ func BuildDeleteQuery(idValue int64, tableName string, idFieldName string) (quer
 }
 
 type Scanner interface {
-	Scan(dest ...interface{}) error
+	Scan(dest ...any) error
 }

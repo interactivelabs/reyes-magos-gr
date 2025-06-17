@@ -8,7 +8,7 @@ func RepeatStringWithDevider(s string, count int, d string) string {
 	}
 
 	var builder strings.Builder
-	for i := 0; i < count; i++ {
+	for i := range count {
 		builder.WriteString(s)
 		if i < count-1 {
 			builder.WriteString(d)
