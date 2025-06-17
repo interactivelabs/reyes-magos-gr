@@ -6,4 +6,5 @@ type Profile struct {
 	Nickname   string
 	Email      string
 	Picture    string
+	Flags      map[string]bool
 }
