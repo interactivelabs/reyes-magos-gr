@@ -11,18 +11,22 @@ import (
 
 type HomeHandler struct{}
 
-func (h HomeHandler) HomeViewHandler(ctx echo.Context) error {
+func NewHomeHandler() *HomeHandler {
+	return &HomeHandler{}
+}
+
+func (h *HomeHandler) HomeViewHandler(ctx echo.Context) error {
 	return lib.Render(ctx, home.Home())
 }
 
-func (h HomeHandler) SupportViewHandler(ctx echo.Context) error {
+func (h *HomeHandler) SupportViewHandler(ctx echo.Context) error {
 	return lib.Render(ctx, support.Support())
 }
 
-func (h HomeHandler) NotVolunteerHandler(ctx echo.Context) error {
+func (h *HomeHandler) NotVolunteerHandler(ctx echo.Context) error {
 	return lib.Render(ctx, volunteer.NotVolunteer())
 }
 
-func (h HomeHandler) VerifyEmailHandler(ctx echo.Context) error {
+func (h *HomeHandler) VerifyEmailHandler(ctx echo.Context) error {
 	return lib.Render(ctx, volunteer.VerifyEmail())
 }

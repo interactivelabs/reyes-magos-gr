@@ -12,9 +12,21 @@ import (
 )
 
 type OrdersHandler struct {
-	OrdersStore store.OrdersStore
-	ToysStore   store.ToysStore
-	VolunteersStore  store.VolunteersStore
+	OrdersStore     store.OrdersStore
+	ToysStore       store.ToysStore
+	VolunteersStore store.VolunteersStore
+}
+
+func NewOrdersHandler(
+	ordersStore store.OrdersStore,
+	toysStore store.ToysStore,
+	volunteersStore store.VolunteersStore,
+) *OrdersHandler {
+	return &OrdersHandler{
+		OrdersStore:     ordersStore,
+		ToysStore:       toysStore,
+		VolunteersStore: volunteersStore,
+	}
 }
 
 type Order interface {
@@ -30,7 +42,7 @@ func getOrderId(o Order) (int64, error) {
 	return orderID, nil
 }
 
-func (h OrdersHandler) OrdersViewHandler(ctx echo.Context) error {
+func (h *OrdersHandler) OrdersViewHandler(ctx echo.Context) error {
 	orders, err := h.OrdersStore.GetAllActiveOrders()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -44,7 +56,7 @@ func (h OrdersHandler) OrdersViewHandler(ctx echo.Context) error {
 	return lib.Render(ctx, ordersView.Orders(orders, completedOrders))
 }
 
-func (h OrdersHandler) OrderCardViewHandler(ctx echo.Context) error {
+func (h *OrdersHandler) OrderCardViewHandler(ctx echo.Context) error {
 	orderID, err := getOrderId(ctx)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -58,7 +70,7 @@ func (h OrdersHandler) OrderCardViewHandler(ctx echo.Context) error {
 	return lib.Render(ctx, ordersView.LinkOrderCard(order))
 }
 
-func (h OrdersHandler) UpdateOrderViewHandler(ctx echo.Context) error {
+func (h *OrdersHandler) UpdateOrderViewHandler(ctx echo.Context) error {
 	orderID, err := getOrderId(ctx)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -87,7 +99,7 @@ type SaveOrderChangesrRequest struct {
 	OrderCompleted int64  `form:"order_completed" validate:"number"`
 }
 
-func (h OrdersHandler) SaveOrderChangesHandler(ctx echo.Context) error {
+func (h *OrdersHandler) SaveOrderChangesHandler(ctx echo.Context) error {
 	saveOrderRequest := new(SaveOrderChangesrRequest)
 	if err := ctx.Bind(saveOrderRequest); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())

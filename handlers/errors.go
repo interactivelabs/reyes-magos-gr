@@ -7,14 +7,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h HomeHandler) Error401(ctx echo.Context) error {
+func (h *HomeHandler) Error401(ctx echo.Context) error {
 	return lib.Render(ctx, errors.Error401())
 }
 
-func (h HomeHandler) Error404(ctx echo.Context) error {
+func (h *HomeHandler) Error404(ctx echo.Context) error {
 	return lib.Render(ctx, errors.Error404())
 }
 
-func (h HomeHandler) Error500(ctx echo.Context) error {
+func (h *HomeHandler) Error500(ctx echo.Context) error {
 	return lib.Render(ctx, errors.Error500())
 }

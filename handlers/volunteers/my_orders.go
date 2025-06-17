@@ -14,11 +14,21 @@ import (
 )
 
 type MyOrdersHandler struct {
+	OrdersStore       store.OrdersStore
 	VolunteersService services.VolunteersService
-	Ordersrepository  store.OrdersStore
 }
 
-func (h MyOrdersHandler) MyOrdersViewHandler(ctx echo.Context) error {
+func NewMyOrdersHandler(
+	ordersStore store.OrdersStore,
+	volunteersService services.VolunteersService,
+) *MyOrdersHandler {
+	return &MyOrdersHandler{
+		OrdersStore:       ordersStore,
+		VolunteersService: volunteersService,
+	}
+}
+
+func (h *MyOrdersHandler) MyOrdersViewHandler(ctx echo.Context) error {
 	profile, perr := GetProfileHandler(ctx, h.VolunteersService)
 	if perr != nil && perr.Code == http.StatusUnauthorized {
 		return perr
@@ -35,14 +45,14 @@ func (h MyOrdersHandler) MyOrdersViewHandler(ctx echo.Context) error {
 	return lib.Render(ctx, volunteer.MyOrders(orders))
 }
 
-func (h MyOrdersHandler) MyOrdersCompleteHandler(ctx echo.Context) error {
+func (h *MyOrdersHandler) MyOrdersCompleteHandler(ctx echo.Context) error {
 	orderIDStr := ctx.Param("order_id")
 	orderId, err := strconv.ParseInt(orderIDStr, 10, 64)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid order ID")
 	}
 
-	order, err := h.Ordersrepository.GetOrderByID(orderId)
+	order, err := h.OrdersStore.GetOrderByID(orderId)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -52,7 +62,7 @@ func (h MyOrdersHandler) MyOrdersCompleteHandler(ctx echo.Context) error {
 		order.CompletedDate = time.Now().Format(time.RFC3339)
 	}
 
-	err = h.Ordersrepository.UpdateOrder(order)
+	err = h.OrdersStore.UpdateOrder(order)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

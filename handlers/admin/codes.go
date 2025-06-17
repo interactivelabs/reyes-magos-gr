@@ -15,10 +15,24 @@ type CodesHandler struct {
 	CodesStore          store.CodesStore
 	VolunteersStore     store.VolunteersStore
 	VolunteerCodesStore store.VolunteerCodesStore
-	CodesService             services.CodesService
+	CodesService        services.CodesService
 }
 
-func (h CodesHandler) CodesViewHandler(ctx echo.Context) error {
+func NewCodesHandler(
+	codesStore store.CodesStore,
+	volunteersStore store.VolunteersStore,
+	volunteerCodesStore store.VolunteerCodesStore,
+	codesService services.CodesService,
+) *CodesHandler {
+	return &CodesHandler{
+		CodesStore:          codesStore,
+		VolunteersStore:     volunteersStore,
+		VolunteerCodesStore: volunteerCodesStore,
+		CodesService:        codesService,
+	}
+}
+
+func (h *CodesHandler) CodesViewHandler(ctx echo.Context) error {
 	activeCodes, err := h.CodesStore.GetUnassignedCodes()
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -39,10 +53,10 @@ func (h CodesHandler) CodesViewHandler(ctx echo.Context) error {
 
 type AssignCodesRequest struct {
 	VolunteerID int64   `form:"volunteer_id" validate:"required"`
-	CodeIDs     []int64 `form:"code_ids" validate:"required"`
+	CodeIDs     []int64 `form:"code_ids"     validate:"required"`
 }
 
-func (h CodesHandler) AssignCodesHandler(ctx echo.Context) error {
+func (h *CodesHandler) AssignCodesHandler(ctx echo.Context) error {
 	acr := new(AssignCodesRequest)
 	if err := ctx.Bind(acr); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -67,10 +81,10 @@ func (h CodesHandler) AssignCodesHandler(ctx echo.Context) error {
 
 type RemoveCodesRequest struct {
 	VolunteerCodeIDs []int64 `form:"volunteer_code_ids" validate:"required"`
-	CodeIDs          []int64 `form:"code_ids" validate:"required"`
+	CodeIDs          []int64 `form:"code_ids"           validate:"required"`
 }
 
-func (h CodesHandler) RemoveCodesHandler(ctx echo.Context) error {
+func (h *CodesHandler) RemoveCodesHandler(ctx echo.Context) error {
 	acr := new(RemoveCodesRequest)
 	if err := ctx.Bind(acr); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -101,7 +115,7 @@ type CreateCodesRequest struct {
 	Count int64 `form:"count" validate:"required,min=1,max=100"`
 }
 
-func (h CodesHandler) CreateCodesHandler(ctx echo.Context) error {
+func (h *CodesHandler) CreateCodesHandler(ctx echo.Context) error {
 	acr := new(CreateCodesRequest)
 	if err := ctx.Bind(acr); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
