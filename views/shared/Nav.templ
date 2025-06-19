@@ -46,7 +46,7 @@ templ Nav() {
 							<a href="/catalog" class={ desktopMenuLink }>Catálogo</a>
 						</div>
 					</div>
-					if lib.GetProfile(ctx).IsLoggedIn == true {
+					if lib.IsLoggedIn(ctx) {
 						<div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 							<!-- Profile dropdown -->
 							<div class="relative ml-3" x-data="{ openAdmin: false }">
@@ -60,8 +60,8 @@ templ Nav() {
 								>
 									<span class="absolute -inset-1.5"></span>
 									<span class="sr-only">Open admin menu</span>
-									if lib.GetProfile(ctx).Picture != "" {
-										<img class="h-10 w-10 rounded-full" src={ lib.GetProfile(ctx).Picture } alt="" role="presentation"/>
+									if lib.GetPicture(ctx) != "" {
+										<img class="h-10 w-10 rounded-full" src={ lib.GetPicture(ctx) } alt="" role="presentation"/>
 									} else {
 										@svg.FingerPrint("h-10 w-10 rounded-full")
 									}
@@ -86,7 +86,7 @@ templ Nav() {
 									<a href="/volunteer/mycodes" class="block p-4 text-sm" role="menuitem">Mis Codigos</a>
 									<a href="/volunteer/myorders" class="block p-4 text-sm" role="menuitem">Mis Ordenes</a>
 									<a href="/logout" class="block p-4 text-sm" role="menuitem">Salir</a>
-									if lib.GetProfile(ctx).IsAdmin {
+									if lib.IsAdmin(ctx) {
 										<div class="block p-4 text-sm border-b text-center">Admin</div>
 										<a href="/admin/codes" class="block p-4 text-sm" role="menuitem">Codigos</a>
 										<a href="/admin/orders" class="block p-4 text-sm" role="menuitem">Ordenes</a>

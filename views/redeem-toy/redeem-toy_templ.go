@@ -435,7 +435,7 @@ func RedeemToy(toy models.Toy, code string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			if lib.GetProfile(ctx).IsLoggedIn == true {
+			if lib.IsVolunteersCartEnabled(ctx) {
 				templ_7745c5c3_Err = AddToCartButton(toy.ToyID).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err

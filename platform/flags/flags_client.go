@@ -6,7 +6,7 @@ import (
 	"github.com/posthog/posthog-go"
 )
 
-func NewFlagsClient() (*posthog.Client, error) {
+func NewFlagsClient() (posthog.Client, error) {
 	posthogKey := os.Getenv("POSTHOG_API_KEY")
 
 	client, err := posthog.NewWithConfig(
@@ -19,5 +19,5 @@ func NewFlagsClient() (*posthog.Client, error) {
 
 	defer client.Close()
 
-	return &client, nil
+	return client, nil
 }

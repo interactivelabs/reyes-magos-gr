@@ -142,20 +142,20 @@ func Nav() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if lib.GetProfile(ctx).IsLoggedIn == true {
+		if lib.IsLoggedIn(ctx) {
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<div class=\"absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0\"><!-- Profile dropdown --><div class=\"relative ml-3\" x-data=\"{ openAdmin: false }\"><button type=\"button\" id=\"admin-menu-button\" aria-expanded=\"false\" aria-haspopup=\"true\" @click=\"openAdmin = !openAdmin\" class=\"relative flex rounded-full bg-white text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-orange focus:ring-offset-2\"><span class=\"absolute -inset-1.5\"></span> <span class=\"sr-only\">Open admin menu</span> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			if lib.GetProfile(ctx).Picture != "" {
+			if lib.GetPicture(ctx) != "" {
 				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<img class=\"h-10 w-10 rounded-full\" src=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var11 string
-				templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetProfile(ctx).Picture)
+				templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetPicture(ctx))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/shared/Nav.templ`, Line: 64, Col: 79}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/shared/Nav.templ`, Line: 64, Col: 71}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 				if templ_7745c5c3_Err != nil {
@@ -175,7 +175,7 @@ func Nav() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			if lib.GetProfile(ctx).IsAdmin {
+			if lib.IsAdmin(ctx) {
 				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "<div class=\"block p-4 text-sm border-b text-center\">Admin</div><a href=\"/admin/codes\" class=\"block p-4 text-sm\" role=\"menuitem\">Codigos</a> <a href=\"/admin/orders\" class=\"block p-4 text-sm\" role=\"menuitem\">Ordenes</a> <a href=\"/admin/volunteers\" class=\"block p-4 text-sm\" role=\"menuitem\">Voluntarios</a> <a href=\"/admin/toys\" class=\"block p-4 text-sm\" role=\"menuitem\">Juguetes</a>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
