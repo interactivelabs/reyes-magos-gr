@@ -64,6 +64,19 @@ func GetSessionProfile(ctx echo.Context) (map[string]any, error) {
 	return profileMap, nil
 }
 
+func SetSessionProfile(ctx echo.Context, sessionProfile map[string]any) error {
+	profileJSON, err := json.Marshal(sessionProfile)
+	if err != nil {
+		return err
+	}
+
+	if err := SetCookieSession(ctx, "profile", string(profileJSON)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type contextKey string
 
 const (
@@ -94,6 +107,15 @@ func GetCtxProfile(ctx echo.Context) (profile dtos.Profile) {
 		profile.Picture = picture
 	}
 
+	if flags, ok := sessionProfile["flags"].(string); ok {
+		profile.Flags = make(map[string]bool)
+		if err := json.Unmarshal([]byte(flags), &profile.Flags); err != nil {
+			profile.Flags = make(map[string]bool)
+		}
+	} else {
+		profile.Flags = make(map[string]bool)
+	}
+
 	return profile
 }
 
@@ -102,4 +124,27 @@ func GetProfile(ctx context.Context) (profile dtos.Profile) {
 		return profile
 	}
 	return dtos.Profile{}
+}
+
+func IsAdmin(ctx context.Context) bool {
+	profile := GetProfile(ctx)
+	return profile.IsAdmin
+}
+
+func IsLoggedIn(ctx context.Context) bool {
+	profile := GetProfile(ctx)
+	return profile.IsLoggedIn
+}
+
+func GetPicture(ctx context.Context) string {
+	profile := GetProfile(ctx)
+	return profile.Picture
+}
+
+func IsVolunteersCartEnabled(ctx context.Context) bool {
+	profile := GetProfile(ctx)
+	if profile.Flags == nil {
+		return false
+	}
+	return profile.Flags["volunteers-cart-enabled"]
 }

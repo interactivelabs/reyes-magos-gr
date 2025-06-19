@@ -3,7 +3,6 @@ package handlers
 import (
 	"crypto/rand"
 	"encoding/base64"
-	"encoding/json"
 	"net/http"
 	"net/url"
 	"os"
@@ -68,12 +67,7 @@ func (h *LoginHandler) LoginCallbackHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
 	}
 
-	profileJSON, err := json.Marshal(profile)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-
-	if err := lib.SetCookieSession(ctx, "profile", string(profileJSON)); err != nil {
+	if err := lib.SetSessionProfile(ctx, profile); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 

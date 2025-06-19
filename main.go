@@ -5,9 +5,10 @@ import (
 	"log"
 	"os"
 	"reyes-magos-gr/app"
-	reyes_middleware "reyes-magos-gr/middleware"
+	"reyes-magos-gr/middleware"
 	"reyes-magos-gr/platform/authenticator"
 	"reyes-magos-gr/platform/database"
+	"reyes-magos-gr/platform/flags"
 	"reyes-magos-gr/router"
 )
 
@@ -33,9 +34,15 @@ func main() {
 		log.Fatalf("Failed to initialize the authenticator: %v", err)
 	}
 
-	e := router.SetupRouter(app, auth)
+	// Initialize the PostHog client
+	flagsClient, err := flags.NewFlagsClient()
+	if err != nil {
+		log.Fatalf("Failed to initialize the authenticator: %v", err)
+	}
 
-	e.HTTPErrorHandler = reyes_middleware.CustomHTTPErrorHandler
+	e := router.SetupRouter(app, auth, flagsClient)
+
+	e.HTTPErrorHandler = middleware.CustomHTTPErrorHandler
 
 	var host = "localhost"
 	var port = "8080"

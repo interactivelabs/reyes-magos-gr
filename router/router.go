@@ -14,10 +14,15 @@ import (
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/posthog/posthog-go"
 	"golang.org/x/time/rate"
 )
 
-func SetupRouter(app *app.App, auth *authenticator.Authenticator) *echo.Echo {
+func SetupRouter(
+	app *app.App,
+	auth *authenticator.Authenticator,
+	flagsClient posthog.Client,
+) *echo.Echo {
 	e := echo.New()
 
 	// Middleware
@@ -56,6 +61,8 @@ func SetupRouter(app *app.App, auth *authenticator.Authenticator) *echo.Echo {
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: allowOrigins,
 	}))
+
+	e.Use(reyes_middleware.UserFlags(flagsClient))
 
 	// PUBLIC ENDPOINTS
 	homeHandler := handlers.NewHomeHandler()
