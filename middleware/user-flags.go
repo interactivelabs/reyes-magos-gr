@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"maps"
 	"net/http"
@@ -22,6 +23,7 @@ func UserFlags(client posthog.Client) echo.MiddlewareFunc {
 			}
 
 			email, _ := sessionProfile["name"].(string)
+			DistinctId := base64.StdEncoding.EncodeToString([]byte(email))
 
 			profileFlags := make(map[string]bool)
 			if sessionFlags, ok := sessionProfile["flags"].(string); ok {
@@ -39,12 +41,10 @@ func UserFlags(client posthog.Client) echo.MiddlewareFunc {
 					continue
 				}
 
-				SendFeatureFlagEvents := true
-				isFlagEnabled, err := client.GetFeatureFlag(
+				isFlagEnabled, err := client.IsFeatureEnabled(
 					posthog.FeatureFlagPayload{
-						Key:                   flag,
-						DistinctId:            email,
-						SendFeatureFlagEvents: &SendFeatureFlagEvents,
+						Key:        flag,
+						DistinctId: DistinctId,
 					})
 
 				if err != nil {
