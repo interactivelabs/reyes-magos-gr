@@ -17,13 +17,7 @@ templ UpdateVolunteerForm(volunteer models.Volunteer) {
 		>
 			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
 				@VolunteerForm(volunteer)
-				<div class="mt-6 flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-8">
-					@components.CancelModalButton()
-					<button
-						type="submit"
-						class={ components.BrandPrimaryButton }
-					>Save</button>
-				</div>
+				@components.DialogSaveFooter()
 			</div>
 		</form>
 	}
