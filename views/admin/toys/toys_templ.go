@@ -226,7 +226,7 @@ func Toys(toys []models.Toy) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<main class=\"container mx-auto p-4\"><h1 class=\"text-center pt-8 text-2xl\">Toys</h1><div class=\"sm:flex sm:items-center\"><div class=\"sm:flex-auto\"><h1 class=\"text-base font-semibold leading-6 text-gray-900\">Toys</h1><p class=\"mt-2 text-sm\">A list of all the active Toys.</p></div><div class=\"mt-4 sm:ml-16 sm:mt-0 sm:flex-none\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<main class=\"container mx-auto p-4 min-h-screen\"><h1 class=\"text-center pt-8 text-2xl\">Toys</h1><div class=\"sm:flex sm:items-center\"><div class=\"sm:flex-auto\"><h1 class=\"text-base font-semibold leading-6 text-gray-900\">Toys</h1><p class=\"mt-2 text-sm\">A list of all the active Toys.</p></div><div class=\"mt-4 sm:ml-16 sm:mt-0 sm:flex-none\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

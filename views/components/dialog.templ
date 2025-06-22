@@ -2,6 +2,22 @@ package components
 
 import svg "reyes-magos-gr/views/components/svg"
 
+templ DialogFooter() {
+	<div class="my-6 py-8 flex items-center justify-end gap-x-6 border-t border-gray-900/10">
+		@CancelModalButton()
+		{ children... }
+	</div>
+}
+
+templ DialogSaveFooter() {
+	@DialogFooter() {
+		<button
+			type="submit"
+			class={ BrandPrimaryButton }
+		>Save</button>
+	}
+}
+
 templ CancelModalButton() {
 	<button
 		type="button"
@@ -22,7 +38,7 @@ templ Dialog() {
 			<div
 				role="dialog"
 				x-show="modalOpen"
-				class="fixed top-0 left-0 z-99 flex items-center justify-center w-screen h-screen"
+				class="overflow-auto overflow-y-scroll fixed top-0 left-0 z-99 flex justify-center w-screen min-h-screen"
 				x-cloak
 			>
 				// Overlay
