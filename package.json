@@ -26,12 +26,12 @@
   "homepage": "https://github.com/interactivelabs/reyes-magos-gr#readme",
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",
-    "@tailwindcss/cli": "^4.1.10",
-    "@tailwindcss/vite": "^4.1.10",
+    "@tailwindcss/cli": "^4.1.11",
+    "@tailwindcss/vite": "^4.1.11",
     "@types/alpinejs": "^3.13.11",
     "esbuild": "^0.25.5",
     "gsap": "^3.13.0",
-    "prettier": "^3.5.3",
+    "prettier": "^3.6.2",
     "tailwindcss": "^4.1.7",
     "tailwindcss-motion": "^1.1.1"
   }
