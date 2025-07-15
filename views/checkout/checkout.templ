@@ -14,7 +14,7 @@ templ RedeemToyForm(toyId int64, code string, errorMsg string) {
 	<form
 		class="mt-10"
 		hx-post="/orders/create"
-		hx-on::before-request="beforeRequestHandler(event)"
+		hx-on::before-request="beforeCheckoutHandler(event)"
 		hx-target="this"
 		hx-swap="outerHTML"
 		x-data="codeForm"
@@ -59,17 +59,21 @@ templ RedeemToyForm(toyId int64, code string, errorMsg string) {
 }
 
 templ AddToCartButton(toyId int64) {
-	<div class="mt-8 text-center">
-		<button
-			class={ components.BrandPrimaryButton }
-			hx-post="/admin/cart/add"
-			hx-target="this"
-			hx-swap="outerHTML"
-		>
-			Agregar al Carrito
-			<input type="hidden" name="toy_id" value={ fmt.Sprint(toyId) }/>
-		</button>
-	</div>
+	<form
+		hx-post="/volunteer/mycart"
+		hx-target="this"
+		hx-swap="outerHTML"
+	>
+		<input type="hidden" name="toy_id" value={ fmt.Sprint(toyId) }/>
+		<div class="mt-8 text-center">
+			<button
+				type="submit"
+				class={ components.BrandPrimaryButton }
+			>
+				Agregar al Carrito
+			</button>
+		</div>
+	</form>
 }
 
 templ Checkout(toy models.Toy, code string) {

@@ -123,7 +123,7 @@ func (s *VolunteersServiceApp) CreateVolunteerCartItem(
 	}
 
 	if len(codes) == 0 {
-		return 0, errors.New("no active volunteer codes found")
+		return 0, errors.New("No active volunteer codes found")
 	}
 
 	item := models.CartItem{

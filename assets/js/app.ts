@@ -12,4 +12,4 @@ import "./components/toasts";
 import "./app/myCodes";
 import "./app/catalog";
 import "./app/homeAnnimations";
-import "./app/redeem";
+import "./app/checkout";
