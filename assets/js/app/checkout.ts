@@ -11,7 +11,7 @@ function validateCodeInput(): boolean {
   return code.length > 5;
 }
 
-function beforeRequestHandler(evt: Event) {
+function beforeCheckoutHandler(evt: Event) {
   if (!validateCodeInput()) {
     evt.preventDefault();
   }
@@ -42,4 +42,4 @@ document.addEventListener("alpine:init", () => {
   }));
 });
 
-globalThis.beforeRequestHandler = beforeRequestHandler;
+globalThis.beforeCheckoutHandler = beforeCheckoutHandler;

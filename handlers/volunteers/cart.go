@@ -35,7 +35,7 @@ func (h *CartHandler) CartViewHandler(ctx echo.Context) error {
 }
 
 type CreateCartItemRequest struct {
-	ToyID int64 `json:"toy_id" validate:"required"`
+	ToyID int64 `form:"toy_id" validate:"required"`
 }
 
 func (h *CartHandler) CreateCartItemHandler(ctx echo.Context) error {

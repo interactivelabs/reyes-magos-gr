@@ -5,8 +5,8 @@ import (
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
 	"reyes-magos-gr/store"
+	checkout "reyes-magos-gr/views/checkout"
 	orders "reyes-magos-gr/views/orders"
-	redeem "reyes-magos-gr/views/redeem-toy"
 
 	"github.com/labstack/echo/v4"
 )
@@ -45,7 +45,7 @@ func (h *OrdersHandler) CreateOrderViewHandler(ctx echo.Context) error {
 	if err != nil {
 		if lib.GetHTMLErrorCode(err) == http.StatusBadRequest ||
 			lib.GetHTMLErrorCode(err) == http.StatusConflict {
-			return lib.Render(ctx, redeem.RedeemToyForm(acr.ToyID, acr.Code, "Codigo invalido"))
+			return lib.Render(ctx, checkout.RedeemToyForm(acr.ToyID, acr.Code, "Codigo invalido"))
 		}
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

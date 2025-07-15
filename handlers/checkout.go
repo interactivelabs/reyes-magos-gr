@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/store"
-	redeem "reyes-magos-gr/views/redeem-toy"
+	checkout "reyes-magos-gr/views/checkout"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -39,5 +39,5 @@ func (h *RedeemToyHandler) RedeemToyViewHandler(ctx echo.Context) error {
 
 	code := cr.Code
 
-	return lib.Render(ctx, redeem.RedeemToy(toy, code))
+	return lib.Render(ctx, checkout.Checkout(toy, code))
 }

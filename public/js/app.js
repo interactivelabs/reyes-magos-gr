@@ -231,13 +231,13 @@ if (typeof gsap !== "undefined") {
   }
 }
 
-// assets/js/app/redeem.ts
+// assets/js/app/checkout.ts
 function validateCodeInput() {
   const codeInput = document.getElementById("code");
   const code = codeInput.value.toUpperCase().trim();
   return code.length > 5;
 }
-function beforeRequestHandler(evt) {
+function beforeCheckoutHandler(evt) {
   if (!validateCodeInput()) {
     evt.preventDefault();
   }
@@ -263,5 +263,5 @@ document.addEventListener("alpine:init", () => {
     }
   }));
 });
-globalThis.beforeRequestHandler = beforeRequestHandler;
+globalThis.beforeCheckoutHandler = beforeCheckoutHandler;
 //# sourceMappingURL=app.js.map
