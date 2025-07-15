@@ -108,6 +108,7 @@ func SetupRouter(
 
 	myCartHandler := volunteers.NewCartHandler(app.VolunteersService)
 	vg.GET("/mycart", myCartHandler.CartViewHandler)
+	vg.POST("/mycart", myCartHandler.CreateCartItemHandler)
 
 	// ADMIN ENDPOINTS
 	ag := e.Group("/admin")

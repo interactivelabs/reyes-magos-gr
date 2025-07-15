@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"reyes-magos-gr/store"
 	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/models"
@@ -8,8 +9,8 @@ import (
 
 type VolunteersServiceApp struct {
 	CartsStore          store.CartsStore
-	CodesStore     store.CodesStore
-	OrdersStore    store.OrdersStore
+	CodesStore          store.CodesStore
+	OrdersStore         store.OrdersStore
 	VolunteersStore     store.VolunteersStore
 	VolunteerCodesStore store.VolunteerCodesStore
 }
@@ -23,8 +24,8 @@ func NewVolunteersService(
 ) *VolunteersServiceApp {
 	return &VolunteersServiceApp{
 		CartsStore:          cartsStore,
-		CodesStore:     codesStore,
-		OrdersStore:    ordersStore,
+		CodesStore:          codesStore,
+		OrdersStore:         ordersStore,
 		VolunteersStore:     volunteersStore,
 		VolunteerCodesStore: volunteerCodesStore,
 	}
@@ -37,6 +38,7 @@ type VolunteersService interface {
 	) (codes []models.Code, givenCodes []models.Code, err error)
 	GetVolunteerOrdersByEmail(email string) (orders []models.Order, err error)
 	GetVolunteerCartByEmail(email string) (cartItems []dtos.CartItem, err error)
+	CreateVolunteerCartItem(email string, toyID int64) (CartID int64, err error)
 	GetActiveVolunteersGrupedByLocation() (groupedVolunteers map[string][]models.Volunteer, err error)
 	CreateAndGetVolunteer(volunteer models.Volunteer) (models.Volunteer, error)
 	UpdateVolunteer(volunteer models.Volunteer, volunteerID int64) (models.Volunteer, error)
@@ -101,6 +103,38 @@ func (s *VolunteersServiceApp) GetVolunteerCartByEmail(
 	}
 
 	return cartItems, nil
+}
+
+func (s *VolunteersServiceApp) CreateVolunteerCartItem(
+	email string,
+	toyID int64,
+) (CartID int64, err error) {
+	volunteer, err := s.VolunteersStore.GetVolunteerByEmail(email)
+	if err != nil {
+		return 0, err
+	}
+
+	codes, err := s.VolunteerCodesStore.GetActiveVolunteerCodesByVolunteerID(
+		volunteer.VolunteerID,
+	)
+
+	if err != nil {
+		return 0, err
+	}
+
+	if len(codes) == 0 {
+		return 0, errors.New("no active volunteer codes found")
+	}
+
+	item := models.CartItem{
+		ToyID:           toyID,
+		VolunteerID:     volunteer.VolunteerID,
+		VolunteerCodeID: codes[0].CodeID,
+		Used:            0,
+		Deleted:         0,
+	}
+
+	return s.CartsStore.CreateCartItem(item)
 }
 
 func (s *VolunteersServiceApp) GetActiveVolunteersGrupedByLocation() (groupedVolunteers map[string][]models.Volunteer, err error) {

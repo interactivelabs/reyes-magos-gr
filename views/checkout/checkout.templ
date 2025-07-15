@@ -72,7 +72,7 @@ templ AddToCartButton(toyId int64) {
 	</div>
 }
 
-templ RedeemToy(toy models.Toy, code string) {
+templ Checkout(toy models.Toy, code string) {
 	@layout.Base() {
 		<main class="min-h-screen">
 			<div class="mx-auto max-w-2xl pb-24 pt-8 sm:px-6 lg:max-w-7xl lg:px-8">
