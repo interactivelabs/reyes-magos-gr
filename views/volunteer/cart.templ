@@ -1,0 +1,47 @@
+package pages
+
+import (
+	"fmt"
+	"reyes-magos-gr/store/dtos"
+	"reyes-magos-gr/views"
+	"reyes-magos-gr/views/components"
+)
+
+templ Cart(cartItems []dtos.CartItem) {
+	@layout.Base() {
+		<main>
+			<h1 class="text-center pt-8 text-2xl">Mi Carrito</h1>
+			<section id="my_cart" class="relative isolate px-6 py-20 lg:px-8">
+				@components.Stats("Cart Stats", []components.Stat{
+					{Name: "Total Items", Value: fmt.Sprint(len(cartItems))},
+				})
+				if len(cartItems) > 0 {
+					<div class="py-20">
+						<h2 class="text-lg font-semibold leading-6 text-gray-900">Artículos en el carrito</h2>
+						<ul class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+							for _, item := range cartItems {
+								<li class="col-span-1 flex rounded-lg shadow-sm">
+									{ item.ToyName }
+								</li>
+							}
+						</ul>
+					</div>
+				} else {
+					<p class="text-center text-gray-500">Tu carrito está vacío.</p>
+				}
+			</section>
+		</main>
+	}
+}
+
+templ CartItemCreated() {
+	<div class="alert alert-success">
+		<p>El artículo se ha añadido a tu carrito correctamente.</p>
+	</div>
+}
+
+templ CartItemError(err error) {
+	<div class="alert alert-error">
+		<p>Error al añadir el artículo al carrito: { err.Error() }</p>
+	</div>
+}

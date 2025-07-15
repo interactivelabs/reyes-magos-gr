@@ -3,6 +3,7 @@ package store
 import (
 	"database/sql"
 	"reyes-magos-gr/store/dtos"
+	"reyes-magos-gr/store/models"
 	"reyes-magos-gr/store/utils"
 )
 
@@ -16,6 +17,7 @@ func NewCartsStore(db *sql.DB) *LibSQLCartsStore {
 
 type CartsStore interface {
 	GetCartToys(volunteerID int64) (cartItems []dtos.CartItem, err error)
+	CreateCartItem(item models.CartItem) (cartID int64, err error)
 }
 
 func (r LibSQLCartsStore) GetCartToys(volunteerID int64) (cartItems []dtos.CartItem, err error) {
@@ -49,6 +51,19 @@ func (r LibSQLCartsStore) GetCartToys(volunteerID int64) (cartItems []dtos.CartI
 	}
 
 	return cartItems, nil
+}
+
+func (r LibSQLCartsStore) CreateCartItem(item models.CartItem) (cartID int64, err error) {
+	queryStr, params, err := utils.BuildInsertQuery(item, "carts")
+	if err != nil {
+		return 0, err
+	}
+
+	res, err := utils.ExecuteMutationQuery(r.DB, queryStr, params...)
+	if err != nil {
+		return 0, err
+	}
+	return res.LastInsertId()
 }
 
 const cartItemFields string = `
