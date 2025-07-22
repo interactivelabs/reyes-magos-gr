@@ -127,11 +127,11 @@ func (s *VolunteersServiceApp) CreateVolunteerCartItem(
 	}
 
 	item := models.CartItem{
-		ToyID:           toyID,
-		VolunteerID:     volunteer.VolunteerID,
-		VolunteerCodeID: codes[0].CodeID,
-		Used:            0,
-		Deleted:         0,
+		ToyID:       toyID,
+		VolunteerID: volunteer.VolunteerID,
+		CodeID:      codes[0].CodeID,
+		Used:        0,
+		Deleted:     0,
 	}
 
 	return s.CartsStore.CreateCartItem(item)

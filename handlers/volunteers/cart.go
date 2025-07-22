@@ -2,7 +2,9 @@ package volunteers
 
 import (
 	"net/http"
+	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
+	volunteer "reyes-magos-gr/views/volunteer"
 
 	"github.com/labstack/echo/v4"
 )
@@ -57,12 +59,10 @@ func (h *CartHandler) CreateCartItemHandler(ctx echo.Context) error {
 		return ctx.Redirect(http.StatusTemporaryRedirect, "/notvolunteer")
 	}
 
-	item, err := h.VolunteersService.CreateVolunteerCartItem(profile.Email, createCartItem.ToyID)
+	_, err := h.VolunteersService.CreateVolunteerCartItem(profile.Email, createCartItem.ToyID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return ctx.JSON(http.StatusCreated, map[string]int64{
-		"cart_id": item,
-	})
+	return lib.Render(ctx, volunteer.CartItemCreated())
 }
