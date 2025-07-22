@@ -110,14 +110,14 @@ func (r *LibSQLVolunteerCodesStore) GetAllVolunteerCodesByVolunteerID(
 }
 
 func (r *LibSQLVolunteerCodesStore) GetActiveVolunteerCodesByVolunteerID(
-	volunteerCodeID int64,
+	volunteerID int64,
 ) (codes []models.Code, err error) {
 	query := baseQueryVolunteerCodesByVolunteerID + `
 		AND date(codes.expiration) > date('now')
 		AND codes.used = 0
 		AND codes.given = 0;`
 
-	return r.GetAllVolunteerCodesByVolunteerID(query, volunteerCodeID)
+	return r.GetAllVolunteerCodesByVolunteerID(query, volunteerID)
 }
 
 func (r *LibSQLVolunteerCodesStore) GetUsedVolunteerCodesByVolunteerID(
