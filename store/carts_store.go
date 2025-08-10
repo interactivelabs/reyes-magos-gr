@@ -26,8 +26,7 @@ func (r LibSQLCartsStore) GetCartToys(volunteerID int64) (cartItems []dtos.CartI
 		FROM toys
 		INNER JOIN carts ON carts.toy_id = toys.toy_id
 		WHERE
-			volunteer_code_id IS null
-			AND toys.deleted = 0
+			toys.deleted = 0
 			AND carts.used = 0
 			AND carts.deleted = 0
 			AND volunteer_id = ?;`, volunteerID)

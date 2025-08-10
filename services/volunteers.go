@@ -1,7 +1,6 @@
 package services
 
 import (
-	"errors"
 	"reyes-magos-gr/store"
 	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/models"
@@ -114,22 +113,9 @@ func (s *VolunteersServiceApp) CreateVolunteerCartItem(
 		return 0, err
 	}
 
-	codes, err := s.VolunteerCodesStore.GetActiveVolunteerCodesByVolunteerID(
-		volunteer.VolunteerID,
-	)
-
-	if err != nil {
-		return 0, err
-	}
-
-	if len(codes) == 0 {
-		return 0, errors.New("No active volunteer codes found")
-	}
-
 	item := models.CartItem{
 		ToyID:       toyID,
 		VolunteerID: volunteer.VolunteerID,
-		CodeID:      codes[0].CodeID,
 		Used:        0,
 		Deleted:     0,
 	}
