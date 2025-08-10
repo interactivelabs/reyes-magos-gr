@@ -66,13 +66,19 @@ templ Nav() {
 										@svg.FingerPrint("h-10 w-10 rounded-full")
 									}
 								</button>
+								<el-popover
+									id="desktop-menu-solutions"
+									anchor="bottom"
+									popover
+									class="w-screen max-w-max overflow-visible bg-transparent px-4 transition transition-discrete [--anchor-gap:--spacing(5)] backdrop:bg-transparent open:flex data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
+								></el-popover>
 								<div
 									role="menu"
 									tabindex="-1"
 									id="admin-menu-dropdown"
 									aria-orientation="vertical"
 									aria-labelledby="admin-menu-button"
-									class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden"
+									class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg focus:outline-hidden"
 									x-cloak
 									x-show="openAdmin"
 									x-transition:enter="transition ease-out duration-300"
@@ -85,6 +91,7 @@ templ Nav() {
 								>
 									<a href="/volunteer/mycodes" class="block p-4 text-sm" role="menuitem">Mis Codigos</a>
 									<a href="/volunteer/myorders" class="block p-4 text-sm" role="menuitem">Mis Ordenes</a>
+									<a href="/volunteer/mycart" class="block p-4 text-sm" role="menuitem">Carrito</a>
 									<a href="/logout" class="block p-4 text-sm" role="menuitem">Salir</a>
 									if lib.IsAdmin(ctx) {
 										<div class="block p-4 text-sm border-b text-center">Admin</div>
@@ -103,7 +110,7 @@ templ Nav() {
 			<div
 				role="menu"
 				id="mobile-menu-container"
-				class="bg-white absolute w-full z-50"
+				class="shadow-md sm:hidden bg-white absolute w-full z-50"
 				x-cloak
 				x-show="openMenu"
 				x-transition:enter="transition ease-out duration-500"

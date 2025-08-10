@@ -33,7 +33,7 @@ func (h *CartHandler) CartViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return ctx.JSON(http.StatusOK, cart)
+	return lib.Render(ctx, volunteer.Cart(cart))
 }
 
 type CreateCartItemRequest struct {

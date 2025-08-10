@@ -10,33 +10,106 @@ import (
 templ Cart(cartItems []dtos.CartItem) {
 	@layout.Base() {
 		<main>
-			<h1 class="text-center pt-8 text-2xl">Mi Carrito</h1>
-			<section id="my_cart" class="relative isolate px-6 py-20 lg:px-8">
-				@components.Stats("Cart Stats", []components.Stat{
-					{Name: "Total Items", Value: fmt.Sprint(len(cartItems))},
-				})
+			<div class="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
+				<h1 class="text-4xl font-extralight tracking-tight mb-20">Carrito</h1>
 				if len(cartItems) > 0 {
-					<div class="py-20">
-						<h2 class="text-lg font-semibold leading-6 text-gray-900">Artículos en el carrito</h2>
-						<ul class="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-							for _, item := range cartItems {
-								<li class="col-span-1 flex rounded-lg shadow-sm">
-									{ item.ToyName }
-								</li>
-							}
-						</ul>
-					</div>
+					<form class="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
+						<section aria-labelledby="cart-heading" class="lg:col-span-7">
+							<h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
+							<ul role="list" class="divide-y divide-gray-200 border-t border-b border-gray-200">
+								for _, item := range cartItems {
+									<li class="flex py-6 sm:py-10">
+										<div class="shrink-0">
+											<img src={ item.Image1 } alt={ item.ToyName } class="size-24 rounded-md object-cover sm:size-48"/>
+										</div>
+										<div class="ml-4 flex flex-1 justify-between sm:ml-6">
+											<div class="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
+												<div>
+													<div class="flex justify-between">
+														<h3 class="text-sm">
+															<a href={ fmt.Sprintf("redeem/%d", item.ToyID) } class="font-medium text-gray-700 hover:text-gray-800 line-clamp-5">{ item.ToyName }</a>
+														</h3>
+													</div>
+													<div class="mt-1 flex text-sm">
+														<p class="text-gray-500">{ item.Category }</p>
+													</div>
+												</div>
+											</div>
+											<div class="mt-4 sm:mt-0 text-center">
+												<div class="w-full">
+													<select
+														name="quantity-0"
+														aria-label="Quantity"
+														class="mt-2 sm:mt-0 rounded-md border-0 py-1.5 px-2 ring-1 ring-inset ring-gray-300"
+													>
+														for i := 1; i <= 10; i++ {
+															// TODO: Handle quantity selection
+															if i == 1 {
+																<option value={ fmt.Sprint(i) } selected>{ fmt.Sprint(i) }</option>
+															} else {
+																<option value={ fmt.Sprint(i) }>{ fmt.Sprint(i) }</option>
+															}
+														}
+													</select>
+													<button type="button" class="ml-4 text-sm sm:mt-3 sm:ml-0 font-semibold leading-6 text-brand-orange underline ">
+														<span>Borar</span>
+													</button>
+												</div>
+											</div>
+										</div>
+									</li>
+								}
+							</ul>
+						</section>
+						<section aria-labelledby="summary-heading" class="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
+							<h2 id="summary-heading" class="text-lg font-medium text-gray-900">Detalles</h2>
+							<dl class="mt-6 space-y-4">
+								<div class="flex items-center justify-between">
+									<dt class="">Numero de Articulos</dt>
+									<dd class="font-medium text-gray-900">{ fmt.Sprint(len(cartItems)) }</dd>
+								</div>
+								<div class="flex items-center justify-between border-t border-gray-200 pt-4">
+									<dt class="">Numero de codigos disponibles</dt>
+									<dd class="font-medium text-gray-900">0</dd>
+								</div>
+							</dl>
+							<div class="mt-6">
+								<button type="submit" class={ components.BrandPrimaryButton + " w-full" }>Completar Orden</button>
+							</div>
+						</section>
+					</form>
 				} else {
-					<p class="text-center text-gray-500">Tu carrito está vacío.</p>
+					<p class="text-center text-gray-500">Your cart is empty.</p>
 				}
-			</section>
+			</div>
 		</main>
 	}
 }
 
 templ CartItemCreated() {
-	<div class="alert alert-success">
-		<p>El artículo se ha añadido a tu carrito correctamente.</p>
+	<div class="rounded-md bg-green-50 border border-green-700 p-4 mt-8">
+		<div class="flex">
+			<div class="shrink-0">
+				<svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5 text-green-400">
+					<path d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" fill-rule="evenodd"></path>
+				</svg>
+			</div>
+			<div class="ml-3">
+				<h3 class="text-sm font-medium text-green-800">Carro actualizado</h3>
+				<div class="mt-2 text-sm text-green-700">
+					<p>El artículo se ha añadido a tu carrito correctamente.</p>
+				</div>
+				<div class="mt-4">
+					<div class="-mx-2 -my-1.5 flex">
+						<button
+							type="button"
+							onclick="history.back()"
+							class="rounded-md bg-green-50 px-2 py-1.5 text-sm font-medium text-green-800 hover:bg-green-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+						>Regresar</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 }
 
