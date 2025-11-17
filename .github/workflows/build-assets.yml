@@ -33,4 +33,5 @@ jobs:
           command: |
             r2 object put ${{ vars.BUCKET_NAME }}/js/app.js --file public/js/app.js --ct text/javascript --cache-control="public,max-age=3600"
             r2 object put ${{ vars.BUCKET_NAME }}/js/admin.js --file public/js/admin.js --ct text/javascript --cache-control="public,max-age=3600"
+            r2 object put ${{ vars.BUCKET_NAME }}/js/volunteer.js --file public/js/volunteer.js --ct text/javascript --cache-control="public,max-age=3600"
             r2 object put ${{ vars.BUCKET_NAME }}/css/main.css --file public/css/main.css --ct text/css --cache-control="public,max-age=3600"
