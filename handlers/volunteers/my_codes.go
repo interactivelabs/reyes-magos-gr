@@ -109,13 +109,7 @@ func (h *MyCodesHandler) GiveCodes(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	// Fetch updated codes for rendering
-	updatedCodes, updatedGivenCodes, cerr := h.VolunteersService.GetVolunteerCodesByEmail(profile.Email)
-	if cerr != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, cerr.Error())
-	}
-
-	return lib.Render(ctx, volunteer.MyCodes(updatedCodes, updatedGivenCodes))
+	return lib.Render(ctx, volunteer.GivenCodesList(codesToGive))
 }
 
 func GetProfileHandler(
