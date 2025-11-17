@@ -3,12 +3,11 @@ package pages
 import (
 	"fmt"
 	"reyes-magos-gr/store/dtos"
-	"reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
 )
 
 templ Cart(cartItems []dtos.CartItem) {
-	@layout.Base() {
+	@VolunteerLayout() {
 		<main>
 			<div class="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
 				<h1 class="text-4xl font-extralight tracking-tight mb-20">Carrito</h1>

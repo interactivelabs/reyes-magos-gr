@@ -4,10 +4,10 @@
   "description": "App for distributing toys",
   "scripts": {
     "build:css": "npx @tailwindcss/cli -i ./assets/css/main.css -o ./public/css/main.css --minify",
-    "build:js": "esbuild assets/js/app.ts assets/js/admin.ts  --outdir=public/js --bundle --format=esm --tree-shaking=true --minify",
+    "build:js": "esbuild assets/js/app.ts assets/js/admin.ts assets/js/volunteer.ts  --outdir=public/js --bundle --format=esm --tree-shaking=true --minify",
     "build": "npm run build:js && npm run build:css",
     "dev:css": "npx @tailwindcss/cli -i ./assets/css/main.css -o ./public/css/main.css --watch",
-    "dev:js": "esbuild assets/js/app.ts assets/js/admin.ts  --outdir=public/js --bundle --format=esm --tree-shaking=true --sourcemap --watch",
+    "dev:js": "esbuild assets/js/app.ts assets/js/admin.ts assets/js/volunteer.ts  --outdir=public/js --bundle --format=esm --tree-shaking=true --sourcemap --watch",
     "dev": "npm run dev:js"
   },
   "repository": {

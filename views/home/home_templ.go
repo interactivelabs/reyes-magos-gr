@@ -97,7 +97,7 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\">Recibe un regalo</a> <a href=\"#steps\" class=\"text-sm font-semibold leading-6 text-brand-orange\">Ver como <span aria-hidden=\"true\">→</span></a></div></div></div></section><section id=\"steps\" class=\"text-center mx-6 my-24 max-w-(--breakpoint-md) md:mx-auto\"><div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">1. Obtener un codigo de regalo</h2><p class=\"mt-4 text-lg leading-8\">Un voluntario te podra dar un codigo gratuito para poder recibir un regalo.</p><div id=\"home-ilustracion-1\" class=\"opacity-0\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" preload>Recibe un regalo</a> <a href=\"#steps\" class=\"text-sm font-semibold leading-6 text-brand-orange\">Ver como <span aria-hidden=\"true\">→</span></a></div></div></div></section><section id=\"steps\" class=\"text-center mx-6 my-24 max-w-(--breakpoint-md) md:mx-auto\"><div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">1. Obtener un codigo de regalo</h2><p class=\"mt-4 text-lg leading-8\">Un voluntario te podra dar un codigo gratuito para poder recibir un regalo.</p><div id=\"home-ilustracion-1\" class=\"opacity-0\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -113,7 +113,7 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">2. Usa el codigo</h2><p class=\"mt-4 text-lg leading-8\">Entra a este sitio y ve a la seccion de <a href=\"/catalog\" class=\"font-semibold leading-6 text-brand-orange underline\">catálogo</a>, donde podras ordernar el regalo gratuito.</p><p class=\"mt-4 text-lg leading-8\">Si no tienes accesso a internet la persona voluntaria podra ayudarte en el momento.</p><div id=\"home-ilustracion-2\" class=\"opacity-0\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<div class=\"text-center mt-12 my-24\"><h2 class=\"text-3xl font-display font-extralight tracking-tight sm:text-4xl\">2. Usa el codigo</h2><p class=\"mt-4 text-lg leading-8\">Entra a este sitio y ve a la seccion de <a href=\"/catalog\" class=\"font-semibold leading-6 text-brand-orange underline\" preload>catálogo</a>, donde podras ordernar el regalo gratuito.</p><p class=\"mt-4 text-lg leading-8\">Si no tienes accesso a internet la persona voluntaria podra ayudarte en el momento.</p><div id=\"home-ilustracion-2\" class=\"opacity-0\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -180,7 +180,7 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\">Recibe un regalo</a></section></main><script defer src=\"https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js\"></script> <script defer src=\"https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js\"></script>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\" preload>Recibe un regalo</a></section></main><script defer src=\"https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js\"></script> <script defer src=\"https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js\"></script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

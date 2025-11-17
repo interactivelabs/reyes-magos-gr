@@ -2,11 +2,12 @@ package pages
 
 import (
 	"fmt"
+	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/models"
 	"reyes-magos-gr/views/components"
 )
 
-templ UpdateToyForm(toy models.Toy) {
+templ UpdateToyForm(toy models.Toy, categories []dtos.AutocompleteItem) {
 	@components.Dialog() {
 		<form
 			class="pt-8"
@@ -16,7 +17,7 @@ templ UpdateToyForm(toy models.Toy) {
 			x-on:htmx:after-on-load="modalOpen = false"
 		>
 			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
-				@ToyForm(toy)
+				@ToyForm(toy, categories)
 				@components.DialogSaveFooter()
 			</div>
 		</form>

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/store/models"
-	layout "reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
 	svg "reyes-magos-gr/views/components/svg"
 )
@@ -60,7 +59,7 @@ templ MyCodeItem(code models.Code) {
 }
 
 templ MyCodes(codes []models.Code, givenCodes []models.Code) {
-	@layout.Base() {
+	@VolunteerLayout() {
 		<main>
 			<h1 class="text-center pt-8 text-2xl">Mis Codigos</h1>
 			<section id="my_codes" class="relative isolate px-6 py-20 lg:px-8">

@@ -1,1 +1,204 @@
-document.addEventListener("alpine:init",()=>{Alpine.data("toasts",()=>({notifications:[],displayDuration:5e3,addNotification(e){let t=Date.now();this.notifications.length>=20&&this.notifications.splice(0,this.notifications.length-19),this.notifications.push({...e,id:t})},removeNotification(e){setTimeout(()=>{this.notifications=this.notifications.filter(t=>t.id!==e)},400)}}))});function c(e){window.dispatchEvent(new CustomEvent("notify",{detail:e}))}var h=e=>e&&e.includes("message")&&e.includes("Key"),y=e=>{let t=[],o=e.split(",").filter(n=>n.includes("Key")).map(n=>n.trim().replace("message=",""));for(let n of o){let a=n.split("\\n");for(let i=0;i<a.length;i++){let r=a[i],l=r.match(/Key: '([^']+)'/),s=r.match(/Error:(.+)/);l&&s&&t.push({key:l[1],message:s[1].trim()})}}return t};window.addEventListener("htmx:responseError",e=>{let t=e.detail.xhr.status;if(t===500&&c({variant:"error",title:"Error del servidor",message:"Ha ocurrido un error inesperado. Por favor intenta de nuevo."}),t===400){let{responseText:o}=e.detail.xhr;if(h(o)){let n=y(o),{target:a}=e;if(a instanceof HTMLFormElement){let i=a;for(let r of n){let l=r.key.split(".").pop(),s=i.querySelector(`[name="${l}"]`);s&&(s.setCustomValidity(r.message),s.reportValidity())}}}}});var d=async e=>{try{await navigator.clipboard.writeText(e),c({variant:"error",title:"Copiado!",message:"El codigo ha sido copiado al portapapeles."})}catch(t){console.error("Failed to copy: ",t)}},v=async e=>{let t={title:"Comparte la alegria!",text:`Utiliza este codigo para obtener un regalo: ${e}`,url:`${window.location.origin}/catalog?code=${e}`};try{await navigator.share(t)}catch(o){console.error("Share failed: ",o)}};globalThis.copyCode=d;globalThis.shareCode=async e=>{typeof navigator.share>"u"?d(e):v(e)};function E(e,t){let o;return function(...n){o&&clearTimeout(o),o=setTimeout(()=>{e.apply(this,n)},t)}}var m=E;var p=()=>document.getElementsByName("category[]"),g=e=>{e.delete("page");let t=e.toString();window.location.replace(`${window.location.pathname}?${t}`)},T=()=>{let e=document.getElementsByName("age_min")[0],t=document.getElementsByName("age_max")[0];return{ageMin:e.value,ageMax:t.value}},u=()=>{let e=p(),o=Array.from(e).filter(r=>r.checked).map(r=>r.value),n=new URLSearchParams(window.location.search);if(n.delete("category"),n.delete("age_min"),n.delete("age_max"),o.length>0)for(let r of o)n.append("category",r);let{ageMin:a,ageMax:i}=T();parseInt(a,10)>1&&n.set("age_min",a),parseInt(i,10)>1&&n.set("age_max",i),g(n)},w=()=>{let e=p();for(let o of e)o.checked=!1;let t=new URLSearchParams(window.location.search);t.delete("category"),t.delete("age_min"),t.delete("age_max"),g(t)},x=e=>{let t=p();if(e==="age_min"){let o=document.getElementsByName("age_min")[0];o.value="0"}else if(e==="age_max"){let o=document.getElementsByName("age_max")[0];o.value="0"}for(let o of t)o.value===e&&(o.checked=!1);u()},b=()=>{let e=new URLSearchParams(window.location.search),t=p();if(e.has("category")){let o=e.getAll("category");for(let n of t)o.includes(n.value)&&(n.checked=!0)}};globalThis.updateFilters=u;globalThis.clearFilters=w;globalThis.removeFilter=x;b();var M=()=>{document.body.scrollTop>300||document.documentElement.scrollTop>300?window.dispatchEvent(new CustomEvent("showbacktotopbtn")):window.dispatchEvent(new CustomEvent("hidebacktotopbtn"))},A=m(M,250);window.addEventListener("scroll",A);if(typeof gsap<"u"){gsap.registerPlugin(ScrollTrigger);for(let e=1;e<=3;e++)gsap.to(`#home-ilustracion-${e}`,{scrollTrigger:{trigger:`#home-ilustracion-${e}`,toggleActions:"play pause resume reset",start:"top 80%"},duration:1,opacity:1})}function f(){return document.getElementById("code").value.toUpperCase().trim().length>5}function H(e){f()||e.preventDefault()}document.addEventListener("alpine:init",()=>{Alpine.data("codeForm",()=>({valid:!0,init(){this.valid=!0},submit(e){this.valid=f(),e.preventDefault(),e.stopPropagation()},update(){let e=document.getElementById("code"),t=e.value.toUpperCase().trim();e.value=t,t.length>5&&(this.valid=!0)}}))});globalThis.beforeCheckoutHandler=H;
+// assets/js/shared/htmxErrorHandler.ts
+var isGoValidatorError = (responseText) => responseText && responseText.includes("message") && responseText.includes("Key");
+var parseGoValidatorError = (errorText) => {
+  const errors = [];
+  const errorLines = errorText.split(",").filter((line) => line.includes("Key")).map((line) => line.trim().replace("message=", ""));
+  for (const line of errorLines) {
+    const lineErrors = line.split("\\n");
+    for (let i = 0; i < lineErrors.length; i++) {
+      const error = lineErrors[i];
+      const keyMatch = error.match(/Key: '([^']+)'/);
+      const messageMatch = error.match(/Error:(.+)/);
+      if (keyMatch && messageMatch) {
+        errors.push({
+          key: keyMatch[1],
+          message: messageMatch[1].trim()
+        });
+      }
+    }
+  }
+  return errors;
+};
+window.addEventListener(
+  "htmx:responseError",
+  (e) => {
+    const code = e.detail.xhr.status;
+    if (code === 500) {
+      console.log(e);
+    }
+    if (code === 400) {
+      const { responseText } = e.detail.xhr;
+      if (isGoValidatorError(responseText)) {
+        const errors = parseGoValidatorError(responseText);
+        const { target } = e;
+        if (target instanceof HTMLFormElement) {
+          const form = target;
+          for (const error of errors) {
+            const fieldName = error.key.split(".").pop();
+            const input = form.querySelector(
+              `[name="${fieldName}"]`
+            );
+            if (input) {
+              input.setCustomValidity(error.message);
+              input.reportValidity();
+            }
+          }
+        }
+      }
+    }
+  }
+);
+
+// assets/js/utils/debounce.ts
+function debounce(func, wait) {
+  let timeout;
+  return function(...args) {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => {
+      func.apply(this, args);
+    }, wait);
+  };
+}
+var debounce_default = debounce;
+
+// assets/js/app/catalog.ts
+var getFilters = () => document.getElementsByName("category[]");
+var updateUrlFilters = (params) => {
+  params.delete("page");
+  const newQueryString = params.toString();
+  window.location.replace(`${window.location.pathname}?${newQueryString}`);
+};
+var getAgeFilters = () => {
+  const ageMin = document.getElementsByName("age_min")[0];
+  const ageMax = document.getElementsByName("age_max")[0];
+  return { ageMin: ageMin.value, ageMax: ageMax.value };
+};
+var updateFilters = () => {
+  const filters = getFilters();
+  const selectedFilters = Array.from(filters).filter(
+    (filter) => filter.checked
+  );
+  const selectedFiltersValues = selectedFilters.map((filter) => filter.value);
+  const params = new URLSearchParams(window.location.search);
+  params.delete("category");
+  params.delete("age_min");
+  params.delete("age_max");
+  if (selectedFiltersValues.length > 0) {
+    for (const filter of selectedFiltersValues) {
+      params.append("category", filter);
+    }
+  }
+  const { ageMin, ageMax } = getAgeFilters();
+  if (parseInt(ageMin, 10) > 1) {
+    params.set("age_min", ageMin);
+  }
+  if (parseInt(ageMax, 10) > 1) {
+    params.set("age_max", ageMax);
+  }
+  updateUrlFilters(params);
+};
+var clearFilters = () => {
+  const filters = getFilters();
+  for (const filter of filters) {
+    filter.checked = false;
+  }
+  const params = new URLSearchParams(window.location.search);
+  params.delete("category");
+  params.delete("age_min");
+  params.delete("age_max");
+  updateUrlFilters(params);
+};
+var removeFilter = (filterValue) => {
+  const filters = getFilters();
+  if (filterValue === "age_min") {
+    const ageMin = document.getElementsByName("age_min")[0];
+    ageMin.value = "0";
+  } else if (filterValue === "age_max") {
+    const ageMax = document.getElementsByName("age_max")[0];
+    ageMax.value = "0";
+  }
+  for (const filter of filters) {
+    if (filter.value === filterValue) {
+      filter.checked = false;
+    }
+  }
+  updateFilters();
+};
+var setUrlFilters = () => {
+  const params = new URLSearchParams(window.location.search);
+  const filters = getFilters();
+  if (params.has("category")) {
+    const selectedFilters = params.getAll("category");
+    for (const filter of filters) {
+      if (selectedFilters.includes(filter.value)) {
+        filter.checked = true;
+      }
+    }
+  }
+};
+globalThis.updateFilters = updateFilters;
+globalThis.clearFilters = clearFilters;
+globalThis.removeFilter = removeFilter;
+setUrlFilters();
+var handleBackToTopScroll = () => {
+  if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+    window.dispatchEvent(new CustomEvent("showbacktotopbtn"));
+  } else {
+    window.dispatchEvent(new CustomEvent("hidebacktotopbtn"));
+  }
+};
+var scrollHandler = debounce_default(handleBackToTopScroll, 250);
+window.addEventListener("scroll", scrollHandler);
+
+// assets/js/app/homeAnnimations.ts
+if (typeof gsap !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+  for (let i = 1; i <= 3; i++) {
+    gsap.to(`#home-ilustracion-${i}`, {
+      scrollTrigger: {
+        trigger: `#home-ilustracion-${i}`,
+        toggleActions: "play pause resume reset",
+        start: "top 80%"
+      },
+      duration: 1,
+      opacity: 1
+    });
+  }
+}
+
+// assets/js/app/checkout.ts
+function validateCodeInput() {
+  const codeInput = document.getElementById("code");
+  const code = codeInput.value.toUpperCase().trim();
+  return code.length > 5;
+}
+function beforeCheckoutHandler(evt) {
+  if (!validateCodeInput()) {
+    evt.preventDefault();
+  }
+}
+document.addEventListener("alpine:init", () => {
+  Alpine.data("codeForm", () => ({
+    valid: true,
+    init() {
+      this.valid = true;
+    },
+    submit(evt) {
+      this.valid = validateCodeInput();
+      evt.preventDefault();
+      evt.stopPropagation();
+    },
+    update() {
+      const codeInput = document.getElementById("code");
+      const code = codeInput.value.toUpperCase().trim();
+      codeInput.value = code;
+      if (code.length > 5) {
+        this.valid = true;
+      }
+    }
+  }));
+});
+globalThis.beforeCheckoutHandler = beforeCheckoutHandler;
+//# sourceMappingURL=app.js.map

@@ -7,9 +7,6 @@ declare global {
 
 import "./shared/htmxErrorHandler";
 
-import "./components/toasts";
-
-import "./app/myCodes";
 import "./app/catalog";
 import "./app/homeAnnimations";
 import "./app/checkout";

@@ -1,0 +1,58 @@
+package pages
+
+import (
+	"fmt"
+	"reyes-magos-gr/store/dtos"
+	"reyes-magos-gr/views/components"
+)
+
+templ AutocompleteCategories(currentValue string, categories []dtos.AutocompleteItem) {
+	<div x-data={ fmt.Sprintf("CategoryWithSearch('%s')", currentValue) }>
+		<label for="category_search" class={ components.BaseLabelStyles }>Categories</label>
+		<el-autocomplete class="relative mt-2 block">
+			<input
+				id="category_search"
+				name="category_search"
+				x-model="category_search"
+				class={ components.BaseInputStyles }
+			/>
+			<button
+				type="button"
+				class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-hidden"
+				@click="setNewCategory"
+			>Add</button>
+			<el-options
+				popover
+				anchor="bottom end"
+				class="max-h-56 w-(--input-width) overflow-auto rounded-md bg-white py-1 text-base shadow-lg outline outline-black/5 transition-discrete [--anchor-gap:--spacing(1)] sm:text-sm dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10"
+			>
+				for _, c := range categories {
+					<el-option
+						value={ c.Value }
+						class="block px-3 py-2 text-gray-900 select-none aria-selected:bg-brand-orange aria-selected:text-white dark:text-gray-200 dark:aria-selected:bg-brand-orange"
+					>{ c.Label }</el-option>
+				}
+			</el-options>
+		</el-autocomplete>
+		<div class="mt-2 flex" x-show="category.length > 0">
+			<template x-for="(CatItem, index) in category.split(',')" :key="'CatItem-' + index">
+				<div class="-my-1 flex flex-wrap items-center">
+					<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
+						<span x-text="CatItem"></span>
+						<button
+							type="button"
+							@click="removeCategory(CatItem)"
+							class="ml-1 inline-flex h-4 w-4 shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
+						>
+							<span class="sr-only">Remove Category</span>
+							<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+								<path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
+							</svg>
+						</button>
+					</span>
+				</div>
+			</template>
+		</div>
+		<input type="hidden" name="category" id="category" x-model="category"/>
+	</div>
+}
