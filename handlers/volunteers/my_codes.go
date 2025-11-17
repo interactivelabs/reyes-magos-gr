@@ -66,6 +66,39 @@ func (h *MyCodesHandler) GiveCode(ctx echo.Context) error {
 	return lib.Render(ctx, volunteer.MyCodeItem(code))
 }
 
+type GiveCodesRequest struct {
+	CodesNumber int `form:"codes_number" validate:"required"`
+}
+
+func (h *MyCodesHandler) GiveCodes(ctx echo.Context) error {
+	acr := new(GiveCodesRequest)
+	if err := ctx.Bind(acr); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	if err := ctx.Validate(acr); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	profile, err := GetProfileHandler(ctx, h.VolunteersService)
+	if err != nil && err.Code == http.StatusUnauthorized {
+		return err
+	}
+	if err != nil && err.Code == http.StatusForbidden {
+		return ctx.Redirect(http.StatusTemporaryRedirect, "/notvolunteer")
+	}
+
+	codes, _, cerr := h.VolunteersService.GetVolunteerCodesByEmail(profile.Email)
+	if cerr != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, cerr.Error())
+	}
+
+	if acr.CodesNumber > len(codes) {
+		return echo.NewHTTPError(http.StatusBadRequest, "Not enough codes available")
+	}
+
+	return lib.Render(ctx, volunteer.VolunteerLayout())
+}
+
 func GetProfileHandler(
 	ctx echo.Context,
 	volunteersService services.VolunteersService,
