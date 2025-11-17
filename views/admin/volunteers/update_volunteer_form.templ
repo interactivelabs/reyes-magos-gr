@@ -7,8 +7,9 @@ import (
 )
 
 templ UpdateVolunteerForm(volunteer models.Volunteer) {
-	@components.Dialog() {
+	@components.Dialog("dialog-volunteer-update-form") {
 		<form
+			id="volunteer-update-form"
 			class="pt-8"
 			hx-put={ string(templ.URL(fmt.Sprintf("/admin/volunteers/%d/save", volunteer.VolunteerID))) }
 			hx-target={ fmt.Sprintf("#admin-volunteer-row-%d", volunteer.VolunteerID) }
@@ -17,7 +18,7 @@ templ UpdateVolunteerForm(volunteer models.Volunteer) {
 		>
 			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
 				@VolunteerForm(volunteer)
-				@components.DialogSaveFooter()
+				@components.DialogSaveFooter("dialog-volunteer-update-form")
 			</div>
 		</form>
 	}
