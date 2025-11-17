@@ -17,6 +17,7 @@ func NewCodesStore(db *sql.DB) *LibSQLCodesStore {
 type CodesStore interface {
 	CreateCode(code models.Code) (int64, models.Code, error)
 	UpdateCode(code models.Code) error
+	UpdateCodes(codes []models.Code) error
 	DeleteCode(codeID int64) error
 	GetCodeByID(codeID int64) (models.Code, error)
 	GetCode(code string) (models.Code, error)
@@ -65,6 +66,32 @@ func (r LibSQLCodesStore) UpdateCode(code models.Code) error {
 		return err
 	}
 	return nil
+}
+
+func (r LibSQLCodesStore) UpdateCodes(codes []models.Code) error {
+	if len(codes) == 0 {
+		return nil
+	}
+
+	tx, err := r.DB.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	for _, code := range codes {
+		queryStr, params, err := utils.BuildUpdateQuery(code, "codes", "code_id")
+		if err != nil {
+			return err
+		}
+
+		_, err = tx.Exec(queryStr, params...)
+		if err != nil {
+			return err
+		}
+	}
+
+	return tx.Commit()
 }
 
 func (r LibSQLCodesStore) DeleteCode(codeID int64) error {
