@@ -247,7 +247,7 @@ func MyCodes(codes []models.Code, givenCodes []models.Code) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			if len(codes) > 5 {
+			if len(codes) > 5 && lib.IsVolunteersCartEnabled(ctx) {
 				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "<div class=\"py-20\"><h2 class=\"text-lg font-semibold leading-6 text-gray-900\">Regalar varios codigos</h2><form id=\"give-codes\" hx-post=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err

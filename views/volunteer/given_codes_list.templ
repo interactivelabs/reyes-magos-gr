@@ -1,0 +1,70 @@
+package pages
+
+import (
+	"fmt"
+	"reyes-magos-gr/lib"
+	"reyes-magos-gr/store/models"
+	svg "reyes-magos-gr/views/components/svg"
+)
+
+templ GivenCodeCard(code models.Code) {
+	<li class="col-span-1 flex flex-col rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+		<div class="p-6 flex-1 bg-white">
+			<p class="text-2xl font-bold text-gray-900 mb-2">{ code.Code }</p>
+			<p class="text-sm text-gray-500">Expira: { lib.FormatDate(code.Expiration) }</p>
+		</div>
+		<div class="flex border-t border-gray-200">
+			<button
+				type="button"
+				class="relative flex-1 inline-flex items-center justify-center gap-2 bg-white px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+				onclick={ onCopyHandler(code.Code) }
+			>
+				@svg.Clipboard("h-5 w-5 fill-current")
+				<span>Copiar</span>
+			</button>
+			<button
+				type="button"
+				class="relative flex-1 inline-flex items-center justify-center gap-2 bg-white px-4 py-3 text-sm font-semibold text-gray-700 border-l border-gray-200 hover:bg-gray-50 transition-colors"
+				onclick={ onShareHandler(code.Code) }
+			>
+				@svg.Share("h-5 w-5 fill-current")
+				<span>Compartir</span>
+			</button>
+		</div>
+	</li>
+}
+
+templ GivenCodesList(codes []models.Code) {
+	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+		<div class="text-center mb-8">
+			<div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+				@svg.Gift("h-8 w-8 fill-green-600")
+			</div>
+			<h2 class="text-3xl font-bold text-gray-900 mb-2">¡Códigos Listos para Regalar!</h2>
+			<p class="text-lg text-gray-600">
+				{ fmt.Sprintf("%d código(s) marcado(s) como regalado(s)", len(codes)) }
+			</p>
+		</div>
+
+		<div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
+			<p class="text-sm text-blue-800 text-center">
+				Usa los botones de abajo para copiar o compartir cada código con las familias
+			</p>
+		</div>
+
+		<ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+			for _, code := range codes {
+				@GivenCodeCard(code)
+			}
+		</ul>
+
+		<div class="text-center">
+			<a
+				href="/volunteer/mycodes"
+				class="inline-flex items-center gap-2 rounded-md bg-brand-orange px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-brand-orange/90 transition-colors"
+			>
+				Volver a Mis Códigos
+			</a>
+		</div>
+	</div>
+}
