@@ -7,7 +7,7 @@ import (
 )
 
 templ CreateToyForm(categories []dtos.AutocompleteItem) {
-	@components.Dialog() {
+	@components.Dialog("dialog-toy-new-form") {
 		<form
 			id="toy-new-form"
 			class="pt-8"
@@ -18,7 +18,7 @@ templ CreateToyForm(categories []dtos.AutocompleteItem) {
 		>
 			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
 				@ToyForm(models.Toy{}, categories)
-				@components.DialogSaveFooter()
+				@components.DialogSaveFooter("dialog-toy-new-form")
 			</div>
 		</form>
 	}

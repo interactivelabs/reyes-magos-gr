@@ -2,15 +2,15 @@ package components
 
 import svg "reyes-magos-gr/views/components/svg"
 
-templ DialogFooter() {
+templ DialogFooter(id string) {
 	<div class="my-6 py-8 flex items-center justify-end gap-x-6 border-t border-gray-900/10">
-		@CancelModalButton()
+		@CancelModalButton(id)
 		{ children... }
 	</div>
 }
 
-templ DialogSaveFooter() {
-	@DialogFooter() {
+templ DialogSaveFooter(id string) {
+	@DialogFooter(id) {
 		<button
 			type="submit"
 			class={ BrandPrimaryButton }
@@ -18,71 +18,39 @@ templ DialogSaveFooter() {
 	}
 }
 
-templ CancelModalButton() {
+templ CancelModalButton(id string) {
 	<button
 		type="button"
 		class={ BaseSecondaryButton }
-		@click="modalOpen=false"
+		command="close"
+		commandfor={ id }
 	>
 		Cancel
 	</button>
 }
 
-templ Dialog() {
-	<template x-teleport="body">
-		<div
-			@keydown.escape.window="modalOpen = false"
-			class="relative z-50"
-			role="dialog"
-			x-cloak
-		>
-			// Overlay
-			<div
-				x-show="modalOpen"
-				x-transition:enter="ease-out duration-300"
-				x-transition:enter-start="opacity-0"
-				x-transition:enter-end="opacity-100"
-				x-transition:leave="ease-in duration-300"
-				x-transition:leave-start="opacity-100"
-				x-transition:leave-end="opacity-0"
-				@click="modalOpen=false"
-				class="fixed inset-0 bg-gray-500/75 transition-opacity"
-				aria-hidden="true"
-			></div>
-			// Modal Body
-			<div
-				class="fixed inset-0 z-10 w-screen overflow-y-auto"
-				x-show="modalOpen"
-				x-cloak
-			>
-				<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-					<div
-						x-show="modalOpen"
-						x-trap="modalOpen"
-						x-transition:enter="ease-out duration-300"
-						x-transition:enter-start="opacity-0"
-						x-transition:enter-end="opacity-100"
-						x-transition:leave="ease-in duration-200"
-						x-transition:leave-start="opacity-100"
-						x-transition:leave-end="opacity-0"
-						class="relative transform rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6"
-						@click.away="modalOpen = false"
-						x-init="htmx.process($el)"
-					>
-						<div class="absolute right-0 top-0 hidden sm:block p-4">
-							<button
-								type="button"
-								class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-offset-2"
-								@click="modalOpen = false"
-							>
-								<span class="sr-only">Close</span>
-								@svg.Close("h-6 w-6 fill-current")
-							</button>
-						</div>
-						{ children... }
+templ Dialog(id string) {
+	<el-dialog open>
+		<dialog id={ id } class="backdrop:bg-transparent bg-transparent fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto">
+			<el-dialog-backdrop class="fixed inset-0 bg-black/50"></el-dialog-backdrop>
+			<div class="flex min-h-full items-end justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0">
+				<el-dialog-panel
+					class="bg-white block data-closed:scale-95 data-closed:opacity-0  relative transform overflow-hidden rounded-lg p-4 shadow-xl transition-all duration-200 min-w-1/2"
+				>
+					<div class="absolute right-0 top-0 hidden sm:block p-4">
+						<button
+							type="button"
+							class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-hidden focus:ring-2 focus:ring-offset-2"
+							command="close"
+							commandfor={ id }
+						>
+							<span class="sr-only">Close</span>
+							@svg.Close("h-6 w-6 fill-current")
+						</button>
 					</div>
-				</div>
+					{ children... }
+				</el-dialog-panel>
 			</div>
-		</div>
-	</template>
+		</dialog>
+	</el-dialog>
 }
