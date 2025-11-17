@@ -96,7 +96,26 @@ func (h *MyCodesHandler) GiveCodes(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Not enough codes available")
 	}
 
-	return lib.Render(ctx, volunteer.VolunteerLayout())
+	// Select the first N codes to mark as given
+	codesToGive := codes[:acr.CodesNumber]
+
+	// Mark all selected codes as given
+	for i := range codesToGive {
+		codesToGive[i].Given = 1
+	}
+
+	// Update all codes in a batch
+	if err := h.CodesStore.UpdateCodes(codesToGive); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	// Fetch updated codes for rendering
+	updatedCodes, updatedGivenCodes, cerr := h.VolunteersService.GetVolunteerCodesByEmail(profile.Email)
+	if cerr != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, cerr.Error())
+	}
+
+	return lib.Render(ctx, volunteer.MyCodes(updatedCodes, updatedGivenCodes))
 }
 
 func GetProfileHandler(
