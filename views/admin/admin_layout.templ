@@ -2,11 +2,11 @@ package admin
 
 import (
 	"reyes-magos-gr/lib"
-	layout "reyes-magos-gr/views"
+	"reyes-magos-gr/views/volunteer"
 )
 
 templ AdminLayout() {
-	@layout.Base() {
+	@pages.VolunteerLayout() {
 		{ children... }
 		<script type="module" src={ lib.GetAssetUrl("js/admin.js") } defer></script>
 	}

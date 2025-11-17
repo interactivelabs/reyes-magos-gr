@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/store"
+	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/models"
 	toys_view "reyes-magos-gr/views/admin/toys"
 	"strconv"
@@ -33,7 +34,11 @@ func (h *ToysHandler) ToysViewHandler(ctx echo.Context) error {
 }
 
 func (h *ToysHandler) CreateToyFormHandler(ctx echo.Context) error {
-	return lib.Render(ctx, toys_view.CreateToyForm())
+	categories, err := getCategories(h.ToysStore)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	return lib.Render(ctx, toys_view.CreateToyForm(categories))
 }
 
 type CreateToyRequest struct {
@@ -84,7 +89,12 @@ func (h *ToysHandler) UpdateToyFormHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, toys_view.UpdateToyForm(toy))
+	categories, err := getCategories(h.ToysStore)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return lib.Render(ctx, toys_view.UpdateToyForm(toy, categories))
 }
 
 func (h *ToysHandler) UpdateToyPutHandler(ctx echo.Context) error {
@@ -159,4 +169,19 @@ func (h *ToysHandler) ToysCategoriesViewHandler(ctx echo.Context) error {
 	}
 
 	return ctx.JSON(http.StatusOK, objects)
+}
+
+func getCategories(toysStore store.ToysStore) ([]dtos.AutocompleteItem, error) {
+	categories, err := toysStore.GetCategories()
+	if err != nil {
+		return nil, echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	var objects []dtos.AutocompleteItem
+	for _, str := range categories {
+		obj := dtos.AutocompleteItem{Value: str, Label: str}
+		objects = append(objects, obj)
+	}
+
+	return objects, nil
 }

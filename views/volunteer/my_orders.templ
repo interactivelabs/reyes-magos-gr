@@ -3,12 +3,11 @@ package pages
 import (
 	"fmt"
 	"reyes-magos-gr/store/models"
-	layout "reyes-magos-gr/views"
 	"reyes-magos-gr/views/components"
 )
 
 templ MyOrders(orders []models.Order) {
-	@layout.Base() {
+	@VolunteerLayout() {
 		<main>
 			<h1 class="text-center pt-8 text-2xl">Mis Ordenes</h1>
 			<section id="my_orders" class="relative isolate px-6 py-20 lg:px-8">

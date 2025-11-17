@@ -24,7 +24,7 @@ templ Home() {
 						<div class="w-full text-right text-sm">- William Arthur Ward</div>
 						<p class="mt-6 text-lg leading-8 text-brand-orange">En este sitio podras recibir un regalo gratuito para un niño</p>
 						<div class="mt-10 flex items-center justify-center gap-x-6">
-							<a href="/catalog" class={ components.BrandPrimaryButtonInverted }>Recibe un regalo</a>
+							<a href="/catalog" class={ components.BrandPrimaryButtonInverted } preload>Recibe un regalo</a>
 							<a href="#steps" class="text-sm font-semibold leading-6 text-brand-orange">Ver como <span aria-hidden="true">→</span></a>
 						</div>
 					</div>
@@ -41,7 +41,7 @@ templ Home() {
 				@components.Divider()
 				<div class="text-center mt-12 my-24">
 					<h2 class="text-3xl font-display font-extralight tracking-tight sm:text-4xl">2. Usa el codigo</h2>
-					<p class="mt-4 text-lg leading-8">Entra a este sitio y ve a la seccion de <a href="/catalog" class="font-semibold leading-6 text-brand-orange underline">catálogo</a>, donde podras ordernar el regalo gratuito.</p>
+					<p class="mt-4 text-lg leading-8">Entra a este sitio y ve a la seccion de <a href="/catalog" class="font-semibold leading-6 text-brand-orange underline" preload>catálogo</a>, donde podras ordernar el regalo gratuito.</p>
 					<p class="mt-4 text-lg leading-8">Si no tienes accesso a internet la persona voluntaria podra ayudarte en el momento.</p>
 					<div id="home-ilustracion-2" class="opacity-0">
 						@svg.Shop("mt-8 w-1/2 mx-auto")
@@ -82,7 +82,7 @@ templ Home() {
 				<p class="mt-4 text-lg leading-8">Si quieres ser voluntario por favor escribenos a <a href="mailto:support@dl-toys.com" class="font-semibold leading-6 text-brand-orange underline">support@dl-toys.com</a></p>
 			</section>
 			<section id="bottom-cta" class="text-center mx-6 my-24 max-w-(--breakpoint-md) md:mx-auto">
-				<a href="/catalog" class={ components.BrandPrimaryButtonInverted }>Recibe un regalo</a>
+				<a href="/catalog" class={ components.BrandPrimaryButtonInverted } preload>Recibe un regalo</a>
 			</section>
 		</main>
 		<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>

@@ -2,7 +2,6 @@ package layout
 
 import (
 	lib "reyes-magos-gr/lib"
-	"reyes-magos-gr/views/components"
 	"reyes-magos-gr/views/shared"
 )
 
@@ -30,13 +29,12 @@ templ Base() {
 			@shared.Nav()
 			{ children... }
 			@shared.Footer()
-			@components.Toasts()
 		</body>
-		<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js" integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz" crossorigin="anonymous"></script>
 		<!-- App Code -->
 		<script defer type="module" src={ lib.GetAssetUrl("js/app.js") }></script>
 		<!-- Htmx Plugins -->
-		<script defer src="https://unpkg.com/htmx-ext-preload@2.1.0/preload.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/htmx-ext-preload@2.1.2" integrity="sha384-PRIcY6hH1Y5784C76/Y8SqLyTanY9rnI3B8F3+hKZFNED55hsEqMJyqWhp95lgfk" crossorigin="anonymous"></script>
 		<script defer src="https://unpkg.com/htmx-ext-remove-me@2.0.0/remove-me.js"></script>
 		<!-- Alpine Plugins -->
 		<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>

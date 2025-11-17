@@ -2,87 +2,60 @@ package pages
 
 import (
 	"fmt"
+
+	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/models"
 	"reyes-magos-gr/views/components"
 )
 
-templ ToyForm(toy models.Toy) {
+templ ToyForm(toy models.Toy, categories []dtos.AutocompleteItem) {
 	<div>
 		<label for="toy_name" class={ components.BaseLabelStyles }>Name</label>
 		<div class="mt-2">
-			<input type="text" name="toy_name" class={ components.BaseInputStyles } value={ toy.ToyName }/>
+			<input type="text" id="toy_name" name="toy_name" class={ components.BaseInputStyles } value={ toy.ToyName }/>
 		</div>
 	</div>
 	<div>
 		<label for="toy_description" class={ components.BaseLabelStyles }>Description</label>
 		<div class="mt-2">
-			<textarea name="toy_description" class={ components.BaseInputStyles }>{ toy.ToyDescription }</textarea>
+			<textarea id="toy_description" name="toy_description" class={ components.BaseInputStyles }>{ toy.ToyDescription }</textarea>
 		</div>
 	</div>
-	<div>
-		<label for="category" class={ components.BaseLabelStyles }>Categories</label>
-		<div
-			class="mt-2"
-			x-data={ fmt.Sprintf("CategoryWithSearch('%s')", toy.Category) }
-			x-on:searchbox-item-selected-category.window="setNewCategory($event)"
-		>
-			@components.SearchBox("/admin/toys/categories", "category")
-			<div class="mt-2 flex" x-show="category.length > 0">
-				<template x-for="(CatItem, index) in category.split(',')" :key="'CatItem-' + index">
-					<div class="-my-1 flex flex-wrap items-center">
-						<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
-							<span x-text="CatItem"></span>
-							<button
-								type="button"
-								@click="removeCategory(CatItem)"
-								class="ml-1 inline-flex h-4 w-4 shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
-							>
-								<span class="sr-only">Remove Category</span>
-								<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
-									<path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
-								</svg>
-							</button>
-						</span>
-					</div>
-				</template>
-			</div>
-			<input type="hidden" name="category" id="category" x-models="category" class={ components.BaseInputStyles }/>
-		</div>
-	</div>
+	@AutocompleteCategories(toy.Category, categories)
 	<div>
 		<label for="age_min" class={ components.BaseLabelStyles }>Minimum Age</label>
 		<div class="mt-2">
-			<input type="number" name="age_min" class={ components.BaseInputStyles } value={ fmt.Sprint(toy.AgeMin) } min="1" max="16"/>
+			<input type="number" id="age_min" name="age_min" class={ components.BaseInputStyles } value={ fmt.Sprint(toy.AgeMin) } min="1" max="16"/>
 		</div>
 	</div>
 	<div>
 		<label for="age_max" class={ components.BaseLabelStyles }>Maximum Age</label>
 		<div class="mt-2">
-			<input type="number" name="age_max" class={ components.BaseInputStyles } value={ fmt.Sprint(toy.AgeMax) } min="1" max="16"/>
+			<input type="number" id="age_max" name="age_max" class={ components.BaseInputStyles } value={ fmt.Sprint(toy.AgeMax) } min="1" max="16"/>
 		</div>
 	</div>
 	<div>
 		<label for="image1" class={ components.BaseLabelStyles }>Image 1</label>
 		<div class="mt-2">
-			<input type="url" name="image1" class={ components.BaseInputStyles } value={ string(templ.URL(toy.Image1)) }/>
+			<input type="url" id="image1" name="image1" class={ components.BaseInputStyles } value={ string(templ.URL(toy.Image1)) }/>
 		</div>
 	</div>
 	<div>
 		<label for="image2" class={ components.BaseLabelStyles }>Image 2</label>
 		<div class="mt-2">
-			<input type="url" name="image2" class={ components.BaseInputStyles } value={ string(templ.URL(toy.Image2)) }/>
+			<input type="url" id="image2" name="image2" class={ components.BaseInputStyles } value={ string(templ.URL(toy.Image2)) }/>
 		</div>
 	</div>
 	<div>
 		<label for="image3" class={ components.BaseLabelStyles }>Image 3</label>
 		<div class="mt-2">
-			<input type="url" name="image3" class={ components.BaseInputStyles } value={ string(templ.URL(toy.Image3)) }/>
+			<input type="url" id="image3" name="image3" class={ components.BaseInputStyles } value={ string(templ.URL(toy.Image3)) }/>
 		</div>
 	</div>
 	<div>
 		<label for="source_url" class={ components.BaseLabelStyles }>Source Url</label>
 		<div class="mt-2">
-			<input type="url" name="source_url" class={ components.BaseInputStyles } value={ string(templ.URL(toy.SourceURL)) }/>
+			<input type="url" id="source_url" name="source_url" class={ components.BaseInputStyles } value={ string(templ.URL(toy.SourceURL)) }/>
 		</div>
 	</div>
 }

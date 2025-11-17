@@ -132,14 +132,14 @@ templ Checkout(toy models.Toy, code string) {
 							@RedeemToyForm(toy.ToyID, code, "")
 						}
 						<div class="mt-16">
-							@components.Accordion() {
-								@components.AccordionRow("Edades (años)", true) {
+							@Accordion() {
+								@AccordionRow("Edades (años)", true) {
 									<p>{ fmt.Sprint(toy.AgeMin) } - { fmt.Sprint(toy.AgeMax) }</p>
 								}
-								@components.AccordionRow("Categoria", true) {
+								@AccordionRow("Categoria", true) {
 									<p>{ toy.Category }</p>
 								}
-								@components.AccordionRow("Descripción", false) {
+								@AccordionRow("Descripción", false) {
 									<p>{ toy.ToyName }</p>
 									<ul class="mt-4">
 										for _, item := range strings.Split(toy.ToyDescription, "\n") {
