@@ -61,7 +61,8 @@ func (r LibSQLCartsStore) GetCartItemByID(cartID int64) (item models.CartItem, e
 		SELECT `+allCartFields+`
 		FROM carts
 		WHERE
-			deleted = 0
+			cart_id = ?
+			AND deleted = 0
 			AND used = 0;
 `, cartID)
 
