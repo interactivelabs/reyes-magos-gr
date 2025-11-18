@@ -10,6 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"fmt"
+	"reyes-magos-gr/lib"
 	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/models"
 	"reyes-magos-gr/views/components"
@@ -53,9 +54,9 @@ func UpdateToyForm(toy models.Toy, categories []dtos.AutocompleteItem) templ.Com
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(string(templ.URL(fmt.Sprintf("/admin/toys/%d/save", toy.ToyID))))
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(lib.GetSafeIdUrl("/admin/toys/%d/save", toy.ToyID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/toys/update_toy_form.templ`, Line: 15, Col: 76}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/toys/update_toy_form.templ`, Line: 16, Col: 62}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -68,7 +69,7 @@ func UpdateToyForm(toy models.Toy, categories []dtos.AutocompleteItem) templ.Com
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("#admin-toys-row-%d", toy.ToyID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/toys/update_toy_form.templ`, Line: 16, Col: 59}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/toys/update_toy_form.templ`, Line: 17, Col: 59}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {

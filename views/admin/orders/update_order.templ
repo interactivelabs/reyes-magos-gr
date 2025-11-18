@@ -2,6 +2,7 @@ package pages
 
 import (
 	"fmt"
+	"reyes-magos-gr/lib"
 	"reyes-magos-gr/store/models"
 	"reyes-magos-gr/views/components"
 )
@@ -9,7 +10,7 @@ import (
 templ UpdateOrder(order models.Order, toy models.Toy, volunteer models.Volunteer) {
 	<form
 		class="w-full p-8 bg-white"
-		hx-put={ string(templ.URL(fmt.Sprintf("/admin/order/%d/save", order.OrderID))) }
+		hx-put={ lib.GetSafeIdUrl("/admin/order/%d/save", order.OrderID) }
 		hx-target={ fmt.Sprintf("#admin-order-%d", order.OrderID) }
 	>
 		<div class="grid grid-cols-1 gap-x-6 gap-y-8">
@@ -51,7 +52,7 @@ templ UpdateOrder(order models.Order, toy models.Toy, volunteer models.Volunteer
 				<button
 					type="button"
 					class={ components.BaseSecondaryButton }
-					hx-get={ string(templ.URL(fmt.Sprintf("/admin/order/%d", order.OrderID))) }
+					hx-get={ lib.GetSafeIdUrl("/admin/order/%d", order.OrderID) }
 					hx-target={ fmt.Sprintf("#admin-order-%d", order.OrderID) }
 				>
 					Cancel

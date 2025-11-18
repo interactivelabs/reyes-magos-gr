@@ -2,6 +2,7 @@ package pages
 
 import (
 	"fmt"
+	"reyes-magos-gr/lib"
 	"reyes-magos-gr/store/models"
 	"reyes-magos-gr/views/admin"
 	"reyes-magos-gr/views/components"
@@ -10,7 +11,7 @@ import (
 templ LinkOrderCard(order models.Order) {
 	<a
 		hx-swap="outerHTML"
-		hx-get={ string(templ.URL(fmt.Sprintf("/admin/order/%d/edit", order.OrderID))) }
+		hx-get={ lib.GetSafeIdUrl("/admin/order/%d/edit", order.OrderID) }
 		class="w-full block cursor-pointer"
 	>
 		@components.OrderCard(order)

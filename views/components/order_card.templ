@@ -36,7 +36,7 @@ templ OrderCard(order models.Order) {
 					<button
 						type="button"
 						class="relative w-full flex-1 inline-flex items-center rounded-md justify-center bg-brand-orange px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-gray-300"
-						hx-post={ string(templ.URL(fmt.Sprintf("/volunteer/myorders/%d/completed", order.OrderID))) }
+						hx-post={ lib.GetSafeIdUrl("/volunteer/myorders/%d/completed", order.OrderID) }
 						hx-target={ fmt.Sprintf("#order-card-%d", order.OrderID) }
 						hx-swap="outerHTML"
 					>

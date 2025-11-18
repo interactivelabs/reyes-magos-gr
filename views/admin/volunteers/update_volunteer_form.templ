@@ -2,6 +2,7 @@ package pages
 
 import (
 	"fmt"
+	"reyes-magos-gr/lib"
 	"reyes-magos-gr/store/models"
 	"reyes-magos-gr/views/components"
 )
@@ -11,7 +12,7 @@ templ UpdateVolunteerForm(volunteer models.Volunteer) {
 		<form
 			id="volunteer-update-form"
 			class="pt-8"
-			hx-put={ string(templ.URL(fmt.Sprintf("/admin/volunteers/%d/save", volunteer.VolunteerID))) }
+			hx-put={ lib.GetSafeIdUrl("/admin/volunteers/%d/save", volunteer.VolunteerID) }
 			hx-target={ fmt.Sprintf("#admin-volunteer-row-%d", volunteer.VolunteerID) }
 			hx-swap="outerHTML"
 			x-on:htmx:after-on-load="modalOpen = false"

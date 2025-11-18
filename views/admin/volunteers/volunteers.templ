@@ -69,7 +69,7 @@ templ AdminVolunteers(groupedVolunteers map[string][]models.Volunteer) {
 					<button
 						type="button"
 						class={ components.BrandPrimaryButton }
-						hx-get="/admin/volunteers/create"
+						hx-get={ string(templ.URL("/admin/volunteers/create")) }
 						hx-target="#volunteer-dialog-container"
 						hx-swap="innerHTML"
 						x-on:htmx:after-swap.window="modalOpen = true"
