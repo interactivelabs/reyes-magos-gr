@@ -19,7 +19,7 @@ type App struct {
 }
 
 func NewApp(db *sql.DB) *App {
-	cartsRepository := store.NewCartsStore(db)
+	cartsStore := store.NewCartsStore(db)
 	codesStore := store.NewCodesStore(db)
 	ordersStore := store.NewOrdersStore(db)
 	toysRepository := store.NewToysStore(db)
@@ -35,7 +35,7 @@ func NewApp(db *sql.DB) *App {
 	)
 
 	volunteersService := services.NewVolunteersService(
-		cartsRepository,
+		cartsStore,
 		codesStore,
 		ordersStore,
 		volunteersStore,
@@ -43,6 +43,7 @@ func NewApp(db *sql.DB) *App {
 	)
 
 	return &App{
+		CartsStore:          cartsStore,
 		CodesStore:          codesStore,
 		OrdersStore:         ordersStore,
 		ToysStore:           toysRepository,
