@@ -18,6 +18,7 @@ func NewCartsStore(db *sql.DB) *LibSQLCartsStore {
 type CartsStore interface {
 	GetCartToys(volunteerID int64) (cartItems []dtos.CartItem, err error)
 	CreateCartItem(item models.CartItem) (cartID int64, err error)
+	DeleteCartItem(cartId int64) (err error)
 }
 
 func (r LibSQLCartsStore) GetCartToys(volunteerID int64) (cartItems []dtos.CartItem, err error) {
@@ -63,6 +64,19 @@ func (r LibSQLCartsStore) CreateCartItem(item models.CartItem) (cartID int64, er
 		return 0, err
 	}
 	return res.LastInsertId()
+}
+
+func (r LibSQLCartsStore) DeleteCartItem(cartID int64) error {
+	queryStr, params, err := utils.BuildDeleteQuery(cartID, "carts", "cart_id")
+	if err != nil {
+		return err
+	}
+
+	_, err = utils.ExecuteMutationQuery(r.DB, queryStr, params...)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 const cartItemFields string = `

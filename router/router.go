@@ -107,9 +107,10 @@ func SetupRouter(
 	vg.GET("/myorders", myOrdersHandler.MyOrdersViewHandler)
 	vg.POST("/myorders/:order_id/completed", myOrdersHandler.MyOrdersCompleteHandler)
 
-	myCartHandler := volunteers.NewCartHandler(app.VolunteersService)
+	myCartHandler := volunteers.NewCartHandler(app.CartsStore, app.VolunteersService)
 	vg.GET("/mycart", myCartHandler.CartViewHandler)
 	vg.POST("/mycart", myCartHandler.CreateCartItemHandler)
+	vg.DELETE("/mycart/:card_id", myCartHandler.DeleteCartItemHandler)
 
 	// ADMIN ENDPOINTS
 	ag := e.Group("/admin")
