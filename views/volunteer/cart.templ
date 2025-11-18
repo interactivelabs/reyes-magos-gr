@@ -9,93 +9,89 @@ import (
 
 templ Cart(cartItems []dtos.CartItem, numCodes int) {
 	@VolunteerLayout() {
-		<main>
-			<div class="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
-				<h1 class="text-4xl font-extralight tracking-tight mb-20">Carrito</h1>
-				if len(cartItems) > 0 {
-					<form class="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
-						<section aria-labelledby="cart-heading" class="lg:col-span-7">
-							<h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
-							<ul role="list" class="divide-y divide-gray-200 border-t border-b border-gray-200">
-								for _, item := range cartItems {
-									<li
-										class="flex py-6 sm:py-10"
-										id={ fmt.Sprintf("volunteer-car-row-%d", item.CartID) }
-									>
-										<div class="shrink-0">
-											<img
-												src={ item.Image1 }
-												alt={ item.ToyName }
-												class="size-24 rounded-md object-cover sm:size-48"
-											/>
-										</div>
-										<div class="ml-4 flex flex-1 justify-between sm:ml-6">
-											<div class="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-												<div>
-													<div class="flex justify-between">
-														<h3 class="text-sm">
-															<a
-																href={ fmt.Sprintf("redeem/%d", item.ToyID) }
-																class="font-medium text-gray-700 hover:text-gray-800 line-clamp-5"
-															>{ item.ToyName }</a>
-														</h3>
-													</div>
-													<div class="mt-1 flex text-sm">
-														<p class="text-gray-500">{ item.Category }</p>
-													</div>
+		<main class="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
+			<h1 class="text-4xl font-extralight tracking-tight mb-20">Carrito</h1>
+			if len(cartItems) > 0 {
+				<form class="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
+					<section aria-labelledby="cart-heading" class="lg:col-span-7">
+						<h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
+						<ul role="list" class="divide-y divide-gray-200 border-t border-b border-gray-200">
+							for _, item := range cartItems {
+								<li
+									class="flex py-6 sm:py-10"
+									id={ fmt.Sprintf("volunteer-car-row-%d", item.CartID) }
+								>
+									<div class="shrink-0">
+										<img
+											src={ item.Image1 }
+											alt={ item.ToyName }
+											class="size-24 rounded-md object-cover sm:size-48"
+										/>
+									</div>
+									<div class="ml-4 flex flex-1 justify-between sm:ml-6">
+										<div class="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
+											<div>
+												<div class="flex justify-between">
+													<h3 class="text-sm">
+														<a
+															href={ fmt.Sprintf("redeem/%d", item.ToyID) }
+															class="font-medium text-gray-700 hover:text-gray-800 line-clamp-5"
+														>{ item.ToyName }</a>
+													</h3>
 												</div>
-											</div>
-											<div class="mt-4 sm:mt-0 text-center">
-												<div class="w-full">
-													<select
-														name="quantity"
-														aria-label="Quantity"
-														class="mt-2 sm:mt-0 rounded-md border-0 py-1.5 px-2 ring-1 ring-inset ring-gray-300"
-													>
-														for i := 1; i <= 10; i++ {
-															<option value={ fmt.Sprint(i) }>{ fmt.Sprint(i) }</option>
-														}
-													</select>
-													<a
-														type="button"
-														hx-params="none"
-														hx-delete={ lib.GetSafeIdUrl("/volunteer/mycart/%d", item.CartID) }
-														hx-target={ fmt.Sprintf("#volunteer-car-row-%d", item.CartID) }
-														class="underline cursor-pointer text-sm font-semibold leading-6 text-brand-orange"
-													>
-														Borar
-													</a>
+												<div class="mt-1 flex text-sm">
+													<p class="text-gray-500">{ item.Category }</p>
 												</div>
 											</div>
 										</div>
-									</li>
-								}
-							</ul>
-						</section>
-						<section
-							aria-labelledby="summary-heading"
-							class="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
-						>
-							<h2 id="summary-heading" class="text-lg font-medium text-gray-900">Detalles</h2>
-							<dl class="mt-6 space-y-4">
-								<div class="flex items-center justify-between">
-									<dt class="">Numero de Articulos</dt>
-									<dd class="font-medium text-gray-900">{ fmt.Sprint(len(cartItems)) }</dd>
-								</div>
-								<div class="flex items-center justify-between border-t border-gray-200 pt-4">
-									<dt class="">Numero de codigos disponibles</dt>
-									<dd class="font-medium text-gray-900">{ fmt.Sprint(numCodes) }</dd>
-								</div>
-							</dl>
-							<div class="mt-6">
-								<button type="submit" class={ components.BrandPrimaryButton + " w-full" }>Completar Orden</button>
+										<div class="mt-4 sm:mt-0 text-center">
+											<div class="w-full">
+												<select
+													name="quantity"
+													aria-label="Quantity"
+													class="mt-2 sm:mt-0 rounded-md border-0 py-1.5 px-2 ring-1 ring-inset ring-gray-300"
+												>
+													for i := 1; i <= 10; i++ {
+														<option value={ fmt.Sprint(i) }>{ fmt.Sprint(i) }</option>
+													}
+												</select>
+												<a
+													type="button"
+													hx-params="none"
+													hx-delete={ lib.GetSafeIdUrl("/volunteer/mycart/%d", item.CartID) }
+													hx-target={ fmt.Sprintf("#volunteer-car-row-%d", item.CartID) }
+													class="underline cursor-pointer text-sm font-semibold leading-6 text-brand-orange"
+												>Borar</a>
+											</div>
+										</div>
+									</div>
+								</li>
+							}
+						</ul>
+					</section>
+					<section
+						aria-labelledby="summary-heading"
+						class="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
+					>
+						<h2 id="summary-heading" class="text-lg font-medium text-gray-900">Detalles</h2>
+						<dl class="mt-6 space-y-4">
+							<div class="flex items-center justify-between">
+								<dt class="">Numero de Articulos</dt>
+								<dd class="font-medium text-gray-900">{ fmt.Sprint(len(cartItems)) }</dd>
 							</div>
-						</section>
-					</form>
-				} else {
-					<p class="text-center text-gray-500">Your cart is empty.</p>
-				}
-			</div>
+							<div class="flex items-center justify-between border-t border-gray-200 pt-4">
+								<dt class="">Numero de codigos disponibles</dt>
+								<dd class="font-medium text-gray-900">{ fmt.Sprint(numCodes) }</dd>
+							</div>
+						</dl>
+						<div class="mt-6">
+							<button type="submit" class={ components.BrandPrimaryButton + " w-full" }>Completar Orden</button>
+						</div>
+					</section>
+				</form>
+			} else {
+				<p class="text-center text-gray-500">Your cart is empty.</p>
+			}
 		</main>
 	}
 }
