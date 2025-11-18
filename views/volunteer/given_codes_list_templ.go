@@ -68,14 +68,14 @@ func GivenCodesList(codes []models.Code) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		for i, code := range codes {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<li class=\"flex items-center gap-3\"><span class=\"flex-shrink-0 w-6 h-6 flex items-center justify-center bg-gray-100 text-gray-600 text-xs font-medium rounded-full\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<li class=\"flex items-center gap-3\"><span class=\"shrink-0 w-6 h-6 flex items-center justify-center bg-gray-100 text-gray-600 text-xs font-medium rounded-full\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", i+1))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/given_codes_list.templ`, Line: 43, Col: 32}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/given_codes_list.templ`, Line: 41, Col: 32}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -88,7 +88,7 @@ func GivenCodesList(codes []models.Code) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(code.Code)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/given_codes_list.templ`, Line: 45, Col: 64}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/given_codes_list.templ`, Line: 43, Col: 64}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -101,7 +101,7 @@ func GivenCodesList(codes []models.Code) templ.Component {
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(lib.FormatDate(code.Expiration))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/given_codes_list.templ`, Line: 46, Col: 86}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/volunteer/given_codes_list.templ`, Line: 44, Col: 86}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -162,7 +162,7 @@ func GivenCodesList(codes []models.Code) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<span>Compartir Todos</span></button></div></div></div><div class=\"text-center\"><a href=\"/volunteer/mycodes\" class=\"inline-flex items-center gap-2 rounded-md bg-gray-100 px-6 py-3 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-200 transition-colors\">Volver a Mis Códigos</a></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<span>Compartir Todos</span></button></div></div></div><div class=\"text-center\"><a href=\"/volunteer/mycodes\" class=\"inline-flex items-center gap-2 rounded-md bg-gray-100 px-6 py-3 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-200 transition-colors\">Recargar mis codigos</a></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

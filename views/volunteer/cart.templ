@@ -2,11 +2,12 @@ package pages
 
 import (
 	"fmt"
+	"reyes-magos-gr/lib"
 	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/views/components"
 )
 
-templ Cart(cartItems []dtos.CartItem) {
+templ Cart(cartItems []dtos.CartItem, numCodes int) {
 	@VolunteerLayout() {
 		<main>
 			<div class="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -37,22 +38,22 @@ templ Cart(cartItems []dtos.CartItem) {
 											<div class="mt-4 sm:mt-0 text-center">
 												<div class="w-full">
 													<select
-														name="quantity-0"
+														name="quantity"
 														aria-label="Quantity"
 														class="mt-2 sm:mt-0 rounded-md border-0 py-1.5 px-2 ring-1 ring-inset ring-gray-300"
 													>
 														for i := 1; i <= 10; i++ {
-															// TODO: Handle quantity selection
-															if i == 1 {
-																<option value={ fmt.Sprint(i) } selected>{ fmt.Sprint(i) }</option>
-															} else {
-																<option value={ fmt.Sprint(i) }>{ fmt.Sprint(i) }</option>
-															}
+															<option value={ fmt.Sprint(i) }>{ fmt.Sprint(i) }</option>
 														}
 													</select>
-													<button type="button" class="ml-4 text-sm sm:mt-3 sm:ml-0 font-semibold leading-6 text-brand-orange underline ">
-														<span>Borar</span>
-													</button>
+													<a
+														type="button"
+														hx-params="none"
+														hx-delete={ lib.GetSafeIdUrl("/volunteer/mycart/%d", item.CartID) }
+														class="underline cursor-pointer text-sm font-semibold leading-6 text-brand-orange"
+													>
+														Borar
+													</a>
 												</div>
 											</div>
 										</div>
@@ -69,7 +70,7 @@ templ Cart(cartItems []dtos.CartItem) {
 								</div>
 								<div class="flex items-center justify-between border-t border-gray-200 pt-4">
 									<dt class="">Numero de codigos disponibles</dt>
-									<dd class="font-medium text-gray-900">0</dd>
+									<dd class="font-medium text-gray-900">{ fmt.Sprint(numCodes) }</dd>
 								</div>
 							</dl>
 							<div class="mt-6">

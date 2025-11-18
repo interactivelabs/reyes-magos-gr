@@ -33,7 +33,12 @@ func (h *CartHandler) CartViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, volunteer.Cart(cart))
+	codes, _, cerr := h.VolunteersService.GetVolunteerCodesByEmail(profile.Email)
+	if cerr != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, cerr.Error())
+	}
+
+	return lib.Render(ctx, volunteer.Cart(cart, len(codes)))
 }
 
 type CreateCartItemRequest struct {

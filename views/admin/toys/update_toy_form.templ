@@ -2,6 +2,7 @@ package pages
 
 import (
 	"fmt"
+	"reyes-magos-gr/lib"
 	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/models"
 	"reyes-magos-gr/views/components"
@@ -12,7 +13,7 @@ templ UpdateToyForm(toy models.Toy, categories []dtos.AutocompleteItem) {
 		<form
 			id="toy-update-form"
 			class="pt-8"
-			hx-put={ string(templ.URL(fmt.Sprintf("/admin/toys/%d/save", toy.ToyID))) }
+			hx-put={ lib.GetSafeIdUrl("/admin/toys/%d/save", toy.ToyID) }
 			hx-target={ fmt.Sprintf("#admin-toys-row-%d", toy.ToyID) }
 			hx-swap="outerHTML"
 			x-on:htmx:after-on-load="modalOpen = false"

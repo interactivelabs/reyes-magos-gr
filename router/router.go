@@ -101,6 +101,7 @@ func SetupRouter(
 	myCodesHandler := volunteers.NewMyCodesHandler(app.CodesStore, app.VolunteersService)
 	vg.GET("/mycodes", myCodesHandler.MyCodesViewHandler)
 	vg.POST("/mycodes/give/:code_id", myCodesHandler.GiveCode)
+	vg.POST("/mycodes/give_codes", myCodesHandler.GiveCodes)
 
 	myOrdersHandler := volunteers.NewMyOrdersHandler(app.OrdersStore, app.VolunteersService)
 	vg.GET("/myorders", myOrdersHandler.MyOrdersViewHandler)

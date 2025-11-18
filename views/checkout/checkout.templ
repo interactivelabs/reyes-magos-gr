@@ -13,7 +13,7 @@ import (
 templ RedeemToyForm(toyId int64, code string, errorMsg string) {
 	<form
 		class="mt-10"
-		hx-post="/orders/create"
+		hx-post={ string(templ.URL("/orders/create")) }
 		hx-on::before-request="beforeCheckoutHandler(event)"
 		hx-target="this"
 		hx-swap="outerHTML"
@@ -60,7 +60,7 @@ templ RedeemToyForm(toyId int64, code string, errorMsg string) {
 
 templ AddToCartButton(toyId int64) {
 	<form
-		hx-post="/volunteer/mycart"
+		hx-post={ string(templ.URL("/volunteer/mycart")) }
 		hx-target="this"
 		hx-swap="outerHTML"
 	>
