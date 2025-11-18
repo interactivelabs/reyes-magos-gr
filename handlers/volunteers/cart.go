@@ -4,17 +4,22 @@ import (
 	"net/http"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
+	"reyes-magos-gr/store"
 	volunteer "reyes-magos-gr/views/volunteer"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
 
 type CartHandler struct {
+	CartsStore        store.CartsStore
 	VolunteersService services.VolunteersService
 }
 
-func NewCartHandler(volunteersService services.VolunteersService) *CartHandler {
+func NewCartHandler(
+	cartsStore store.CartsStore, volunteersService services.VolunteersService) *CartHandler {
 	return &CartHandler{
+		CartsStore:        cartsStore,
 		VolunteersService: volunteersService,
 	}
 }
@@ -70,4 +75,19 @@ func (h *CartHandler) CreateCartItemHandler(ctx echo.Context) error {
 	}
 
 	return lib.Render(ctx, volunteer.CartItemCreated())
+}
+
+func (h *CartHandler) DeleteCartItemHandler(ctx echo.Context) error {
+	cartIdStr := ctx.Param("cart_id")
+	cartId, err := strconv.ParseInt(cartIdStr, 10, 64)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid Cart ID")
+	}
+
+	err = h.CartsStore.DeleteCartItem(cartId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return ctx.NoContent(http.StatusOK)
 }
