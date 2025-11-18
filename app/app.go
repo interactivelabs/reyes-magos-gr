@@ -29,6 +29,7 @@ func NewApp(db *sql.DB) *App {
 	codesService := services.NewCodesService(codesStore)
 
 	orderService := services.NewOrdersService(
+		cartsStore,
 		codesStore,
 		ordersStore,
 		volunteerCodesStore,

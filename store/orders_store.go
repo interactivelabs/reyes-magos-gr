@@ -16,6 +16,7 @@ func NewOrdersStore(db *sql.DB) *LibSQLOrdersStore {
 
 type OrdersStore interface {
 	CreateOrder(order models.Order) (id int64, err error)
+	CreateOrders(orders []models.Order) error
 	UpdateOrder(order models.Order) error
 	DeleteOrder(orderID int64) error
 	GetOrderByID(orderID int64) (order models.Order, err error)
@@ -35,6 +36,32 @@ func (r LibSQLOrdersStore) CreateOrder(order models.Order) (id int64, err error)
 		return 0, err
 	}
 	return res.LastInsertId()
+}
+
+func (r LibSQLOrdersStore) CreateOrders(orders []models.Order) error {
+	if len(orders) == 0 {
+		return nil
+	}
+
+	tx, err := r.DB.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	for _, order := range orders {
+		queryStr, params, err := utils.BuildInsertQuery(order, "orders")
+		if err != nil {
+			return err
+		}
+
+		_, err = tx.Exec(queryStr, params...)
+		if err != nil {
+			return err
+		}
+	}
+
+	return tx.Commit()
 }
 
 func (r LibSQLOrdersStore) UpdateOrder(order models.Order) error {
