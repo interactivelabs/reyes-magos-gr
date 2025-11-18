@@ -98,8 +98,8 @@ func (s *OrdersServiceApp) CreateOrders(
 	codesToUpdate := make([]models.Code, 0, totalCodesNeeded)
 	codeIndex := 0
 
-	for i := range cartIDs {
-		item, err := s.CartsStore.GetCartItemByID(cartIDs[i])
+	for i, cartID := range cartIDs {
+		item, err := s.CartsStore.GetCartItemByID(cartID)
 		if err != nil {
 			return err
 		}
