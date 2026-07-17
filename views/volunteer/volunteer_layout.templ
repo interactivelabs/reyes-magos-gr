@@ -9,7 +9,6 @@ import (
 templ VolunteerLayout() {
 	@layout.Base() {
 		{ children... }
-		<script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
 		<script type="module" src={ lib.GetAssetUrl("js/volunteer.js") } defer></script>
 		@components.Toasts()
 	}

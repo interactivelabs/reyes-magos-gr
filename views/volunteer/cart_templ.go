@@ -66,7 +66,7 @@ func Cart(cartItems []dtos.CartItem, numCodes int) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" hx-target=\"this\"><section aria-labelledby=\"cart-heading\" class=\"lg:col-span-7\"><h2 id=\"cart-heading\" class=\"sr-only\">Items in your shopping cart</h2><ul role=\"list\" class=\"divide-y divide-gray-200 border-t border-b border-gray-200\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" hx-target=\"closest\"><section aria-labelledby=\"cart-heading\" class=\"lg:col-span-7\"><h2 id=\"cart-heading\" class=\"sr-only\">Items in your shopping cart</h2><ul role=\"list\" class=\"divide-y divide-gray-200 border-t border-b border-gray-200\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

@@ -89,7 +89,6 @@ templ Catalog(
 			<h1 class="text-4xl font-extralight tracking-tight text-center mb-20">Escoje un regalo</h1>
 			<!-- Filters -->
 			<section
-				x-data="{ expanded: false }"
 				aria-labelledby="filter-heading"
 				class="grid items-center border-b border-t border-gray-200 mx-auto max-w-3xl lg:max-w-7xl lg:px-8 bg-white sticky top-0 z-10"
 			>
@@ -99,9 +98,8 @@ templ Catalog(
 						<div class="px-2 md:px-6">
 							<button
 								type="button"
-								aria-controls="filters-panel"
-								:aria-expanded="expanded"
-								@click="expanded = !expanded"
+								id="filters-btn"
+								popovertarget="filters-popover"
 								class="group flex items-center font-medium"
 							>
 								@svg.FilterEmpty("h-4 w-4 mr-4 fill-current")
@@ -114,7 +112,7 @@ templ Catalog(
 						<div class="px-2 md:px-6 flex-1 text-right">
 							<label for="page" class="text-sm">
 								<span class="inline-block mr-2 text-gray-500">Resultados:</span>
-								@LinksListboxSmall(fmt.Sprint(pageSize), fmt.Sprintf("%d Resultados por pagina", pageSize), fmt.Sprint(pageSize), pageSizeLinks)
+								@LinksListboxSmall("listbox-pagesize", fmt.Sprint(pageSize), fmt.Sprintf("%d Resultados por pagina", pageSize), fmt.Sprint(pageSize), pageSizeLinks)
 							</label>
 						</div>
 					</div>
@@ -134,45 +132,45 @@ templ Catalog(
 						</div>
 					</div>
 				}
-				<div id="filters-panel" class="border-t border-gray-200 py-8" x-show="expanded" x-collapse>
-					<form id="filters-form" onsubmit="event.preventDefault();updateFilters();">
-						<div class="mx-auto max-w-7xl gap-x-6 px-4 text-sm sm:flex sm:px-6 md:gap-x-8 lg:px-8">
-							<div class="w-full sm:w-auto">
-								<div class="space-y-6 mb-8 sm:space-y-4 relative">
-									<label for="age_min" class="block mb-2 font-bold">Edad Minima</label>
-									@AgeRangeFields("age_min", ageMin)
-								</div>
-								<div class="space-y-6 mb-8 sm:space-y-4 relative">
-									<label for="age_max" class="block mb-2 font-bold">Edad Maxima</label>
-									@AgeRangeFields("age_max", ageMax)
-								</div>
-							</div>
-							<div class="mt-12 sm:mt-0">
-								<legend class="block font-bold mb-6">Categorias</legend>
-								<div class="grid auto-rows-min grid-cols-1 gap-y-4 sm:grid-cols-2 md:grid-cols-3 md:gap-x-8 lg:grid-cols-4">
-									for i, category := range categories {
-										<div class="flex items-center text-base sm:text-sm">
-											<input
-												name="category[]"
-												type="checkbox"
-												value={ category }
-												id={ fmt.Sprintf("category-%d", i) }
-												class="h-4 w-4 shrink-0 rounded-sm border-gray-300 text-brand-orange focus:ring-brand-orange"
-											/>
-											<label for={ fmt.Sprintf("category-%d", i) } class="ml-3 min-w-0 flex-1 text-gray-600 cursor-pointer">
-												{ category }
-											</label>
-										</div>
-									}
-								</div>
-							</div>
-						</div>
-						<div class="text-right">
-							<button type="submit" class={ components.BrandPrimaryButton }>Aplicar Filtros</button>
-						</div>
-					</form>
-				</div>
 			</section>
+			<el-popover id="filters-popover" anchor="filters-btn" class="w-screen border-t border-b border-gray-200 bg-white shadow-lg py-8 px-4 sm:px-6 lg:px-8 inset-x-0 mt-0">
+				<form id="filters-form" onsubmit="event.preventDefault();updateFilters();">
+					<div class="mx-auto max-w-7xl gap-x-6 text-sm sm:flex md:gap-x-8">
+						<div class="w-full sm:w-auto">
+							<div class="space-y-6 mb-8 sm:space-y-4 relative">
+								<label for="age_min" class="block mb-2 font-bold">Edad Minima</label>
+								@AgeRangeFields("age_min", ageMin)
+							</div>
+							<div class="space-y-6 mb-8 sm:space-y-4 relative">
+								<label for="age_max" class="block mb-2 font-bold">Edad Maxima</label>
+								@AgeRangeFields("age_max", ageMax)
+							</div>
+						</div>
+						<div class="mt-12 sm:mt-0">
+							<legend class="block font-bold mb-6">Categorias</legend>
+							<div class="grid auto-rows-min grid-cols-1 gap-y-4 sm:grid-cols-2 md:grid-cols-3 md:gap-x-8 lg:grid-cols-4">
+								for i, category := range categories {
+									<div class="flex items-center text-base sm:text-sm">
+										<input
+											name="category[]"
+											type="checkbox"
+											value={ category }
+											id={ fmt.Sprintf("category-%d", i) }
+											class="h-4 w-4 shrink-0 rounded-sm border-gray-300 text-brand-orange focus:ring-brand-orange"
+										/>
+										<label for={ fmt.Sprintf("category-%d", i) } class="ml-3 min-w-0 flex-1 text-gray-600 cursor-pointer">
+											{ category }
+										</label>
+									</div>
+								}
+							</div>
+						</div>
+					</div>
+					<div class="text-right">
+						<button type="submit" class={ components.BrandPrimaryButton }>Aplicar Filtros</button>
+					</div>
+				</form>
+			</el-popover>
 			<div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
 				<!-- Catalog -->
 				if len(toys) == 0 {
@@ -239,7 +237,7 @@ templ Catalog(
 						}
 					</div>
 					<div class="flex mt-2 md:hidden">
-						@LinksListbox(fmt.Sprint(page), fmt.Sprintf("Pagina %d de %d", page, pages), fmt.Sprint(page), pageNumberlinks)
+						@LinksListbox("listbox-page", fmt.Sprint(page), fmt.Sprintf("Pagina %d de %d", page, pages), fmt.Sprint(page), pageNumberlinks)
 					</div>
 					<div class="-mt-px flex w-0 flex-1 justify-end">
 						if page < pages {

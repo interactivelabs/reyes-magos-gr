@@ -10,21 +10,15 @@ const ListBoxBtnClassBase = "flex items-center text-left shadow-xs rounded-md ri
 const ListBoxBtnClass = ListBoxBtnClassBase + " py-1.5 px-6 "
 const ListBoxBtnClassSmall = ListBoxBtnClassBase + " py-1 px-4 "
 
-templ OptionsList(selectedLink string, links []dtos.CatalogLink) {
-	<ul
-		class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden sm:text-sm"
+templ OptionsList(popoverID string, selectedLink string, links []dtos.CatalogLink) {
+	<el-popover
+		id={ popoverID }
+		anchor={ popoverID + "-btn" }
+		class="absolute z-10 mt-1 w-48 overflow-auto rounded-md bg-white py-2 text-base shadow-lg ring-1 ring-black/5 focus:outline-hidden sm:text-sm"
 		tabindex="-1"
 		role="listbox"
 		aria-labelledby="listbox-label"
 		aria-activedescendant={ fmt.Sprintf("listbox-option-%s", selectedLink) }
-		x-show="expandedPagesOptions"
-		x-transition:enter="ease-out duration-100"
-		x-transition:enter-start="opacity-0"
-		x-transition:enter-end="opacity-100"
-		x-transition:leave="ease-in duration-100"
-		x-transition:leave-start="opacity-100"
-		x-transition:leave-end="opacity-0"
-		@click.away="expandedPagesOptions = false"
 	>
 		for i, link := range links {
 			<li
@@ -41,39 +35,39 @@ templ OptionsList(selectedLink string, links []dtos.CatalogLink) {
 				</a>
 			</li>
 		}
-	</ul>
+	</el-popover>
 }
 
-templ LinksListbox(btnText string, btnLabel string, selectedLink string, links []dtos.CatalogLink) {
-	<div class="relative inline-block" x-data="{ expandedPagesOptions: false }" x-cloak>
+templ LinksListbox(popoverID string, btnText string, btnLabel string, selectedLink string, links []dtos.CatalogLink) {
+	<div class="relative inline-block">
 		<button
 			type="button"
+			id={ popoverID + "-btn" }
+			popovertarget={ popoverID }
 			class={ ListBoxBtnClass }
 			aria-haspopup="listbox"
-			:aria-expanded="expandedPagesOptions"
 			aria-label={ btnLabel }
-			@click="expandedPagesOptions = !expandedPagesOptions"
 		>
 			<span class="inline-block mr-1">{ btnText }</span>
 			@svg.ChevronDown("-mr-1 size-5 text-gray-400 fill-current")
 		</button>
-		@OptionsList(selectedLink, links)
+		@OptionsList(popoverID, selectedLink, links)
 	</div>
 }
 
-templ LinksListboxSmall(btnText string, btnLabel string, selectedLink string, links []dtos.CatalogLink) {
-	<div class="relative inline-block" x-data="{ expandedPagesOptions: false }" x-cloak>
+templ LinksListboxSmall(popoverID string, btnText string, btnLabel string, selectedLink string, links []dtos.CatalogLink) {
+	<div class="relative inline-block">
 		<button
 			type="button"
+			id={ popoverID + "-btn" }
+			popovertarget={ popoverID }
 			class={ ListBoxBtnClassSmall }
 			aria-haspopup="listbox"
-			:aria-expanded="expandedPagesOptions"
 			aria-label={ btnLabel }
-			@click="expandedPagesOptions = !expandedPagesOptions"
 		>
 			<span class="inline-block mr-1">{ btnText }</span>
 			@svg.ChevronDown("-mr-1 size-5 text-gray-400 fill-current")
 		</button>
-		@OptionsList(selectedLink, links)
+		@OptionsList(popoverID, selectedLink, links)
 	</div>
 }
