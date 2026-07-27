@@ -9,62 +9,31 @@ var variants = []string{"info", "success", "warning", "error"}
 
 templ Toasts() {
 	<div
-		x-data="toasts"
-		@notify.window="addNotification({
-			variant: $event.detail.variant,
-			title: $event.detail.title,
-			message: $event.detail.message,
-		})"
-	>
-		<div
-			x-on:mouseenter="$dispatch('pause-auto-dismiss')"
-			x-on:mouseleave="$dispatch('resume-auto-dismiss')"
-			class="group pointer-events-none fixed inset-x-8 top-0 z-99 flex max-w-full flex-col gap-2 bg-transparent px-6 py-6 md:right-0 md:left-[unset] md:max-w-sm"
-		>
-			<template
-				x-for="(notification, index) in notifications"
-				x-bind:key="notification.id"
-			>
-				<div>
-					for _, variant := range variants {
-						@ToastTemplate(variant)
-					}
-				</div>
-			</template>
-		</div>
-	</div>
+		id="toast-viewport"
+		class="group pointer-events-none fixed inset-x-8 top-0 z-99 flex max-w-full flex-col gap-2 bg-transparent px-6 py-6 md:right-0 md:left-[unset] md:max-w-sm"
+		aria-live="polite"
+		aria-atomic="false"
+	></div>
+	for _, variant := range variants {
+		@ToastTemplate(variant)
+	}
 }
 
 templ ToastTemplate(variant string) {
-	<template x-if={ fmt.Sprintf("notification.variant === '%s'", variant) }>
-		<div
-			x-data="{ isVisible: false, timeout: null }"
-			x-cloak
-			x-show="isVisible"
-			class={ getToastVariantClasses(variant)["container"] }
-			role="alert"
-			x-on:pause-auto-dismiss.window="clearTimeout(timeout)"
-			x-on:resume-auto-dismiss.window=" timeout = setTimeout(() => {(isVisible = false), removeNotification(notification.id) }, displayDuration)"
-			x-init="$nextTick(() => { isVisible = true }), (timeout = setTimeout(() => { isVisible = false, removeNotification(notification.id)}, displayDuration))"
-			x-transition:enter="transition duration-300 ease-out"
-			x-transition:enter-end="translate-y-0"
-			x-transition:enter-start="translate-y-8"
-			x-transition:leave="transition duration-300 ease-in"
-			x-transition:leave-end="-translate-x-24 opacity-0 md:translate-x-24"
-			x-transition:leave-start="translate-x-0 opacity-100"
-		>
-			<div class={ getToastVariantClasses(variant)["wrapper"] } x-trap="isVisible">
+	<template id={ fmt.Sprintf("toast-template-%s", variant) }>
+		<div class={ getToastVariantClasses(variant)["container"] } role="alert">
+			<div class={ getToastVariantClasses(variant)["wrapper"] }>
 				<!-- Icon -->
 				<div class={ getToastVariantClasses(variant)["icon"] } aria-hidden="true">
 					@svg.CheckCircle("h-4 w-4 ml-4 fill-current")
 				</div>
 				<!-- Title & Message -->
 				<div class="flex flex-col gap-2">
-					<h3 x-cloak x-show="notification.title" class={ getToastVariantClasses(variant)["title"] } x-text="notification.title"></h3>
-					<p x-cloak x-show="notification.message" class="text-pretty text-sm" x-text="notification.message"></p>
+					<h3 data-toast-title class={ getToastVariantClasses(variant)["title"] }></h3>
+					<p data-toast-message class="text-pretty text-sm"></p>
 				</div>
 				<!--Dismiss Button -->
-				<button type="button" class="ml-auto" aria-label="dismiss notification" x-on:click="(isVisible = false), removeNotification(notification.id)">
+				<button type="button" class="ml-auto" aria-label="dismiss notification" data-toast-dismiss>
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" class="size-5 shrink-0" aria-hidden="true">
 						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
 					</svg>

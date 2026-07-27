@@ -1,10 +1,3 @@
-/// <reference types="alpinejs" />
-import type { Alpine as AlpineType } from "alpinejs";
-
-declare global {
-  var Alpine: AlpineType;
-}
-
 import "./shared/htmxErrorHandler";
 
 import "./app/catalog";
