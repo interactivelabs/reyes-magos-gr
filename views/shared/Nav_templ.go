@@ -37,7 +37,7 @@ func Nav() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<header><nav class=\"border-b border-gray-200 bg-white\" x-data=\"{ openMenu: false }\"><div class=\"mx-auto max-w-7xl px-2 py-2 sm:px-6 lg:px-8\"><div class=\"relative flex h-16 justify-between\"><div class=\"absolute inset-y-0 left-0 flex items-center sm:hidden\"><!-- Mobile menu button --><button type=\"button\" id=\"mobile-menu-button\" aria-controls=\"mobile-menu\" aria-expanded=\"false\" class=\"relative inline-flex items-center justify-center rounded-md p-2 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-brand-orange\" @click=\"openMenu = !openMenu\"><span class=\"absolute -inset-0.5\"></span> <span class=\"sr-only\">Abrir menu</span> <svg id=\"mobile-menu-button-icon-closed\" class=\"block h-6 w-6\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" aria-hidden=\"true\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5\"></path></svg> <svg id=\"mobile-menu-button-icon-open\" class=\"hidden h-6 w-6\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" aria-hidden=\"true\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 18L18 6M6 6l12 12\"></path></svg></button></div><div class=\"flex flex-1 items-center justify-center sm:items-stretch sm:justify-start\"><div class=\"flex shrink-0 items-center\"><a href=\"/\"><img class=\"h-16 w-auto\" src=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<header><nav class=\"border-b border-gray-200 bg-white\"><div class=\"mx-auto max-w-7xl px-2 py-2 sm:px-6 lg:px-8\"><div class=\"relative flex h-16 justify-between\"><div class=\"absolute inset-y-0 left-0 flex items-center sm:hidden\"><!-- Mobile menu button --><button type=\"button\" id=\"mobile-menu-button\" popovertarget=\"mobile-menu-container\" aria-controls=\"mobile-menu-container\" aria-expanded=\"false\" class=\"relative inline-flex items-center justify-center rounded-md p-2 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-brand-orange\"><span class=\"absolute -inset-0.5\"></span> <span class=\"sr-only\">Abrir menu</span> <svg id=\"mobile-menu-button-icon-closed\" class=\"block h-6 w-6\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" aria-hidden=\"true\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5\"></path></svg> <svg id=\"mobile-menu-button-icon-open\" class=\"hidden h-6 w-6\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"1.5\" stroke=\"currentColor\" aria-hidden=\"true\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 18L18 6M6 6l12 12\"></path></svg></button></div><div class=\"flex flex-1 items-center justify-center sm:items-stretch sm:justify-start\"><div class=\"flex shrink-0 items-center\"><a href=\"/\"><img class=\"h-16 w-auto\" src=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -143,7 +143,7 @@ func Nav() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if lib.IsLoggedIn(ctx) {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<div class=\"absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0\"><!-- Profile dropdown --><div class=\"relative ml-3\" x-data=\"{ openAdmin: false }\"><button type=\"button\" id=\"admin-menu-button\" aria-expanded=\"false\" aria-haspopup=\"true\" @click=\"openAdmin = !openAdmin\" class=\"relative flex rounded-full bg-white text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-orange focus:ring-offset-2\"><span class=\"absolute -inset-1.5\"></span> <span class=\"sr-only\">Open admin menu</span> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<div class=\"absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0\"><!-- Profile dropdown --><div class=\"relative ml-3\"><button type=\"button\" id=\"admin-menu-button\" popovertarget=\"admin-menu-dropdown\" aria-expanded=\"false\" aria-haspopup=\"true\" class=\"relative flex rounded-full bg-white text-sm focus:outline-hidden focus:ring-2 focus:ring-brand-orange focus:ring-offset-2\"><span class=\"absolute -inset-1.5\"></span> <span class=\"sr-only\">Open admin menu</span> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -171,7 +171,7 @@ func Nav() templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</button> <el-popover id=\"desktop-menu-solutions\" anchor=\"bottom\" popover class=\"w-screen max-w-max overflow-visible bg-transparent px-4 transition transition-discrete [--anchor-gap:--spacing(5)] backdrop:bg-transparent open:flex data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in\"></el-popover><div role=\"menu\" tabindex=\"-1\" id=\"admin-menu-dropdown\" aria-orientation=\"vertical\" aria-labelledby=\"admin-menu-button\" class=\"absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg focus:outline-hidden\" x-cloak x-show=\"openAdmin\" x-transition:enter=\"transition ease-out duration-300\" x-transition:enter-start=\"opacity-0 translate-y-1\" x-transition:enter-end=\"opacity-100 translate-y-0\" x-transition:leave=\"transition ease-in duration-300\" x-transition:leave-start=\"opacity-100 translate-y-0\" x-transition:leave-end=\"opacity-0 translate-y-1\" @click.away=\"openAdmin = false\"><a href=\"/volunteer/mycodes\" class=\"block p-4 text-sm\" role=\"menuitem\">Mis Codigos</a> <a href=\"/volunteer/myorders\" class=\"block p-4 text-sm\" role=\"menuitem\">Mis Ordenes</a> <a href=\"/volunteer/mycart\" class=\"block p-4 text-sm\" role=\"menuitem\">Carrito</a> <a href=\"/logout\" class=\"block p-4 text-sm\" role=\"menuitem\">Salir</a> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</button> <el-popover id=\"admin-menu-dropdown\" anchor=\"bottom\" role=\"menu\" tabindex=\"-1\" aria-orientation=\"vertical\" aria-labelledby=\"admin-menu-button\" class=\"right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg focus:outline-hidden transition transition-discrete data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-300 data-leave:ease-in\"><a href=\"/volunteer/mycodes\" class=\"block p-4 text-sm\" role=\"menuitem\">Mis Codigos</a> <a href=\"/volunteer/myorders\" class=\"block p-4 text-sm\" role=\"menuitem\">Mis Ordenes</a> <a href=\"/volunteer/mycart\" class=\"block p-4 text-sm\" role=\"menuitem\">Carrito</a> <a href=\"/logout\" class=\"block p-4 text-sm\" role=\"menuitem\">Salir</a> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -181,12 +181,12 @@ func Nav() templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "</div></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "</el-popover></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</div></div><!-- Mobile menu, show/hide based on menu state. --><div role=\"menu\" id=\"mobile-menu-container\" class=\"shadow-md sm:hidden bg-white absolute w-full z-50\" x-cloak x-show=\"openMenu\" x-transition:enter=\"transition ease-out duration-500\" x-transition:enter-start=\"opacity-0 translate-y-1\" x-transition:enter-end=\"opacity-100 translate-y-0\" x-transition:leave=\"transition ease-in duration-300\" x-transition:leave-start=\"opacity-100 translate-y-0\" x-transition:leave-end=\"opacity-0 translate-y-1\" @click.away=\"openMenu = false\"><div class=\"space-y-1 pb-4 pt-2\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</div></div><!-- Mobile menu, toggled via popovertarget on mobile-menu-button. --><el-popover id=\"mobile-menu-container\" anchor=\"bottom\" role=\"menu\" class=\"!left-0 w-screen z-50 shadow-md sm:hidden bg-white transition transition-discrete data-closed:-translate-y-2 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-300 data-leave:ease-in\"><div class=\"space-y-1 pb-4 pt-2\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -274,7 +274,7 @@ func Nav() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "\">Catálogo</a></div></div></nav></header>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "\">Catálogo</a></div></el-popover></nav></header>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -39,7 +39,6 @@ templ VolunteerRow(volunteer models.Volunteer) {
 				hx-get={ lib.GetSafeIdUrl("/admin/volunteers/%d", volunteer.VolunteerID) }
 				hx-target="#volunteer-dialog-container"
 				hx-swap="innerHTML"
-				x-on:htmx:after-swap.window="modalOpen = true"
 			>
 				Edit
 			</button>
@@ -72,7 +71,6 @@ templ AdminVolunteers(groupedVolunteers map[string][]models.Volunteer) {
 						hx-get={ string(templ.URL("/admin/volunteers/create")) }
 						hx-target="#volunteer-dialog-container"
 						hx-swap="innerHTML"
-						x-on:htmx:after-swap.window="modalOpen = true"
 					>
 						Add Volunteer
 					</button>

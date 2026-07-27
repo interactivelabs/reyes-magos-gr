@@ -17,8 +17,6 @@ templ RedeemToyForm(toyId int64, code string, errorMsg string) {
 		hx-on::before-request="beforeCheckoutHandler(event)"
 		hx-target="this"
 		hx-swap="outerHTML"
-		x-data="codeForm"
-		@submit="submit"
 	>
 		<label class="text-lg leading-6 font-medium text-gray-900">Codigo</label>
 		<div class="mt-2">
@@ -28,12 +26,12 @@ templ RedeemToyForm(toyId int64, code string, errorMsg string) {
 				name="code"
 				pattern="[A-Z1-9]+"
 				class={ components.BaseInputStyles }
-				@blur="update"
+				onblur="onCodeInputBlur()"
 				required
 				value={ code }
 			/>
 			<input type="hidden" name="toy_id" value={ fmt.Sprint(toyId) }/>
-			<p class="mt-2 text-sm text-red-600" x-show="!valid">Un codigo valido es requerido (e.g. A1B2C3)</p>
+			<p class="mt-2 text-sm text-red-600 hidden" id="code-error">Un codigo valido es requerido (e.g. A1B2C3)</p>
 		</div>
 		if errorMsg != "" {
 			<div class="rounded-md drop-shadow-xs bg-red-50 p-4 mt-2">
@@ -87,11 +85,11 @@ templ Checkout(toy models.Toy, code string) {
 					</button>
 				</div>
 				<div class="lg:grid lg:auto-rows-min lg:grid-cols-2 lg:gap-x-8">
-					<div x-data={ fmt.Sprintf("{ selected: 1, src: '%s' }", toy.Image1) } class="mt-8 lg:col-start-1 lg:row-span-3 lg:row-start-1">
+					<div class="mt-8 lg:col-start-1 lg:row-span-3 lg:row-start-1">
 						<h3 class="sr-only">Images</h3>
 						<img
 							id="toy-image-0"
-							:src="src"
+							src={ toy.Image1 }
 							alt={ toy.ToyDescription }
 							class="max-h-[600px] m-auto"
 						/>
@@ -100,25 +98,22 @@ templ Checkout(toy models.Toy, code string) {
 								id="toy-image-1"
 								src={ toy.Image1 }
 								alt={ toy.ToyDescription }
-								class="rounded-lg cursor-pointer max-h-[150px]"
-								x-bind:class="{ 'border-4 border-brand-orange brightness-90': selected === 1 }"
-								@click={ fmt.Sprintf("selected = 1; src = '%s'", toy.Image1) }
+								class="rounded-lg cursor-pointer max-h-[150px] border-4 border-brand-orange brightness-90"
+								onclick="selectToyImage(this)"
 							/>
 							<img
 								id="toy-image-2"
 								src={ toy.Image2 }
 								alt={ toy.ToyDescription }
 								class="rounded-lg cursor-pointer max-h-[150px]"
-								x-bind:class="{ 'border-4 border-brand-orange brightness-90': selected === 2 }"
-								@click={ fmt.Sprintf("selected = 2, src = '%s'", toy.Image2) }
+								onclick="selectToyImage(this)"
 							/>
 							<img
 								id="toy-image-3"
 								src={ toy.Image3 }
 								alt={ toy.ToyDescription }
 								class="rounded-lg cursor-pointer max-h-[150px]"
-								x-bind:class="{ 'border-4 border-brand-orange brightness-90': selected === 3 }"
-								@click={ fmt.Sprintf("selected = 3, src = '%s'", toy.Image3) }
+								onclick="selectToyImage(this)"
 							/>
 						</div>
 					</div>

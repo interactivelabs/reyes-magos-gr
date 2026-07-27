@@ -25,7 +25,6 @@ templ ToyRow(toy models.Toy) {
 				class={ components.BaseSecondaryButton + " w-full" }
 				hx-get={ lib.GetSafeIdUrl("/admin/toys/%d", toy.ToyID) }
 				hx-target="#toys-dialog-container"
-				x-on:htmx:after-swap.window="modalOpen = true"
 			>
 				Edit
 			</button>

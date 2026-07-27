@@ -15,7 +15,6 @@ templ UpdateVolunteerForm(volunteer models.Volunteer) {
 			hx-put={ lib.GetSafeIdUrl("/admin/volunteers/%d/save", volunteer.VolunteerID) }
 			hx-target={ fmt.Sprintf("#admin-volunteer-row-%d", volunteer.VolunteerID) }
 			hx-swap="outerHTML"
-			x-on:htmx:after-on-load="modalOpen = false"
 		>
 			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
 				@VolunteerForm(volunteer)

@@ -172,33 +172,38 @@ if (typeof gsap !== "undefined") {
 function validateCodeInput() {
   const codeInput = document.getElementById("code");
   const code = codeInput.value.toUpperCase().trim();
+  codeInput.value = code;
   return code.length > 5;
 }
+function toggleCodeError(valid) {
+  const errorMsg = document.getElementById("code-error");
+  errorMsg.classList.toggle("hidden", valid);
+}
 function beforeCheckoutHandler(evt) {
-  if (!validateCodeInput()) {
+  const valid = validateCodeInput();
+  toggleCodeError(valid);
+  if (!valid) {
     evt.preventDefault();
   }
 }
-document.addEventListener("alpine:init", () => {
-  Alpine.data("codeForm", () => ({
-    valid: true,
-    init() {
-      this.valid = true;
-    },
-    submit(evt) {
-      this.valid = validateCodeInput();
-      evt.preventDefault();
-      evt.stopPropagation();
-    },
-    update() {
-      const codeInput = document.getElementById("code");
-      const code = codeInput.value.toUpperCase().trim();
-      codeInput.value = code;
-      if (code.length > 5) {
-        this.valid = true;
-      }
-    }
-  }));
-});
+globalThis.onCodeInputBlur = () => {
+  if (validateCodeInput()) {
+    toggleCodeError(true);
+  }
+};
 globalThis.beforeCheckoutHandler = beforeCheckoutHandler;
+var SELECTED_THUMBNAIL_CLASSES = [
+  "border-4",
+  "border-brand-orange",
+  "brightness-90"
+];
+globalThis.selectToyImage = (thumbnail) => {
+  const mainImage = document.getElementById("toy-image-0");
+  mainImage.src = thumbnail.src;
+  const thumbnails = thumbnail.parentElement?.children ?? [];
+  for (const el of Array.from(thumbnails)) {
+    el.classList.remove(...SELECTED_THUMBNAIL_CLASSES);
+  }
+  thumbnail.classList.add(...SELECTED_THUMBNAIL_CLASSES);
+};
 //# sourceMappingURL=app.js.map

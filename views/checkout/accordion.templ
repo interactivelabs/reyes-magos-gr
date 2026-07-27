@@ -1,7 +1,5 @@
 package pages
 
-import "fmt"
-
 templ Accordion() {
 	<div class="relative w-full">
 		{ children... }
@@ -9,27 +7,16 @@ templ Accordion() {
 }
 
 templ AccordionRow(title string, expanded bool) {
-	<div x-data={ fmt.Sprintf("{ isExpanded: %t }", expanded) } class="duration-200 ease-out cursor-pointer group border-b" x-cloak>
-		<button
-			@click="isExpanded = ! isExpanded"
-			aria-controls="accordionItem"
-			:aria-expanded="isExpanded ? 'true' : 'false'"
-			class="flex items-center justify-between w-full py-4 text-left select-none font-extralight text-lg"
-		>
+	<details class="group border-b" open?={ expanded }>
+		<summary class="flex items-center justify-between w-full py-4 cursor-pointer select-none font-extralight text-lg list-none [&::-webkit-details-marker]:hidden">
 			<span>{ title }</span>
-			<div
-				:class="{ 'rotate-90': isExpanded }"
-				class="relative flex items-center justify-center w-2.5 h-2.5 duration-300 ease-out"
-			>
+			<div class="relative flex items-center justify-center w-2.5 h-2.5 duration-300 ease-out group-open:rotate-90">
 				<div class="absolute w-0.5 h-full bg-neutral-500 group-hover:bg-neutral-800 rounded-full"></div>
-				<div
-					:class="{ 'rotate-90': isExpanded }"
-					class="absolute w-full h-0.5 ease duration-300 bg-neutral-500 group-hover:bg-neutral-800 rounded-full"
-				></div>
+				<div class="absolute w-full h-0.5 ease duration-300 bg-neutral-500 group-hover:bg-neutral-800 rounded-full group-open:rotate-90"></div>
 			</div>
-		</button>
-		<div x-show="isExpanded" x-collapse x-cloak class="pb-4">
+		</summary>
+		<div class="pb-4 group-open:motion-preset-slide-down group-open:motion-duration-300">
 			{ children... }
 		</div>
-	</div>
+	</details>
 }
