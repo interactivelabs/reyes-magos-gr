@@ -13,6 +13,38 @@
   --color-brand-purple-light: #9e78b3;
   --color-brand-purple-dark: #501c6c;
   --color-brand-blue: #2a3245;
+
+  /*
+   * D&L Toys Design Spec — "soft & hopeful" direction.
+   * Source: docs/DL Toys Design Spec.dc.html
+   * Additive tokens for the phased migration — the brand-* tokens above stay
+   * in place until every view using them has been moved over.
+   */
+  --font-heading: Quicksand, ui-sans-serif, system-ui, sans-serif;
+
+  --color-primary: #e8926a;
+  --color-primary-shadow: #b8623f;
+  --color-secondary: #9b85c4;
+  --color-secondary-shadow: #6b5599;
+  --color-accent: #c96a3e;
+  --color-ink: #4a3f4d;
+  --color-muted: #8d7f91;
+  --color-background: #fbf7fb;
+  --color-surface: #ffffff;
+  --color-border: #ece3ef;
+  --color-chip: #f4ecf6;
+  --color-disabled: #e5dde8;
+  --color-disabled-text: #b3a7b8;
+
+  --radius-chip: 12px;
+  --radius-input: 14px;
+  --radius-button: 16px;
+  --radius-image: 20px;
+  --radius-pill: 9999px;
+
+  --shadow-primary: 0 4px 0 var(--color-primary-shadow);
+  --shadow-secondary: 0 4px 0 var(--color-secondary-shadow);
+  --shadow-focus: 0 0 0 4px rgb(232 146 106 / 0.2);
 }
 
 @layer base {
