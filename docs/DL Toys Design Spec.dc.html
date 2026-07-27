@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>doc-page:not(:defined){visibility:hidden}</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Cabin:wght@400;500;600;700&family=Indie+Flower&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="./doc-page.js"></script>
+  <style>
+    .spec-body { font-family:'Cabin',sans-serif; color:#3a2e37; font-size:14px; line-height:1.6; }
+    .spec-body h1 { font-family:'Quicksand',sans-serif; font-size:34px; font-weight:700; color:#4a3f4d; margin:0 0 4px; }
+    .spec-body h2 { font-family:'Quicksand',sans-serif; font-size:22px; font-weight:700; color:#4a3f4d; margin:48px 0 4px; border-bottom:2px solid #ece3ef; padding-bottom:8px; }
+    .spec-body h3 { font-family:'Quicksand',sans-serif; font-size:16px; font-weight:600; color:#4a3f4d; margin:24px 0 8px; }
+    .spec-body p { margin:0 0 10px; }
+    .spec-sub { color:#8d7f91; font-size:14px; margin:0 0 24px; }
+    table.spec-table { width:100%; border-collapse:collapse; font-size:13px; margin:12px 0 20px; break-inside:avoid; }
+    table.spec-table th { text-align:left; background:#f4ecf6; padding:8px 10px; font-family:'Quicksand',sans-serif; font-weight:700; color:#4a3f4d; }
+    table.spec-table td { padding:8px 10px; border-bottom:1px solid #ece3ef; vertical-align:top; }
+    .mono { font-family:'JetBrains Mono',monospace; font-size:12px; }
+    .swatch-grid { display:flex; gap:16px; flex-wrap:wrap; margin:12px 0 20px; break-inside:avoid; }
+    .swatch { width:150px; break-inside:avoid; }
+    .swatch-chip { height:70px; border-radius:12px; margin-bottom:8px; }
+    .swatch-name { font-weight:600; font-size:12px; }
+    .swatch-hex { font-family:'JetBrains Mono',monospace; font-size:11px; color:#8d7f91; }
+    .type-row { display:flex; align-items:baseline; gap:16px; margin:14px 0; break-inside:avoid; }
+    .type-label { width:170px; flex-shrink:0; font-size:11px; color:#8d7f91; font-family:'JetBrains Mono',monospace; }
+    code.tok { background:#f4ecf6; padding:2px 6px; border-radius:4px; font-family:'JetBrains Mono',monospace; font-size:12px; }
+    pre.tok-block { background:#2c2632; color:#eee6f2; padding:18px 20px; border-radius:12px; font-family:'JetBrains Mono',monospace; font-size:12px; line-height:1.7; overflow-x:auto; break-inside:avoid; }
+    .spec-btn-primary { border:none; background:#e8926a; color:#fff; padding:14px 26px; border-radius:16px; font-weight:700; font-size:14px; font-family:'Quicksand',sans-serif; cursor:pointer; box-shadow:0 4px 0 #b8623f; }
+    .spec-btn-secondary { border:none; background:#9b85c4; color:#fff; padding:14px 24px; border-radius:16px; font-weight:700; font-size:14px; font-family:'Quicksand',sans-serif; cursor:pointer; box-shadow:0 4px 0 #6b5599; }
+    .spec-btn-outline { border:2px solid #e8926a; background:none; color:#c96a3e; padding:12px 24px; border-radius:16px; font-weight:700; font-size:14px; font-family:'Quicksand',sans-serif; cursor:pointer; }
+    .spec-btn-disabled { border:none; background:#e5dde8; color:#b3a7b8; padding:14px 26px; border-radius:16px; font-weight:700; font-size:14px; font-family:'Quicksand',sans-serif; }
+    .spec-input { border-radius:14px; border:1px solid #ece3ef; padding:12px 16px; font-size:14px; font-family:'Cabin',sans-serif; width:220px; }
+    .spec-input-focus { border-radius:14px; border:1px solid #e8926a; box-shadow:0 0 0 4px rgba(232,146,106,0.2); padding:12px 16px; font-size:14px; font-family:'Cabin',sans-serif; width:220px; }
+    .spec-chip { display:inline-flex; align-items:center; gap:8px; background:#f4ecf6; border-radius:999px; padding:8px 16px; font-size:13px; }
+    .row-flex { display:flex; gap:20px; flex-wrap:wrap; align-items:center; margin:14px 0 20px; break-inside:avoid; }
+    .spacing-bar { background:#e8926a; height:14px; border-radius:4px; }
+    .radius-box { width:60px; height:60px; background:#f4ecf6; border:2px solid #9b85c4; }
+    ul.spec-list { margin:0 0 14px; padding-left:20px; }
+    ul.spec-list li { margin-bottom:4px; }
+  </style>
+</helmet>
+
+<doc-page margin="0.85in">
+<div class="spec-body">
+
+<h1>D&amp;L Toys — Design Spec</h1>
+<p class="spec-sub">Foundations for buttons, inputs, type, and color — the "soft &amp; hopeful" direction. For design + dev handoff.</p>
+
+<h2>1. Overview &amp; Tone</h2>
+<p>D&amp;L Toys distributes free toys to children via a volunteer network. The site's tone is <b>joyful, warm, and hopeful</b> — never corporate or transactional. Copy is written in Spanish, second person informal ("tu"), plainspoken and encouraging. No emoji; enthusiasm comes from copy and color, not decoration.</p>
+<ul class="spec-list">
+<li>Voice: warm, grateful, community-driven — volunteers and families are thanked often.</li>
+<li>Never salesy: this is a gift, not a purchase — avoid retail language ("comprar", "precio"). Use "recibir", "regalo", "ordernar".</li>
+</ul>
+
+<h2>2. Color Palette</h2>
+<p>A peach + lavender pastel pair, warmer and softer than the prior orange/purple/blue brand set. Each color has a matching darker "shadow" shade used under buttons (see §4).</p>
+
+<div class="swatch-grid">
+<div class="swatch"><div class="swatch-chip" style="background:#e8926a"></div><div class="swatch-name">Primary — Peach</div><div class="swatch-hex">#e8926a</div></div>
+<div class="swatch"><div class="swatch-chip" style="background:#b8623f"></div><div class="swatch-name">Primary Shadow</div><div class="swatch-hex">#b8623f</div></div>
+<div class="swatch"><div class="swatch-chip" style="background:#9b85c4"></div><div class="swatch-name">Secondary — Lavender</div><div class="swatch-hex">#9b85c4</div></div>
+<div class="swatch"><div class="swatch-chip" style="background:#6b5599"></div><div class="swatch-name">Secondary Shadow</div><div class="swatch-hex">#6b5599</div></div>
+<div class="swatch"><div class="swatch-chip" style="background:#c96a3e"></div><div class="swatch-name">Accent Text (links)</div><div class="swatch-hex">#c96a3e</div></div>
+<div class="swatch"><div class="swatch-chip" style="background:#4a3f4d"></div><div class="swatch-name">Ink (text)</div><div class="swatch-hex">#4a3f4d</div></div>
+<div class="swatch"><div class="swatch-chip" style="background:#8d7f91"></div><div class="swatch-name">Muted text</div><div class="swatch-hex">#8d7f91</div></div>
+<div class="swatch"><div class="swatch-chip" style="background:#fbf7fb; border:1px solid #ece3ef"></div><div class="swatch-name">Background</div><div class="swatch-hex">#fbf7fb</div></div>
+<div class="swatch"><div class="swatch-chip" style="background:#ffffff; border:1px solid #ece3ef"></div><div class="swatch-name">Surface (cards/header)</div><div class="swatch-hex">#ffffff</div></div>
+<div class="swatch"><div class="swatch-chip" style="background:#ece3ef"></div><div class="swatch-name">Border / hairline</div><div class="swatch-hex">#ece3ef</div></div>
+<div class="swatch"><div class="swatch-chip" style="background:#f4ecf6"></div><div class="swatch-name">Chip / subtle fill</div><div class="swatch-hex">#f4ecf6</div></div>
+</div>
+<p class="spec-sub" style="margin-top:-8px">Usage: Peach = primary actions ("Recibe un regalo", "Ordernar Regalo"). Lavender = secondary actions ("Ver como", back button, floating "Arriba" button). Never place peach text on a peach button — always white.</p>
+
+<h2>3. Typography</h2>
+<div class="type-row"><div class="type-label">Display / Headings</div><div style="font-family:'Quicksand',sans-serif; font-weight:700; font-size:26px;">Quicksand — rounded, friendly geometric sans</div></div>
+<div class="type-row"><div class="type-label">Body</div><div style="font-family:'Cabin',sans-serif; font-size:18px;">Cabin — warm humanist sans, used for all paragraph copy</div></div>
+<div class="type-row"><div class="type-label">Decorative accent</div><div style="font-family:'Indie Flower',cursive; font-size:22px;">Indie Flower — hero quote only, used sparingly</div></div>
+
+<table class="spec-table">
+<tr><th>Role</th><th>Font / Weight</th><th>Size</th><th>Line-height</th></tr>
+<tr><td>H1 (page title)</td><td>Quicksand 700</td><td>40px</td><td>1.2</td></tr>
+<tr><td>H2 (section)</td><td>Quicksand 700</td><td>32px</td><td>1.2</td></tr>
+<tr><td>H3 (card/toy title)</td><td>Quicksand 600–700</td><td>18–22px</td><td>1.3</td></tr>
+<tr><td>Body</td><td>Cabin 400</td><td>16–18px</td><td>1.6</td></tr>
+<tr><td>Small / label</td><td>Cabin 600</td><td>12–13px</td><td>1.4</td></tr>
+<tr><td>Nav link</td><td>Cabin 600, uppercase, 0.04em tracking</td><td>13px</td><td>1</td></tr>
+<tr><td>Hero quote</td><td>Indie Flower 400</td><td>32px</td><td>1.3</td></tr>
+</table>
+
+<h2>4. Buttons</h2>
+<p>Signature style: solid fill, fully-committed <b>shadow-pop</b> — a flat 4px offset "shadow" beneath each button (no blur) that reads as a pressable, playful surface. Radius 16px. No hover-lift animation defined yet — flag for dev to add a 1–2px press-down-on-click if desired.</p>
+
+<div class="row-flex">
+<button class="spec-btn-primary">Recibe un regalo</button>
+<button class="spec-btn-secondary">Ver como →</button>
+<button class="spec-btn-outline">Aplicar Filtros</button>
+<button class="spec-btn-disabled">No disponible</button>
+</div>
+
+<table class="spec-table">
+<tr><th>Variant</th><th>Background</th><th>Text</th><th>Shadow</th><th>Radius</th><th>Padding</th><th>Use for</th></tr>
+<tr><td>Primary</td><td class="mono">#e8926a</td><td>#fff</td><td class="mono">0 4px 0 #b8623f</td><td>16px</td><td>14px 26px</td><td>Main CTA — one per view</td></tr>
+<tr><td>Secondary</td><td class="mono">#9b85c4</td><td>#fff</td><td class="mono">0 4px 0 #6b5599</td><td>16px</td><td>14px 24px</td><td>Supporting action</td></tr>
+<tr><td>Outline</td><td>transparent</td><td class="mono">#c96a3e</td><td>none</td><td>16px</td><td>12px 24px</td><td>Low-emphasis / form submit inside a light card</td></tr>
+<tr><td>Disabled</td><td class="mono">#e5dde8</td><td class="mono">#b3a7b8</td><td>none</td><td>16px</td><td>14px 26px</td><td>Unavailable action</td></tr>
+</table>
+<p>Font: Quicksand 700, 14px, no uppercase transform. Cursor pointer. Icon-only buttons (e.g. floating "Arriba") use the same shadow-pop treatment at a smaller square footprint.</p>
+
+<h2>5. Inputs &amp; Form Controls</h2>
+<div class="row-flex">
+<div><div class="spec-sub" style="margin-bottom:6px">Default</div><input class="spec-input" placeholder="A1B2C3"/></div>
+<div><div class="spec-sub" style="margin-bottom:6px">Focus</div><input class="spec-input-focus" placeholder="A1B2C3"/></div>
+<div><div class="spec-sub" style="margin-bottom:6px">Category chip</div><label class="spec-chip"><input type="checkbox" style="accent-color:#e8926a"/>Bloques</label></div>
+</div>
+<table class="spec-table">
+<tr><th>Property</th><th>Value</th></tr>
+<tr><td>Border radius</td><td>14px</td></tr>
+<tr><td>Border (default)</td><td class="mono">1px solid #ece3ef</td></tr>
+<tr><td>Border (focus)</td><td class="mono">1px solid #e8926a</td></tr>
+<tr><td>Focus glow</td><td class="mono">box-shadow: 0 0 0 4px rgba(232,146,106,0.2)</td></tr>
+<tr><td>Padding</td><td>12px 16px</td></tr>
+<tr><td>Font</td><td>Cabin 400, 14–15px</td></tr>
+<tr><td>Checkbox / range accent</td><td class="mono">accent-color: #e8926a</td></tr>
+</table>
+<p>Range sliders (age filter) use native <span class="mono">input[type=range]</span> with the peach accent color — no custom track/thumb graphics needed. Checkboxes are wrapped in pill-shaped "chips" (background <span class="mono">#f4ecf6</span>, radius 999px) rather than shown bare.</p>
+
+<h2>6. Spacing &amp; Radius Scale</h2>
+<div class="row-flex" style="align-items:flex-end;">
+<div><div class="spacing-bar" style="width:4px"></div><div class="spec-sub">4</div></div>
+<div><div class="spacing-bar" style="width:8px"></div><div class="spec-sub">8</div></div>
+<div><div class="spacing-bar" style="width:16px"></div><div class="spec-sub">16</div></div>
+<div><div class="spacing-bar" style="width:24px"></div><div class="spec-sub">24</div></div>
+<div><div class="spacing-bar" style="width:32px"></div><div class="spec-sub">32</div></div>
+<div><div class="spacing-bar" style="width:48px"></div><div class="spec-sub">48</div></div>
+<div><div class="spacing-bar" style="width:96px"></div><div class="spec-sub">96</div></div>
+</div>
+<div class="row-flex">
+<div><div class="radius-box" style="border-radius:0"></div><div class="spec-sub">0 — none</div></div>
+<div><div class="radius-box" style="border-radius:12px"></div><div class="spec-sub">12 — chips/cards</div></div>
+<div><div class="radius-box" style="border-radius:14px"></div><div class="spec-sub">14 — inputs</div></div>
+<div><div class="radius-box" style="border-radius:16px"></div><div class="spec-sub">16 — buttons</div></div>
+<div><div class="radius-box" style="border-radius:20px"></div><div class="spec-sub">20 — image frames</div></div>
+<div><div class="radius-box" style="border-radius:999px"></div><div class="spec-sub">999 — pills</div></div>
+</div>
+
+<h2>7. Iconography</h2>
+<p>Simple 1.5–2px stroke line icons (chevrons, arrows, filter, lock, back-arrow), rendered inline as SVG at 14–18px, colored via <span class="mono">currentColor</span>/fill to match surrounding text. No icon font or emoji in use. Decorative step illustrations (gift-code, shop, open-gift on the homepage) are original hand-drawn line art from the current site — keep those as-is; only UI icons follow this spec.</p>
+
+<h2>8. Assets</h2>
+<table class="spec-table">
+<tr><th>Asset</th><th>File</th><th>Notes</th></tr>
+<tr><td>Logo</td><td class="mono">logo01_sm.webp</td><td>56px tall in header, left-aligned</td></tr>
+<tr><td>Hero photo</td><td class="mono">hero_v5.webp</td><td>Full-bleed background, object-fit: cover</td></tr>
+<tr><td>"Porque?" photo</td><td class="mono">gift_wrap_md.webp</td><td>Paired 2-col with copy, left radius 20px</td></tr>
+<tr><td>Toy product photos</td><td>—</td><td>Not yet supplied; catalog/redeem screens use square image placeholders (1:1) pending real photography</td></tr>
+</table>
+
+<h2>9. Dev Tokens (CSS custom properties)</h2>
+<pre class="tok-block">:root {
+  /* color */
+  --color-primary: #e8926a;
+  --color-primary-shadow: #b8623f;
+  --color-secondary: #9b85c4;
+  --color-secondary-shadow: #6b5599;
+  --color-accent-text: #c96a3e;
+  --color-ink: #4a3f4d;
+  --color-muted: #8d7f91;
+  --color-bg: #fbf7fb;
+  --color-surface: #ffffff;
+  --color-border: #ece3ef;
+  --color-chip: #f4ecf6;
+
+  /* type */
+  --font-display: 'Quicksand', sans-serif;
+  --font-body: 'Cabin', sans-serif;
+  --font-accent: 'Indie Flower', cursive;
+
+  /* radius */
+  --radius-chip: 12px;
+  --radius-input: 14px;
+  --radius-button: 16px;
+  --radius-image: 20px;
+  --radius-pill: 999px;
+
+  /* button shadow-pop */
+  --shadow-primary: 0 4px 0 var(--color-primary-shadow);
+  --shadow-secondary: 0 4px 0 var(--color-secondary-shadow);
+
+  /* focus glow */
+  --focus-glow: 0 0 0 4px rgba(232, 146, 106, 0.2);
+}</pre>
+
+<h2>10. Open Questions for the Team</h2>
+<ul class="spec-list">
+<li>Should buttons get a pressed-state animation (translate-y + shadow shrink) on click?</li>
+<li>Real toy product photography is still needed for Catalog + Redeem screens.</li>
+<li>Confirm whether the three hand-drawn step illustrations on Home should be restyled to match this palette in a future pass, or stay as-is.</li>
+</ul>
+
+</div>
+</doc-page>
+
+</x-dc>
+</body>
+</html>
