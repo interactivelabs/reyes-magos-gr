@@ -35,20 +35,22 @@ func getRedeemToyLink(toyID int64, code string) string {
 }
 
 templ AgeRangeFields(name string, value int64) {
-	<input
-		min="1"
-		max="16"
-		type="range"
-		id={ name }
-		name={ name }
-		value={ fmt.Sprint(value) }
-		class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointe"
-	/>
-	<span class={ RangeBaseStyles + " start-0" }>1</span>
-	<span class={ RangeBaseStyles + " start-1/4 -translate-x-1/2 rtl:translate-x-1/2" }>4</span>
-	<span class={ RangeBaseStyles + " start-2/4 -translate-x-1/2 rtl:translate-x-1/2" }>8</span>
-	<span class={ RangeBaseStyles + " start-3/4 -translate-x-1/2 rtl:translate-x-1/2" }>12</span>
-	<span class={ RangeBaseStyles + " end-0" }>16</span>
+	<div class="relative">
+		<input
+			min="1"
+			max="16"
+			type="range"
+			id={ name }
+			name={ name }
+			value={ fmt.Sprint(value) }
+			class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointe"
+		/>
+		<span class={ RangeBaseStyles + " start-0" }>1</span>
+		<span class={ RangeBaseStyles + " start-1/4 -translate-x-1/2 rtl:translate-x-1/2" }>4</span>
+		<span class={ RangeBaseStyles + " start-2/4 -translate-x-1/2 rtl:translate-x-1/2" }>8</span>
+		<span class={ RangeBaseStyles + " start-3/4 -translate-x-1/2 rtl:translate-x-1/2" }>12</span>
+		<span class={ RangeBaseStyles + " end-0" }>16</span>
+	</div>
 }
 
 templ FilterPill(filter_label string, filter_value string) {
@@ -133,7 +135,11 @@ templ Catalog(
 					</div>
 				}
 			</section>
-			<el-popover id="filters-popover" anchor="filters-btn" class="w-screen border-t border-b border-gray-200 bg-white shadow-lg py-8 px-4 sm:px-6 lg:px-8 inset-x-0 mt-0">
+			<el-popover
+				id="filters-popover"
+				anchor="bottom"
+				class="!left-0 mt-0 w-screen border-t border-b border-gray-200 bg-white shadow-lg py-8 px-4 sm:px-6 lg:left-1/2! lg:w-full lg:max-w-7xl lg:-translate-x-1/2 lg:px-8 transition transition-discrete data-closed:-translate-y-2 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
+			>
 				<form id="filters-form" onsubmit="event.preventDefault();updateFilters();">
 					<div class="mx-auto max-w-7xl gap-x-6 text-sm sm:flex md:gap-x-8">
 						<div class="w-full sm:w-auto">
@@ -280,31 +286,19 @@ templ Catalog(
 			</div>
 			<!-- Back to top btn -->
 			<div
-				x-data="{ showBackToTop: false }"
-				@showbacktotopbtn.window="showBackToTop = true"
-				@hidebacktotopbtn.window="showBackToTop = false"
+				id="back-to-top-btn"
+				class="fixed bottom-6 right-2 md:right-6 z-10 opacity-0 pointer-events-none transition-opacity duration-200"
 			>
-				<div
-					x-show="showBackToTop"
-					x-transition:enter="ease-out duration-200"
-					x-transition:enter-start="opacity-0"
-					x-transition:enter-end="opacity-100"
-					x-transition:leave="ease-in duration-200"
-					x-transition:leave-start="opacity-100"
-					x-transition:leave-end="opacity-0"
-					class="fixed bottom-6 right-2 md:right-6 z-10"
+				<button
+					aria-hidden="true"
+					class="p-4 bg-brand-blue text-white rounded-md shadow-md font-extralight text-center text-xs flex flex-col justify-center items-center"
+					onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+					title="Arriba"
+					type="button"
 				>
-					<button
-						aria-hidden="true"
-						class="p-4 bg-brand-blue text-white rounded-md shadow-md font-extralight text-center text-xs flex flex-col justify-center items-center"
-						onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
-						title="Arriba"
-						type="button"
-					>
-						@svg.ArrowToTop("h-5 w-5 fill-current")
-						<span class="inline-block mt-1 tracking-widest">Arriba</span>
-					</button>
-				</div>
+					@svg.ArrowToTop("h-5 w-5 fill-current")
+					<span class="inline-block mt-1 tracking-widest">Arriba</span>
+				</button>
 			</div>
 		</main>
 	}

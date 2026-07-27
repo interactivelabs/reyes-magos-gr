@@ -103,15 +103,14 @@ globalThis.removeFilter = removeFilter;
 setUrlFilters();
 
 // Back to top button display
+const backToTopBtn = document.getElementById("back-to-top-btn");
+
 const handleBackToTopScroll = () => {
-  if (
-    document.body.scrollTop > 300 ||
-    document.documentElement.scrollTop > 300
-  ) {
-    window.dispatchEvent(new CustomEvent("showbacktotopbtn"));
-  } else {
-    window.dispatchEvent(new CustomEvent("hidebacktotopbtn"));
-  }
+  const isScrolled =
+    document.body.scrollTop > 300 || document.documentElement.scrollTop > 300;
+  backToTopBtn?.classList.toggle("opacity-0", !isScrolled);
+  backToTopBtn?.classList.toggle("pointer-events-none", !isScrolled);
+  backToTopBtn?.classList.toggle("opacity-100", isScrolled);
 };
 
 const scrollHandler = debounce(handleBackToTopScroll, 250);

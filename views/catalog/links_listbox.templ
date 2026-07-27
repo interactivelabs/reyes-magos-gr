@@ -13,7 +13,7 @@ const ListBoxBtnClassSmall = ListBoxBtnClassBase + " py-1 px-4 "
 templ OptionsList(popoverID string, selectedLink string, links []dtos.CatalogLink) {
 	<el-popover
 		id={ popoverID }
-		anchor={ popoverID + "-btn" }
+		anchor="bottom"
 		class="absolute z-10 mt-1 w-48 overflow-auto rounded-md bg-white py-2 text-base shadow-lg ring-1 ring-black/5 focus:outline-hidden sm:text-sm"
 		tabindex="-1"
 		role="listbox"
