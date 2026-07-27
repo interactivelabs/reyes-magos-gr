@@ -21,7 +21,7 @@ func HasOrderShipped(order models.Order) string {
 			return shipped
 		}
 	}
-	return "Not Shipped"
+	return "No se ha enviado!"
 }
 
 func OrderCard(order models.Order) templ.Component {

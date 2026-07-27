@@ -29,6 +29,22 @@ globalThis.orderCompletedToggleClick = (btn) => {
 };
 
 // assets/js/admin/toys_form.ts
+document.addEventListener(
+  "pointerdown",
+  (event) => {
+    const target = event.target;
+    if (target?.id === "category_search") {
+      event.stopPropagation();
+    }
+  },
+  true
+);
+document.addEventListener("change", (event) => {
+  const target = event.target;
+  if (target?.id === "category_search") {
+    globalThis.addCategory();
+  }
+});
 function getCategoryElements() {
   const input = document.getElementById("category_search");
   const hiddenInput = document.getElementById("category");
@@ -54,7 +70,10 @@ function createCategoryChip(category) {
       <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
     </svg>
   `;
-  removeButton.addEventListener("click", () => removeCategory(category));
+  removeButton.addEventListener(
+    "click",
+    () => globalThis.removeCategory(category)
+  );
   pill.append(label, removeButton);
   wrapper.append(pill);
   return wrapper;

@@ -16,30 +16,32 @@ func splitCategories(value string) []string {
 templ AutocompleteCategories(currentValue string, categories []dtos.AutocompleteItem) {
 	<div>
 		<label for="category_search" class={ components.BaseLabelStyles }>Categories</label>
-		<el-autocomplete class="relative mt-2 block">
-			<input
-				id="category_search"
-				name="category_search"
-				class={ components.BaseInputStyles }
-			/>
+		<div class="relative mt-2 block">
+			<el-autocomplete class="block">
+				<input
+					id="category_search"
+					name="category_search"
+					class={ components.BaseInputStyles }
+				/>
+				<el-options
+					popover
+					anchor="bottom end"
+					class="max-h-56 w-(--input-width) overflow-auto rounded-md bg-white py-1 text-base shadow-lg outline outline-black/5 transition-discrete [--anchor-gap:--spacing(1)] sm:text-sm dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10"
+				>
+					for _, c := range categories {
+						<el-option
+							value={ c.Value }
+							class="block px-3 py-2 text-gray-900 select-none aria-selected:bg-brand-orange aria-selected:text-white dark:text-gray-200 dark:aria-selected:bg-brand-orange"
+						>{ c.Label }</el-option>
+					}
+				</el-options>
+			</el-autocomplete>
 			<button
 				type="button"
 				class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-hidden"
 				onclick="addCategory()"
 			>Add</button>
-			<el-options
-				popover
-				anchor="bottom end"
-				class="max-h-56 w-(--input-width) overflow-auto rounded-md bg-white py-1 text-base shadow-lg outline outline-black/5 transition-discrete [--anchor-gap:--spacing(1)] sm:text-sm dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10"
-			>
-				for _, c := range categories {
-					<el-option
-						value={ c.Value }
-						class="block px-3 py-2 text-gray-900 select-none aria-selected:bg-brand-orange aria-selected:text-white dark:text-gray-200 dark:aria-selected:bg-brand-orange"
-					>{ c.Label }</el-option>
-				}
-			</el-options>
-		</el-autocomplete>
+		</div>
 		<div class={ "mt-2 flex", templ.KV("hidden", currentValue == "") } id="category-chips">
 			for _, cat := range splitCategories(currentValue) {
 				@CategoryChip(cat)

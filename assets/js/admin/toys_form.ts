@@ -1,3 +1,34 @@
+declare var addCategory: () => void;
+declare var removeCategory: (category: string) => void;
+
+// The category-search <el-autocomplete> opens its options list on any
+// pointerdown/focus of the input, showing the full unfiltered list. We only
+// want it to open once the user actually types, so we stop the pointerdown
+// before it reaches the input (native focus still happens since we only
+// stop propagation, not the default action). Delegated on document since the
+// form (and its input) is re-created on every modal open.
+document.addEventListener(
+  "pointerdown",
+  (event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.id === "category_search") {
+      event.stopPropagation();
+    }
+  },
+  true
+);
+
+// Selecting an option sets the input's value and dispatches "change" (the
+// library's own signal that a selection was committed, as opposed to "input"
+// which fires on every keystroke). Treat that the same as clicking "Add" —
+// the Add button is reserved for committing a freeform value not in the list.
+document.addEventListener("change", (event) => {
+  const target = event.target as HTMLElement | null;
+  if (target?.id === "category_search") {
+    globalThis.addCategory();
+  }
+});
+
 function getCategoryElements() {
   const input = document.getElementById("category_search") as HTMLInputElement;
   const hiddenInput = document.getElementById("category") as HTMLInputElement;
@@ -29,7 +60,9 @@ function createCategoryChip(category: string): HTMLElement {
       <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
     </svg>
   `;
-  removeButton.addEventListener("click", () => removeCategory(category));
+  removeButton.addEventListener("click", () =>
+    globalThis.removeCategory(category)
+  );
 
   pill.append(label, removeButton);
   wrapper.append(pill);

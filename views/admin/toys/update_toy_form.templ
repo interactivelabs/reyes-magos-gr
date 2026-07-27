@@ -16,6 +16,7 @@ templ UpdateToyForm(toy models.Toy, categories []dtos.AutocompleteItem) {
 			hx-put={ lib.GetSafeIdUrl("/admin/toys/%d/save", toy.ToyID) }
 			hx-target={ fmt.Sprintf("#admin-toys-row-%d", toy.ToyID) }
 			hx-swap="outerHTML"
+			hx-on::after-request="if (event.detail.successful) this.closest('dialog').close()"
 		>
 			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
 				@ToyForm(toy, categories)

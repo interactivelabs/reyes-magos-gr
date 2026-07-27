@@ -60,7 +60,7 @@ func CreateToyForm(categories []dtos.AutocompleteItem) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-target=\"#admin-toys-table-body\" hx-swap=\"afterbegin\"><div class=\"grid grid-cols-1 gap-x-6 gap-y-8\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-target=\"#admin-toys-table-body\" hx-swap=\"afterbegin\" hx-on::after-request=\"if (event.detail.successful) this.closest('dialog').close()\"><div class=\"grid grid-cols-1 gap-x-6 gap-y-8\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

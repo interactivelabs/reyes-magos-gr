@@ -14,6 +14,7 @@ templ CreateToyForm(categories []dtos.AutocompleteItem) {
 			hx-post={ string(templ.URL("/admin/toys")) }
 			hx-target="#admin-toys-table-body"
 			hx-swap="afterbegin"
+			hx-on::after-request="if (event.detail.successful) this.closest('dialog').close()"
 		>
 			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
 				@ToyForm(models.Toy{}, categories)
