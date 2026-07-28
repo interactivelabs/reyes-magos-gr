@@ -15,14 +15,14 @@ script onRemoveFilter(filterValue string) {
 	removeFilter(filterValue)
 }
 
-const RangeBaseStyles string = "text-sm text-gray-500 absolute -bottom-6"
+const RangeBaseStyles string = "text-sm text-muted absolute -bottom-6"
 
 func getPagingStyles(page int64, i int) string {
 	var selected string
 	if i == int(page) {
-		selected = "text-brand-orange border-brand-orange"
+		selected = "text-primary border-primary"
 	} else {
-		selected = "text-gray-500 hover:border-gray-300 hover:text-gray-700 border-transparent"
+		selected = "text-muted hover:border-border hover:text-ink border-transparent"
 	}
 	return fmt.Sprintf("inline-flex items-center border-t-2 px-4 pt-4 text-sm font-medium %s", selected)
 }
@@ -43,7 +43,7 @@ templ AgeRangeFields(name string, value int64) {
 			id={ name }
 			name={ name }
 			value={ fmt.Sprint(value) }
-			class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointe"
+			class={ components.DSRangeInput }
 		/>
 		<span class={ RangeBaseStyles + " start-0" }>1</span>
 		<span class={ RangeBaseStyles + " start-1/4 -translate-x-1/2 rtl:translate-x-1/2" }>4</span>
@@ -55,12 +55,12 @@ templ AgeRangeFields(name string, value int64) {
 
 templ FilterPill(filter_label string, filter_value string) {
 	<div class="-my-1 flex flex-wrap items-center">
-		<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
+		<span class="m-1 inline-flex items-center rounded-pill bg-chip py-1.5 pl-3 pr-2 text-[13px] font-sans text-ink">
 			<span>{ filter_label }</span>
 			<button
 				type="button"
 				onclick={ onRemoveFilter(filter_value) }
-				class="ml-1 inline-flex h-4 w-4 shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
+				class="ml-1 inline-flex h-4 w-4 shrink-0 rounded-full p-1 text-muted hover:bg-surface hover:text-ink"
 			>
 				<span class="sr-only">Remove filter for { filter_label }</span>
 				<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
@@ -87,40 +87,40 @@ templ Catalog(
 	code string,
 ) {
 	@layout.Base() {
-		<main id="catalog" class="relative isolate py-20 lg:px-8 bg-white min-h-screen">
-			<h1 class="text-4xl font-extralight tracking-tight text-center mb-20">Escoje un regalo</h1>
+		<main id="catalog" class="relative isolate py-20 lg:px-8 bg-surface min-h-screen">
+			<h1 class={ components.DSHeading1 + " text-center mb-20" }>Escoje un regalo</h1>
 			<!-- Filters -->
 			<section
 				aria-labelledby="filter-heading"
-				class="grid items-center border-b border-t border-gray-200 mx-auto max-w-3xl lg:max-w-7xl lg:px-8 bg-white sticky top-0 z-10"
+				class="grid items-center border-b border-t border-border mx-auto max-w-3xl lg:max-w-7xl lg:px-8 bg-surface sticky top-0 z-10"
 			>
 				<h2 id="filter-heading" class="sr-only">Filtros</h2>
 				<div class="relative col-start-1 row-start-1 py-4">
-					<div class="mx-auto flex items-center max-w-7xl divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8">
+					<div class="mx-auto flex items-center max-w-7xl divide-x divide-border px-4 text-sm sm:px-6 lg:px-8">
 						<div class="px-2 md:px-6">
 							<button
 								type="button"
 								id="filters-btn"
 								popovertarget="filters-popover"
-								class="group flex items-center font-medium"
+								class="group flex items-center font-sans font-semibold text-ink"
 							>
 								@svg.FilterEmpty("h-4 w-4 mr-4 fill-current")
 								Filtros
 							</button>
 						</div>
 						<div class="px-2 md:px-6">
-							<button type="button" class="text-gray-500" onclick="clearFilters()">Limpiar Filtros</button>
+							<button type="button" class="font-sans text-muted" onclick="clearFilters()">Limpiar Filtros</button>
 						</div>
 						<div class="px-2 md:px-6 flex-1 text-right">
 							<label for="page" class="text-sm">
-								<span class="inline-block mr-2 text-gray-500">Resultados:</span>
+								<span class="inline-block mr-2 text-muted">Resultados:</span>
 								@LinksListboxSmall("listbox-pagesize", fmt.Sprint(pageSize), fmt.Sprintf("%d Resultados por pagina", pageSize), fmt.Sprint(pageSize), pageSizeLinks)
 							</label>
 						</div>
 					</div>
 				</div>
 				if len(categoryFilters) > 0 || ageMin > 1 || ageMax > 1 {
-					<div class="bg-gray-100">
+					<div class="bg-chip">
 						<div class="mx-auto max-w-7xl px-4 py-3 sm:flex sm:items-center sm:px-6 lg:px-8">
 							if ageMin > 1 {
 								@FilterPill(fmt.Sprintf("Edad Minima: %d", ageMin), "age_min")
@@ -138,42 +138,40 @@ templ Catalog(
 			<el-popover
 				id="filters-popover"
 				anchor="bottom"
-				class="!left-0 mt-0 w-screen border-t border-b border-gray-200 bg-white shadow-lg py-8 px-4 sm:px-6 lg:left-1/2! lg:w-full lg:max-w-7xl lg:-translate-x-1/2 lg:px-8 transition transition-discrete data-closed:-translate-y-2 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
+				class="!left-0 mt-0 w-screen border-t border-b border-border bg-surface shadow-lg py-8 px-4 sm:px-6 lg:left-1/2! lg:w-full lg:max-w-7xl lg:-translate-x-1/2 lg:px-8 transition transition-discrete data-closed:-translate-y-2 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
 			>
 				<form id="filters-form" onsubmit="event.preventDefault();updateFilters();">
 					<div class="mx-auto max-w-7xl gap-x-6 text-sm sm:flex md:gap-x-8">
 						<div class="w-full sm:w-auto">
 							<div class="space-y-6 mb-8 sm:space-y-4 relative">
-								<label for="age_min" class="block mb-2 font-bold">Edad Minima</label>
+								<label for="age_min" class={ components.DSLabel + " mb-2" }>Edad Minima</label>
 								@AgeRangeFields("age_min", ageMin)
 							</div>
 							<div class="space-y-6 mb-8 sm:space-y-4 relative">
-								<label for="age_max" class="block mb-2 font-bold">Edad Maxima</label>
+								<label for="age_max" class={ components.DSLabel + " mb-2" }>Edad Maxima</label>
 								@AgeRangeFields("age_max", ageMax)
 							</div>
 						</div>
 						<div class="mt-12 sm:mt-0">
-							<legend class="block font-bold mb-6">Categorias</legend>
+							<legend class={ components.DSLabel + " mb-6" }>Categorias</legend>
 							<div class="grid auto-rows-min grid-cols-1 gap-y-4 sm:grid-cols-2 md:grid-cols-3 md:gap-x-8 lg:grid-cols-4">
 								for i, category := range categories {
-									<div class="flex items-center text-base sm:text-sm">
+									<label for={ fmt.Sprintf("category-%d", i) } class={ components.DSChip + " cursor-pointer" }>
 										<input
 											name="category[]"
 											type="checkbox"
 											value={ category }
 											id={ fmt.Sprintf("category-%d", i) }
-											class="h-4 w-4 shrink-0 rounded-sm border-gray-300 text-brand-orange focus:ring-brand-orange"
+											class={ components.DSChipCheckbox }
 										/>
-										<label for={ fmt.Sprintf("category-%d", i) } class="ml-3 min-w-0 flex-1 text-gray-600 cursor-pointer">
-											{ category }
-										</label>
-									</div>
+										{ category }
+									</label>
 								}
 							</div>
 						</div>
 					</div>
 					<div class="text-right">
-						<button type="submit" class={ components.BrandPrimaryButton }>Aplicar Filtros</button>
+						<button type="submit" class={ components.DSButtonOutline }>Aplicar Filtros</button>
 					</div>
 				</form>
 			</el-popover>
@@ -181,8 +179,8 @@ templ Catalog(
 				<!-- Catalog -->
 				if len(toys) == 0 {
 					<div>
-						<div class="text-center text-2xl">No hay juguetes disponibles con los filtros actuales</div>
-						<p>Actualiza los filtros o limpa los filtros para ver mas resultados</p>
+						<div class={ components.DSHeading3 + " text-center" }>No hay juguetes disponibles con los filtros actuales</div>
+						<p class={ components.DSBody }>Actualiza los filtros o limpa los filtros para ver mas resultados</p>
 					</div>
 				} else {
 					<div class="columns md:columns-4 gap-12 space-y-12 my-8">
@@ -190,21 +188,21 @@ templ Catalog(
 							<a class="inline-block mt-8" href={ templ.URL(getRedeemToyLink(toy.ToyID, code)) }>
 								<div class="group relative flex flex-col overflow-hidden">
 									<div class="group-hover:opacity-75">
-										<img src={ toy.Image1 } alt={ toy.ToyDescription } class="w-full"/>
+										<img src={ toy.Image1 } alt={ toy.ToyDescription } class={ components.DSImageFrame + " w-full" }/>
 									</div>
 									<div class="flex flex-1 flex-col mt-6">
-										<h3 class="text-lg font-bold line-clamp-2">
+										<h3 class={ components.DSHeading3 + " line-clamp-2" }>
 											<span aria-hidden="true" class="absolute inset-0"></span>
 											{ toy.ToyName }
 										</h3>
 										<div class="flex-1 flex justify-between mt-4">
 											<div class="text-center">
-												<div class="text-xs text-gray-500 font-extralight">Categoria</div>
-												<div>{ toy.Category }</div>
+												<div class="text-xs font-sans text-muted">Categoria</div>
+												<div class="font-sans text-ink">{ toy.Category }</div>
 											</div>
 											<div class="text-center">
-												<div class="text-xs text-gray-500 font-extralight">Edades</div>
-												<div>{ fmt.Sprint(toy.AgeMin) } a { fmt.Sprint(toy.AgeMax) } años</div>
+												<div class="text-xs font-sans text-muted">Edades</div>
+												<div class="font-sans text-ink">{ fmt.Sprint(toy.AgeMin) } a { fmt.Sprint(toy.AgeMax) } años</div>
 											</div>
 										</div>
 									</div>
@@ -214,14 +212,14 @@ templ Catalog(
 					</div>
 				}
 				<!-- Paging -->
-				<nav class="flex justify-between border-t border-gray-200 px-4 sm:px-0">
+				<nav class="flex justify-between border-t border-border px-4 sm:px-0">
 					<div class="-mt-px flex w-0 flex-1">
 						if page > 1 {
 							<a
 								href={ templ.URL(lib.GetPaginationLink(currentQuery, int(page-1), pageSize)) }
-								class="inline-flex items-center border-t-2 border-transparent pr-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+								class="inline-flex items-center border-t-2 border-transparent pr-1 text-sm font-medium text-muted hover:border-border hover:text-ink"
 							>
-								<svg class="mr-3 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+								<svg class="mr-3 h-5 w-5 text-muted" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
 									<path
 										fill-rule="evenodd"
 										clip-rule="evenodd"
@@ -249,10 +247,10 @@ templ Catalog(
 						if page < pages {
 							<a
 								href={ templ.URL(lib.GetPaginationLink(currentQuery, int(page+1), pageSize)) }
-								class="inline-flex items-center border-t-2 border-transparent pl-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+								class="inline-flex items-center border-t-2 border-transparent pl-1 text-sm font-medium text-muted hover:border-border hover:text-ink"
 							>
 								Siguiente
-								<svg class="ml-3 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+								<svg class="ml-3 h-5 w-5 text-muted" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
 									<path
 										fill-rule="evenodd"
 										clip-rule="evenodd"
@@ -264,13 +262,13 @@ templ Catalog(
 					</div>
 				</nav>
 				<!-- Paging labels -->
-				<div class="mt-6 text-center text-sm font-medium text-gray-500">
+				<div class="mt-6 text-center text-sm font-medium font-sans text-muted">
 					Mostrando del
-					<div class="text-base font-bold mx-2 inline-block">
+					<div class="text-base font-semibold text-ink mx-2 inline-block">
 						{ fmt.Sprint(((page - 1) * pageSize) + 1) }
 					</div>
 					a
-					<div class="text-base font-bold mx-2 inline-block">
+					<div class="text-base font-semibold text-ink mx-2 inline-block">
 						if count <= (page * pageSize) {
 							{ fmt.Sprint(count) }
 						} else {
@@ -278,7 +276,7 @@ templ Catalog(
 						}
 					</div>
 					de
-					<div class="text-base font-bold mx-2 inline-block">
+					<div class="text-base font-semibold text-ink mx-2 inline-block">
 						{ fmt.Sprint(count) }
 					</div>
 					resultados
@@ -291,7 +289,7 @@ templ Catalog(
 			>
 				<button
 					aria-hidden="true"
-					class="p-4 bg-brand-blue text-white rounded-md shadow-md font-extralight text-center text-xs flex flex-col justify-center items-center"
+					class="p-4 bg-secondary text-white rounded-button shadow-secondary font-heading font-bold text-center text-xs flex flex-col justify-center items-center"
 					onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
 					title="Arriba"
 					type="button"
