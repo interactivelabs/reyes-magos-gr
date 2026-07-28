@@ -1,5 +1,10 @@
 import { showToast } from "../components/toasts";
 
+declare global {
+  var copyCode: (code: string) => void;
+  var shareCode: (code: string) => void;
+}
+
 const copy = async (code: string) => {
   try {
     await navigator.clipboard.writeText(code);

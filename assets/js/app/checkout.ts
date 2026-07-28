@@ -1,3 +1,11 @@
+export {};
+
+declare global {
+  var onCodeInputBlur: () => void;
+  var beforeCheckoutHandler: (evt: Event) => void;
+  var selectToyImage: (thumbnail: HTMLImageElement) => void;
+}
+
 function validateCodeInput(): boolean {
   const codeInput = document.getElementById("code") as HTMLInputElement;
   const code = codeInput.value.toUpperCase().trim();
@@ -26,11 +34,7 @@ globalThis.onCodeInputBlur = () => {
 
 globalThis.beforeCheckoutHandler = beforeCheckoutHandler;
 
-const SELECTED_THUMBNAIL_CLASSES = [
-  "border-4",
-  "border-brand-orange",
-  "brightness-90",
-];
+const SELECTED_THUMBNAIL_CLASSES = ["border-4", "border-primary", "brightness-90"];
 
 globalThis.selectToyImage = (thumbnail: HTMLImageElement) => {
   const mainImage = document.getElementById("toy-image-0") as HTMLImageElement;

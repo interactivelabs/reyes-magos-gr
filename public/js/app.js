@@ -192,11 +192,7 @@ globalThis.onCodeInputBlur = () => {
   }
 };
 globalThis.beforeCheckoutHandler = beforeCheckoutHandler;
-var SELECTED_THUMBNAIL_CLASSES = [
-  "border-4",
-  "border-brand-orange",
-  "brightness-90"
-];
+var SELECTED_THUMBNAIL_CLASSES = ["border-4", "border-primary", "brightness-90"];
 globalThis.selectToyImage = (thumbnail) => {
   const mainImage = document.getElementById("toy-image-0");
   mainImage.src = thumbnail.src;

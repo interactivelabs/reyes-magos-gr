@@ -14,7 +14,7 @@ import (
 	"reyes-magos-gr/views/components/svg"
 )
 
-const ListBoxBtnClassBase = "flex items-center text-left shadow-xs rounded-md ring-1 ring-inset ring-gray-300 focus:outline-hidden focus:ring-2 focus:ring-brand-orange sm:text-sm/6 "
+const ListBoxBtnClassBase = "flex items-center text-left font-sans border border-border rounded-input bg-surface text-ink focus:outline-hidden focus:border-primary focus:shadow-focus sm:text-sm/6 "
 const ListBoxBtnClass = ListBoxBtnClassBase + " py-1.5 px-6 "
 const ListBoxBtnClassSmall = ListBoxBtnClassBase + " py-1 px-4 "
 
@@ -52,7 +52,7 @@ func OptionsList(popoverID string, selectedLink string, links []dtos.CatalogLink
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" anchor=\"bottom\" class=\"absolute z-10 mt-1 w-48 overflow-auto rounded-md bg-white py-2 text-base shadow-lg ring-1 ring-black/5 focus:outline-hidden sm:text-sm\" tabindex=\"-1\" role=\"listbox\" aria-labelledby=\"listbox-label\" aria-activedescendant=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" anchor=\"bottom\" class=\"absolute z-10 mt-1 w-48 overflow-auto rounded-input bg-surface py-2 text-base shadow-lg border border-border focus:outline-hidden sm:text-sm\" tabindex=\"-1\" role=\"listbox\" aria-labelledby=\"listbox-label\" aria-activedescendant=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -83,7 +83,7 @@ func OptionsList(popoverID string, selectedLink string, links []dtos.CatalogLink
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" role=\"option\"><a class=\"inline-block w-full py-2 px-3 text-gray-900 text-center\" href=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" role=\"option\"><a class=\"inline-block w-full py-2 px-3 font-sans text-ink text-center\" href=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -234,7 +234,7 @@ func LinksListbox(popoverID string, btnText string, btnLabel string, selectedLin
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = svg.ChevronDown("-mr-1 size-5 text-gray-400 fill-current").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = svg.ChevronDown("-mr-1 size-5 text-muted fill-current").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -353,7 +353,7 @@ func LinksListboxSmall(popoverID string, btnText string, btnLabel string, select
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = svg.ChevronDown("-mr-1 size-5 text-gray-400 fill-current").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = svg.ChevronDown("-mr-1 size-5 text-muted fill-current").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -18,38 +18,38 @@ templ RedeemToyForm(toyId int64, code string, errorMsg string) {
 		hx-target="this"
 		hx-swap="outerHTML"
 	>
-		<label class="text-lg leading-6 font-medium text-gray-900">Codigo</label>
+		<label class={ components.DSLabel }>Codigo</label>
 		<div class="mt-2">
 			<input
 				id="code"
 				type="text"
 				name="code"
 				pattern="[A-Z1-9]+"
-				class={ components.BaseInputStyles }
+				class={ components.DSInput }
 				onblur="onCodeInputBlur()"
 				required
 				value={ code }
 			/>
 			<input type="hidden" name="toy_id" value={ fmt.Sprint(toyId) }/>
-			<p class="mt-2 text-sm text-red-600 hidden" id="code-error">Un codigo valido es requerido (e.g. A1B2C3)</p>
+			<p class="mt-2 text-sm font-sans text-red-600 hidden" id="code-error">Un codigo valido es requerido (e.g. A1B2C3)</p>
 		</div>
 		if errorMsg != "" {
-			<div class="rounded-md drop-shadow-xs bg-red-50 p-4 mt-2">
+			<div class="rounded-chip bg-red-50 p-4 mt-2">
 				<div class="flex">
 					<div class="shrink-0">
 						@svg.ErrorIcon("size-5 text-red-400")
 					</div>
 					<div class="ml-3">
-						<h3 class="text-sm font-medium text-red-800">
+						<h3 class="text-sm font-sans font-medium text-red-800">
 							{ errorMsg },
-							<a href="/#steps" class=" inline-block ml-1 underline font-bold">Ve aqui como obeter un codigo</a>
+							<a href="/#steps" class="inline-block ml-1 underline font-bold">Ve aqui como obeter un codigo</a>
 						</h3>
 					</div>
 				</div>
 			</div>
 		}
 		<div class="mt-8 text-right">
-			<button type="submit" class={ components.BrandPrimaryButton + " w-full lg:w-auto" }>
+			<button type="submit" class={ components.DSButtonPrimary + " w-full lg:w-auto" }>
 				Ordernar Regalo
 			</button>
 		</div>
@@ -66,7 +66,7 @@ templ AddToCartButton(toyId int64) {
 		<div class="mt-8 text-center">
 			<button
 				type="submit"
-				class={ components.BrandPrimaryButton }
+				class={ components.DSButtonPrimary }
 			>
 				Agregar al Carrito
 			</button>
@@ -76,13 +76,16 @@ templ AddToCartButton(toyId int64) {
 
 templ Checkout(toy models.Toy, code string) {
 	@layout.Base() {
-		<main class="min-h-screen">
+		<main class="min-h-screen bg-surface">
 			<div class="mx-auto max-w-2xl pb-24 pt-8 sm:px-6 lg:max-w-7xl lg:px-8">
 				<div class="px-4 md:px-0">
-					<button class={ components.BrandPrimaryButton + " flex items-center" } onclick="history.back()">
+					<button class={ components.DSButtonOutline + " flex items-center" } onclick="history.back()">
 						@svg.ArrowToLeft("h-5 w-5 fill-current")
 						<span class="inline-block ml-1 tracking-widest">Regresar</span>
 					</button>
+				</div>
+				<div class="mt-16 text-center px-4">
+					<h2 class={ components.DSHeading3 }>{ toy.ToyName }</h2>
 				</div>
 				<div class="lg:grid lg:auto-rows-min lg:grid-cols-2 lg:gap-x-8">
 					<div class="mt-8 lg:col-start-1 lg:row-span-3 lg:row-start-1">
@@ -91,34 +94,31 @@ templ Checkout(toy models.Toy, code string) {
 							id="toy-image-0"
 							src={ toy.Image1 }
 							alt={ toy.ToyDescription }
-							class="max-h-[600px] m-auto"
+							class={ components.DSImageFrame + " max-h-150 m-auto" }
 						/>
 						<div class="px-2 md:px-0 mt-4 grid grid-cols-3 gap-4 lg:gap-8 justify-items-center">
 							<img
 								id="toy-image-1"
 								src={ toy.Image1 }
 								alt={ toy.ToyDescription }
-								class="rounded-lg cursor-pointer max-h-[150px] border-4 border-brand-orange brightness-90"
+								class={ components.DSImageFrame + " cursor-pointer max-h-37.5 border-4 border-primary brightness-90" }
 								onclick="selectToyImage(this)"
 							/>
 							<img
 								id="toy-image-2"
 								src={ toy.Image2 }
 								alt={ toy.ToyDescription }
-								class="rounded-lg cursor-pointer max-h-[150px]"
+								class={ components.DSImageFrame + " cursor-pointer max-h-37.5" }
 								onclick="selectToyImage(this)"
 							/>
 							<img
 								id="toy-image-3"
 								src={ toy.Image3 }
 								alt={ toy.ToyDescription }
-								class="rounded-lg cursor-pointer max-h-[150px]"
+								class={ components.DSImageFrame + " cursor-pointer max-h-37.5" }
 								onclick="selectToyImage(this)"
 							/>
 						</div>
-					</div>
-					<div class="mt-16 md:mt-0 text-center px-4 md:px-0">
-						<h2 class="text-xl font-medium text-gray-900">{ toy.ToyName }</h2>
 					</div>
 					<div class="px-4 md:px-0">
 						if lib.IsVolunteersCartEnabled(ctx) {
@@ -129,16 +129,16 @@ templ Checkout(toy models.Toy, code string) {
 						<div class="mt-16">
 							@Accordion() {
 								@AccordionRow("Edades (años)", true) {
-									<p>{ fmt.Sprint(toy.AgeMin) } - { fmt.Sprint(toy.AgeMax) }</p>
+									<p class={ components.DSBody }>{ fmt.Sprint(toy.AgeMin) } - { fmt.Sprint(toy.AgeMax) }</p>
 								}
 								@AccordionRow("Categoria", true) {
-									<p>{ toy.Category }</p>
+									<p class={ components.DSBody }>{ toy.Category }</p>
 								}
-								@AccordionRow("Descripción", false) {
-									<p>{ toy.ToyName }</p>
+								@AccordionRow("Descripción", true) {
+									<p class={ components.DSBody }>{ toy.ToyName }</p>
 									<ul class="mt-4">
 										for _, item := range strings.Split(toy.ToyDescription, "\n") {
-											<li class="mt-4">{ item }</li>
+											<li class={ components.DSBody + " mt-4" }>{ item }</li>
 										}
 									</ul>
 								}

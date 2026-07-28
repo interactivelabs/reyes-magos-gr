@@ -1,3 +1,5 @@
+declare var selectAllUnsigned: () => void;
+
 const form = document.getElementById("remove_code_form");
 
 // This is done because of the styling on the checkbox there a styled input and a hidden checkbox input

@@ -38,7 +38,7 @@ templ Cart(cartItems []dtos.CartItem, numCodes int) {
 												<div class="flex justify-between">
 													<h3 class="text-sm">
 														<a
-															href={ fmt.Sprintf("redeem/%d", item.ToyID) }
+															href={ fmt.Sprintf("checkout/%d", item.ToyID) }
 															class="font-medium text-gray-700 hover:text-gray-800 line-clamp-5"
 														>{ item.ToyName }</a>
 													</h3>

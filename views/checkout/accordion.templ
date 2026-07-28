@@ -1,5 +1,7 @@
 package pages
 
+import "reyes-magos-gr/views/components"
+
 templ Accordion() {
 	<div class="relative w-full">
 		{ children... }
@@ -7,12 +9,12 @@ templ Accordion() {
 }
 
 templ AccordionRow(title string, expanded bool) {
-	<details class="group border-b" open?={ expanded }>
-		<summary class="flex items-center justify-between w-full py-4 cursor-pointer select-none font-extralight text-lg list-none [&::-webkit-details-marker]:hidden">
+	<details class="group border-b border-border" open?={ expanded }>
+		<summary class={ components.DSHeading3 + " flex items-center justify-between w-full py-4 cursor-pointer select-none text-lg list-none [&::-webkit-details-marker]:hidden" }>
 			<span>{ title }</span>
 			<div class="relative flex items-center justify-center w-2.5 h-2.5 duration-300 ease-out group-open:rotate-90">
-				<div class="absolute w-0.5 h-full bg-neutral-500 group-hover:bg-neutral-800 rounded-full"></div>
-				<div class="absolute w-full h-0.5 ease duration-300 bg-neutral-500 group-hover:bg-neutral-800 rounded-full group-open:rotate-90"></div>
+				<div class="absolute w-0.5 h-full bg-muted group-hover:bg-ink rounded-full"></div>
+				<div class="absolute w-full h-0.5 ease duration-300 bg-muted group-hover:bg-ink rounded-full group-open:rotate-90"></div>
 			</div>
 		</summary>
 		<div class="pb-4 group-open:motion-preset-slide-down group-open:motion-duration-300">

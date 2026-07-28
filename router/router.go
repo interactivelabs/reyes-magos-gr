@@ -85,7 +85,7 @@ func SetupRouter(
 	e.GET("/catalog", catalogHandler.CatalogViewHandler)
 
 	redeemToyHandler := handlers.NewRedeemToyHandler(app.ToysStore)
-	e.GET("/redeem/:toy_id", redeemToyHandler.RedeemToyViewHandler)
+	e.GET("/checkout/:toy_id", redeemToyHandler.RedeemToyViewHandler)
 
 	ordersHandler := handlers.NewOrdersHandler(app.VolunteersStore, app.OrderService)
 	e.POST("/orders/create", ordersHandler.CreateOrderViewHandler)

@@ -1,9 +1,15 @@
 import debounce from "../utils/debounce";
 
+declare global {
+  var updateFilters: () => void;
+  var clearFilters: () => void;
+  var removeFilter: (filterValue: string) => void;
+}
+
 const getFilters = () =>
   document.getElementsByName("category[]") as NodeListOf<HTMLInputElement>;
 
-const updateUrlFilters = (params) => {
+const updateUrlFilters = (params: URLSearchParams) => {
   params.delete("page");
   const newQueryString = params.toString();
   window.location.replace(`${window.location.pathname}?${newQueryString}`);
@@ -62,7 +68,7 @@ const clearFilters = () => {
   updateUrlFilters(params);
 };
 
-const removeFilter = (filterValue) => {
+const removeFilter = (filterValue: string) => {
   const filters = getFilters();
 
   if (filterValue === "age_min") {
