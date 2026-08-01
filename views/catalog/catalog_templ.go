@@ -519,7 +519,7 @@ func Catalog(
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "\">Categorias</legend><div class=\"grid auto-rows-min grid-cols-1 gap-y-4 sm:grid-cols-2 md:grid-cols-3 md:gap-x-8 lg:grid-cols-4\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "\">Categorias</legend><div class=\"grid auto-rows-min gap-4 grid-cols-2 md:grid-cols-3 md:gap-x-8 lg:grid-cols-4\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -27,6 +27,7 @@ templ RedeemToyForm(toyId int64, code string, errorMsg string) {
 				pattern="[A-Z1-9]+"
 				class={ components.DSInput }
 				onblur="onCodeInputBlur()"
+				oninput="onCodeInputChange()"
 				required
 				value={ code }
 			/>
@@ -34,7 +35,7 @@ templ RedeemToyForm(toyId int64, code string, errorMsg string) {
 			<p class="mt-2 text-sm font-sans text-red-600 hidden" id="code-error">Un codigo valido es requerido (e.g. A1B2C3)</p>
 		</div>
 		if errorMsg != "" {
-			<div class="rounded-chip bg-red-50 p-4 mt-2">
+			<div class="rounded-chip bg-red-50 p-4 mt-2" id="backend-error">
 				<div class="flex">
 					<div class="shrink-0">
 						@svg.ErrorIcon("size-5 text-red-400")

@@ -185,7 +185,7 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\">Un voluntario te podra dar un codigo gratuito para poder recibir un regalo.</p><div id=\"home-ilustracion-1\" class=\"opacity-0\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\">Un voluntario te podra dar un codigo gratuito para poder recibir un regalo.</p><div id=\"home-ilustracion-1\" class=\"scroll-reveal\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -267,7 +267,7 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "\">Si no tienes accesso a internet la persona voluntaria podra ayudarte en el momento.</p><div id=\"home-ilustracion-2\" class=\"opacity-0\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "\">Si no tienes accesso a internet la persona voluntaria podra ayudarte en el momento.</p><div id=\"home-ilustracion-2\" class=\"scroll-reveal\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -327,7 +327,7 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "\">Una vez que se ordeno el regalo tomara unos dias para llegar al voluntario quien se encargara de hacertelo llegar.</p><div id=\"home-ilustracion-3\" class=\"opacity-0\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "\">Una vez que se ordeno el regalo tomara unos dias para llegar al voluntario quien se encargara de hacertelo llegar.</p><div id=\"home-ilustracion-3\" class=\"scroll-reveal\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -576,7 +576,7 @@ func Home() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 50, "\" preload>Recibe un regalo</a></section></main><script defer src=\"https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js\"></script> <script defer src=\"https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js\"></script>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 50, "\" preload>Recibe un regalo</a></section></main>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -152,22 +152,6 @@ var handleBackToTopScroll = () => {
 var scrollHandler = debounce_default(handleBackToTopScroll, 250);
 window.addEventListener("scroll", scrollHandler);
 
-// assets/js/app/homeAnnimations.ts
-if (typeof gsap !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-  for (let i = 1; i <= 3; i++) {
-    gsap.to(`#home-ilustracion-${i}`, {
-      scrollTrigger: {
-        trigger: `#home-ilustracion-${i}`,
-        toggleActions: "play pause resume reset",
-        start: "top 80%"
-      },
-      duration: 1,
-      opacity: 1
-    });
-  }
-}
-
 // assets/js/app/checkout.ts
 function validateCodeInput() {
   const codeInput = document.getElementById("code");
@@ -192,6 +176,9 @@ globalThis.onCodeInputBlur = () => {
   }
 };
 globalThis.beforeCheckoutHandler = beforeCheckoutHandler;
+globalThis.onCodeInputChange = () => {
+  document.getElementById("backend-error")?.classList.add("hidden");
+};
 var SELECTED_THUMBNAIL_CLASSES = ["border-4", "border-primary", "brightness-90"];
 globalThis.selectToyImage = (thumbnail) => {
   const mainImage = document.getElementById("toy-image-0");
