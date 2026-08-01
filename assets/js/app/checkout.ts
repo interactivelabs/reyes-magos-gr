@@ -2,6 +2,7 @@ export {};
 
 declare global {
   var onCodeInputBlur: () => void;
+  var onCodeInputChange: () => void;
   var beforeCheckoutHandler: (evt: Event) => void;
   var selectToyImage: (thumbnail: HTMLImageElement) => void;
 }
@@ -33,6 +34,10 @@ globalThis.onCodeInputBlur = () => {
 };
 
 globalThis.beforeCheckoutHandler = beforeCheckoutHandler;
+
+globalThis.onCodeInputChange = () => {
+  document.getElementById("backend-error")?.classList.add("hidden");
+};
 
 const SELECTED_THUMBNAIL_CLASSES = ["border-4", "border-primary", "brightness-90"];
 

@@ -45,6 +45,16 @@
   --shadow-primary: 0 4px 0 var(--color-primary-shadow);
   --shadow-secondary: 0 4px 0 var(--color-secondary-shadow);
   --shadow-focus: 0 0 0 4px rgb(232 146 106 / 0.2);
+
+  /*
+   * Scroll-reveal pattern — native CSS scroll-driven animations.
+   * Reusable for future small scroll-triggered reveals. Progressive
+   * enhancement: `.scroll-reveal` degrades to fully visible content
+   * when `animation-timeline: view()` is unsupported, and is disabled
+   * when the user prefers reduced motion.
+   */
+  --animate-reveal: reveal-in linear both;
+  --scroll-reveal-range: cover 20% cover 50%;
 }
 
 @layer base {
@@ -63,6 +73,30 @@
 
   button[type="button"] {
     cursor: pointer;
+  }
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@utility scroll-reveal {
+  /* Fallback: fully visible — no scroll-timeline / JS dependency at all. */
+  opacity: 1;
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      opacity: 0;
+      animation: var(--animate-reveal);
+      animation-duration: auto;
+      animation-timeline: view();
+      animation-range: var(--scroll-reveal-range);
+    }
   }
 }
 
