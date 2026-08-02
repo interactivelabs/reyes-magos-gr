@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Cabin:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #efe9ee; }
+    a { color: #c96a3e; }
+    a:hover { color: #b8623f; }
+  </style>
+</helmet>
+<div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;padding:40px;">
+
+  <section id="1a" style="position:relative;width:1100px;flex-shrink:0;">
+    <div style="position:absolute;top:-30px;left:0;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;background:#4a3f4d;color:#fff;padding:3px 10px;border-radius:6px;">1a</div>
+    <div style="font-family:'Cabin',sans-serif;color:#4a3f4d;background:#fbf7fb;padding:48px 24px 96px;border-radius:12px;">
+      <div style="max-width:1050px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:8px;">
+          <h1 style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:34px;margin:0 0 6px;color:#4a3f4d;">Mis Órdenes</h1>
+          <p style="font-size:15px;color:#8d7f91;margin:0;">Aquí puedes ver el estado de tus regalos ordenados</p>
+        </div>
+
+        <div style="display:flex;justify-content:center;margin:28px 0 40px;">
+          <div style="display:inline-flex;align-items:center;gap:10px;background:#f4ecf6;border-radius:999px;padding:10px 22px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="height:16px;width:16px;fill:#9b85c4;"><path d="M190.5 68.8L225.3 128l-1.3 0-72 0c-22.1 0-40-17.9-40-40s17.9-40 40-40l2.2 0c14.9 0 28.8 7.9 36.3 20.8zM64 88c0 14.4 3.5 28 9.6 40L32 128c-17.7 0-32 14.3-32 32l0 64c0 17.7 14.3 32 32 32l448 0c17.7 0 32-14.3 32-32l0-64c0-17.7-14.3-32-32-32l-41.6 0c6.1-12 9.6-25.6 9.6-40c0-48.6-39.4-88-88-88l-2.2 0c-31.9 0-61.5 16.9-77.7 44.4L256 85.5l-24.1-41C215.7 16.9 186.1 0 154.2 0L152 0C103.4 0 64 39.4 64 88zm336 0c0 22.1-17.9 40-40 40l-72 0-1.3 0 34.8-59.2C329.1 55.9 342.9 48 357.8 48l2.2 0c22.1 0 40 17.9 40 40zM32 288l0 176c0 26.5 21.5 48 48 48l144 0 0-224L32 288zM288 512l144 0c26.5 0 48-21.5 48-48l0-176-192 0 0 224z"/></svg>
+            <span style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:20px;color:#c96a3e;">{{ pendingCount }}</span>
+            <span style="font-size:13px;color:#8d7f91;">{{ pendingLabel }}</span>
+          </div>
+        </div>
+
+        <sc-if value="{{ hasOrders }}" hint-placeholder-val="{{ true }}">
+          <h2 style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:19px;margin:0 0 18px;color:#4a3f4d;">Órdenes sin completar</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));gap:20px;">
+            <sc-for list="{{ cards }}" as="card" hint-placeholder-count="4">
+              <div style="display:flex;flex-direction:column;gap:16px;background:#ffffff;border:1px solid #ece3ef;border-radius:20px;padding:22px;box-shadow:0 2px 10px rgba(74,63,77,0.06);">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <span style="font-family:'JetBrains Mono',monospace,'Cabin';font-size:12px;color:#b3a7b8;">Orden #{{ card.id }}</span>
+                  <span style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.03em;text-transform:uppercase;padding:5px 12px;border-radius:999px;background:{{ card.chipBg }};color:{{ card.chipColor }};">{{ card.statusText }}</span>
+                </div>
+
+                <div style="display:flex;align-items:flex-start;">
+                  <sc-for list="{{ card.timeline }}" as="t" hint-placeholder-count="5">
+                    <sc-if value="{{ t.isDot }}" hint-placeholder-val="{{ true }}">
+                      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;width:30px;">
+                        <div style="width:16px;height:16px;border-radius:999px;flex-shrink:0;background:{{ t.dotBg }};border:2px solid {{ t.dotBorder }};"></div>
+                        <div style="font-size:10px;color:#8d7f91;text-align:center;line-height:1.2;">{{ t.label }}</div>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ t.isLine }}" hint-placeholder-val="{{ false }}">
+                      <div style="flex:1;height:2px;background:{{ t.lineColor }};margin:7px -2px 0;"></div>
+                    </sc-if>
+                  </sc-for>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:8px;padding-top:2px;border-top:1px solid #ece3ef;">
+                  <p style="margin:0;font-size:13px;display:flex;align-items:center;gap:8px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="height:13px;width:13px;fill:#8d7f91;flex-shrink:0;"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l80 0 0 56-80 0 0-56zm0 104l80 0 0 64-80 0 0-64zm128 0l96 0 0 64-96 0 0-64zm144 0l80 0 0 64-80 0 0-64zm80-48l-80 0 0-56 80 0 0 56zm0 160l0 40c0 8.8-7.2 16-16 16l-64 0 0-56 80 0zm-128 0l0 56-96 0 0-56 96 0zm-144 0l0 56-64 0c-8.8 0-16-7.2-16-16l0-40 80 0zM272 248l-96 0 0-56 96 0 0 56z"/></svg>
+                    <span style="color:#8d7f91;">Fecha de orden:</span> <span style="font-weight:600;">{{ card.orderDateLabel }}</span>
+                  </p>
+                  <p style="margin:0;font-size:13px;display:flex;align-items:center;gap:8px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" style="height:13px;width:13px;fill:#8d7f91;flex-shrink:0;"><path d="M48 0C21.5 0 0 21.5 0 48L0 368c0 26.5 21.5 48 48 48l16 0c0 53 43 96 96 96s96-43 96-96l128 0c0 53 43 96 96 96s96-43 96-96l32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64 0-32 0-18.7c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7L416 96l0-48c0-26.5-21.5-48-48-48L48 0zM416 160l50.7 0L544 237.3l0 18.7-128 0 0-96zM112 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm368-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>
+                    <span style="color:#8d7f91;">Enviado:</span> <span style="font-weight:600;">{{ card.shippedLabel }}</span>
+                  </p>
+                </div>
+
+                <sc-if value="{{ card.showButton }}" hint-placeholder-val="{{ false }}">
+                  <button type="button" onclick="{{ card.onComplete }}" style="display:flex;align-items:center;justify-content:center;gap:10px;border:none;cursor:pointer;background:#e8926a;color:#fff;font-family:'Quicksand',sans-serif;font-weight:700;font-size:14px;padding:12px 20px;border-radius:16px;box-shadow:0 4px 0 #b8623f;" style-active="transform:translateY(4px);box-shadow:none;">
+                    Completar
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="height:14px;width:14px;fill:currentColor;"><path d="M413.5 92L133.5 372l-99-99c-4.7-4.7-12.3-4.7-17 0L6.2 284.3c-4.7 4.7-4.7 12.3 0 17l118.8 118.8c4.7 4.7 12.3 4.7 17 0l299.8-299.8c4.7-4.7 4.7-12.3 0-17l-11.3-11.3c-4.7-4.7-12.3-4.7-17 0z"></path></svg>
+                  </button>
+                </sc-if>
+
+                <sc-if value="{{ card.isCompleted }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;align-items:center;justify-content:center;gap:8px;background:#f4ecf6;color:#8d7f91;font-size:13px;font-weight:600;border-radius:14px;padding:11px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="height:13px;width:13px;fill:currentColor;"><path d="M413.5 92L133.5 372l-99-99c-4.7-4.7-12.3-4.7-17 0L6.2 284.3c-4.7 4.7-4.7 12.3 0 17l118.8 118.8c4.7 4.7 12.3 4.7 17 0l299.8-299.8c4.7-4.7 4.7-12.3 0-17l-11.3-11.3c-4.7-4.7-12.3-4.7-17 0z"></path></svg>
+                    Completada
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:64px 24px;background:#ffffff;border:1px solid #ece3ef;border-radius:20px;">
+            <p style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:18px;margin:0 0 6px;">No tienes órdenes pendientes</p>
+            <p style="font-size:14px;color:#8d7f91;margin:0;">Cuando ordenes un regalo, aparecerá aquí.</p>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+
+  <section id="1b" style="position:relative;width:1100px;flex-shrink:0;">
+    <div style="position:absolute;top:-30px;left:0;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;background:#4a3f4d;color:#fff;padding:3px 10px;border-radius:6px;">1b — icons in progress circles</div>
+    <div style="font-family:'Cabin',sans-serif;color:#4a3f4d;background:#fbf7fb;padding:48px 24px 96px;border-radius:12px;">
+      <div style="max-width:1050px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:8px;">
+          <h1 style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:34px;margin:0 0 6px;color:#4a3f4d;">Mis Órdenes</h1>
+          <p style="font-size:15px;color:#8d7f91;margin:0;">Aquí puedes ver el estado de tus regalos ordenados</p>
+        </div>
+
+        <div style="display:flex;justify-content:center;margin:28px 0 40px;">
+          <div style="display:inline-flex;align-items:center;gap:10px;background:#f4ecf6;border-radius:999px;padding:10px 22px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="height:16px;width:16px;fill:#9b85c4;"><path d="M190.5 68.8L225.3 128l-1.3 0-72 0c-22.1 0-40-17.9-40-40s17.9-40 40-40l2.2 0c14.9 0 28.8 7.9 36.3 20.8zM64 88c0 14.4 3.5 28 9.6 40L32 128c-17.7 0-32 14.3-32 32l0 64c0 17.7 14.3 32 32 32l448 0c17.7 0 32-14.3 32-32l0-64c0-17.7-14.3-32-32-32l-41.6 0c6.1-12 9.6-25.6 9.6-40c0-48.6-39.4-88-88-88l-2.2 0c-31.9 0-61.5 16.9-77.7 44.4L256 85.5l-24.1-41C215.7 16.9 186.1 0 154.2 0L152 0C103.4 0 64 39.4 64 88zm336 0c0 22.1-17.9 40-40 40l-72 0-1.3 0 34.8-59.2C329.1 55.9 342.9 48 357.8 48l2.2 0c22.1 0 40 17.9 40 40zM32 288l0 176c0 26.5 21.5 48 48 48l144 0 0-224L32 288zM288 512l144 0c26.5 0 48-21.5 48-48l0-176-192 0 0 224z"/></svg>
+            <span style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:20px;color:#c96a3e;">{{ pendingCount }}</span>
+            <span style="font-size:13px;color:#8d7f91;">{{ pendingLabel }}</span>
+          </div>
+        </div>
+
+        <sc-if value="{{ hasOrders }}" hint-placeholder-val="{{ true }}">
+          <h2 style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:19px;margin:0 0 18px;color:#4a3f4d;">Órdenes sin completar</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));gap:20px;">
+            <sc-for list="{{ cards }}" as="card" hint-placeholder-count="4">
+              <div style="display:flex;flex-direction:column;gap:16px;background:#ffffff;border:1px solid #ece3ef;border-radius:20px;padding:22px;box-shadow:0 2px 10px rgba(74,63,77,0.06);">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <span style="font-family:'JetBrains Mono',monospace,'Cabin';font-size:12px;color:#b3a7b8;">Orden #{{ card.id }}</span>
+                  <span style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.03em;text-transform:uppercase;padding:5px 12px;border-radius:999px;background:{{ card.chipBg }};color:{{ card.chipColor }};">{{ card.statusText }}</span>
+                </div>
+
+                <div style="display:flex;align-items:flex-start;">
+                  <sc-for list="{{ card.timeline }}" as="t" hint-placeholder-count="5">
+                    <sc-if value="{{ t.isDot }}" hint-placeholder-val="{{ true }}">
+                      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;width:36px;">
+                        <div style="width:28px;height:28px;border-radius:999px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:{{ t.dotBg }};border:2px solid {{ t.dotBorder }};">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="{{ t.iconViewBox }}" style="height:12px;width:12px;fill:{{ t.iconColor }};"><path d="{{ t.iconPath }}"></path></svg>
+                        </div>
+                        <div style="font-size:10px;color:#8d7f91;text-align:center;line-height:1.2;">{{ t.label }}</div>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ t.isLine }}" hint-placeholder-val="{{ false }}">
+                      <div style="flex:1;height:2px;background:{{ t.lineColor }};margin:13px -2px 0;"></div>
+                    </sc-if>
+                  </sc-for>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:8px;padding-top:2px;border-top:1px solid #ece3ef;">
+                  <p style="margin:0;font-size:13px;display:flex;align-items:center;gap:8px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="height:13px;width:13px;fill:#8d7f91;flex-shrink:0;"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l80 0 0 56-80 0 0-56zm0 104l80 0 0 64-80 0 0-64zm128 0l96 0 0 64-96 0 0-64zm144 0l80 0 0 64-80 0 0-64zm80-48l-80 0 0-56 80 0 0 56zm0 160l0 40c0 8.8-7.2 16-16 16l-64 0 0-56 80 0zm-128 0l0 56-96 0 0-56 96 0zm-144 0l0 56-64 0c-8.8 0-16-7.2-16-16l0-40 80 0zM272 248l-96 0 0-56 96 0 0 56z"/></svg>
+                    <span style="color:#8d7f91;">Fecha de orden:</span> <span style="font-weight:600;">{{ card.orderDateLabel }}</span>
+                  </p>
+                  <p style="margin:0;font-size:13px;display:flex;align-items:center;gap:8px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" style="height:13px;width:13px;fill:#8d7f91;flex-shrink:0;"><path d="M48 0C21.5 0 0 21.5 0 48L0 368c0 26.5 21.5 48 48 48l16 0c0 53 43 96 96 96s96-43 96-96l128 0c0 53 43 96 96 96s96-43 96-96l32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64 0-32 0-18.7c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7L416 96l0-48c0-26.5-21.5-48-48-48L48 0zM416 160l50.7 0L544 237.3l0 18.7-128 0 0-96zM112 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm368-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>
+                    <span style="color:#8d7f91;">Enviado:</span> <span style="font-weight:600;">{{ card.shippedLabel }}</span>
+                  </p>
+                </div>
+
+                <sc-if value="{{ card.showButton }}" hint-placeholder-val="{{ false }}">
+                  <button type="button" onclick="{{ card.onComplete2 }}" style="display:flex;align-items:center;justify-content:center;gap:10px;border:none;cursor:pointer;background:#e8926a;color:#fff;font-family:'Quicksand',sans-serif;font-weight:700;font-size:14px;padding:12px 20px;border-radius:16px;box-shadow:0 4px 0 #b8623f;" style-active="transform:translateY(4px);box-shadow:none;">
+                    Completar
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="height:14px;width:14px;fill:currentColor;"><path d="M413.5 92L133.5 372l-99-99c-4.7-4.7-12.3-4.7-17 0L6.2 284.3c-4.7 4.7-4.7 12.3 0 17l118.8 118.8c4.7 4.7 12.3 4.7 17 0l299.8-299.8c4.7-4.7 4.7-12.3 0-17l-11.3-11.3c-4.7-4.7-12.3-4.7-17 0z"></path></svg>
+                  </button>
+                </sc-if>
+
+                <sc-if value="{{ card.isCompleted }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;align-items:center;justify-content:center;gap:8px;background:#f4ecf6;color:#8d7f91;font-size:13px;font-weight:600;border-radius:14px;padding:11px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="height:13px;width:13px;fill:currentColor;"><path d="M413.5 92L133.5 372l-99-99c-4.7-4.7-12.3-4.7-17 0L6.2 284.3c-4.7 4.7-4.7 12.3 0 17l118.8 118.8c4.7 4.7 12.3 4.7 17 0l299.8-299.8c4.7-4.7 4.7-12.3 0-17l-11.3-11.3c-4.7-4.7-12.3-4.7-17 0z"></path></svg>
+                    Completada
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:64px 24px;background:#ffffff;border:1px solid #ece3ef;border-radius:20px;">
+            <p style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:18px;margin:0 0 6px;">No tienes órdenes pendientes</p>
+            <p style="font-size:14px;color:#8d7f91;margin:0;">Cuando ordenes un regalo, aparecerá aquí.</p>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:2300,&quot;height&quot;:950}}">
+var ICONS = {
+  box: { viewBox: '0 0 448 512', path: 'M50.7 58.5L0 160l208 0 0-128L93.7 32C75.5 32 58.9 42.3 50.7 58.5zM240 160l208 0L397.3 58.5C389.1 42.3 372.5 32 354.3 32L240 32l0 128zm208 32L0 192 0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-224z' },
+  truck: { viewBox: '0 0 640 512', path: 'M48 0C21.5 0 0 21.5 0 48L0 368c0 26.5 21.5 48 48 48l16 0c0 53 43 96 96 96s96-43 96-96l128 0c0 53 43 96 96 96s96-43 96-96l32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64 0-32 0-18.7c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7L416 96l0-48c0-26.5-21.5-48-48-48L48 0zM416 160l50.7 0L544 237.3l0 18.7-128 0 0-96zM112 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm368-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z' },
+  check: { viewBox: '0 0 448 512', path: 'M413.5 92L133.5 372l-99-99c-4.7-4.7-12.3-4.7-17 0L6.2 284.3c-4.7 4.7-4.7 12.3 0 17l118.8 118.8c4.7 4.7 12.3 4.7 17 0l299.8-299.8c4.7-4.7 4.7-12.3 0-17l-11.3-11.3c-4.7-4.7-12.3-4.7-17 0z' }
+};
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      orders: [
+        { id: 45, orderDate: '2026-08-01', shipped: false, shippedDate: null, completed: false },
+        { id: 44, orderDate: '2026-07-29', shipped: true, shippedDate: '2026-07-30', completed: false },
+        { id: 41, orderDate: '2026-07-27', shipped: true, shippedDate: '2026-07-28', completed: false },
+        { id: 37, orderDate: '2026-07-26', shipped: true, shippedDate: '2026-07-27', completed: true },
+        { id: 33, orderDate: '2026-07-20', shipped: true, shippedDate: '2026-07-22', completed: true }
+      ]
+    };
+    this.complete = this.complete.bind(this);
+  }
+
+  formatOrderDate(iso) {
+    if (!iso) { return null; }
+    var d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  buildDot(active, iconKey) {
+    var icon = ICONS[iconKey];
+    return {
+      dotBg: active ? '#e8926a' : '#ffffff',
+      dotBorder: active ? '#e8926a' : '#ece3ef',
+      iconViewBox: icon.viewBox,
+      iconPath: icon.path,
+      iconColor: active ? '#ffffff' : '#c9bccf'
+    };
+  }
+
+  buildCard(o) {
+    var self = this;
+    var statusText = o.completed ? 'Completada' : (o.shipped ? 'Enviado' : 'Nueva');
+    var chipBg = o.completed ? '#e5dde8' : (o.shipped ? '#fce8dd' : '#f4ecf6');
+    var chipColor = o.completed ? '#8d7f91' : (o.shipped ? '#b8623f' : '#6b5599');
+    var line1Active = o.shipped || o.completed;
+    var line2Active = o.completed;
+    var dot1 = this.buildDot(true, 'box');
+    var dot2 = this.buildDot(o.shipped || o.completed, 'truck');
+    var dot3 = this.buildDot(o.completed, 'check');
+    var timeline = [
+      { isDot: true, isLine: false, label: 'Ordenado', dotBg: dot1.dotBg, dotBorder: dot1.dotBorder, iconViewBox: dot1.iconViewBox, iconPath: dot1.iconPath, iconColor: dot1.iconColor },
+      { isDot: false, isLine: true, lineColor: line1Active ? '#e8926a' : '#ece3ef' },
+      { isDot: true, isLine: false, label: 'Enviado', dotBg: dot2.dotBg, dotBorder: dot2.dotBorder, iconViewBox: dot2.iconViewBox, iconPath: dot2.iconPath, iconColor: dot2.iconColor },
+      { isDot: false, isLine: true, lineColor: line2Active ? '#e8926a' : '#ece3ef' },
+      { isDot: true, isLine: false, label: 'Completado', dotBg: dot3.dotBg, dotBorder: dot3.dotBorder, iconViewBox: dot3.iconViewBox, iconPath: dot3.iconPath, iconColor: dot3.iconColor }
+    ];
+    return {
+      id: o.id,
+      statusText: statusText,
+      chipBg: chipBg,
+      chipColor: chipColor,
+      timeline: timeline,
+      orderDateLabel: this.formatOrderDate(o.orderDate),
+      shippedLabel: o.shipped ? this.formatOrderDate(o.shippedDate) : 'No se ha enviado!',
+      showButton: o.shipped && !o.completed,
+      isCompleted: o.completed,
+      onComplete: function() { self.complete(o.id); },
+      onComplete2: function() { self.complete(o.id); }
+    };
+  }
+
+  complete(id) {
+    this.setState(function(s) {
+      var updated = s.orders.map(function(o) {
+        if (o.id === id) {
+          return Object.assign({}, o, { completed: true });
+        }
+        return o;
+      });
+      return { orders: updated };
+    });
+  }
+
+  renderVals() {
+    var self = this;
+    var orders = this.state.orders;
+    var pendingCount = orders.filter(function(o) { return !o.completed; }).length;
+    var cards = orders.map(function(o) { return self.buildCard(o); });
+    return {
+      pendingCount: pendingCount,
+      pendingLabel: pendingCount === 1 ? 'orden pendiente' : 'órdenes pendientes',
+      hasOrders: orders.length > 0,
+      showEmpty: orders.length === 0,
+      cards: cards
+    };
+  }
+}
+</script>
+</body>
+</html>

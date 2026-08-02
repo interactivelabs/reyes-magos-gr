@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"reyes-magos-gr/store/models"
 	utils "reyes-magos-gr/store/utils"
+	"time"
 )
 
 type LibSQLOrdersStore struct {
@@ -21,6 +22,11 @@ type OrdersStore interface {
 	DeleteOrder(orderID int64) error
 	GetOrderByID(orderID int64) (order models.Order, err error)
 	GetPendingOrdersByVolunteerID(volunteerID int64) (orders []models.Order, err error)
+	GetRecentlyCompletedOrdersByVolunteerID(
+		volunteerID int64,
+		since time.Time,
+		limit int,
+	) (orders []models.Order, err error)
 	GetAllActiveOrders() (orders []models.Order, err error)
 	GetCompletedOrders() (orders []models.Order, err error)
 }
@@ -109,6 +115,28 @@ func (r LibSQLOrdersStore) GetPendingOrdersByVolunteerID(
 			AND deleted = 0
 			AND completed = 0
 	`, volunteerID)
+	if err != nil {
+		return nil, err
+	}
+
+	return GetOrdersFromQuery(rows)
+}
+
+func (r LibSQLOrdersStore) GetRecentlyCompletedOrdersByVolunteerID(
+	volunteerID int64,
+	since time.Time,
+	limit int,
+) (orders []models.Order, err error) {
+	rows, err := r.DB.Query(`
+		SELECT `+orderAllFields+`
+		FROM orders
+		WHERE volunteer_id = ?
+			AND deleted = 0
+			AND completed = 1
+			AND completed_date >= ?
+		ORDER BY completed_date DESC
+		LIMIT ?
+	`, volunteerID, since.Format(time.RFC3339), limit)
 	if err != nil {
 		return nil, err
 	}

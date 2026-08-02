@@ -4,6 +4,7 @@ import (
 	"reyes-magos-gr/store"
 	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/models"
+	"time"
 )
 
 type VolunteersServiceApp struct {
@@ -36,6 +37,11 @@ type VolunteersService interface {
 		email string,
 	) (codes []models.Code, givenCodes []models.Code, err error)
 	GetVolunteerOrdersByEmail(email string) (orders []models.Order, err error)
+	GetRecentlyCompletedVolunteerOrdersByEmail(
+		email string,
+		since time.Time,
+		limit int,
+	) (orders []models.Order, err error)
 	GetVolunteerCartByEmail(email string) (cartItems []dtos.CartItem, err error)
 	CreateVolunteerCartItem(email string, toyID int64) (CartID int64, err error)
 	GetActiveVolunteersGrupedByLocation() (groupedVolunteers map[string][]models.Volunteer, err error)
@@ -81,6 +87,24 @@ func (s *VolunteersServiceApp) GetVolunteerOrdersByEmail(
 	}
 
 	orders, err = s.OrdersStore.GetPendingOrdersByVolunteerID(volunteer.VolunteerID)
+	if err != nil {
+		return nil, err
+	}
+
+	return orders, nil
+}
+
+func (s *VolunteersServiceApp) GetRecentlyCompletedVolunteerOrdersByEmail(
+	email string,
+	since time.Time,
+	limit int,
+) (orders []models.Order, err error) {
+	volunteer, err := s.VolunteersStore.GetVolunteerByEmail(email)
+	if err != nil {
+		return nil, err
+	}
+
+	orders, err = s.OrdersStore.GetRecentlyCompletedOrdersByVolunteerID(volunteer.VolunteerID, since, limit)
 	if err != nil {
 		return nil, err
 	}

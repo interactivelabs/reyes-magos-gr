@@ -5,12 +5,16 @@ import (
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
 	"reyes-magos-gr/store"
-	"reyes-magos-gr/views/components"
 	volunteer "reyes-magos-gr/views/volunteer"
 	"strconv"
 	"time"
 
 	"github.com/labstack/echo/v4"
+)
+
+const (
+	recentlyCompletedOrdersWindowMonths = 3
+	recentlyCompletedOrdersLimit        = 20
 )
 
 type MyOrdersHandler struct {
@@ -42,7 +46,15 @@ func (h *MyOrdersHandler) MyOrdersViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, volunteer.MyOrders(orders))
+	since := time.Now().AddDate(0, -recentlyCompletedOrdersWindowMonths, 0)
+	recentlyCompletedOrders, err := h.VolunteersService.GetRecentlyCompletedVolunteerOrdersByEmail(
+		profile.Email, since, recentlyCompletedOrdersLimit,
+	)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return lib.Render(ctx, volunteer.MyOrders(orders, recentlyCompletedOrders))
 }
 
 func (h *MyOrdersHandler) MyOrdersCompleteHandler(ctx echo.Context) error {
@@ -67,5 +79,5 @@ func (h *MyOrdersHandler) MyOrdersCompleteHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, components.OrderCard(order))
+	return lib.Render(ctx, volunteer.MyOrderCard(order))
 }
