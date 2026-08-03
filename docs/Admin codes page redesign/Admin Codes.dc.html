@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Cabin:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #fbf7fb; font-family: 'Cabin', sans-serif; color: #4a3f4d; }
+    a { color: #c96a3e; text-decoration: none; }
+    a:hover { color: #b8623f; }
+    input[type="checkbox"] { accent-color: #e8926a; width: 16px; height: 16px; cursor: pointer; }
+  </style>
+</helmet>
+
+<div style="min-height:100vh;">
+
+  <header style="background:#ffffff;border-bottom:1px solid #ece3ef;">
+    <div style="max-width:1100px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:72px;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <span style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:19px;color:#4a3f4d;">D&amp;L Toys</span>
+        <span style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;color:#9b85c4;background:#f4ecf6;padding:4px 10px;border-radius:999px;">Admin</span>
+      </div>
+      <nav style="display:flex;gap:28px;">
+        <a href="/admin/codes" style="font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#c96a3e;border-bottom:2px solid #e8926a;padding-bottom:22px;margin-bottom:-23px;">Códigos</a>
+        <a href="/admin/orders" style="font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#8d7f91;">Órdenes</a>
+        <a href="/admin/volunteers" style="font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#8d7f91;">Voluntarios</a>
+        <a href="/admin/toys" style="font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#8d7f91;">Juguetes</a>
+      </nav>
+      <a href="/logout" style="font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#8d7f91;">Salir</a>
+    </div>
+  </header>
+
+  <main style="max-width:1100px;margin:0 auto;padding:40px 32px 96px;">
+
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:28px;">
+      <div>
+        <h1 style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:30px;margin:0 0 4px;">Códigos</h1>
+        <p style="font-size:14px;color:#8d7f91;margin:0;">Genera códigos de regalo y asígnalos a los voluntarios.</p>
+      </div>
+      <sc-if value="{{ createIsInline }}" hint-placeholder-val="{{ true }}">
+        <span></span>
+      </sc-if>
+      <sc-if value="{{ createIsModal }}" hint-placeholder-val="{{ false }}">
+        <button type="button" onclick="{{ openCreateModal }}" style="display:flex;align-items:center;gap:8px;border:none;cursor:pointer;background:#e8926a;color:#fff;font-family:'Quicksand',sans-serif;font-weight:700;font-size:14px;padding:12px 22px;border-radius:16px;box-shadow:0 4px 0 #b8623f;" style-active="transform:translateY(4px);box-shadow:none;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="height:13px;width:13px;fill:currentColor;"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"></path></svg>
+          Generar códigos
+        </button>
+      </sc-if>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:36px;">
+      <div style="background:#ffffff;border:1px solid #ece3ef;border-radius:20px;padding:20px 22px;">
+        <div style="font-size:12px;color:#8d7f91;font-weight:600;margin-bottom:6px;">Sin asignar</div>
+        <div style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:28px;color:#4a3f4d;">{{ statUnassigned }}</div>
+      </div>
+      <div style="background:#ffffff;border:1px solid #ece3ef;border-radius:20px;padding:20px 22px;">
+        <div style="font-size:12px;color:#8d7f91;font-weight:600;margin-bottom:6px;">Asignados sin usar</div>
+        <div style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:28px;color:#4a3f4d;">{{ statAssigned }}</div>
+      </div>
+      <div style="background:#ffffff;border:1px solid #ece3ef;border-radius:20px;padding:20px 22px;">
+        <div style="font-size:12px;color:#8d7f91;font-weight:600;margin-bottom:6px;">Total activos</div>
+        <div style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:28px;color:#4a3f4d;">{{ statTotal }}</div>
+      </div>
+    </div>
+
+    <sc-if value="{{ createIsInline }}" hint-placeholder-val="{{ true }}">
+      <div style="background:#ffffff;border:1px solid #ece3ef;border-radius:20px;padding:24px 26px;margin-bottom:36px;">
+        <h2 style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:17px;margin:0 0 4px;">Generar códigos nuevos</h2>
+        <p style="font-size:13px;color:#8d7f91;margin:0 0 16px;">Cada código expira 10 días después de generarse.</p>
+        <div style="display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;">
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;color:#8d7f91;margin-bottom:6px;">Cantidad</label>
+            <input type="number" min="1" max="100" value="{{ createCount }}" oninput="{{ onCreateCountChange }}" placeholder="10" style="border-radius:14px;border:1px solid #ece3ef;padding:12px 16px;font-size:14px;font-family:'Cabin',sans-serif;width:140px;">
+          </div>
+          <button type="button" onclick="{{ onCreateSubmit }}" style="display:flex;align-items:center;gap:8px;border:none;cursor:pointer;background:#e8926a;color:#fff;font-family:'Quicksand',sans-serif;font-weight:700;font-size:14px;padding:12px 22px;border-radius:16px;box-shadow:0 4px 0 #b8623f;" style-active="transform:translateY(4px);box-shadow:none;">Generar</button>
+          <sc-if value="{{ createMessage }}" hint-placeholder-val="{{ false }}">
+            <span style="font-size:13px;color:#6b5599;font-weight:600;">{{ createMessage }}</span>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <section style="margin-bottom:40px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+        <h2 style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:19px;margin:0;">Códigos sin asignar</h2>
+        <sc-if value="{{ assignMessage }}" hint-placeholder-val="{{ false }}">
+          <span style="font-size:13px;color:#6b5599;font-weight:600;">{{ assignMessage }}</span>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ hasUnassigned }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#ffffff;border:1px solid #ece3ef;border-radius:20px;overflow:hidden;">
+          <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid #ece3ef;background:#fbf7fb;flex-wrap:wrap;">
+            <label style="font-size:12px;font-weight:600;color:#8d7f91;">Asignar a</label>
+            <select value="{{ selectedVolunteerId }}" onchange="{{ onVolunteerChange }}" style="border-radius:14px;border:1px solid #ece3ef;padding:10px 14px;font-size:14px;font-family:'Cabin',sans-serif;background:#fff;min-width:240px;">
+              <option value="">Selecciona un voluntario…</option>
+              <sc-for list="{{ volunteerOptions }}" as="v" hint-placeholder-count="3">
+                <option value="{{ v.id }}">{{ v.label }}</option>
+              </sc-for>
+            </select>
+            <div style="flex:1;"></div>
+            <span style="font-size:13px;color:#8d7f91;">{{ selectedCodeCount }} seleccionados</span>
+            <button type="button" onclick="{{ onAssignSubmit }}" disabled="{{ assignDisabled }}" style="{{ assignButtonStyle }}">Asignar ({{ selectedCodeCount }})</button>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:14px;">
+            <thead>
+              <tr style="border-bottom:1px solid #ece3ef;">
+                <th style="width:48px;padding:{{ rowPadding }} 20px;text-align:left;"><input type="checkbox" checked="{{ allUnassignedChecked }}" onchange="{{ onToggleAllUnassigned }}"></th>
+                <th style="padding:{{ rowPadding }} 4px {{ rowPadding }} 0;text-align:left;">
+                  <button type="button" onclick="{{ onToggleAllUnassigned }}" style="border:none;background:none;cursor:pointer;color:#9b85c4;font-family:'Cabin',sans-serif;font-weight:600;font-size:12px;text-decoration:underline;text-underline-offset:2px;padding:0;">{{ selectAllUnassignedLabel }}</button>
+                </th>
+                <th style="padding:{{ rowPadding }} 20px;text-align:left;font-family:'Quicksand',sans-serif;font-weight:700;font-size:12px;color:#8d7f91;text-transform:uppercase;letter-spacing:0.03em;">Código</th>
+                <th style="padding:{{ rowPadding }} 20px;text-align:left;font-family:'Quicksand',sans-serif;font-weight:700;font-size:12px;color:#8d7f91;text-transform:uppercase;letter-spacing:0.03em;">Expira</th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ unassignedRows }}" as="row" hint-placeholder-count="6">
+                <tr style="border-bottom:1px solid #f4ecf6;">
+                  <td style="padding:{{ rowPadding }} 20px;"><input type="checkbox" checked="{{ row.checked }}" onchange="{{ row.toggle }}"></td>
+                  <td style="padding:{{ rowPadding }} 20px;">
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;background:#f4ecf6;color:#4a3f4d;padding:5px 10px;border-radius:8px;">{{ row.code }}</span>
+                  </td>
+                  <td style="padding:{{ rowPadding }} 20px;color:#8d7f91;">{{ row.expirationLabel }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showUnassignedEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;padding:48px 24px;background:#ffffff;border:1px solid #ece3ef;border-radius:20px;">
+          <p style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:16px;margin:0 0 6px;">No hay códigos sin asignar</p>
+          <p style="font-size:14px;color:#8d7f91;margin:0;">Genera nuevos códigos para poder asignarlos a un voluntario.</p>
+        </div>
+      </sc-if>
+    </section>
+
+    <section>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+        <h2 style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:19px;margin:0;">Asignados sin usar</h2>
+        <sc-if value="{{ removeMessage }}" hint-placeholder-val="{{ false }}">
+          <span style="font-size:13px;color:#6b5599;font-weight:600;">{{ removeMessage }}</span>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ hasAssigned }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#ffffff;border:1px solid #ece3ef;border-radius:20px;overflow:hidden;">
+          <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid #ece3ef;background:#fbf7fb;flex-wrap:wrap;">
+            <label style="font-size:12px;font-weight:600;color:#8d7f91;">Filtrar por voluntario</label>
+            <select value="{{ filterVolunteer }}" onchange="{{ onFilterVolunteerChange }}" style="border-radius:14px;border:1px solid #ece3ef;padding:10px 14px;font-size:14px;font-family:'Cabin',sans-serif;background:#fff;min-width:200px;">
+              <option value="">Todos</option>
+              <sc-for list="{{ assignedVolunteerNames }}" as="name" hint-placeholder-count="3">
+                <option value="{{ name }}">{{ name }}</option>
+              </sc-for>
+            </select>
+            <div style="flex:1;"></div>
+            <span style="font-size:13px;color:#8d7f91;">{{ selectedRemoveCount }} seleccionados</span>
+            <button type="button" onclick="{{ onRemoveSubmit }}" disabled="{{ removeDisabled }}" style="{{ removeButtonStyle }}">Quitar ({{ selectedRemoveCount }})</button>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:14px;">
+            <thead>
+              <tr style="border-bottom:1px solid #ece3ef;">
+                <th style="width:48px;padding:{{ rowPadding }} 20px;text-align:left;"><input type="checkbox" checked="{{ allAssignedChecked }}" onchange="{{ onToggleAllAssigned }}"></th>
+                <th style="padding:{{ rowPadding }} 4px {{ rowPadding }} 0;text-align:left;">
+                  <button type="button" onclick="{{ onToggleAllAssigned }}" style="border:none;background:none;cursor:pointer;color:#9b85c4;font-family:'Cabin',sans-serif;font-weight:600;font-size:12px;text-decoration:underline;text-underline-offset:2px;padding:0;">{{ selectAllAssignedLabel }}</button>
+                </th>
+                <th style="padding:{{ rowPadding }} 20px;text-align:left;font-family:'Quicksand',sans-serif;font-weight:700;font-size:12px;color:#8d7f91;text-transform:uppercase;letter-spacing:0.03em;">Voluntario</th>
+                <th style="padding:{{ rowPadding }} 20px;text-align:left;font-family:'Quicksand',sans-serif;font-weight:700;font-size:12px;color:#8d7f91;text-transform:uppercase;letter-spacing:0.03em;">Código</th>
+                <th style="padding:{{ rowPadding }} 20px;text-align:left;font-family:'Quicksand',sans-serif;font-weight:700;font-size:12px;color:#8d7f91;text-transform:uppercase;letter-spacing:0.03em;">Expira</th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ assignedRows }}" as="row" hint-placeholder-count="5">
+                <tr style="border-bottom:1px solid #f4ecf6;">
+                  <td style="padding:{{ rowPadding }} 20px;"><input type="checkbox" checked="{{ row.checked }}" onchange="{{ row.toggle }}"></td>
+                  <td style="padding:{{ rowPadding }} 20px;font-weight:600;">{{ row.volunteer }}</td>
+                  <td style="padding:{{ rowPadding }} 20px;">
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;background:#f4ecf6;color:#4a3f4d;padding:5px 10px;border-radius:8px;">{{ row.code }}</span>
+                  </td>
+                  <td style="padding:{{ rowPadding }} 20px;color:#8d7f91;">{{ row.expirationLabel }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showAssignedEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;padding:48px 24px;background:#ffffff;border:1px solid #ece3ef;border-radius:20px;">
+          <p style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:16px;margin:0 0 6px;">No hay códigos asignados sin usar</p>
+          <p style="font-size:14px;color:#8d7f91;margin:0;">Cuando asignes códigos a voluntarios, aparecerán aquí hasta que se usen.</p>
+        </div>
+      </sc-if>
+    </section>
+
+  </main>
+
+  <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(74,63,77,0.35);display:flex;align-items:center;justify-content:center;z-index:50;" onclick="{{ closeCreateModal }}">
+      <div style="background:#ffffff;border-radius:20px;padding:28px 30px;width:360px;max-width:90vw;" onclick="{{ stopPropagation }}">
+        <h2 style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:18px;margin:0 0 4px;">Generar códigos nuevos</h2>
+        <p style="font-size:13px;color:#8d7f91;margin:0 0 18px;">Cada código expira 10 días después de generarse.</p>
+        <label style="display:block;font-size:12px;font-weight:600;color:#8d7f91;margin-bottom:6px;">Cantidad</label>
+        <input type="number" min="1" max="100" value="{{ createCount }}" oninput="{{ onCreateCountChange }}" placeholder="10" style="border-radius:14px;border:1px solid #ece3ef;padding:12px 16px;font-size:14px;font-family:'Cabin',sans-serif;width:100%;box-sizing:border-box;margin-bottom:20px;">
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+          <button type="button" onclick="{{ closeCreateModal }}" style="border:2px solid #e8926a;background:none;color:#c96a3e;padding:12px 20px;border-radius:16px;font-weight:700;font-size:14px;font-family:'Quicksand',sans-serif;cursor:pointer;">Cancelar</button>
+          <button type="button" onclick="{{ onCreateSubmitModal }}" style="border:none;cursor:pointer;background:#e8926a;color:#fff;font-family:'Quicksand',sans-serif;font-weight:700;font-size:14px;padding:12px 22px;border-radius:16px;box-shadow:0 4px 0 #b8623f;">Generar</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1400,&quot;height&quot;:1000},&quot;createPlacement&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;inline&quot;,&quot;options&quot;:[&quot;inline&quot;,&quot;modal&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;comfortable&quot;,&quot;options&quot;:[&quot;comfortable&quot;,&quot;compact&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+function fmtDate(iso) {
+  var d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+function randCode() {
+  var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  var s = '';
+  for (var i = 0; i < 6; i++) { s += chars[Math.floor(Math.random() * chars.length)]; }
+  return s;
+}
+function addDays(days) {
+  var d = new Date();
+  d.setDate(d.getDate() + days);
+  return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+}
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    var nextCodeId = 1;
+    var mk = function(daysOut) { return { codeId: nextCodeId++, code: randCode(), expiration: addDays(daysOut) }; };
+    this.state = {
+      volunteers: [
+        { id: 1, name: 'Ana Torres' },
+        { id: 2, name: 'Luis Hernández' },
+        { id: 3, name: 'Marta Díaz' }
+      ],
+      unassigned: [mk(10), mk(9), mk(9), mk(8), mk(7), mk(6)],
+      assigned: [
+        { volunteerCodeId: 101, volunteer: 'Carla Reyes', code: randCode(), expiration: addDays(5) },
+        { volunteerCodeId: 102, volunteer: 'Jorge Salas', code: randCode(), expiration: addDays(4) },
+        { volunteerCodeId: 103, volunteer: 'Ana Torres', code: randCode(), expiration: addDays(3) }
+      ],
+      selectedCodeIds: {},
+      selectedRemoveIds: {},
+      selectedVolunteerId: '',
+      filterVolunteer: '',
+      createCount: 10,
+      createMessage: '',
+      assignMessage: '',
+      removeMessage: '',
+      modalOpen: false
+    };
+    this._nextCodeId = nextCodeId;
+    this._msgTimer = null;
+
+    this.onVolunteerChange = this.onVolunteerChange.bind(this);
+    this.onCreateCountChange = this.onCreateCountChange.bind(this);
+    this.onCreateSubmit = this.onCreateSubmit.bind(this);
+    this.onCreateSubmitModal = this.onCreateSubmitModal.bind(this);
+    this.onAssignSubmit = this.onAssignSubmit.bind(this);
+    this.onRemoveSubmit = this.onRemoveSubmit.bind(this);
+    this.onToggleAllUnassigned = this.onToggleAllUnassigned.bind(this);
+    this.onToggleAllAssigned = this.onToggleAllAssigned.bind(this);
+    this.onFilterVolunteerChange = this.onFilterVolunteerChange.bind(this);
+    this.openCreateModal = this.openCreateModal.bind(this);
+    this.closeCreateModal = this.closeCreateModal.bind(this);
+    this.stopPropagation = this.stopPropagation.bind(this);
+  }
+
+  flash(field, text) {
+    var self = this;
+    var upd = {};
+    upd[field] = text;
+    this.setState(upd);
+    clearTimeout(this._msgTimer);
+    this._msgTimer = setTimeout(function() {
+      var clear = {};
+      clear[field] = '';
+      self.setState(clear);
+    }, 2600);
+  }
+
+  toggleCode(id) {
+    this.setState(function(s) {
+      var next = Object.assign({}, s.selectedCodeIds);
+      if (next[id]) { delete next[id]; } else { next[id] = true; }
+      return { selectedCodeIds: next };
+    });
+  }
+
+  toggleRemove(id) {
+    this.setState(function(s) {
+      var next = Object.assign({}, s.selectedRemoveIds);
+      if (next[id]) { delete next[id]; } else { next[id] = true; }
+      return { selectedRemoveIds: next };
+    });
+  }
+
+  onToggleAllUnassigned() {
+    this.setState(function(s) {
+      var allChecked = s.unassigned.length > 0 && s.unassigned.every(function(c) { return s.selectedCodeIds[c.codeId]; });
+      if (allChecked) { return { selectedCodeIds: {} }; }
+      var next = {};
+      s.unassigned.forEach(function(c) { next[c.codeId] = true; });
+      return { selectedCodeIds: next };
+    });
+  }
+
+  onToggleAllAssigned() {
+    this.setState(function(s) {
+      var visible = s.filterVolunteer ? s.assigned.filter(function(c) { return c.volunteer === s.filterVolunteer; }) : s.assigned;
+      var allChecked = visible.length > 0 && visible.every(function(c) { return s.selectedRemoveIds[c.volunteerCodeId]; });
+      var next = Object.assign({}, s.selectedRemoveIds);
+      visible.forEach(function(c) {
+        if (allChecked) { delete next[c.volunteerCodeId]; } else { next[c.volunteerCodeId] = true; }
+      });
+      return { selectedRemoveIds: next };
+    });
+  }
+
+  onFilterVolunteerChange(e) {
+    this.setState({ filterVolunteer: e.target.value });
+  }
+
+  onVolunteerChange(e) {
+    this.setState({ selectedVolunteerId: e.target.value });
+  }
+
+  onCreateCountChange(e) {
+    this.setState({ createCount: e.target.value });
+  }
+
+  doCreate() {
+    var self = this;
+    var count = Math.max(1, Math.min(100, parseInt(this.state.createCount, 10) || 0));
+    var added = [];
+    for (var i = 0; i < count; i++) {
+      added.push({ codeId: this._nextCodeId++, code: randCode(), expiration: addDays(10) });
+    }
+    this.setState(function(s) {
+      return { unassigned: s.unassigned.concat(added) };
+    });
+    this.flash('createMessage', count + (count === 1 ? ' código generado' : ' códigos generados'));
+  }
+
+  onCreateSubmit() { this.doCreate(); }
+  onCreateSubmitModal() { this.doCreate(); this.setState({ modalOpen: false }); }
+  openCreateModal() { this.setState({ modalOpen: true }); }
+  closeCreateModal() { this.setState({ modalOpen: false }); }
+  stopPropagation(e) { e.stopPropagation(); }
+
+  onAssignSubmit() {
+    var self = this;
+    var s = this.state;
+    var volunteer = s.volunteers.find(function(v) { return String(v.id) === String(s.selectedVolunteerId); });
+    if (!volunteer) return;
+    var selectedIds = Object.keys(s.selectedCodeIds).map(Number);
+    if (selectedIds.length === 0) return;
+    var moving = s.unassigned.filter(function(c) { return s.selectedCodeIds[c.codeId]; });
+    var remaining = s.unassigned.filter(function(c) { return !s.selectedCodeIds[c.codeId]; });
+    var newAssigned = moving.map(function(c) {
+      return { volunteerCodeId: Date.now() + Math.random(), volunteer: volunteer.name, code: c.code, expiration: c.expiration };
+    });
+    this.setState({
+      unassigned: remaining,
+      assigned: s.assigned.concat(newAssigned),
+      selectedCodeIds: {},
+      selectedVolunteerId: ''
+    });
+    this.flash('assignMessage', selectedIds.length + (selectedIds.length === 1 ? ' código asignado a ' : ' códigos asignados a ') + volunteer.name);
+  }
+
+  onRemoveSubmit() {
+    var s = this.state;
+    var count = Object.keys(s.selectedRemoveIds).length;
+    if (count === 0) return;
+    var remaining = s.assigned.filter(function(c) { return !s.selectedRemoveIds[c.volunteerCodeId]; });
+    this.setState({ assigned: remaining, selectedRemoveIds: {} });
+    this.flash('removeMessage', count + (count === 1 ? ' código eliminado' : ' códigos eliminados'));
+  }
+
+  renderVals() {
+    var self = this;
+    var s = this.state;
+    var density = this.props.density || 'comfortable';
+    var rowPadding = density === 'compact' ? '8px' : '14px';
+    var createPlacement = this.props.createPlacement || 'inline';
+
+    var allUnassignedChecked = s.unassigned.length > 0 && s.unassigned.every(function(c) { return !!s.selectedCodeIds[c.codeId]; });
+    var filteredAssigned = s.filterVolunteer ? s.assigned.filter(function(c) { return c.volunteer === s.filterVolunteer; }) : s.assigned;
+    var allAssignedChecked = filteredAssigned.length > 0 && filteredAssigned.every(function(c) { return !!s.selectedRemoveIds[c.volunteerCodeId]; });
+    var selectedCodeCount = Object.keys(s.selectedCodeIds).length;
+    var selectedRemoveCount = Object.keys(s.selectedRemoveIds).filter(function(id) {
+      return filteredAssigned.some(function(c) { return String(c.volunteerCodeId) === String(id); });
+    }).length;
+    var assignedVolunteerNames = Array.from(new Set(s.assigned.map(function(c) { return c.volunteer; })));
+    var assignDisabled = !s.selectedVolunteerId || selectedCodeCount === 0;
+    var removeDisabled = selectedRemoveCount === 0;
+
+    var btnBase = 'border:none;cursor:pointer;font-family:"Quicksand",sans-serif;font-weight:700;font-size:13px;padding:10px 18px;border-radius:14px;';
+    var assignButtonStyle = assignDisabled
+      ? btnBase + 'background:#e5dde8;color:#b3a7b8;'
+      : btnBase + 'background:#e8926a;color:#fff;box-shadow:0 3px 0 #b8623f;';
+    var removeButtonStyle = removeDisabled
+      ? btnBase + 'background:#e5dde8;color:#b3a7b8;'
+      : btnBase + 'background:#9b85c4;color:#fff;box-shadow:0 3px 0 #6b5599;';
+
+    var unassignedRows = s.unassigned.map(function(c) {
+      return {
+        codeId: c.codeId,
+        code: c.code,
+        expirationLabel: fmtDate(c.expiration),
+        checked: !!s.selectedCodeIds[c.codeId],
+        toggle: function() { self.toggleCode(c.codeId); }
+      };
+    });
+
+    var assignedRows = filteredAssigned.map(function(c) {
+      return {
+        volunteerCodeId: c.volunteerCodeId,
+        volunteer: c.volunteer,
+        code: c.code,
+        expirationLabel: fmtDate(c.expiration),
+        checked: !!s.selectedRemoveIds[c.volunteerCodeId],
+        toggle: function() { self.toggleRemove(c.volunteerCodeId); }
+      };
+    });
+
+    var volunteerOptions = s.volunteers.map(function(v) { return { id: v.id, label: v.name }; });
+
+    return {
+      statUnassigned: s.unassigned.length,
+      statAssigned: s.assigned.length,
+      statTotal: s.unassigned.length + s.assigned.length,
+      createIsInline: createPlacement !== 'modal',
+      createIsModal: createPlacement === 'modal',
+      createCount: s.createCount,
+      createMessage: s.createMessage,
+      assignMessage: s.assignMessage,
+      removeMessage: s.removeMessage,
+      onCreateCountChange: this.onCreateCountChange,
+      onCreateSubmit: this.onCreateSubmit,
+      onCreateSubmitModal: this.onCreateSubmitModal,
+      openCreateModal: this.openCreateModal,
+      closeCreateModal: this.closeCreateModal,
+      stopPropagation: this.stopPropagation,
+      modalOpen: s.modalOpen,
+      rowPadding: rowPadding,
+      hasUnassigned: s.unassigned.length > 0,
+      showUnassignedEmpty: s.unassigned.length === 0,
+      unassignedRows: unassignedRows,
+      volunteerOptions: volunteerOptions,
+      selectedVolunteerId: s.selectedVolunteerId,
+      onVolunteerChange: this.onVolunteerChange,
+      selectedCodeCount: selectedCodeCount,
+      allUnassignedChecked: allUnassignedChecked,
+      onToggleAllUnassigned: this.onToggleAllUnassigned,
+      assignDisabled: assignDisabled,
+      assignButtonStyle: assignButtonStyle,
+      onAssignSubmit: this.onAssignSubmit,
+      hasAssigned: s.assigned.length > 0,
+      showAssignedEmpty: s.assigned.length === 0,
+      assignedRows: assignedRows,
+      selectedRemoveCount: selectedRemoveCount,
+      allAssignedChecked: allAssignedChecked,
+      onToggleAllAssigned: this.onToggleAllAssigned,
+      removeDisabled: removeDisabled,
+      removeButtonStyle: removeButtonStyle,
+      onRemoveSubmit: this.onRemoveSubmit,
+      assignedVolunteerNames: assignedVolunteerNames,
+      filterVolunteer: s.filterVolunteer,
+      onFilterVolunteerChange: this.onFilterVolunteerChange,
+      selectAllUnassignedLabel: allUnassignedChecked ? 'Deseleccionar todo' : 'Seleccionar todo',
+      selectAllAssignedLabel: allAssignedChecked ? 'Deseleccionar todo' : 'Seleccionar todo'
+    };
+  }
+}
+</script>
+</body>
+</html>

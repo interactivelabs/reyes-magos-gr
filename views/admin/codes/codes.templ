@@ -10,160 +10,171 @@ import (
 
 templ Codes(codes []models.Code, volunteerCodes []models.VolunteerCode, volunteers []models.Volunteer) {
 	@admin.AdminLayout() {
-		<main>
-			<div class="container mx-auto lg:max-w-7xl lg:px-8">
-				<div class="relative w-full">
-					<div class="p-8 text-center">
-						<h1 class="text-2xl">Codes</h1>
+		<main class="bg-background min-h-screen">
+			<div class="container mx-auto max-w-5xl px-6 py-10 lg:px-8">
+				<div class="mb-7">
+					<h1 class={ components.DSHeading1 }>Códigos</h1>
+					<p class={ components.DSBody + " text-muted" }>Genera códigos de regalo y asígnalos a los voluntarios.</p>
+				</div>
+				<div class="mb-9 grid grid-cols-1 gap-4 sm:grid-cols-3">
+					<div class="rounded-chip border border-border bg-surface px-5 py-5">
+						<div class="mb-1.5 font-sans text-xs font-semibold text-muted">Sin asignar</div>
+						<div class={ components.DSHeading2 }>{ fmt.Sprint(len(codes)) }</div>
 					</div>
-					<div class="flex flex-col justify-around">
-						if len(codes) > 0 {
-							<div class="pb-6">
-								<form method="post" action="/admin/codes/assign" id="assign-codes-form">
-									<h2 class="text-xl text-center py-6">Un assigned</h2>
-									<div class="py-4">
-										<label for="volunteer_id" class="block text-sm font-medium leading-6">Volunteer</label>
-										<select
-											id="volunteer_id"
-											name="volunteer_id"
-											class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-brand-orange sm:text-sm sm:leading-6"
-										>
-											for _, volunteer := range volunteers {
-												<option value={ templ.EscapeString(fmt.Sprint(volunteer.VolunteerID)) }>
-													{ volunteer.Name } - { volunteer.Email }
-												</option>
-											}
-										</select>
-									</div>
-									<table class="w-full caption-bottom text-sm">
-										<thead class="[&_tr]:border-b">
-											<tr class="border-b transition-colors hover:bg-muted/50">
-												<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]">
-													Assign
-												</th>
-												<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]">
-													Code
-												</th>
-												<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-													Expiration
-												</th>
-											</tr>
-										</thead>
-										<tbody class="[&_tr:last-child]:border-0">
-											for _, code := range codes {
-												<tr class="border-b transition-colors hover:bg-muted/50">
-													<td class="p-4 align-middle">
-														<input
-															type="checkbox"
-															value={ templ.EscapeString(fmt.Sprint(code.CodeID)) }
-															name="code_ids"
-															class="h-4 w-4 rounded-sm border-gray-300 text-brand-orange focus:ring-brand-orange"
-														/>
-													</td>
-													<td class="p-4 align-middle font-medium">{ code.Code }</td>
-													<td class="p-4 align-middle">{ lib.FormatDate(code.Expiration) }</td>
-												</tr>
-											}
-										</tbody>
-									</table>
-									<div>
-										<button
-											type="button"
-											onclick="selectAllUnsigned()"
-											class={ components.BaseSecondaryButton }
-										>Select All</button>
-									</div>
-									<div class="flex justify-center py-6">
-										<button
-											type="submit"
-											class={ components.BrandPrimaryButton }
-										>
-											Assign
-										</button>
-									</div>
-								</form>
-							</div>
-						} else {
-							<div class="pb-6">
-								<form method="post" action="/admin/codes/create">
-									<h2 class="text-xl text-center">Create Codes</h2>
-									<div class="py-8">
-										<label for="count" class="block text-sm font-medium leading-6">Count</label>
-										<div class="mt-2">
-											<div class="flex rounded-md shadow-xs ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-brand-orange sm:max-w-md">
-												<input
-													type="number"
-													name="count"
-													class="w-full block flex-1 border-0 bg-transparent py-1.5 pl-1 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-													placeholder="10"
-													required
-												/>
-											</div>
-										</div>
-										<div class="flex justify-center py-6">
-											<button
-												type="submit"
-												class={ components.BrandPrimaryButton }
-											>
-												Create
-											</button>
-										</div>
-									</div>
-								</form>
-							</div>
-						}
-						@components.Divider()
-						<div class="pb-6">
-							<form method="post" action="/admin/codes/remove" id="remove_code_form">
-								<h2 class="text-xl text-center py-6">Assigned Not Used</h2>
-								<table class="w-full caption-bottom text-sm">
-									<thead class="[&_tr]:border-b">
-										<tr class="border-b transition-colors hover:bg-muted/50">
-											<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]">
-												Remove
+					<div class="rounded-chip border border-border bg-surface px-5 py-5">
+						<div class="mb-1.5 font-sans text-xs font-semibold text-muted">Asignados sin usar</div>
+						<div class={ components.DSHeading2 }>{ fmt.Sprint(len(volunteerCodes)) }</div>
+					</div>
+					<div class="rounded-chip border border-border bg-surface px-5 py-5">
+						<div class="mb-1.5 font-sans text-xs font-semibold text-muted">Total activos</div>
+						<div class={ components.DSHeading2 }>{ fmt.Sprint(len(codes) + len(volunteerCodes)) }</div>
+					</div>
+				</div>
+				<div class="mb-9 rounded-chip border border-border bg-surface px-6 py-6">
+					<h2 class={ components.DSHeading3 }>Generar códigos nuevos</h2>
+					<p class="mb-4 mt-1 font-sans text-sm text-muted">Cada código expira 10 días después de generarse.</p>
+					<form method="post" action="/admin/codes/create" class="flex flex-wrap items-end gap-4">
+						<div>
+							<label for="count" class={ components.DSLabel + " mb-1.5" }>Cantidad</label>
+							<input
+								type="number"
+								id="count"
+								name="count"
+								min="1"
+								max="100"
+								placeholder="10"
+								required
+								class="w-36 rounded-input border border-border bg-surface px-4 py-3 text-sm font-sans text-ink placeholder:text-muted focus:border-primary focus:outline-none focus:shadow-focus"
+							/>
+						</div>
+						<button type="submit" class={ components.DSButtonPrimary }>Generar</button>
+					</form>
+				</div>
+				<section class="mb-10">
+					<h2 class={ components.DSHeading3 + " mb-3.5" }>Códigos sin asignar</h2>
+					if len(codes) > 0 {
+						<form method="post" action="/admin/codes/assign" id="assign-codes-form">
+							<div class="overflow-hidden rounded-chip border border-border bg-surface">
+								<div class="flex flex-nowrap items-center gap-3.5 overflow-x-auto border-b border-border bg-chip/40 px-5 py-4">
+									<label for="volunteer_id" class="shrink-0 whitespace-nowrap text-sm font-semibold text-ink">Asignar a</label>
+									<select
+										id="volunteer_id"
+										name="volunteer_id"
+										class="w-auto min-w-60 shrink-0 rounded-input border border-border bg-surface px-4 py-3 text-sm font-sans text-ink focus:border-primary focus:outline-none focus:shadow-focus"
+									>
+										<option value="">Selecciona un voluntario…</option>
+										for _, volunteer := range volunteers {
+											<option value={ templ.EscapeString(fmt.Sprint(volunteer.VolunteerID)) }>
+												{ volunteer.Name } - { volunteer.Email }
+											</option>
+										}
+									</select>
+									<div class="flex-1"></div>
+									<span id="assign-selected-count" class="shrink-0 whitespace-nowrap text-sm text-muted">0 seleccionados</span>
+									<button
+										type="submit"
+										id="assign-submit"
+										class={ components.DSButtonPrimary + " shrink-0 disabled:cursor-not-allowed disabled:bg-disabled disabled:text-disabled-text disabled:shadow-none" }
+										disabled
+									>
+										Asignar (0)
+									</button>
+								</div>
+								<table class="w-full text-sm">
+									<thead>
+										<tr class="border-b border-border">
+											<th class="w-12 px-5 py-3.5 text-left">
+												<input type="checkbox" id="select-all-unassigned" aria-label="Seleccionar todo" class="h-4 w-4 rounded-sm accent-primary"/>
 											</th>
-											<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]">
-												Volunteer
-											</th>
-											<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]">
-												Code
-											</th>
-											<th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-												Expiration
-											</th>
+											<th class="px-5 py-3.5 text-left font-heading text-xs font-bold uppercase tracking-wide text-muted">Código</th>
+											<th class="px-5 py-3.5 text-left font-heading text-xs font-bold uppercase tracking-wide text-muted">Expira</th>
 										</tr>
 									</thead>
-									<tbody class="[&_tr:last-child]:border-0">
-										for _, code := range volunteerCodes {
-											<tr class="border-b transition-colors hover:bg-muted/50">
-												<td class="p-4 align-middle">
+									<tbody>
+										for _, code := range codes {
+											<tr class="border-b border-border last:border-0">
+												<td class="px-5 py-3.5">
 													<input
-														class="h-4 w-4 rounded-sm border-gray-300 text-brand-orange focus:ring-brand-orange"
 														type="checkbox"
-														value={ templ.EscapeString(fmt.Sprint(code.VolunteerCodeID)) }
-														name="volunteer_code_ids"
+														value={ templ.EscapeString(fmt.Sprint(code.CodeID)) }
+														name="code_ids"
+														class="unassigned-checkbox h-4 w-4 rounded-sm accent-primary"
 													/>
-													<input class="hidden" type="checkbox" value={ templ.EscapeString(fmt.Sprint(code.Code.CodeID)) } name="code_ids"/>
 												</td>
-												<td class="p-4 align-middle font-medium">{ code.Volunteer.Name }</td>
-												<td class="p-4 align-middle font-medium">{ code.Code.Code }</td>
-												<td class="p-4 align-middle">{ lib.FormatDate(code.Code.Expiration) }</td>
+												<td class="px-5 py-3.5">
+													<span class="rounded-chip bg-chip px-2.5 py-1 font-mono text-[13px] font-semibold text-ink">{ code.Code }</span>
+												</td>
+												<td class="px-5 py-3.5 text-muted">{ lib.FormatDate(code.Expiration) }</td>
 											</tr>
 										}
 									</tbody>
 								</table>
-								<div class="flex justify-center py-6">
+							</div>
+						</form>
+					} else {
+						<div class="rounded-chip border border-border bg-surface px-6 py-12 text-center">
+							<p class={ components.DSHeading3 }>No hay códigos sin asignar</p>
+							<p class="mt-1.5 font-sans text-sm text-muted">Genera nuevos códigos para poder asignarlos a un voluntario.</p>
+						</div>
+					}
+				</section>
+				<section>
+					<h2 class={ components.DSHeading3 + " mb-3.5" }>Asignados sin usar</h2>
+					if len(volunteerCodes) > 0 {
+						<form method="post" action="/admin/codes/remove" id="remove-codes-form">
+							<div class="overflow-hidden rounded-chip border border-border bg-surface">
+								<div class="flex flex-nowrap items-center justify-end gap-3.5 overflow-x-auto border-b border-border bg-chip/40 px-5 py-4">
+									<span id="remove-selected-count" class="shrink-0 whitespace-nowrap text-sm text-muted">0 seleccionados</span>
 									<button
 										type="submit"
-										class={ components.BrandPrimaryButton }
+										id="remove-submit"
+										class={ components.DSButtonSecondary + " shrink-0 disabled:cursor-not-allowed disabled:bg-disabled disabled:text-disabled-text disabled:shadow-none" }
+										disabled
 									>
-										Remove
+										Quitar (0)
 									</button>
 								</div>
-							</form>
+								<table class="w-full text-sm">
+									<thead>
+										<tr class="border-b border-border">
+											<th class="w-12 px-5 py-3.5 text-left">
+												<input type="checkbox" id="select-all-assigned" aria-label="Seleccionar todo" class="h-4 w-4 rounded-sm accent-secondary"/>
+											</th>
+											<th class="px-5 py-3.5 text-left font-heading text-xs font-bold uppercase tracking-wide text-muted">Voluntario</th>
+											<th class="px-5 py-3.5 text-left font-heading text-xs font-bold uppercase tracking-wide text-muted">Código</th>
+											<th class="px-5 py-3.5 text-left font-heading text-xs font-bold uppercase tracking-wide text-muted">Expira</th>
+										</tr>
+									</thead>
+									<tbody>
+										for _, code := range volunteerCodes {
+											<tr class="border-b border-border last:border-0">
+												<td class="px-5 py-3.5">
+													<input
+														type="checkbox"
+														value={ templ.EscapeString(fmt.Sprint(code.VolunteerCodeID)) }
+														name="volunteer_code_ids"
+														class="assigned-checkbox h-4 w-4 rounded-sm accent-secondary"
+													/>
+													<input class="hidden" type="checkbox" value={ templ.EscapeString(fmt.Sprint(code.Code.CodeID)) } name="code_ids"/>
+												</td>
+												<td class="px-5 py-3.5 font-medium text-ink">{ code.Volunteer.Name }</td>
+												<td class="px-5 py-3.5">
+													<span class="rounded-chip bg-chip px-2.5 py-1 font-mono text-[13px] font-semibold text-ink">{ code.Code.Code }</span>
+												</td>
+												<td class="px-5 py-3.5 text-muted">{ lib.FormatDate(code.Code.Expiration) }</td>
+											</tr>
+										}
+									</tbody>
+								</table>
+							</div>
+						</form>
+					} else {
+						<div class="rounded-chip border border-border bg-surface px-6 py-12 text-center">
+							<p class={ components.DSHeading3 }>No hay códigos asignados sin usar</p>
+							<p class="mt-1.5 font-sans text-sm text-muted">Cuando asignes códigos a voluntarios, aparecerán aquí hasta que se usen.</p>
 						</div>
-					</div>
-				</div>
+					}
+				</section>
 			</div>
 		</main>
 	}

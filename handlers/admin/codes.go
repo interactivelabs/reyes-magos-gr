@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"fmt"
 	"net/http"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
@@ -76,7 +77,7 @@ func (h *CodesHandler) AssignCodesHandler(ctx echo.Context) error {
 		}
 	}
 
-	return ctx.Redirect(303, "/admin/codes")
+	return ctx.Redirect(303, fmt.Sprintf("/admin/codes?assigned=%d", len(acr.CodeIDs)))
 }
 
 type RemoveCodesRequest struct {
@@ -108,7 +109,7 @@ func (h *CodesHandler) RemoveCodesHandler(ctx echo.Context) error {
 		}
 	}
 
-	return ctx.Redirect(303, "/admin/codes")
+	return ctx.Redirect(303, fmt.Sprintf("/admin/codes?removed=%d", len(acr.VolunteerCodeIDs)))
 }
 
 type CreateCodesRequest struct {
@@ -129,5 +130,5 @@ func (h *CodesHandler) CreateCodesHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return ctx.Redirect(303, "/admin/codes")
+	return ctx.Redirect(303, fmt.Sprintf("/admin/codes?created=%d", acr.Count))
 }

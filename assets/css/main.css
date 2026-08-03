@@ -21,6 +21,7 @@
    * in place until every view using them has been moved over.
    */
   --font-heading: Quicksand, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
   --color-primary: #e8926a;
   --color-primary-shadow: #b8623f;
