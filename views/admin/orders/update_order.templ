@@ -7,60 +7,97 @@ import (
 	"reyes-magos-gr/views/components"
 )
 
+func orderCompletedToggleTrackClass(completed int64) string {
+	base := "cursor-pointer relative inline-flex h-6 w-11 shrink-0 rounded-pill border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:shadow-focus "
+	if completed == 1 {
+		return base + "bg-primary"
+	}
+	return base + "bg-disabled"
+}
+
+func orderCompletedToggleKnobClass(completed int64) string {
+	base := "pointer-events-none inline-block h-5 w-5 transform rounded-pill bg-surface shadow-sm ring-0 transition duration-200 ease-in-out "
+	if completed == 1 {
+		return base + "translate-x-5"
+	}
+	return base + "translate-x-0"
+}
+
+func orderCompletedAriaChecked(completed int64) string {
+	if completed == 1 {
+		return "true"
+	}
+	return "false"
+}
+
 templ UpdateOrder(order models.Order, toy models.Toy, volunteer models.Volunteer) {
 	<form
-		class="w-full p-8 bg-white"
+		class="w-full rounded-image border border-border bg-surface p-5.5"
 		hx-put={ lib.GetSafeIdUrl("/admin/order/%d/save", order.OrderID) }
 		hx-target={ fmt.Sprintf("#admin-order-%d", order.OrderID) }
 	>
-		<div class="grid grid-cols-1 gap-x-6 gap-y-8">
-			<div>
-				<label for="email" class={ components.BaseLabelStyles }>Volunteer Email</label>
+		<div class="grid grid-cols-1 gap-x-6 gap-y-5">
+			<div class="mb-4">
+				<label class={ components.DSLabel }>Juguete</label>
 				<div class="mt-2">
-					<input type="email" name="email" value={ volunteer.Email } class={ components.BaseInputStyles } readonly/>
+					<a
+						href={ templ.URL(toy.SourceURL) }
+						target="_blank"
+						rel="noopener noreferrer"
+						referrerpolicy="no-referrer"
+						class={ components.DSInput + " block truncate underline decoration-dotted underline-offset-2" }
+					>
+						{ toy.ToyName }
+					</a>
 				</div>
 			</div>
-			<div>
-				<label for="phone" class={ components.BaseLabelStyles }>Volunteer Phone</label>
+			<div class="mb-4">
+				<label for="email" class={ components.DSLabel }>Correo del Voluntario</label>
 				<div class="mt-2">
-					<input type="tel" name="phone" value={ volunteer.Phone } class={ components.BaseInputStyles } readonly/>
+					<input type="email" name="email" value={ volunteer.Email } class={ components.DSInput } readonly/>
 				</div>
 			</div>
-			<div>
-				<label for="shipped_date" class={ components.BaseLabelStyles }>Shipped Date</label>
+			<div class="mb-4">
+				<label for="phone" class={ components.DSLabel }>Teléfono del Voluntario</label>
 				<div class="mt-2">
-					<input type="date" name="shipped_date" value={ order.ShippedDate } class={ components.BaseInputStyles }/>
+					<input type="tel" name="phone" value={ volunteer.Phone } class={ components.DSInput } readonly/>
 				</div>
 			</div>
-			<div class="flex items-center">
+			<div class="mb-4">
+				<label for="shipped_date" class={ components.DSLabel }>Fecha de Envío</label>
+				<div class="mt-2">
+					<input type="date" name="shipped_date" value={ order.ShippedDate } class={ components.DSInput }/>
+				</div>
+			</div>
+			<div class="flex items-center text-end mb-4">
 				<input type="hidden" name="order_completed" value={ fmt.Sprint(order.Completed) }/>
 				<button
 					type="button"
 					role="switch"
-					aria-checked="false"
+					aria-checked={ orderCompletedAriaChecked(order.Completed) }
 					aria-labelledby="order-completed-label"
 					onclick="orderCompletedToggleClick(this)"
-					class={ components.ToggleButtonStyles(order.Completed) }
+					class={ orderCompletedToggleTrackClass(order.Completed) }
 				>
-					<span aria-hidden="true" class={ components.ToggleInsertStyles(order.Completed) }></span>
+					<span aria-hidden="true" class={ orderCompletedToggleKnobClass(order.Completed) }></span>
 				</button>
 				<span class="ml-3 text-sm" id="order-completed-label">
-					<span class={ components.BaseLabelStyles }>Order Completed</span>
+					<span class={ components.DSLabel }>Orden Completada</span>
 				</span>
 			</div>
-			<div class="mt-6 flex items-center justify-end gap-x-6 border-t border-gray-900/10 pt-8">
+			<div class="flex items-center justify-between gap-x-4 border-t border-border pt-6 w-full">
 				<button
 					type="button"
-					class={ components.BaseSecondaryButton }
+					class={ components.DSButtonOutline }
 					hx-get={ lib.GetSafeIdUrl("/admin/order/%d", order.OrderID) }
 					hx-target={ fmt.Sprintf("#admin-order-%d", order.OrderID) }
 				>
-					Cancel
+					Cancelar
 				</button>
 				<button
 					type="submit"
-					class={ components.BrandPrimaryButton }
-				>Save</button>
+					class={ components.DSButtonPrimary }
+				>Guardar</button>
 			</div>
 		</div>
 	</form>

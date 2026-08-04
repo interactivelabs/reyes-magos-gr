@@ -1,6 +1,8 @@
 package services
 
 import (
+	"database/sql"
+	"errors"
 	"reyes-magos-gr/store"
 	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/models"
@@ -11,6 +13,7 @@ type VolunteersServiceApp struct {
 	CartsStore          store.CartsStore
 	CodesStore          store.CodesStore
 	OrdersStore         store.OrdersStore
+	ToysStore           store.ToysStore
 	VolunteersStore     store.VolunteersStore
 	VolunteerCodesStore store.VolunteerCodesStore
 }
@@ -19,6 +22,7 @@ func NewVolunteersService(
 	cartsStore store.CartsStore,
 	codesStore store.CodesStore,
 	ordersStore store.OrdersStore,
+	toysStore store.ToysStore,
 	volunteersStore store.VolunteersStore,
 	volunteerCodesStore store.VolunteerCodesStore,
 ) *VolunteersServiceApp {
@@ -26,6 +30,7 @@ func NewVolunteersService(
 		CartsStore:          cartsStore,
 		CodesStore:          codesStore,
 		OrdersStore:         ordersStore,
+		ToysStore:           toysStore,
 		VolunteersStore:     volunteersStore,
 		VolunteerCodesStore: volunteerCodesStore,
 	}
@@ -36,12 +41,13 @@ type VolunteersService interface {
 	GetVolunteerCodesByEmail(
 		email string,
 	) (codes []models.Code, givenCodes []models.Code, err error)
-	GetVolunteerOrdersByEmail(email string) (orders []models.Order, err error)
+	GetVolunteerOrdersByEmail(email string) (orders []models.OrderDetails, err error)
 	GetRecentlyCompletedVolunteerOrdersByEmail(
 		email string,
 		since time.Time,
 		limit int,
-	) (orders []models.Order, err error)
+	) (orders []models.OrderDetails, err error)
+	EnrichOrder(order models.Order) (models.OrderDetails, error)
 	GetVolunteerCartByEmail(email string) (cartItems []dtos.CartItem, err error)
 	CreateVolunteerCartItem(email string, toyID int64) (CartID int64, err error)
 	GetActiveVolunteersGrupedByLocation() (groupedVolunteers map[string][]models.Volunteer, err error)
@@ -78,38 +84,69 @@ func (s *VolunteersServiceApp) GetVolunteerCodesByEmail(
 	return codes, givenCodes, nil
 }
 
+func (s *VolunteersServiceApp) EnrichOrder(order models.Order) (models.OrderDetails, error) {
+	toy, err := s.ToysStore.GetToyByID(order.ToyID)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return models.OrderDetails{}, err
+	}
+
+	code, err := s.CodesStore.GetCodeByID(order.CodeID)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return models.OrderDetails{}, err
+	}
+
+	return models.OrderDetails{
+		Order:        order,
+		ToyName:      toy.ToyName,
+		ToySourceURL: toy.SourceURL,
+		Code:         code.Code,
+	}, nil
+}
+
+func (s *VolunteersServiceApp) enrichOrders(orders []models.Order) ([]models.OrderDetails, error) {
+	details := make([]models.OrderDetails, 0, len(orders))
+	for _, order := range orders {
+		detail, err := s.EnrichOrder(order)
+		if err != nil {
+			return nil, err
+		}
+		details = append(details, detail)
+	}
+	return details, nil
+}
+
 func (s *VolunteersServiceApp) GetVolunteerOrdersByEmail(
 	email string,
-) (orders []models.Order, err error) {
+) (orders []models.OrderDetails, err error) {
 	volunteer, err := s.VolunteersStore.GetVolunteerByEmail(email)
 	if err != nil {
 		return nil, err
 	}
 
-	orders, err = s.OrdersStore.GetPendingOrdersByVolunteerID(volunteer.VolunteerID)
+	pendingOrders, err := s.OrdersStore.GetPendingOrdersByVolunteerID(volunteer.VolunteerID)
 	if err != nil {
 		return nil, err
 	}
 
-	return orders, nil
+	return s.enrichOrders(pendingOrders)
 }
 
 func (s *VolunteersServiceApp) GetRecentlyCompletedVolunteerOrdersByEmail(
 	email string,
 	since time.Time,
 	limit int,
-) (orders []models.Order, err error) {
+) (orders []models.OrderDetails, err error) {
 	volunteer, err := s.VolunteersStore.GetVolunteerByEmail(email)
 	if err != nil {
 		return nil, err
 	}
 
-	orders, err = s.OrdersStore.GetRecentlyCompletedOrdersByVolunteerID(volunteer.VolunteerID, since, limit)
+	completedOrders, err := s.OrdersStore.GetRecentlyCompletedOrdersByVolunteerID(volunteer.VolunteerID, since, limit)
 	if err != nil {
 		return nil, err
 	}
 
-	return orders, nil
+	return s.enrichOrders(completedOrders)
 }
 
 func (s *VolunteersServiceApp) GetVolunteerCartByEmail(

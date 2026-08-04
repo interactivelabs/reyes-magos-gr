@@ -7,44 +7,80 @@ import (
 	svg "reyes-magos-gr/views/components/svg"
 )
 
-func HasOrderShipped(order models.Order) string {
-	if order.Shipped == 1 {
-		if shipped, err := lib.FormatDate(order.ShippedDate); err == nil {
-			return shipped
-		}
-	}
-	return "No se ha enviado!"
+const orderCardClasses = "flex flex-col gap-4 rounded-image border border-border bg-surface p-5.5 shadow-sm"
+
+templ orderCardBody(details models.OrderDetails) {
+	<div class="flex items-center justify-between">
+		<span class="font-mono text-xs text-disabled-text">Orden #{ fmt.Sprint(details.Order.OrderID) }</span>
+		@OrderStatusChip(details.Order)
+	</div>
+	@OrderTimeline(details.Order)
+	<div class="flex flex-col gap-2 border-t border-border pt-3">
+		<p class="flex items-center gap-2 text-[13px]">
+			@svg.CalendarDays("h-3.5 w-3.5 shrink-0 fill-muted")
+			<span class="text-muted">Fecha de orden:</span>
+			<span class="font-semibold text-ink">{ lib.FormatDate(details.Order.OrderDate) }</span>
+		</p>
+		<p class="flex items-center gap-2 text-[13px]">
+			@svg.Truck("h-3.5 w-3.5 shrink-0 fill-muted")
+			<span class="text-muted">Enviado:</span>
+			<span class="font-semibold text-ink">{ HasOrderShipped(details.Order) }</span>
+		</p>
+		<p class="flex items-center gap-2 text-[13px]">
+			@svg.Ticket("h-3.5 w-3.5 shrink-0 fill-muted")
+			<span class="text-muted shrink-0">Código:</span>
+			<span class="font-semibold text-ink">{ details.Code }</span>
+		</p>
+		<p class="flex items-center gap-2 text-[13px] min-w-0">
+			@svg.Gift("h-3.5 w-3.5 shrink-0 fill-muted")
+			<span class="text-muted shrink-0">Juguete:</span>
+			<a
+				href={ templ.URL(details.ToySourceURL) }
+				target="_blank"
+				rel="noopener noreferrer"
+				referrerpolicy="no-referrer"
+				onclick="event.stopPropagation()"
+				class="min-w-0 flex-1 truncate font-semibold text-ink underline decoration-dotted underline-offset-2"
+			>
+				{ details.ToyName }
+			</a>
+		</p>
+	</div>
 }
 
-templ OrderCard(order models.Order) {
-	<div class="flex flex-col flex-1 rounded-lg border-gray-400 bg-white" id={ fmt.Sprintf("order-card-%d", order.OrderID) }>
-		<div class="flex-1 px-4 py-2 text-sm text-left">
-			<p class="text-lg text-gray-900 hover:text-gray-600">
-				<span class="text-sm text-gray-600">Fecha de orden:</span> { lib.FormatDate(order.OrderDate) }
-			</p>
-			<p class="text-lg text-gray-900 hover:text-gray-600">
-				<span class="text-sm text-gray-600">Enviado:</span> { HasOrderShipped(order) }
-			</p>
+templ OrderCard(details models.OrderDetails, isAdmin bool) {
+	if isAdmin {
+		<div
+			hx-swap="outerHTML"
+			hx-get={ lib.GetSafeIdUrl("/admin/order/%d/edit", details.Order.OrderID) }
+			class="block w-full cursor-pointer"
+			tabindex="0"
+		>
+			<div class={ orderCardClasses }>
+				@orderCardBody(details)
+			</div>
 		</div>
-		if order.Shipped == 1 {
-			if order.Completed == 1 {
-				<div class="h-full w-full p-2 text-center bg-gray-200 text-gray-500 text-sm font-semibold">
+	} else {
+		<li class={ orderCardClasses } id={ fmt.Sprintf("order-card-%d", details.Order.OrderID) }>
+			@orderCardBody(details)
+			if details.Order.Shipped == 1 && details.Order.Completed != 1 {
+				<button
+					type="button"
+					class={ DSButtonPrimary + " w-full" }
+					hx-post={ lib.GetSafeIdUrl("/volunteer/myorders/%d/completed", details.Order.OrderID) }
+					hx-target={ fmt.Sprintf("#order-card-%d", details.Order.OrderID) }
+					hx-swap="outerHTML"
+				>
+					Completar
+					@svg.CheckCircle("h-3.5 w-3.5 fill-current")
+				</button>
+			}
+			if details.Order.Completed == 1 {
+				<div class="flex items-center justify-center gap-2 rounded-input bg-chip px-4 py-2.5 text-[13px] font-semibold text-muted">
+					@svg.CheckCircle("h-3.5 w-3.5 fill-current")
 					Completada
 				</div>
-			} else {
-				<div class="flex-1">
-					<button
-						type="button"
-						class="relative w-full flex-1 inline-flex items-center rounded-md justify-center bg-brand-orange px-3 py-2 text-sm font-semibold text-white ring-1 ring-inset ring-gray-300"
-						hx-post={ lib.GetSafeIdUrl("/volunteer/myorders/%d/completed", order.OrderID) }
-						hx-target={ fmt.Sprintf("#order-card-%d", order.OrderID) }
-						hx-swap="outerHTML"
-					>
-						Completar
-						@svg.CheckCircle("h-4 w-4 ml-4 fill-current")
-					</button>
-				</div>
 			}
-		}
-	</div>
+		</li>
+	}
 }

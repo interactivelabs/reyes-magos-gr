@@ -135,6 +135,7 @@ func SetupRouter(
 		app.OrdersStore,
 		app.ToysStore,
 		app.VolunteersStore,
+		app.CodesStore,
 	)
 	ag.GET("/orders", adminOrdersHandler.OrdersViewHandler)
 	ag.GET("/order/:order_id", adminOrdersHandler.OrderCardViewHandler)

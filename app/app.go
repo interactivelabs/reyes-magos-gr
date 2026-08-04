@@ -39,6 +39,7 @@ func NewApp(db *sql.DB) *App {
 		cartsStore,
 		codesStore,
 		ordersStore,
+		toysRepository,
 		volunteersStore,
 		volunteerCodesStore,
 	)

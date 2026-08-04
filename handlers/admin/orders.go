@@ -1,10 +1,14 @@
 package admin
 
 import (
+	"database/sql"
+	"errors"
 	"net/http"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/store"
+	"reyes-magos-gr/store/models"
 	ordersView "reyes-magos-gr/views/admin/orders"
+	"reyes-magos-gr/views/components"
 	"strconv"
 	"time"
 
@@ -15,18 +19,52 @@ type OrdersHandler struct {
 	OrdersStore     store.OrdersStore
 	ToysStore       store.ToysStore
 	VolunteersStore store.VolunteersStore
+	CodesStore      store.CodesStore
 }
 
 func NewOrdersHandler(
 	ordersStore store.OrdersStore,
 	toysStore store.ToysStore,
 	volunteersStore store.VolunteersStore,
+	codesStore store.CodesStore,
 ) *OrdersHandler {
 	return &OrdersHandler{
 		OrdersStore:     ordersStore,
 		ToysStore:       toysStore,
 		VolunteersStore: volunteersStore,
+		CodesStore:      codesStore,
 	}
+}
+
+func (h *OrdersHandler) toOrderDetails(order models.Order) (models.OrderDetails, error) {
+	toy, err := h.ToysStore.GetToyByID(order.ToyID)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return models.OrderDetails{}, err
+	}
+
+	code, err := h.CodesStore.GetCodeByID(order.CodeID)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return models.OrderDetails{}, err
+	}
+
+	return models.OrderDetails{
+		Order:        order,
+		ToyName:      toy.ToyName,
+		ToySourceURL: toy.SourceURL,
+		Code:         code.Code,
+	}, nil
+}
+
+func (h *OrdersHandler) toOrdersDetails(orders []models.Order) ([]models.OrderDetails, error) {
+	details := make([]models.OrderDetails, 0, len(orders))
+	for _, order := range orders {
+		detail, err := h.toOrderDetails(order)
+		if err != nil {
+			return nil, err
+		}
+		details = append(details, detail)
+	}
+	return details, nil
 }
 
 type Order interface {
@@ -53,7 +91,17 @@ func (h *OrdersHandler) OrdersViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, ordersView.Orders(orders, completedOrders))
+	orderDetails, err := h.toOrdersDetails(orders)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	completedOrderDetails, err := h.toOrdersDetails(completedOrders)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return lib.Render(ctx, ordersView.Orders(orderDetails, completedOrderDetails))
 }
 
 func (h *OrdersHandler) OrderCardViewHandler(ctx echo.Context) error {
@@ -67,7 +115,12 @@ func (h *OrdersHandler) OrderCardViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, ordersView.LinkOrderCard(order))
+	details, err := h.toOrderDetails(order)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return lib.Render(ctx, components.OrderCard(details, true))
 }
 
 func (h *OrdersHandler) UpdateOrderViewHandler(ctx echo.Context) error {
@@ -136,5 +189,10 @@ func (h *OrdersHandler) SaveOrderChangesHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, ordersView.LinkOrderCard(order))
+	details, err := h.toOrderDetails(order)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return lib.Render(ctx, components.OrderCard(details, true))
 }

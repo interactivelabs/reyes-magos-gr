@@ -5,6 +5,7 @@ import (
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
 	"reyes-magos-gr/store"
+	"reyes-magos-gr/views/components"
 	volunteer "reyes-magos-gr/views/volunteer"
 	"strconv"
 	"time"
@@ -79,5 +80,10 @@ func (h *MyOrdersHandler) MyOrdersCompleteHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, volunteer.MyOrderCard(order))
+	details, err := h.VolunteersService.EnrichOrder(order)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return lib.Render(ctx, components.OrderCard(details, false))
 }
