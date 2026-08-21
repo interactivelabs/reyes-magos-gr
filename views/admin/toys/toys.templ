@@ -6,85 +6,156 @@ import (
 	"reyes-magos-gr/store/models"
 	"reyes-magos-gr/views/admin"
 	"reyes-magos-gr/views/components"
+	"strings"
 )
 
+func toyCategories(toy models.Toy) []string {
+	if toy.Category == "" {
+		return nil
+	}
+
+	parts := strings.Split(toy.Category, ",")
+	categories := make([]string, 0, len(parts))
+	for _, part := range parts {
+		if trimmed := strings.TrimSpace(part); trimmed != "" {
+			categories = append(categories, trimmed)
+		}
+	}
+	return categories
+}
+
+func ToyCountLabel(count int) string {
+	if count == 1 {
+		return "1 juguete"
+	}
+	return fmt.Sprintf("%d juguetes", count)
+}
+
 templ ToyRow(toy models.Toy) {
-	<tr
-		class="border-t border-gray-300"
-		id={ fmt.Sprintf("admin-toys-row-%d", toy.ToyID) }
-	>
-		<td class="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">{ toy.ToyName }</td>
-		<td class="px-3 py-4 text-sm text-gray-500">{ toy.Category }</td>
-		<td class="px-3 py-4 text-sm text-gray-500 text-ellipsis">{ toy.ToyDescription }</td>
-		<td class="px-3 py-4 text-sm text-gray-500 text-ellipsis">
-			<a href={ templ.URL(toy.SourceURL) } target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Link</a>
+	<tr class="border-b border-chip" id={ fmt.Sprintf("admin-toys-row-%d", toy.ToyID) }>
+		<td class="px-5 py-4 align-top">
+			<div class="font-heading text-[15px] font-bold text-ink">{ toy.ToyName }</div>
 		</td>
-		<td class="relative py-4 pl-3 pr-4 sm:pr-3">
-			<button
-				type="button"
-				class={ components.BaseSecondaryButton + " w-full" }
+		<td class="px-5 py-4 align-top">
+			<div class="flex flex-wrap gap-1.5">
+				for _, category := range toyCategories(toy) {
+					<span class="rounded-pill bg-chip px-2.5 py-1 text-[12px] font-semibold text-secondary-shadow">{ category }</span>
+				}
+			</div>
+		</td>
+		<td class="px-5 py-4 align-top text-[13px] leading-relaxed text-muted">
+			<p class="line-clamp-3 break-words">{ toy.ToyDescription }</p>
+		</td>
+		<td class="px-5 py-4 align-top">
+			<a
+				class="font-semibold text-accent"
+				href={ templ.URL(toy.SourceURL) }
+				target="_blank"
+				rel="noopener noreferrer"
+				referrerpolicy="no-referrer"
+			>
+				Ver
+			</a>
+		</td>
+		<td class="whitespace-nowrap px-5 py-4 text-right align-top">
+			<a
+				class="font-semibold text-accent"
+				href="#"
 				hx-get={ lib.GetSafeIdUrl("/admin/toys/%d", toy.ToyID) }
 				hx-target="#toys-dialog-container"
 			>
-				Edit
-			</button>
-			<button
-				type="button"
-				class={ components.BaseSecondaryButton + " w-full mt-4" }
+				Editar
+			</a>
+			<span class="px-2 text-border">|</span>
+			<a
+				class="font-semibold text-secondary"
+				href="#"
 				hx-delete={ lib.GetSafeIdUrl("/admin/toys/%d/delete", toy.ToyID) }
-				hx-confirm="Are you sure you want to delete the toy?"
+				hx-confirm="¿Seguro que deseas eliminar este juguete?"
 				hx-target={ fmt.Sprintf("#admin-toys-row-%d", toy.ToyID) }
 			>
-				Delete
-			</button>
+				Eliminar
+			</a>
 		</td>
 	</tr>
 }
 
-templ Toys(toys []models.Toy) {
+templ ToySearchResults(toys []models.Toy, resultLabel string) {
+	<div class="border-b border-border bg-background px-5 py-2.5 font-sans text-[13px] text-muted">
+		{ resultLabel }
+	</div>
+	if len(toys) == 0 {
+		<div class="px-6 py-14 text-center">
+			<p class={ components.DSHeading3 }>Sin resultados</p>
+			<p class={ components.DSBody + " text-muted" }>Ningún juguete coincide con esa búsqueda.</p>
+		</div>
+	} else {
+		<div class="overflow-x-auto">
+			<table class="w-full min-w-180 table-fixed border-collapse text-sm">
+				<colgroup>
+					<col class="w-[35%]"/>
+					<col class="w-[15%]"/>
+					<col class="w-[35%]"/>
+					<col class="w-[5%]"/>
+					<col class="w-[10%]"/>
+				</colgroup>
+				<thead>
+					<tr class="border-b border-border">
+						<th class="px-5 py-3 text-left font-heading text-xs font-bold uppercase tracking-wide text-muted">Nombre</th>
+						<th class="px-5 py-3 text-left font-heading text-xs font-bold uppercase tracking-wide text-muted">Categoría</th>
+						<th class="px-5 py-3 text-left font-heading text-xs font-bold uppercase tracking-wide text-muted">Descripción</th>
+						<th class="px-5 py-3 text-left font-heading text-xs font-bold uppercase tracking-wide text-muted">Enlace</th>
+						<th class="px-5 py-3 text-right font-heading text-xs font-bold uppercase tracking-wide text-muted">Acciones</th>
+					</tr>
+				</thead>
+				<tbody id="admin-toys-table-body">
+					for _, toy := range toys {
+						@ToyRow(toy)
+					}
+				</tbody>
+			</table>
+		</div>
+	}
+}
+
+templ Toys(toys []models.Toy, resultLabel string, search string) {
 	@admin.AdminLayout() {
-		<main class="container mx-auto p-4 min-h-screen">
-			<h1 class="text-center pt-8 text-2xl">Toys</h1>
-			<div class="sm:flex sm:items-center">
-				<div class="sm:flex-auto">
-					<h1 class="text-base font-semibold leading-6 text-gray-900">Toys</h1>
-					<p class="mt-2 text-sm">A list of all the active Toys.</p>
+		<main class="bg-background min-h-screen">
+			<div class="container mx-auto px-6 py-10 lg:px-8">
+				<div class="mb-7 flex flex-wrap items-end justify-between gap-4">
+					<div>
+						<h1 class={ components.DSHeading1 }>Juguetes</h1>
+						<p class={ components.DSBody + " text-muted" }>Lista de todos los juguetes activos en el catálogo.</p>
+					</div>
+					@components.DSPrimaryButton(templ.Attributes{
+						"hx-get":    "/admin/toys/create",
+						"hx-target": "#toys-dialog-container",
+					}) {
+						Agregar juguete
+					}
 				</div>
-				<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-					<button
-						type="button"
-						class={ components.BrandPrimaryButton }
-						hx-get="/admin/toys/create"
-						hx-target="#toys-dialog-container"
-					>
-						Add Toy
-					</button>
-				</div>
-			</div>
-			<section id="admin_toys" class="mt-8 flow-root">
-				<div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
-					<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-						<table class="min-w-full rounded-md shadow-xs border">
-							<thead class="bg-white">
-								<tr>
-									<th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">Toy Name</th>
-									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Category</th>
-									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
-									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Link</th>
-									<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3">
-										<span class="sr-only">Actions</span>
-									</th>
-								</tr>
-							</thead>
-							<tbody class="bg-white" id="admin-toys-table-body">
-								for _, toy := range toys {
-									@ToyRow(toy)
-								}
-							</tbody>
-						</table>
+				<div class="overflow-hidden rounded-image border border-border bg-surface">
+					<div class="flex flex-wrap items-center gap-3.5 border-b border-border bg-background px-5 py-4">
+						<div class="w-70">
+							<input
+								type="text"
+								name="q"
+								value={ search }
+								placeholder="Buscar por nombre o categoría…"
+								class={ components.DSInput }
+								hx-get="/admin/toys"
+								hx-trigger="input changed delay:300ms, search"
+								hx-target="#toys-table-region"
+								hx-swap="innerHTML"
+								hx-push-url="true"
+							/>
+						</div>
+					</div>
+					<div id="toys-table-region">
+						@ToySearchResults(toys, resultLabel)
 					</div>
 				</div>
-			</section>
+			</div>
 			<div id="toys-dialog-container"></div>
 		</main>
 	}

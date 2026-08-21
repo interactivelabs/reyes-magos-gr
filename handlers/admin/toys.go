@@ -25,12 +25,46 @@ func NewToysHandler(toysStore store.ToysStore) *ToysHandler {
 }
 
 func (h *ToysHandler) ToysViewHandler(ctx echo.Context) error {
-	toys, err := h.ToysStore.GetToys()
+	q := strings.TrimSpace(ctx.QueryParam("q"))
+
+	toys, resultLabel, err := h.fetchToys(q)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, toys_view.Toys(toys))
+	if ctx.Request().Header.Get("HX-Request") != "" {
+		return lib.Render(ctx, toys_view.ToySearchResults(toys, resultLabel))
+	}
+
+	return lib.Render(ctx, toys_view.Toys(toys, resultLabel, q))
+}
+
+// fetchToys fetches the active toys, filtering by name/category when q is set.
+func (h *ToysHandler) fetchToys(q string) (toys []models.Toy, resultLabel string, err error) {
+	allToys, err := h.ToysStore.GetToys()
+	if err != nil {
+		return nil, "", err
+	}
+
+	filtered := filterToys(allToys, q)
+
+	return filtered, toys_view.ToyCountLabel(len(filtered)), nil
+}
+
+func filterToys(toys []models.Toy, q string) []models.Toy {
+	if q == "" {
+		return toys
+	}
+
+	needle := strings.ToLower(q)
+	var filtered []models.Toy
+	for _, toy := range toys {
+		if strings.Contains(strings.ToLower(toy.ToyName), needle) ||
+			strings.Contains(strings.ToLower(toy.Category), needle) {
+			filtered = append(filtered, toy)
+		}
+	}
+	return filtered
 }
 
 func (h *ToysHandler) CreateToyFormHandler(ctx echo.Context) error {

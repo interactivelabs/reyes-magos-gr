@@ -5,9 +5,11 @@ import (
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/services"
 	"reyes-magos-gr/store"
+	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/models"
 	views "reyes-magos-gr/views/admin/volunteers"
 	"strconv"
+	"strings"
 
 	"github.com/dranikpg/dto-mapper"
 	"github.com/labstack/echo/v4"
@@ -29,12 +31,65 @@ func NewVolunteersHandler(
 }
 
 func (h *VolunteersHandler) VolunteersViewHandler(ctx echo.Context) error {
-	volunteers, err := h.VolunteersService.GetActiveVolunteersGrupedByLocation()
+	q := strings.TrimSpace(ctx.QueryParam("q"))
+
+	groups, resultLabel, err := h.fetchVolunteerGroups(q)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, views.AdminVolunteers(volunteers))
+	if ctx.Request().Header.Get("HX-Request") != "" {
+		return lib.Render(ctx, views.VolunteerSearchResults(groups, resultLabel))
+	}
+
+	return lib.Render(ctx, views.AdminVolunteers(groups, resultLabel, q))
+}
+
+// fetchVolunteerGroups fetches the active volunteers with their given/held
+// counts and last-activity date, filtering by name/email when q is set.
+func (h *VolunteersHandler) fetchVolunteerGroups(
+	q string,
+) (groups []dtos.VolunteerLocationGroup, resultLabel string, err error) {
+	allGroups, err := h.VolunteersService.GetActiveVolunteersWithStatsGroupedByLocation()
+	if err != nil {
+		return nil, "", err
+	}
+
+	filtered, total := filterVolunteerGroups(allGroups, q)
+
+	return filtered, views.VolunteerCountLabel(total), nil
+}
+
+func filterVolunteerGroups(
+	groups []dtos.VolunteerLocationGroup,
+	q string,
+) (filtered []dtos.VolunteerLocationGroup, total int) {
+	if q == "" {
+		for _, group := range groups {
+			total += len(group.Volunteers)
+		}
+		return groups, total
+	}
+
+	needle := strings.ToLower(q)
+	for _, group := range groups {
+		var matched []dtos.VolunteerListItem
+		for _, volunteer := range group.Volunteers {
+			if strings.Contains(strings.ToLower(volunteer.Name), needle) ||
+				strings.Contains(strings.ToLower(volunteer.Email), needle) {
+				matched = append(matched, volunteer)
+			}
+		}
+		if len(matched) > 0 {
+			filtered = append(filtered, dtos.VolunteerLocationGroup{
+				Location:   group.Location,
+				Volunteers: matched,
+			})
+			total += len(matched)
+		}
+	}
+
+	return filtered, total
 }
 
 func (h *VolunteersHandler) VolunteersCreateHandler(ctx echo.Context) error {
@@ -70,12 +125,17 @@ func (h *VolunteersHandler) VolunteersCreatePostHandler(ctx echo.Context) error 
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	volunteer, err = h.VolunteersService.CreateAndGetVolunteer(volunteer)
+	_, err = h.VolunteersService.CreateAndGetVolunteer(volunteer)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, views.NewVolunteerRow(volunteer))
+	groups, resultLabel, err := h.fetchVolunteerGroups("")
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return lib.Render(ctx, views.NewVolunteerRow(groups, resultLabel))
 }
 
 func (h *VolunteersHandler) VolunteersUpdateViewHandler(ctx echo.Context) error {
@@ -120,7 +180,20 @@ func (h *VolunteersHandler) VolunteersUpdatePutHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, views.VolunteerRow(volunteer))
+	item := dtos.VolunteerListItem{Volunteer: volunteer}
+
+	allGroups, err := h.VolunteersService.GetActiveVolunteersWithStatsGroupedByLocation()
+	if err == nil {
+		for _, group := range allGroups {
+			for _, candidate := range group.Volunteers {
+				if candidate.VolunteerID == volunteerID {
+					item = candidate
+				}
+			}
+		}
+	}
+
+	return lib.Render(ctx, views.VolunteerRow(item))
 }
 
 func (h *VolunteersHandler) VolunteersDeleteHandler(ctx echo.Context) error {
