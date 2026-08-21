@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&amp;family=Cabin:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #fbf7fb; font-family: 'Cabin', sans-serif; color: #4a3f4d; }
+    a { color: #c96a3e; text-decoration: none; }
+    a:hover { color: #b8623f; }
+  </style>
+</helmet>
+
+<div style="min-height:100vh;">
+
+  <header style="background:#ffffff;border-bottom:1px solid #ece3ef;">
+    <div style="max-width:1180px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:72px;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <span style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:19px;color:#4a3f4d;">D&amp;L Toys</span>
+        <span style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;color:#9b85c4;background:#f4ecf6;padding:4px 10px;border-radius:999px;">Admin</span>
+      </div>
+      <nav style="display:flex;gap:28px;">
+        <a href="/admin/codes" style="font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#8d7f91;">Códigos</a>
+        <a href="/admin/orders" style="font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#8d7f91;">Órdenes</a>
+        <a href="/admin/volunteers" style="font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#c96a3e;border-bottom:2px solid #e8926a;padding-bottom:22px;margin-bottom:-23px;">Voluntarios</a>
+        <a href="/admin/toys" style="font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#8d7f91;">Juguetes</a>
+      </nav>
+      <a href="/logout" style="font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#8d7f91;">Salir</a>
+    </div>
+  </header>
+
+  <main style="max-width:1180px;margin:0 auto;padding:40px 32px 96px;">
+
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:28px;">
+      <div>
+        <h1 style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:30px;margin:0 0 4px;">Voluntarios</h1>
+        <p style="font-size:14px;color:#8d7f91;margin:0;">Lista de todos los voluntarios activos, agrupados por ciudad.</p>
+      </div>
+      <button type="button" onclick="{{ onAddVolunteer }}" style="display:flex;align-items:center;gap:8px;border:none;cursor:pointer;background:#e8926a;color:#fff;font-family:'Quicksand',sans-serif;font-weight:700;font-size:14px;padding:12px 22px;border-radius:16px;box-shadow:0 4px 0 #b8623f;" style-active="transform:translateY(4px);box-shadow:none;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="height:13px;width:13px;fill:currentColor;"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z"></path></svg>
+        Agregar voluntario
+      </button>
+    </div>
+
+    <div style="background:#ffffff;border:1px solid #ece3ef;border-radius:20px;overflow:hidden;">
+
+      <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid #ece3ef;background:#fbf7fb;flex-wrap:wrap;">
+        <input type="text" value="{{ search }}" oninput="{{ onSearchChange }}" placeholder="Buscar por nombre o email…" style="border-radius:14px;border:1px solid #ece3ef;padding:11px 16px;font-size:14px;font-family:'Cabin',sans-serif;background:#fff;width:280px;">
+        <div style="flex:1;"></div>
+        <span style="font-size:13px;color:#8d7f91;">{{ resultLabel }}</span>
+      </div>
+
+      <div style="overflow-x:auto;">
+      <table style="width:100%;min-width:1020px;border-collapse:collapse;font-size:14px;">
+        <thead>
+          <tr style="border-bottom:1px solid #ece3ef;">
+            <th style="padding:12px 20px;text-align:left;font-family:'Quicksand',sans-serif;font-weight:700;font-size:12px;color:#8d7f91;text-transform:uppercase;letter-spacing:0.03em;">Voluntario</th>
+            <th style="padding:12px 20px;text-align:left;font-family:'Quicksand',sans-serif;font-weight:700;font-size:12px;color:#8d7f91;text-transform:uppercase;letter-spacing:0.03em;">Contacto</th>
+            <th style="padding:12px 20px;text-align:left;font-family:'Quicksand',sans-serif;font-weight:700;font-size:12px;color:#8d7f91;text-transform:uppercase;letter-spacing:0.03em;min-width:220px;">Dirección</th>
+            <th style="padding:12px 16px;text-align:right;font-family:'Quicksand',sans-serif;font-weight:700;font-size:12px;color:#8d7f91;text-transform:uppercase;letter-spacing:0.03em;width:88px;white-space:nowrap;">Entregados</th>
+            <th style="padding:12px 16px;text-align:right;font-family:'Quicksand',sans-serif;font-weight:700;font-size:12px;color:#8d7f91;text-transform:uppercase;letter-spacing:0.03em;width:88px;white-space:nowrap;">En mano</th>
+            <th style="padding:12px 20px;text-align:left;font-family:'Quicksand',sans-serif;font-weight:700;font-size:12px;color:#8d7f91;text-transform:uppercase;letter-spacing:0.03em;width:150px;">Última actividad</th>
+            <th style="padding:12px 20px;text-align:right;font-family:'Quicksand',sans-serif;font-weight:700;font-size:12px;color:#8d7f91;text-transform:uppercase;letter-spacing:0.03em;width:130px;">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{ groups }}" as="group" hint-placeholder-count="2">
+            <tr>
+              <th colspan="7" style="background:#f4ecf6;padding:9px 20px;text-align:left;font-family:'Quicksand',sans-serif;font-weight:700;font-size:13px;color:#4a3f4d;border-top:1px solid #ece3ef;border-bottom:1px solid #ece3ef;">
+                {{ group.location }}
+                <span style="font-family:'Cabin',sans-serif;font-weight:400;color:#8d7f91;">· {{ group.countLabel }}</span>
+              </th>
+            </tr>
+            <sc-for list="{{ group.rows }}" as="row" hint-placeholder-count="3">
+              <tr style="border-bottom:1px solid #f4ecf6;">
+                <td style="padding:16px 20px;vertical-align:top;">
+                  <div style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:15px;color:#4a3f4d;">{{ row.name }}</div>
+                </td>
+                <td style="padding:16px 20px;vertical-align:top;">
+                  <div style="color:#4a3f4d;">{{ row.email }}</div>
+                  <div style="color:#8d7f91;font-size:13px;margin-top:3px;">{{ row.phone }}</div>
+                </td>
+                <td style="padding:16px 20px;vertical-align:top;color:#8d7f91;font-size:13px;line-height:1.5;min-width:220px;">
+                  <div style="color:#4a3f4d;font-size:14px;white-space:nowrap;">{{ row.street }}</div>
+                  <div>{{ row.region }}</div>
+                </td>
+                <td style="padding:16px 16px;vertical-align:top;text-align:right;font-family:'Quicksand',sans-serif;font-weight:700;font-size:17px;color:#4a3f4d;white-space:nowrap;">{{ row.given }}</td>
+                <td style="padding:16px 16px;vertical-align:top;text-align:right;font-family:'Quicksand',sans-serif;font-weight:700;font-size:17px;white-space:nowrap;">
+                  <span style="color:#4a3f4d;">{{ row.held }}</span>
+                </td>
+                <td style="padding:16px 20px;vertical-align:top;white-space:nowrap;">
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="{{ row.staleDotStyle }}"></span>
+                    <span style="{{ row.lastActivityStyle }}">{{ row.lastActivity }}</span>
+                  </div>
+                  <div style="color:#8d7f91;font-size:12px;margin-top:3px;">{{ row.lastActivityDate }}</div>
+                </td>
+                <td style="padding:16px 20px;vertical-align:top;text-align:right;white-space:nowrap;">
+                  <a href="{{ row.editUrl }}" style="font-weight:600;color:#c96a3e;">Editar</a>
+                  <span style="color:#ece3ef;padding:0 8px;">|</span>
+                  <a href="{{ row.deleteUrl }}" onclick="{{ row.onDelete }}" style="font-weight:600;color:#9b85c4;">Eliminar</a>
+                </td>
+              </tr>
+            </sc-for>
+          </sc-for>
+        </tbody>
+      </table>
+      </div>
+
+      <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;padding:56px 24px;">
+          <p style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:16px;margin:0 0 6px;">Sin resultados</p>
+          <p style="font-size:14px;color:#8d7f91;margin:0;">Ningún voluntario coincide con esa búsqueda.</p>
+        </div>
+      </sc-if>
+
+    </div>
+
+    <p style="font-size:12px;color:#8d7f91;margin:14px 2px 0;font-family:'JetBrains Mono',monospace;">Nota dev: «Última actividad» requiere una columna <span style="color:#6b5599;">codes.given_date</span> (aún no existe en reyes.sql).</p>
+
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900}}">
+function daysAgo(n) {
+  var d = new Date();
+  d.setDate(d.getDate() - n);
+  return d;
+}
+function fmtDate(d) {
+  return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+function relLabel(days) {
+  if (days === null || days === undefined) return 'Sin actividad';
+  if (days === 0) return 'Hoy';
+  if (days === 1) return 'Ayer';
+  if (days < 30) return 'Hace ' + days + ' días';
+  var m = Math.floor(days / 30);
+  return m === 1 ? 'Hace 1 mes' : 'Hace ' + m + ' meses';
+}
+
+var DATA = [
+  { id: 1, name: 'Luis Gonzalez', email: 'luismgonzalezb@gmail.com', phone: '555 555 5555',
+    street: '4441 249th Ter SE', region: 'Sammamish, WA 98029, USA', state: 'WA', city: 'Sammamish',
+    given: 24, held: 3, lastDays: 2 },
+  { id: 2, name: 'Ana Torres', email: 'ana.torres@example.com', phone: '555 214 8890',
+    street: '112 NE 8th St, Apt 4B', region: 'Sammamish, WA 98074, USA', state: 'WA', city: 'Sammamish',
+    given: 9, held: 0, lastDays: 12 },
+  { id: 3, name: 'Marta Díaz', email: 'marta.diaz@example.com', phone: '555 902 3311',
+    street: 'Av. Juárez 1204', region: 'Guadalajara, JAL 44100, MX', state: 'JAL', city: 'Guadalajara',
+    given: 41, held: 6, lastDays: 0 },
+  { id: 4, name: 'Jorge Salas', email: 'jorge.salas@example.com', phone: '555 660 1002',
+    street: 'Calle Morelos 88', region: 'Guadalajara, JAL 44160, MX', state: 'JAL', city: 'Guadalajara',
+    given: 5, held: 8, lastDays: 124 },
+  { id: 5, name: 'Carla Reyes', email: 'carla.reyes@example.com', phone: '555 118 7420',
+    street: 'Insurgentes Sur 940', region: 'Ciudad de México, CDMX 03100, MX', state: 'CDMX', city: 'Ciudad de México',
+    given: 0, held: 2, lastDays: null }
+];
+
+class Component extends DCLogic {
+  state = { search: '', volunteers: DATA };
+
+  onSearchChange = (e) => this.setState({ search: e.target.value });
+  onAddVolunteer = () => {};
+
+  deleteRow(id) {
+    this.setState(s => ({ volunteers: s.volunteers.filter(v => v.id !== id) }));
+  }
+
+  renderVals() {
+    var q = this.state.search.trim().toLowerCase();
+    var list = this.state.volunteers.filter(v =>
+      !q || v.name.toLowerCase().indexOf(q) >= 0 || v.email.toLowerCase().indexOf(q) >= 0);
+
+    var byLoc = {};
+    var order = [];
+    list.forEach(v => {
+      var loc = v.state + ', ' + v.city;
+      if (!byLoc[loc]) { byLoc[loc] = []; order.push(loc); }
+      byLoc[loc].push(v);
+    });
+
+    var self = this;
+    var groups = order.map(loc => ({
+      location: loc,
+      countLabel: byLoc[loc].length === 1 ? '1 voluntario' : byLoc[loc].length + ' voluntarios',
+      rows: byLoc[loc].map(v => ({
+        name: v.name,
+        email: v.email,
+        phone: v.phone || '—',
+        street: v.street,
+        region: v.region,
+        given: v.given,
+        held: v.held,
+        staleDotStyle: (v.lastDays === null || v.lastDays >= 60)
+          ? 'width:8px;height:8px;border-radius:999px;background:#e8926a;flex:none;'
+          : 'display:none;',
+        lastActivityStyle: (v.lastDays === null || v.lastDays >= 60)
+          ? 'color:#b8623f;font-weight:600;'
+          : 'color:#4a3f4d;',
+        lastActivity: relLabel(v.lastDays),
+        lastActivityDate: v.lastDays === null ? '' : fmtDate(daysAgo(v.lastDays)),
+        editUrl: '/admin/volunteers/' + v.id,
+        deleteUrl: '/admin/volunteers/' + v.id + '/delete',
+        onDelete: (e) => { e.preventDefault(); self.deleteRow(v.id); }
+      }))
+    }));
+
+    return {
+      search: this.state.search,
+      onSearchChange: this.onSearchChange,
+      onAddVolunteer: this.onAddVolunteer,
+      resultLabel: list.length === 1 ? '1 voluntario' : list.length + ' voluntarios',
+      groups: groups,
+      isEmpty: list.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

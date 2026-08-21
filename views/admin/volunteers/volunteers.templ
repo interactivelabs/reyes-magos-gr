@@ -3,116 +3,222 @@ package pages
 import (
 	"fmt"
 	"reyes-magos-gr/lib"
-	"reyes-magos-gr/store/models"
+	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/views/admin"
 	"reyes-magos-gr/views/components"
 )
 
-templ NewVolunteerRow(volunteer models.Volunteer) {
-	@VolunteerRow(volunteer)
+const volunteerStaleAfterDays = 60
+
+func volunteerLastActivityLabel(item dtos.VolunteerListItem) string {
+	if item.LastActivityDate == nil {
+		return "Sin actividad"
+	}
+	days, err := lib.DaysSince(*item.LastActivityDate)
+	if err != nil {
+		return "Sin actividad"
+	}
+	return lib.RelativeSpanishLabel(days)
+}
+
+func volunteerLastActivityDate(item dtos.VolunteerListItem) string {
+	if item.LastActivityDate == nil {
+		return ""
+	}
+	formatted, err := lib.FormatSpanishDate(*item.LastActivityDate)
+	if err != nil {
+		return ""
+	}
+	return formatted
+}
+
+func volunteerIsStale(item dtos.VolunteerListItem) bool {
+	if item.LastActivityDate == nil {
+		return true
+	}
+	days, err := lib.DaysSince(*item.LastActivityDate)
+	if err != nil {
+		return true
+	}
+	return days >= volunteerStaleAfterDays
+}
+
+func volunteerActivityTextClass(stale bool) string {
+	if stale {
+		return "font-semibold text-primary-shadow"
+	}
+	return "text-ink"
+}
+
+func volunteerStreet(item dtos.VolunteerListItem) string {
+	if item.Address2 == "" {
+		return item.Address
+	}
+	return item.Address + ", " + item.Address2
+}
+
+func volunteerRegion(item dtos.VolunteerListItem) string {
+	region := item.City + ", " + item.State + " " + item.ZipCode
+	if item.Country == "" {
+		return region
+	}
+	return region + ", " + item.Country
+}
+
+func VolunteerCountLabel(count int) string {
+	if count == 1 {
+		return "1 voluntario"
+	}
+	return fmt.Sprintf("%d voluntarios", count)
+}
+
+templ VolunteerRow(item dtos.VolunteerListItem) {
+	<tr class="border-b border-chip" id={ fmt.Sprintf("admin-volunteer-row-%d", item.VolunteerID) }>
+		<td class="px-5 py-4 align-top">
+			<div class="font-heading text-[15px] font-bold text-ink">{ item.Name }</div>
+		</td>
+		<td class="px-5 py-4 align-top">
+			<div class="text-ink">{ item.Email }</div>
+			<div class="mt-0.5 text-[13px] text-muted">
+				if item.Phone != "" {
+					{ item.Phone }
+				} else {
+					{ "—" }
+				}
+			</div>
+		</td>
+		<td class="min-w-55 px-5 py-4 align-top text-[13px] leading-relaxed text-muted">
+			<div class="whitespace-nowrap text-sm text-ink">{ volunteerStreet(item) }</div>
+			<div>{ volunteerRegion(item) }</div>
+		</td>
+		<td class="whitespace-nowrap px-4 py-4 text-right align-top font-heading text-[17px] font-bold text-ink">
+			{ fmt.Sprint(item.GivenCount) }
+		</td>
+		<td class="whitespace-nowrap px-4 py-4 text-right align-top font-heading text-[17px] font-bold text-ink">
+			{ fmt.Sprint(item.HeldCount) }
+		</td>
+		<td class="whitespace-nowrap px-5 py-4 align-top">
+			<div class="flex items-center gap-2">
+				if volunteerIsStale(item) {
+					<span class="h-2 w-2 flex-none rounded-full bg-primary"></span>
+				}
+				<span class={ volunteerActivityTextClass(volunteerIsStale(item)) }>{ volunteerLastActivityLabel(item) }</span>
+			</div>
+			if volunteerLastActivityDate(item) != "" {
+				<div class="mt-0.5 text-xs text-muted">{ volunteerLastActivityDate(item) }</div>
+			}
+		</td>
+		<td class="whitespace-nowrap px-5 py-4 text-right align-top">
+			<a
+				class="font-semibold text-accent"
+				href="#"
+				hx-get={ lib.GetSafeIdUrl("/admin/volunteers/%d", item.VolunteerID) }
+				hx-target="#volunteer-dialog-container"
+				hx-swap="innerHTML"
+			>
+				Editar
+			</a>
+			<span class="px-2 text-border">|</span>
+			<a
+				class="font-semibold text-secondary"
+				href="#"
+				hx-delete={ lib.GetSafeIdUrl("/admin/volunteers/%d/delete", item.VolunteerID) }
+				hx-confirm="Are you sure you want to delete the volunteer?"
+				hx-target={ fmt.Sprintf("#admin-volunteer-row-%d", item.VolunteerID) }
+			>
+				Eliminar
+			</a>
+		</td>
+	</tr>
+}
+
+templ VolunteerSearchResults(groups []dtos.VolunteerLocationGroup, resultLabel string) {
+	<div class="border-b border-border bg-background px-5 py-2.5 font-sans text-[13px] text-muted">
+		{ resultLabel }
+	</div>
+	if len(groups) == 0 {
+		<div class="px-6 py-14 text-center">
+			<p class={ components.DSHeading3 }>Sin resultados</p>
+			<p class={ components.DSBody + " text-muted" }>Ningún voluntario coincide con esa búsqueda.</p>
+		</div>
+	} else {
+		<div class="overflow-x-auto">
+			<table class="w-full min-w-255 border-collapse text-sm">
+				<thead>
+					<tr class="border-b border-border">
+						<th class="px-5 py-3 text-left font-heading text-xs font-bold uppercase tracking-wide text-muted">Voluntario</th>
+						<th class="px-5 py-3 text-left font-heading text-xs font-bold uppercase tracking-wide text-muted">Contacto</th>
+						<th class="min-w-55 px-5 py-3 text-left font-heading text-xs font-bold uppercase tracking-wide text-muted">Dirección</th>
+						<th class="whitespace-nowrap px-4 py-3 text-right font-heading text-xs font-bold uppercase tracking-wide text-muted">Entregados</th>
+						<th class="whitespace-nowrap px-4 py-3 text-right font-heading text-xs font-bold uppercase tracking-wide text-muted">En mano</th>
+						<th class="px-5 py-3 text-left font-heading text-xs font-bold uppercase tracking-wide text-muted">Última actividad</th>
+						<th class="px-5 py-3 text-right font-heading text-xs font-bold uppercase tracking-wide text-muted">Acciones</th>
+					</tr>
+				</thead>
+				<tbody id="admin-volunteers-table-body">
+					for _, group := range groups {
+						<tr>
+							<th colspan="7" class="border-y border-border bg-chip px-5 py-2.5 text-left font-heading text-[13px] font-bold text-ink">
+								{ group.Location }
+								<span class="font-sans font-normal text-muted">· { VolunteerCountLabel(len(group.Volunteers)) }</span>
+							</th>
+						</tr>
+						for _, item := range group.Volunteers {
+							@VolunteerRow(item)
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	}
+}
+
+templ NewVolunteerRow(groups []dtos.VolunteerLocationGroup, resultLabel string) {
+	@VolunteerSearchResults(groups, resultLabel)
 	<div id="volunteer-new-form" hx-swap-oob="true">
 		@components.AlertSuccess("Saved Succesfully!")
 	</div>
 }
 
-templ VolunteerRow(volunteer models.Volunteer) {
-	<tr
-		class="border-t border-gray-300"
-		id={ fmt.Sprintf("admin-volunteer-row-%d", volunteer.VolunteerID) }
-	>
-		<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">{ volunteer.Name }</td>
-		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{ volunteer.Email }</td>
-		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{ volunteer.Phone }</td>
-		<td class="px-3 py-4 text-sm text-gray-500">
-			{ volunteer.Address },
-			{ volunteer.Address2 },
-			{ volunteer.Province },
-			{ volunteer.City },
-			{ volunteer.State },
-			{ volunteer.ZipCode },
-			{ volunteer.Country }
-		</td>
-		<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-3">
-			<button
-				type="button"
-				class={ components.BaseSecondaryButton }
-				hx-get={ lib.GetSafeIdUrl("/admin/volunteers/%d", volunteer.VolunteerID) }
-				hx-target="#volunteer-dialog-container"
-				hx-swap="innerHTML"
-			>
-				Edit
-			</button>
-			<button
-				type="button"
-				class={ components.BaseSecondaryButton }
-				hx-delete={ lib.GetSafeIdUrl("/admin/volunteers/%d/delete", volunteer.VolunteerID) }
-				hx-confirm="Are you sure you want to delete the volunteer?"
-				hx-target={ fmt.Sprintf("#admin-volunteer-row-%d", volunteer.VolunteerID) }
-			>
-				Delete
-			</button>
-		</td>
-	</tr>
-}
-
-templ AdminVolunteers(groupedVolunteers map[string][]models.Volunteer) {
+templ AdminVolunteers(groups []dtos.VolunteerLocationGroup, resultLabel string, search string) {
 	@admin.AdminLayout() {
-		<main class="container mx-auto p-4 min-h-screen">
-			<h1 class="text-center pt-8 text-2xl">Volunteers</h1>
-			<div class="sm:flex sm:items-center">
-				<div class="sm:flex-auto">
-					<h1 class="text-base font-semibold leading-6 text-gray-900">Volunteers</h1>
-					<p class="mt-2 text-sm">A list of all the active Volunteers.</p>
+		<main class="bg-background min-h-screen">
+			<div class="container mx-auto px-6 py-10 lg:px-8">
+				<div class="mb-7 flex flex-wrap items-end justify-between gap-4">
+					<div>
+						<h1 class={ components.DSHeading1 }>Voluntarios</h1>
+						<p class={ components.DSBody + " text-muted" }>Lista de todos los voluntarios activos, agrupados por ciudad.</p>
+					</div>
+					@components.DSPrimaryButton(templ.Attributes{
+						"hx-get":    "/admin/volunteers/create",
+						"hx-target": "#volunteer-dialog-container",
+						"hx-swap":   "innerHTML",
+					}) {
+						Agregar voluntario
+					}
 				</div>
-				<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-					<button
-						type="button"
-						class={ components.BrandPrimaryButton }
-						hx-get={ string(templ.URL("/admin/volunteers/create")) }
-						hx-target="#volunteer-dialog-container"
-						hx-swap="innerHTML"
-					>
-						Add Volunteer
-					</button>
-				</div>
-			</div>
-			<section id="admin_volunteers" class="mt-8 flow-root">
-				<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-					<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-						<table class="min-w-full rounded-md shadow-xs border">
-							<thead class="bg-white">
-								<tr>
-									<th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3">Name</th>
-									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
-									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Phone</th>
-									<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Address</th>
-									<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-3">
-										<span class="sr-only">Actions</span>
-									</th>
-								</tr>
-							</thead>
-							<tbody class="bg-white" id="admin-volunteers-table-body">
-								if len(groupedVolunteers) > 0 {
-									for location, volunteers := range groupedVolunteers {
-										<tr class="border-t border-gray-200">
-											<th
-												colspan="5"
-												scope="colgroup"
-												class="bg-gray-50 py-2 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-3"
-											>
-												{ location }
-											</th>
-										</tr>
-										for _, volunteer := range volunteers {
-											@VolunteerRow(volunteer)
-										}
-									}
-								}
-							</tbody>
-						</table>
+				<div class="overflow-hidden rounded-image border border-border bg-surface">
+					<div class="flex flex-wrap items-center gap-3.5 border-b border-border bg-background px-5 py-4">
+						<div class="w-70">
+							<input
+								type="text"
+								name="q"
+								value={ search }
+								placeholder="Buscar por nombre o email…"
+								class={ components.DSInput }
+								hx-get="/admin/volunteers"
+								hx-trigger="input changed delay:300ms, search"
+								hx-target="#volunteer-table-region"
+								hx-swap="innerHTML"
+								hx-push-url="true"
+							/>
+						</div>
+					</div>
+					<div id="volunteer-table-region">
+						@VolunteerSearchResults(groups, resultLabel)
 					</div>
 				</div>
-			</section>
+			</div>
 			<div id="volunteer-dialog-container"></div>
 		</main>
 	}

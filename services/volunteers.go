@@ -6,16 +6,18 @@ import (
 	"reyes-magos-gr/store"
 	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/models"
+	"sort"
 	"time"
 )
 
 type VolunteersServiceApp struct {
-	CartsStore          store.CartsStore
-	CodesStore          store.CodesStore
-	OrdersStore         store.OrdersStore
-	ToysStore           store.ToysStore
-	VolunteersStore     store.VolunteersStore
-	VolunteerCodesStore store.VolunteerCodesStore
+	CartsStore            store.CartsStore
+	CodesStore            store.CodesStore
+	OrdersStore           store.OrdersStore
+	ToysStore             store.ToysStore
+	VolunteersStore       store.VolunteersStore
+	VolunteerCodesStore   store.VolunteerCodesStore
+	VolunteersOrdersStore store.VolunteersOrdersStore
 }
 
 func NewVolunteersService(
@@ -25,14 +27,16 @@ func NewVolunteersService(
 	toysStore store.ToysStore,
 	volunteersStore store.VolunteersStore,
 	volunteerCodesStore store.VolunteerCodesStore,
+	volunteersOrdersStore store.VolunteersOrdersStore,
 ) *VolunteersServiceApp {
 	return &VolunteersServiceApp{
-		CartsStore:          cartsStore,
-		CodesStore:          codesStore,
-		OrdersStore:         ordersStore,
-		ToysStore:           toysStore,
-		VolunteersStore:     volunteersStore,
-		VolunteerCodesStore: volunteerCodesStore,
+		CartsStore:            cartsStore,
+		CodesStore:            codesStore,
+		OrdersStore:           ordersStore,
+		ToysStore:             toysStore,
+		VolunteersStore:       volunteersStore,
+		VolunteerCodesStore:   volunteerCodesStore,
+		VolunteersOrdersStore: volunteersOrdersStore,
 	}
 }
 
@@ -51,6 +55,7 @@ type VolunteersService interface {
 	GetVolunteerCartByEmail(email string) (cartItems []dtos.CartItem, err error)
 	CreateVolunteerCartItem(email string, toyID int64) (CartID int64, err error)
 	GetActiveVolunteersGrupedByLocation() (groupedVolunteers map[string][]models.Volunteer, err error)
+	GetActiveVolunteersWithStatsGroupedByLocation() (groups []dtos.VolunteerLocationGroup, err error)
 	CreateAndGetVolunteer(volunteer models.Volunteer) (models.Volunteer, error)
 	UpdateVolunteer(volunteer models.Volunteer, volunteerID int64) (models.Volunteer, error)
 }
@@ -194,6 +199,18 @@ func (s *VolunteersServiceApp) GetActiveVolunteersGrupedByLocation() (groupedVol
 	return groupVolunteersByLocation(allVolunteers), nil
 }
 
+func (s *VolunteersServiceApp) GetActiveVolunteersWithStatsGroupedByLocation() (
+	groups []dtos.VolunteerLocationGroup,
+	err error,
+) {
+	items, err := s.VolunteersOrdersStore.GetActiveVolunteersWithStats()
+	if err != nil {
+		return nil, err
+	}
+
+	return groupVolunteerListItemsByLocation(items), nil
+}
+
 func (s *VolunteersServiceApp) CreateAndGetVolunteer(
 	volunteer models.Volunteer,
 ) (models.Volunteer, error) {
@@ -234,4 +251,28 @@ func groupVolunteersByLocation(
 		groupedVolunteers[location] = append(groupedVolunteers[location], volunteer)
 	}
 	return groupedVolunteers
+}
+
+func groupVolunteerListItemsByLocation(items []dtos.VolunteerListItem) []dtos.VolunteerLocationGroup {
+	byLocation := make(map[string][]dtos.VolunteerListItem)
+	for _, item := range items {
+		location := item.State + ", " + item.City
+		byLocation[location] = append(byLocation[location], item)
+	}
+
+	locations := make([]string, 0, len(byLocation))
+	for location := range byLocation {
+		locations = append(locations, location)
+	}
+	sort.Strings(locations)
+
+	groups := make([]dtos.VolunteerLocationGroup, 0, len(locations))
+	for _, location := range locations {
+		groups = append(groups, dtos.VolunteerLocationGroup{
+			Location:   location,
+			Volunteers: byLocation[location],
+		})
+	}
+
+	return groups
 }

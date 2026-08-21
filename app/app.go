@@ -7,15 +7,16 @@ import (
 )
 
 type App struct {
-	CartsStore          store.CartsStore
-	CodesStore          store.CodesStore
-	OrdersStore         store.OrdersStore
-	ToysStore           store.ToysStore
-	VolunteerCodesStore store.VolunteerCodesStore
-	VolunteersStore     store.VolunteersStore
-	CodesService        services.CodesService
-	OrderService        services.OrdersService
-	VolunteersService   services.VolunteersService
+	CartsStore            store.CartsStore
+	CodesStore            store.CodesStore
+	OrdersStore           store.OrdersStore
+	ToysStore             store.ToysStore
+	VolunteerCodesStore   store.VolunteerCodesStore
+	VolunteersStore       store.VolunteersStore
+	VolunteersOrdersStore store.VolunteersOrdersStore
+	CodesService          services.CodesService
+	OrderService          services.OrdersService
+	VolunteersService     services.VolunteersService
 }
 
 func NewApp(db *sql.DB) *App {
@@ -25,6 +26,7 @@ func NewApp(db *sql.DB) *App {
 	toysRepository := store.NewToysStore(db)
 	volunteerCodesStore := store.NewVolunteerCodesStore(db)
 	volunteersStore := store.NewVolunteersStore(db)
+	volunteersOrdersStore := store.NewVolunteersOrdersStore(db)
 
 	codesService := services.NewCodesService(codesStore)
 
@@ -42,17 +44,19 @@ func NewApp(db *sql.DB) *App {
 		toysRepository,
 		volunteersStore,
 		volunteerCodesStore,
+		volunteersOrdersStore,
 	)
 
 	return &App{
-		CartsStore:          cartsStore,
-		CodesStore:          codesStore,
-		OrdersStore:         ordersStore,
-		ToysStore:           toysRepository,
-		VolunteerCodesStore: volunteerCodesStore,
-		VolunteersStore:     volunteersStore,
-		CodesService:        codesService,
-		OrderService:        orderService,
-		VolunteersService:   volunteersService,
+		CartsStore:            cartsStore,
+		CodesStore:            codesStore,
+		OrdersStore:           ordersStore,
+		ToysStore:             toysRepository,
+		VolunteerCodesStore:   volunteerCodesStore,
+		VolunteersStore:       volunteersStore,
+		VolunteersOrdersStore: volunteersOrdersStore,
+		CodesService:          codesService,
+		OrderService:          orderService,
+		VolunteersService:     volunteersService,
 	}
 }
