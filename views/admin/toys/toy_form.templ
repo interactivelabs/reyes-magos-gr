@@ -58,4 +58,17 @@ templ ToyForm(toy models.Toy, categories []dtos.AutocompleteItem) {
 			<input type="url" id="source_url" name="source_url" class={ components.BaseInputStyles } value={ string(templ.URL(toy.SourceURL)) }/>
 		</div>
 	</div>
+	<div class="my-6 py-8 flex items-center justify-end gap-x-6 border-t border-gray-900/10">
+		<a
+			type="button"
+			class={ components.BaseSecondaryButton }
+			href={ string(templ.URL("/admin/toys")) }
+		>
+			Cancel
+		</a>
+		<button
+			type="submit"
+			class={ components.BrandPrimaryButton }
+		>Save</button>
+	</div>
 }

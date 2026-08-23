@@ -2,22 +2,30 @@ package pages
 
 import (
 	"reyes-magos-gr/store/models"
+	"reyes-magos-gr/views/admin"
 	"reyes-magos-gr/views/components"
 )
 
 templ CreateVolunteerForm() {
-	@components.Dialog("dialog-volunteer-new-form") {
-		<form
-			id="volunteer-new-form"
-			class="pt-8"
-			hx-post={ string(templ.URL("/admin/volunteers")) }
-			hx-target="#volunteer-table-region"
-			hx-swap="innerHTML"
-		>
-			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
-				@VolunteerForm(models.Volunteer{})
-				@components.DialogSaveFooter("dialog-volunteer-new-form")
+	@admin.AdminLayout() {
+		<main class="bg-background min-h-screen">
+			<div class="container mx-auto md:w-4xl px-6 py-10 lg:px-8">
+				<div class="mb-7 flex flex-wrap items-end justify-between gap-4">
+					<div>
+						<h1 class={ components.DSHeading1 }>Crear Voluntario</h1>
+					</div>
+				</div>
+				<form
+					id="volunteer-new-form"
+					class="pt-8"
+					method="post"
+					action={ string(templ.URL("/admin/volunteers/create/save")) }
+				>
+					<div class="grid grid-cols-1 gap-x-6 gap-y-8">
+						@VolunteerForm(models.Volunteer{})
+					</div>
+				</form>
 			</div>
-		</form>
+		</main>
 	}
 }

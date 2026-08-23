@@ -102,14 +102,12 @@ func (h *ToysHandler) CreateToyPostHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	toyID, err := h.ToysStore.CreateToy(toy)
+	_, err = h.ToysStore.CreateToy(toy)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	toy.ToyID = toyID
-
-	return lib.Render(ctx, toys_view.ToyRow(toy))
+	return ctx.Redirect(303, "/admin/toys")
 }
 
 func (h *ToysHandler) UpdateToyFormHandler(ctx echo.Context) error {
@@ -167,7 +165,7 @@ func (h *ToysHandler) UpdateToyPutHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return lib.Render(ctx, toys_view.ToyRow(toy))
+	return ctx.Redirect(303, "/admin/toys")
 }
 
 func (h *ToysHandler) DeleteToyHandler(ctx echo.Context) error {

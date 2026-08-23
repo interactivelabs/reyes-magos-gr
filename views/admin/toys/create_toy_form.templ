@@ -3,23 +3,30 @@ package pages
 import (
 	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/models"
+	"reyes-magos-gr/views/admin"
 	"reyes-magos-gr/views/components"
 )
 
 templ CreateToyForm(categories []dtos.AutocompleteItem) {
-	@components.Dialog("dialog-toy-new-form") {
-		<form
-			id="toy-new-form"
-			class="pt-8"
-			hx-post={ string(templ.URL("/admin/toys")) }
-			hx-target="#admin-toys-table-body"
-			hx-swap="afterbegin"
-			hx-on::after-request="if (event.detail.successful) this.closest('dialog').close()"
-		>
-			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
-				@ToyForm(models.Toy{}, categories)
-				@components.DialogSaveFooter("dialog-toy-new-form")
+	@admin.AdminLayout() {
+		<main class="bg-background min-h-screen">
+			<div class="container mx-auto md:w-4xl px-6 py-10 lg:px-8">
+				<div class="mb-7 flex flex-wrap items-end justify-between gap-4">
+					<div>
+						<h1 class={ components.DSHeading1 }>Crear Juguete</h1>
+					</div>
+				</div>
+				<form
+					id="toy-new-form"
+					class="pt-8"
+					method="post"
+					action={ string(templ.URL("/admin/toys/create/save")) }
+				>
+					<div class="grid grid-cols-1 gap-x-6 gap-y-8">
+						@ToyForm(models.Toy{}, categories)
+					</div>
+				</form>
 			</div>
-		</form>
+		</main>
 	}
 }

@@ -111,10 +111,7 @@ templ VolunteerRow(item dtos.VolunteerListItem) {
 		<td class="whitespace-nowrap px-5 py-4 text-right align-top">
 			<a
 				class="font-semibold text-accent"
-				href="#"
-				hx-get={ lib.GetSafeIdUrl("/admin/volunteers/%d", item.VolunteerID) }
-				hx-target="#volunteer-dialog-container"
-				hx-swap="innerHTML"
+				href={ lib.GetSafeIdUrl("/admin/volunteers/%d", item.VolunteerID) }
 			>
 				Editar
 			</a>
@@ -189,13 +186,10 @@ templ AdminVolunteers(groups []dtos.VolunteerLocationGroup, resultLabel string, 
 						<h1 class={ components.DSHeading1 }>Voluntarios</h1>
 						<p class={ components.DSBody + " text-muted" }>Lista de todos los voluntarios activos, agrupados por ciudad.</p>
 					</div>
-					@components.DSPrimaryButton(templ.Attributes{
-						"hx-get":    "/admin/volunteers/create",
-						"hx-target": "#volunteer-dialog-container",
-						"hx-swap":   "innerHTML",
-					}) {
-						Agregar voluntario
-					}
+					<a
+						class={ components.DSButtonPrimary }
+						href={ string(templ.URL("/admin/volunteers/create")) }
+					>Agregar voluntario</a>
 				</div>
 				<div class="overflow-hidden rounded-image border border-border bg-surface">
 					<div class="flex flex-wrap items-center gap-3.5 border-b border-border bg-background px-5 py-4">
@@ -206,7 +200,7 @@ templ AdminVolunteers(groups []dtos.VolunteerLocationGroup, resultLabel string, 
 								value={ search }
 								placeholder="Buscar por nombre o email…"
 								class={ components.DSInput }
-								hx-get="/admin/volunteers"
+								hx-get={ string(templ.URL("/admin/volunteers")) }
 								hx-trigger="input changed delay:300ms, search"
 								hx-target="#volunteer-table-region"
 								hx-swap="innerHTML"
