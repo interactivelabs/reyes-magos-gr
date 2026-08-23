@@ -130,12 +130,7 @@ func (h *VolunteersHandler) VolunteersCreatePostHandler(ctx echo.Context) error 
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	groups, resultLabel, err := h.fetchVolunteerGroups("")
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-
-	return lib.Render(ctx, views.NewVolunteerRow(groups, resultLabel))
+	return ctx.Redirect(303, "/admin/volunteers")
 }
 
 func (h *VolunteersHandler) VolunteersUpdateViewHandler(ctx echo.Context) error {
@@ -180,20 +175,7 @@ func (h *VolunteersHandler) VolunteersUpdatePutHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	item := dtos.VolunteerListItem{Volunteer: volunteer}
-
-	allGroups, err := h.VolunteersService.GetActiveVolunteersWithStatsGroupedByLocation()
-	if err == nil {
-		for _, group := range allGroups {
-			for _, candidate := range group.Volunteers {
-				if candidate.VolunteerID == volunteerID {
-					item = candidate
-				}
-			}
-		}
-	}
-
-	return lib.Render(ctx, views.VolunteerRow(item))
+	return ctx.Redirect(303, "/admin/volunteers")
 }
 
 func (h *VolunteersHandler) VolunteersDeleteHandler(ctx echo.Context) error {

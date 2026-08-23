@@ -66,4 +66,17 @@ templ VolunteerForm(volunteer models.Volunteer) {
 			<input type="text" name="country" class={ components.BaseInputStyles } value={ volunteer.Country }/>
 		</div>
 	</div>
+	<div class="my-6 py-8 flex items-center justify-end gap-x-6 border-t border-gray-900/10">
+		<a
+			type="button"
+			class={ components.BaseSecondaryButton }
+			href={ string(templ.URL("/admin/volunteers")) }
+		>
+			Cancel
+		</a>
+		<button
+			type="submit"
+			class={ components.BrandPrimaryButton }
+		>Save</button>
+	</div>
 }

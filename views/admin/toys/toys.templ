@@ -34,7 +34,7 @@ func ToyCountLabel(count int) string {
 templ ToyRow(toy models.Toy) {
 	<tr class="border-b border-chip" id={ fmt.Sprintf("admin-toys-row-%d", toy.ToyID) }>
 		<td class="px-5 py-4 align-top">
-			<div class="font-heading text-[15px] font-bold text-ink">{ toy.ToyName }</div>
+			<div class="font-heading text-[15px] font-bold text-ink line-clamp-3 wrap-break-word">{ toy.ToyName }</div>
 		</td>
 		<td class="px-5 py-4 align-top">
 			<div class="flex flex-wrap gap-1.5">
@@ -44,7 +44,7 @@ templ ToyRow(toy models.Toy) {
 			</div>
 		</td>
 		<td class="px-5 py-4 align-top text-[13px] leading-relaxed text-muted">
-			<p class="line-clamp-3 break-words">{ toy.ToyDescription }</p>
+			<p class="line-clamp-3 wrap-break-word">{ toy.ToyDescription }</p>
 		</td>
 		<td class="px-5 py-4 align-top">
 			<a
@@ -60,9 +60,7 @@ templ ToyRow(toy models.Toy) {
 		<td class="whitespace-nowrap px-5 py-4 text-right align-top">
 			<a
 				class="font-semibold text-accent"
-				href="#"
-				hx-get={ lib.GetSafeIdUrl("/admin/toys/%d", toy.ToyID) }
-				hx-target="#toys-dialog-container"
+				href={ lib.GetSafeIdUrl("/admin/toys/%d", toy.ToyID) }
 			>
 				Editar
 			</a>
@@ -127,12 +125,7 @@ templ Toys(toys []models.Toy, resultLabel string, search string) {
 						<h1 class={ components.DSHeading1 }>Juguetes</h1>
 						<p class={ components.DSBody + " text-muted" }>Lista de todos los juguetes activos en el catálogo.</p>
 					</div>
-					@components.DSPrimaryButton(templ.Attributes{
-						"hx-get":    "/admin/toys/create",
-						"hx-target": "#toys-dialog-container",
-					}) {
-						Agregar juguete
-					}
+					<a class={ components.DSButtonPrimary } href={ string(templ.URL("/admin/toys/create")) }>Agregar juguete</a>
 				</div>
 				<div class="overflow-hidden rounded-image border border-border bg-surface">
 					<div class="flex flex-wrap items-center gap-3.5 border-b border-border bg-background px-5 py-4">
@@ -156,7 +149,6 @@ templ Toys(toys []models.Toy, resultLabel string, search string) {
 					</div>
 				</div>
 			</div>
-			<div id="toys-dialog-container"></div>
 		</main>
 	}
 }

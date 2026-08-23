@@ -1,25 +1,32 @@
 package pages
 
 import (
-	"fmt"
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/store/models"
+	"reyes-magos-gr/views/admin"
 	"reyes-magos-gr/views/components"
 )
 
 templ UpdateVolunteerForm(volunteer models.Volunteer) {
-	@components.Dialog("dialog-volunteer-update-form") {
-		<form
-			id="volunteer-update-form"
-			class="pt-8"
-			hx-put={ lib.GetSafeIdUrl("/admin/volunteers/%d/save", volunteer.VolunteerID) }
-			hx-target={ fmt.Sprintf("#admin-volunteer-row-%d", volunteer.VolunteerID) }
-			hx-swap="outerHTML"
-		>
-			<div class="grid grid-cols-1 gap-x-6 gap-y-8">
-				@VolunteerForm(volunteer)
-				@components.DialogSaveFooter("dialog-volunteer-update-form")
+	@admin.AdminLayout() {
+		<main class="bg-background min-h-screen">
+			<div class="container mx-auto md:w-4xl px-6 py-10 lg:px-8">
+				<div class="mb-7 flex flex-wrap items-end justify-between gap-4">
+					<div>
+						<h1 class={ components.DSHeading1 }>Actualizar Voluntario</h1>
+					</div>
+				</div>
+				<form
+					id="volunteer-update-form"
+					class="pt-8"
+					method="POST"
+					action={ lib.GetSafeIdUrl("/admin/volunteers/%d/save", volunteer.VolunteerID) }
+				>
+					<div class="grid grid-cols-1 gap-x-6 gap-y-8">
+						@VolunteerForm(volunteer)
+					</div>
+				</form>
 			</div>
-		</form>
+		</main>
 	}
 }
