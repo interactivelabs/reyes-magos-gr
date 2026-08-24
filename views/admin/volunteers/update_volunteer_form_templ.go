@@ -48,7 +48,7 @@ func UpdateVolunteerForm(volunteer models.Volunteer) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"bg-background min-h-screen\"><div class=\"container mx-auto md:w-4xl px-6 py-10 lg:px-8\"><div class=\"mb-7 flex flex-wrap items-end justify-between gap-4\"><div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main class=\"bg-background min-h-screen\"><div class=\"container mx-auto md:w-4xl px-6 py-10 lg:px-8\"><div class=\"flex flex-wrap items-end justify-between gap-4\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -70,14 +70,14 @@ func UpdateVolunteerForm(volunteer models.Volunteer) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\">Actualizar Voluntario</h1></div></div><form id=\"volunteer-update-form\" class=\"pt-8\" method=\"POST\" action=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\">Actualizar Voluntario</h1></div><form id=\"volunteer-update-form\" class=\"pt-8\" method=\"POST\" action=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var5 templ.SafeURL
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinURLErrs(lib.GetSafeIdUrl("/admin/volunteers/%d/save", volunteer.VolunteerID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 23, Col: 82}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/admin/volunteers/update_volunteer_form.templ`, Line: 21, Col: 82}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {

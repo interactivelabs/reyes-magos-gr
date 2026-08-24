@@ -15,34 +15,34 @@ func splitCategories(value string) []string {
 
 templ AutocompleteCategories(currentValue string, categories []dtos.AutocompleteItem) {
 	<div>
-		<label for="category_search" class={ components.BaseLabelStyles }>Categories</label>
-		<div class="relative mt-2 block">
+		@components.DSFieldLabel("category_search", "Categorías", false)
+		<div class="relative">
 			<el-autocomplete class="block">
 				<input
 					id="category_search"
 					name="category_search"
-					class={ components.BaseInputStyles }
+					class={ components.DSInput }
 				/>
 				<el-options
 					popover
 					anchor="bottom end"
-					class="max-h-56 w-(--input-width) overflow-auto rounded-md bg-white py-1 text-base shadow-lg outline outline-black/5 transition-discrete [--anchor-gap:--spacing(1)] sm:text-sm dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10"
+					class="max-h-56 w-(--input-width) overflow-auto rounded-input border border-border bg-surface py-1 text-base shadow-lg transition-discrete [--anchor-gap:--spacing(1)] sm:text-sm"
 				>
 					for _, c := range categories {
 						<el-option
 							value={ c.Value }
-							class="block px-3 py-2 text-gray-900 select-none aria-selected:bg-brand-orange aria-selected:text-white dark:text-gray-200 dark:aria-selected:bg-brand-orange"
+							class="block px-3 py-2 text-ink select-none aria-selected:bg-primary aria-selected:text-white"
 						>{ c.Label }</el-option>
 					}
 				</el-options>
 			</el-autocomplete>
 			<button
 				type="button"
-				class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-hidden"
+				class="absolute inset-y-0 right-0 flex items-center rounded-r-input px-3 font-heading text-sm font-bold text-accent focus:outline-hidden"
 				onclick="addCategory()"
-			>Add</button>
+			>Agregar</button>
 		</div>
-		<div class={ "mt-2 flex", templ.KV("hidden", currentValue == "") } id="category-chips">
+		<div class={ "mt-3 flex flex-wrap gap-2", templ.KV("hidden", currentValue == "") } id="category-chips">
 			for _, cat := range splitCategories(currentValue) {
 				@CategoryChip(cat)
 			}
@@ -56,15 +56,15 @@ script onRemoveCategory(category string) {
 }
 
 templ CategoryChip(cat string) {
-	<div class="-my-1 flex flex-wrap items-center" data-category={ cat }>
-		<span class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900">
+	<div data-category={ cat }>
+		<span class={ components.DSChip }>
 			<span>{ cat }</span>
 			<button
 				type="button"
 				onclick={ onRemoveCategory(cat) }
-				class="ml-1 inline-flex h-4 w-4 shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
+				class="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-pill text-muted hover:text-accent"
 			>
-				<span class="sr-only">Remove Category</span>
+				<span class="sr-only">Quitar categoría</span>
 				<svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
 					<path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
 				</svg>

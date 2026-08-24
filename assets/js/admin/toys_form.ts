@@ -40,12 +40,11 @@ function getCategoryElements() {
 
 function createCategoryChip(category: string): HTMLElement {
   const wrapper = document.createElement("div");
-  wrapper.className = "-my-1 flex flex-wrap items-center";
   wrapper.dataset.category = category;
 
   const pill = document.createElement("span");
   pill.className =
-    "m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900";
+    "inline-flex items-center gap-2 rounded-pill bg-chip px-4 py-2 text-[13px] font-sans text-ink";
 
   const label = document.createElement("span");
   label.textContent = category;
@@ -53,9 +52,9 @@ function createCategoryChip(category: string): HTMLElement {
   const removeButton = document.createElement("button");
   removeButton.type = "button";
   removeButton.className =
-    "ml-1 inline-flex h-4 w-4 shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500";
+    "inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-pill text-muted hover:text-accent";
   removeButton.innerHTML = `
-    <span class="sr-only">Remove Category</span>
+    <span class="sr-only">Quitar categoría</span>
     <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
       <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
     </svg>

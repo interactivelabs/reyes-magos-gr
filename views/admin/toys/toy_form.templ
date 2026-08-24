@@ -9,66 +9,57 @@ import (
 )
 
 templ ToyForm(toy models.Toy, categories []dtos.AutocompleteItem) {
-	<div>
-		<label for="toy_name" class={ components.BaseLabelStyles }>Name</label>
-		<div class="mt-2">
-			<input type="text" id="toy_name" name="toy_name" class={ components.BaseInputStyles } value={ toy.ToyName }/>
+	<div class="flex flex-col gap-6">
+		@components.DSFormSection("Información del juguete", "Lo que las familias verán al recibir este juguete.") {
+			<div class="sm:col-span-6">
+				@components.DSFieldLabel("toy_name", "Nombre", false)
+				<input type="text" id="toy_name" name="toy_name" class={ components.DSInput } value={ toy.ToyName }/>
+			</div>
+			<div class="sm:col-span-6">
+				@components.DSFieldLabel("toy_description", "Descripción", true)
+				<textarea id="toy_description" name="toy_description" class={ components.DSInput }>{ toy.ToyDescription }</textarea>
+			</div>
+			<div class="sm:col-span-6">
+				@AutocompleteCategories(toy.Category, categories)
+			</div>
+			<div class="sm:col-span-3">
+				@components.DSFieldLabel("age_min", "Edad mínima", false)
+				<input type="number" id="age_min" name="age_min" class={ components.DSInput } value={ fmt.Sprint(toy.AgeMin) } min="1" max="16"/>
+			</div>
+			<div class="sm:col-span-3">
+				@components.DSFieldLabel("age_max", "Edad máxima", false)
+				<input type="number" id="age_max" name="age_max" class={ components.DSInput } value={ fmt.Sprint(toy.AgeMax) } min="1" max="16"/>
+			</div>
+		}
+		@components.DSFormSection("Fotos y enlace de origen", "Imágenes del juguete y de dónde se obtuvo.") {
+			<div class="sm:col-span-2">
+				@components.DSFieldLabel("image1", "Imagen 1", false)
+				<input type="url" id="image1" name="image1" class={ components.DSInput } value={ string(templ.URL(toy.Image1)) }/>
+			</div>
+			<div class="sm:col-span-2">
+				@components.DSFieldLabel("image2", "Imagen 2", false)
+				<input type="url" id="image2" name="image2" class={ components.DSInput } value={ string(templ.URL(toy.Image2)) }/>
+			</div>
+			<div class="sm:col-span-2">
+				@components.DSFieldLabel("image3", "Imagen 3", false)
+				<input type="url" id="image3" name="image3" class={ components.DSInput } value={ string(templ.URL(toy.Image3)) }/>
+			</div>
+			<div class="sm:col-span-6">
+				@components.DSFieldLabel("source_url", "Enlace de origen", false)
+				<input type="url" id="source_url" name="source_url" class={ components.DSInput } value={ string(templ.URL(toy.SourceURL)) }/>
+			</div>
+		}
+		<div class="flex items-center justify-end gap-5">
+			<a
+				href={ string(templ.URL("/admin/toys")) }
+				class="px-2 py-3 font-heading text-sm font-bold text-secondary"
+			>
+				Cancelar
+			</a>
+			<button
+				type="submit"
+				class={ components.DSButtonPrimary }
+			>Guardar</button>
 		</div>
-	</div>
-	<div>
-		<label for="toy_description" class={ components.BaseLabelStyles }>Description</label>
-		<div class="mt-2">
-			<textarea id="toy_description" name="toy_description" class={ components.BaseInputStyles }>{ toy.ToyDescription }</textarea>
-		</div>
-	</div>
-	@AutocompleteCategories(toy.Category, categories)
-	<div>
-		<label for="age_min" class={ components.BaseLabelStyles }>Minimum Age</label>
-		<div class="mt-2">
-			<input type="number" id="age_min" name="age_min" class={ components.BaseInputStyles } value={ fmt.Sprint(toy.AgeMin) } min="1" max="16"/>
-		</div>
-	</div>
-	<div>
-		<label for="age_max" class={ components.BaseLabelStyles }>Maximum Age</label>
-		<div class="mt-2">
-			<input type="number" id="age_max" name="age_max" class={ components.BaseInputStyles } value={ fmt.Sprint(toy.AgeMax) } min="1" max="16"/>
-		</div>
-	</div>
-	<div>
-		<label for="image1" class={ components.BaseLabelStyles }>Image 1</label>
-		<div class="mt-2">
-			<input type="url" id="image1" name="image1" class={ components.BaseInputStyles } value={ string(templ.URL(toy.Image1)) }/>
-		</div>
-	</div>
-	<div>
-		<label for="image2" class={ components.BaseLabelStyles }>Image 2</label>
-		<div class="mt-2">
-			<input type="url" id="image2" name="image2" class={ components.BaseInputStyles } value={ string(templ.URL(toy.Image2)) }/>
-		</div>
-	</div>
-	<div>
-		<label for="image3" class={ components.BaseLabelStyles }>Image 3</label>
-		<div class="mt-2">
-			<input type="url" id="image3" name="image3" class={ components.BaseInputStyles } value={ string(templ.URL(toy.Image3)) }/>
-		</div>
-	</div>
-	<div>
-		<label for="source_url" class={ components.BaseLabelStyles }>Source Url</label>
-		<div class="mt-2">
-			<input type="url" id="source_url" name="source_url" class={ components.BaseInputStyles } value={ string(templ.URL(toy.SourceURL)) }/>
-		</div>
-	</div>
-	<div class="my-6 py-8 flex items-center justify-end gap-x-6 border-t border-gray-900/10">
-		<a
-			type="button"
-			class={ components.BaseSecondaryButton }
-			href={ string(templ.URL("/admin/toys")) }
-		>
-			Cancel
-		</a>
-		<button
-			type="submit"
-			class={ components.BrandPrimaryButton }
-		>Save</button>
 	</div>
 }
