@@ -13,7 +13,7 @@ templ DialogSaveFooter(id string) {
 	@DialogFooter(id) {
 		<button
 			type="submit"
-			class={ BrandPrimaryButton }
+			class={ DSButtonPrimary }
 		>Save</button>
 	}
 }
@@ -21,7 +21,7 @@ templ DialogSaveFooter(id string) {
 templ CancelModalButton(id string) {
 	<button
 		type="button"
-		class={ BaseSecondaryButton }
+		class={ DSButtonSecondary }
 		command="close"
 		commandfor={ id }
 	>
