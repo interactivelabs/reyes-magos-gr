@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Cabin:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin:0; background:#fbf7fb; font-family:'Cabin',sans-serif; color:#4a3f4d; }
+    a { color:#c96a3e; text-decoration:none; }
+    a:hover { color:#b8623f; }
+    input::placeholder { color:#b3a7b8; }
+    input:focus, select:focus { outline:none; border-color:#e8926a !important; box-shadow:0 0 0 4px rgba(232,146,106,0.2); }
+  </style>
+</helmet>
+
+<div style="min-height:100vh;">
+
+  <header style="background:#ffffff;border-bottom:1px solid #ece3ef;">
+    <div style="max-width:1180px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:72px;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <span style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:19px;color:#4a3f4d;">D&amp;L Toys</span>
+        <span style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;color:#9b85c4;background:#f4ecf6;padding:4px 10px;border-radius:999px;">Admin</span>
+      </div>
+      <nav style="display:flex;gap:28px;">
+        <a href="/admin/codes" style="font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#8d7f91;">Códigos</a>
+        <a href="/admin/orders" style="font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#8d7f91;">Órdenes</a>
+        <a href="/admin/volunteers" style="font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#c96a3e;border-bottom:2px solid #e8926a;padding-bottom:22px;margin-bottom:-23px;">Voluntarios</a>
+        <a href="/admin/toys" style="font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#8d7f91;">Juguetes</a>
+      </nav>
+      <a href="/logout" style="font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#8d7f91;">Salir</a>
+    </div>
+  </header>
+
+  <main style="max-width:900px;margin:0 auto;padding:32px 32px 120px;">
+
+    <a href="/admin/volunteers" style="display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:13px;color:#9b85c4;margin-bottom:18px;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="height:11px;width:11px;fill:currentColor;"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"></path></svg>
+      Voluntarios
+    </a>
+
+    <div style="margin-bottom:28px;">
+      <h1 style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:30px;line-height:1.2;margin:0 0 6px;">{{ pageTitle }}</h1>
+      <p style="font-size:14px;color:#8d7f91;margin:0;max-width:560px;text-wrap:pretty;">{{ pageSubtitle }}</p>
+    </div>
+
+    <form onsubmit="{{ onSubmit }}" style="display:flex;flex-direction:column;gap:24px;">
+
+      <section style="background:#ffffff;border:1px solid #ece3ef;border-radius:20px;padding:28px 28px 32px;">
+        <h2 style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:18px;margin:0 0 4px;">Datos del voluntario</h2>
+        <p style="font-size:13px;color:#8d7f91;margin:0 0 24px;">Cómo contactamos al voluntario para coordinar entregas.</p>
+
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:20px 24px;">
+          <div style="grid-column:span 6;">
+            <label for="name" style="display:block;font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#4a3f4d;margin-bottom:7px;">Nombre completo</label>
+            <input id="name" name="name" type="text" value="{{ name }}" oninput="{{ onName }}" placeholder="Luis González" style="width:100%;box-sizing:border-box;border-radius:14px;border:1px solid #ece3ef;padding:12px 16px;font-size:15px;font-family:'Cabin',sans-serif;color:#4a3f4d;background:#fff;">
+          </div>
+          <div style="grid-column:span 4;">
+            <label for="email" style="display:block;font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#4a3f4d;margin-bottom:7px;">Correo electrónico</label>
+            <input id="email" name="email" type="email" value="{{ email }}" oninput="{{ onEmail }}" placeholder="nombre@correo.com" style="width:100%;box-sizing:border-box;border-radius:14px;border:1px solid #ece3ef;padding:12px 16px;font-size:15px;font-family:'Cabin',sans-serif;color:#4a3f4d;background:#fff;">
+            <p style="{{ emailErrorStyle }}">Escribe un correo válido.</p>
+          </div>
+          <div style="grid-column:span 2;">
+            <label for="phone" style="display:block;font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#4a3f4d;margin-bottom:7px;">Teléfono</label>
+            <input id="phone" name="phone" type="tel" value="{{ phone }}" oninput="{{ onPhone }}" placeholder="555 555 5555" style="width:100%;box-sizing:border-box;border-radius:14px;border:1px solid #ece3ef;padding:12px 16px;font-size:15px;font-family:'Cabin',sans-serif;color:#4a3f4d;background:#fff;">
+          </div>
+        </div>
+      </section>
+
+      <section style="background:#ffffff;border:1px solid #ece3ef;border-radius:20px;padding:28px 28px 32px;">
+        <h2 style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:18px;margin:0 0 4px;">Dirección de entrega</h2>
+        <p style="font-size:13px;color:#8d7f91;margin:0 0 24px;">Aquí se envían los juguetes que el voluntario reparte.</p>
+
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:20px 24px;">
+          <div style="grid-column:span 6;">
+            <label for="address" style="display:block;font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#4a3f4d;margin-bottom:7px;">Calle y número</label>
+            <input id="address" name="address" type="text" value="{{ address }}" oninput="{{ onAddress }}" placeholder="Av. Juárez 1204" style="width:100%;box-sizing:border-box;border-radius:14px;border:1px solid #ece3ef;padding:12px 16px;font-size:15px;font-family:'Cabin',sans-serif;color:#4a3f4d;background:#fff;">
+          </div>
+          <div style="grid-column:span 6;">
+            <label for="address2" style="display:flex;align-items:baseline;gap:8px;font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#4a3f4d;margin-bottom:7px;">
+              Interior, depto. o referencia
+              <span style="font-weight:400;font-size:12px;color:#b3a7b8;">Opcional</span>
+            </label>
+            <input id="address2" name="address2" type="text" value="{{ address2 }}" oninput="{{ onAddress2 }}" placeholder="Depto. 4B" style="width:100%;box-sizing:border-box;border-radius:14px;border:1px solid #ece3ef;padding:12px 16px;font-size:15px;font-family:'Cabin',sans-serif;color:#4a3f4d;background:#fff;">
+          </div>
+          <div style="grid-column:span 3;">
+            <label for="city" style="display:block;font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#4a3f4d;margin-bottom:7px;">Ciudad</label>
+            <input id="city" name="city" type="text" value="{{ city }}" oninput="{{ onCity }}" placeholder="Guadalajara" style="width:100%;box-sizing:border-box;border-radius:14px;border:1px solid #ece3ef;padding:12px 16px;font-size:15px;font-family:'Cabin',sans-serif;color:#4a3f4d;background:#fff;">
+          </div>
+          <div style="grid-column:span 3;">
+            <label for="province" style="display:block;font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#4a3f4d;margin-bottom:7px;">Municipio / Delegación</label>
+            <input id="province" name="province" type="text" value="{{ province }}" oninput="{{ onProvince }}" placeholder="Zapopan" style="width:100%;box-sizing:border-box;border-radius:14px;border:1px solid #ece3ef;padding:12px 16px;font-size:15px;font-family:'Cabin',sans-serif;color:#4a3f4d;background:#fff;">
+          </div>
+          <div style="grid-column:span 2;">
+            <label for="state" style="display:block;font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#4a3f4d;margin-bottom:7px;">Estado</label>
+            <input id="state" name="state" type="text" value="{{ state }}" oninput="{{ onState }}" placeholder="JAL" style="width:100%;box-sizing:border-box;border-radius:14px;border:1px solid #ece3ef;padding:12px 16px;font-size:15px;font-family:'Cabin',sans-serif;color:#4a3f4d;background:#fff;">
+          </div>
+          <div style="grid-column:span 2;">
+            <label for="zip_code" style="display:block;font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#4a3f4d;margin-bottom:7px;">Código postal</label>
+            <input id="zip_code" name="zip_code" type="text" inputmode="numeric" value="{{ zip }}" oninput="{{ onZip }}" placeholder="44100" style="width:100%;box-sizing:border-box;border-radius:14px;border:1px solid #ece3ef;padding:12px 16px;font-size:15px;font-family:'Cabin',sans-serif;color:#4a3f4d;background:#fff;">
+          </div>
+          <div style="grid-column:span 2;">
+            <label for="country" style="display:block;font-family:'Cabin',sans-serif;font-weight:600;font-size:13px;color:#4a3f4d;margin-bottom:7px;">País</label>
+            <div style="position:relative;">
+              <select id="country" name="country" value="{{ country }}" onchange="{{ onCountry }}" style="width:100%;box-sizing:border-box;appearance:none;border-radius:14px;border:1px solid #ece3ef;padding:12px 36px 12px 16px;font-size:15px;font-family:'Cabin',sans-serif;color:#4a3f4d;background:#fff;cursor:pointer;">
+                <option value="México">México</option>
+                <option value="USA">USA</option>
+                <option value="Canadá">Canadá</option>
+              </select>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);width:14px;height:14px;fill:#8d7f91;pointer-events:none;"><path d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"></path></svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-top:4px;">
+        <p style="font-size:13px;color:#8d7f91;margin:0;">{{ statusNote }}</p>
+        <div style="display:flex;align-items:center;gap:20px;">
+          <a href="/admin/volunteers" style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:14px;color:#9b85c4;padding:12px 8px;">Cancelar</a>
+          <button type="submit" style="border:none;cursor:pointer;background:#e8926a;color:#fff;font-family:'Quicksand',sans-serif;font-weight:700;font-size:14px;padding:14px 26px;border-radius:16px;box-shadow:0 4px 0 #b8623f;" style-active="transform:translateY(4px);box-shadow:none;">{{ submitLabel }}</button>
+        </div>
+      </div>
+
+    </form>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:1000},&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;create&quot;,&quot;edit&quot;],&quot;default&quot;:&quot;edit&quot;,&quot;tsType&quot;:&quot;'create' | 'edit'&quot;}}">
+class Component extends DCLogic {
+  state = {
+    saved: false,
+    touchedEmail: false,
+    v: {
+      name: '', email: '', phone: '', address: '', address2: '',
+      city: '', province: '', state: '', zip: '', country: 'México'
+    }
+  };
+
+  componentDidMount() {
+    if ((this.props.mode ?? 'edit') === 'edit') {
+      this.setState({ v: {
+        name: 'Luis González', email: 'luismgonzalezb@gmail.com', phone: '555 555 5555',
+        address: '4441 249th Ter SE', address2: '', city: 'Sammamish', province: 'King',
+        state: 'WA', zip: '98029', country: 'USA'
+      }});
+    }
+  }
+
+  set(k) {
+    return (e) => {
+      const val = e.target.value;
+      this.setState(s => ({ saved: false, v: Object.assign({}, s.v, { [k]: val }) }));
+    };
+  }
+
+  renderVals() {
+    const mode = this.props.mode ?? 'edit';
+    const v = this.state.v;
+    const emailBad = this.state.touchedEmail && v.email.length > 0 && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v.email);
+    return {
+      pageTitle: mode === 'create' ? 'Crear voluntario' : 'Actualizar voluntario',
+      pageSubtitle: mode === 'create'
+        ? 'Registra a un nuevo voluntario para que pueda recibir y entregar juguetes.'
+        : 'Actualiza los datos de contacto y la dirección de entrega de este voluntario.',
+      submitLabel: mode === 'create' ? 'Crear voluntario' : 'Guardar cambios',
+      statusNote: this.state.saved
+        ? 'Cambios guardados.'
+        : (mode === 'create' ? 'Todos los campos salvo los marcados como opcionales son necesarios.' : 'Los cambios se aplican de inmediato.'),
+      name: v.name, email: v.email, phone: v.phone, address: v.address, address2: v.address2,
+      city: v.city, province: v.province, state: v.state, zip: v.zip, country: v.country,
+      onName: this.set('name'),
+      onEmail: (e) => { this.setState({ touchedEmail: true }); this.set('email')(e); },
+      onPhone: this.set('phone'),
+      onAddress: this.set('address'),
+      onAddress2: this.set('address2'),
+      onCity: this.set('city'),
+      onProvince: this.set('province'),
+      onState: this.set('state'),
+      onZip: this.set('zip'),
+      onCountry: this.set('country'),
+      emailErrorStyle: emailBad
+        ? 'margin:7px 0 0;font-size:12px;color:#b8623f;font-weight:600;'
+        : 'display:none;',
+      onSubmit: (e) => { e.preventDefault(); this.setState({ saved: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

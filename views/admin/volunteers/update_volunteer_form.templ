@@ -22,9 +22,7 @@ templ UpdateVolunteerForm(volunteer models.Volunteer) {
 					method="POST"
 					action={ lib.GetSafeIdUrl("/admin/volunteers/%d/save", volunteer.VolunteerID) }
 				>
-					<div class="grid grid-cols-1 gap-x-6 gap-y-8">
-						@VolunteerForm(volunteer)
-					</div>
+					@VolunteerForm(volunteer)
 				</form>
 			</div>
 		</main>

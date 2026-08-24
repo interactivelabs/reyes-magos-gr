@@ -6,77 +6,62 @@ import (
 )
 
 templ VolunteerForm(volunteer models.Volunteer) {
-	<div>
-		<label for="name" class={ components.BaseLabelStyles }>Name</label>
-		<div class="mt-2">
-			<input type="text" name="name" class={ components.BaseInputStyles } value={ volunteer.Name }/>
+	<div class="flex flex-col gap-6">
+		@components.DSFormSection("Datos del voluntario", "Cómo contactamos al voluntario para coordinar entregas.") {
+			<div class="sm:col-span-6">
+				@components.DSFieldLabel("name", "Nombre completo", false)
+				<input type="text" id="name" name="name" class={ components.DSInput } value={ volunteer.Name }/>
+			</div>
+			<div class="sm:col-span-4">
+				@components.DSFieldLabel("email", "Correo electrónico", false)
+				<input type="email" id="email" name="email" class={ components.DSInput } value={ volunteer.Email }/>
+			</div>
+			<div class="sm:col-span-2">
+				@components.DSFieldLabel("phone", "Teléfono", false)
+				<input type="tel" id="phone" name="phone" class={ components.DSInput } value={ volunteer.Phone }/>
+			</div>
+		}
+		@components.DSFormSection("Dirección de entrega", "Aquí se envían los juguetes que el voluntario reparte.") {
+			<div class="sm:col-span-6">
+				@components.DSFieldLabel("address", "Calle y número", false)
+				<input type="text" id="address" name="address" class={ components.DSInput } value={ volunteer.Address }/>
+			</div>
+			<div class="sm:col-span-6">
+				@components.DSFieldLabel("address2", "Interior, depto. o referencia", true)
+				<input type="text" id="address2" name="address2" class={ components.DSInput } value={ volunteer.Address2 }/>
+			</div>
+			<div class="sm:col-span-3">
+				@components.DSFieldLabel("city", "Ciudad", false)
+				<input type="text" id="city" name="city" class={ components.DSInput } value={ volunteer.City }/>
+			</div>
+			<div class="sm:col-span-3">
+				@components.DSFieldLabel("province", "Municipio / Delegación", false)
+				<input type="text" id="province" name="province" class={ components.DSInput } value={ volunteer.Province }/>
+			</div>
+			<div class="sm:col-span-2">
+				@components.DSFieldLabel("state", "Estado", false)
+				<input type="text" id="state" name="state" class={ components.DSInput } value={ volunteer.State }/>
+			</div>
+			<div class="sm:col-span-2">
+				@components.DSFieldLabel("zip_code", "Código postal", false)
+				<input type="text" id="zip_code" name="zip_code" class={ components.DSInput } value={ volunteer.ZipCode }/>
+			</div>
+			<div class="sm:col-span-2">
+				@components.DSFieldLabel("country", "País", false)
+				<input type="text" id="country" name="country" class={ components.DSInput } value={ volunteer.Country }/>
+			</div>
+		}
+		<div class="flex items-center justify-end gap-5">
+			<a
+				href={ string(templ.URL("/admin/volunteers")) }
+				class="px-2 py-3 font-heading text-sm font-bold text-secondary"
+			>
+				Cancelar
+			</a>
+			<button
+				type="submit"
+				class={ components.DSButtonPrimary }
+			>Guardar</button>
 		</div>
-	</div>
-	<div>
-		<label for="email" class={ components.BaseLabelStyles }>Email</label>
-		<div class="mt-2">
-			<input type="email" name="email" class={ components.BaseInputStyles } value={ volunteer.Email }/>
-		</div>
-	</div>
-	<div>
-		<label for="phone" class={ components.BaseLabelStyles }>Phone</label>
-		<div class="mt-2">
-			<input type="tel" name="phone" class={ components.BaseInputStyles } value={ volunteer.Phone }/>
-		</div>
-	</div>
-	<div>
-		<label for="address" class={ components.BaseLabelStyles }>Address</label>
-		<div class="mt-2">
-			<input type="text" name="address" class={ components.BaseInputStyles } value={ volunteer.Address }/>
-		</div>
-	</div>
-	<div>
-		<label for="address2" class={ components.BaseLabelStyles }>Address 2</label>
-		<div class="mt-2">
-			<input type="text" name="address2" class={ components.BaseInputStyles } value={ volunteer.Address2 }/>
-		</div>
-	</div>
-	<div>
-		<label for="city" class={ components.BaseLabelStyles }>City</label>
-		<div class="mt-2">
-			<input type="text" name="city" class={ components.BaseInputStyles } value={ volunteer.City }/>
-		</div>
-	</div>
-	<div>
-		<label for="province" class={ components.BaseLabelStyles }>Province / County</label>
-		<div class="mt-2">
-			<input type="text" name="province" class={ components.BaseInputStyles } value={ volunteer.Province }/>
-		</div>
-	</div>
-	<div>
-		<label for="state" class={ components.BaseLabelStyles }>State</label>
-		<div class="mt-2">
-			<input type="text" name="state" class={ components.BaseInputStyles } value={ volunteer.State }/>
-		</div>
-	</div>
-	<div>
-		<label for="zip_code" class={ components.BaseLabelStyles }>Zip Code</label>
-		<div class="mt-2">
-			<input type="text" name="zip_code" class={ components.BaseInputStyles } value={ volunteer.ZipCode }/>
-		</div>
-	</div>
-	<div>
-		<label for="country" class={ components.BaseLabelStyles }>Country</label>
-		<div class="mt-2">
-			<input type="text" name="country" class={ components.BaseInputStyles } value={ volunteer.Country }/>
-		</div>
-	</div>
-	<div class="my-6 py-8 flex items-center justify-end gap-x-6 border-t border-gray-900/10">
-		<a
-			type="button"
-			class={ components.BaseSecondaryButton }
-			href={ string(templ.URL("/admin/volunteers")) }
-		>
-			Cancel
-		</a>
-		<button
-			type="submit"
-			class={ components.BrandPrimaryButton }
-		>Save</button>
 	</div>
 }

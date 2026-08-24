@@ -21,9 +21,7 @@ templ CreateVolunteerForm() {
 					method="post"
 					action={ string(templ.URL("/admin/volunteers/create/save")) }
 				>
-					<div class="grid grid-cols-1 gap-x-6 gap-y-8">
-						@VolunteerForm(models.Volunteer{})
-					</div>
+					@VolunteerForm(models.Volunteer{})
 				</form>
 			</div>
 		</main>
