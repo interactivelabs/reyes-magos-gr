@@ -33,3 +33,6 @@ bin
 
 # Node_modules for the build process only
 node_modules
+
+## Scraping Script results
+scraped
