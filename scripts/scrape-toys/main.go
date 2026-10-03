@@ -4,9 +4,12 @@
 //
 // Usage:
 //
-//	go run ./cmd/scrape-toys -out ./scraped -delay 3s
+//	go run ./scripts/scrape-toys -out ./scraped -delay 3s
 //
-// It uses the same TURSO_* environment variables as the app.
+// It uses the same TURSO_* environment variables as the app. If Amazon keeps
+// serving the robot check, set AMAZON_COOKIE to the Cookie header copied from
+// a logged-in browser request (DevTools → Network → Request Headers) so the
+// script reuses that session.
 package main
 
 import (
@@ -17,6 +20,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/http/cookiejar"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -70,7 +75,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	client := &http.Client{Timeout: 30 * time.Second}
+	jar, err := cookiejar.New(nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	client := &http.Client{Timeout: 30 * time.Second, Jar: jar}
+	primeSessions(client, toys, os.Getenv("AMAZON_COOKIE"))
+
 	var ok, skipped, failed int
 
 	for i, toy := range toys {
@@ -157,15 +168,63 @@ func scrapeToy(client *http.Client, toy models.Toy, jsonPath string, saveHTML bo
 	return os.WriteFile(jsonPath, out, 0o644)
 }
 
-func fetch(client *http.Client, url string) ([]byte, error) {
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+// primeSessions seeds the cookie jar for every host in the toys' source URLs,
+// first with the browser cookies (if any) and then by visiting the homepage,
+// so product requests carry a session like a returning visitor would.
+func primeSessions(client *http.Client, toys []models.Toy, browserCookie string) {
+	var cookies []*http.Cookie
+	if browserCookie != "" {
+		var err error
+		if cookies, err = http.ParseCookie(browserCookie); err != nil {
+			log.Fatal("Error parsing AMAZON_COOKIE: ", err)
+		}
+	}
+
+	seen := map[string]bool{}
+	for _, toy := range toys {
+		u, err := url.Parse(strings.TrimSpace(toy.SourceURL))
+		if err != nil || u.Host == "" || seen[u.Host] {
+			continue
+		}
+		seen[u.Host] = true
+
+		home := &url.URL{Scheme: u.Scheme, Host: u.Host, Path: "/"}
+		if len(cookies) > 0 {
+			// Scope them like Amazon's own Set-Cookie (Domain=.amazon.com.mx)
+			// so later responses overwrite them instead of the jar keeping a
+			// second, conflicting session-id alongside the browser's one.
+			domain := strings.TrimPrefix(u.Hostname(), "www.")
+			for _, c := range cookies {
+				c.Domain, c.Path = domain, "/"
+			}
+			client.Jar.SetCookies(home, cookies)
+			// The browser session is already established; visiting the
+			// homepage again only gets it replaced.
+			continue
+		}
+		if _, err := fetch(client, home.String()); err != nil {
+			log.Printf("warming up %s: %v", home, err)
+		}
+	}
+}
+
+func fetch(client *http.Client, rawURL string) ([]byte, error) {
+	req, err := http.NewRequest(http.MethodGet, rawURL, nil)
 	if err != nil {
 		return nil, err
 	}
 	// Amazon serves a robot-check page to obvious bots, so look like a browser.
 	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36")
-	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+	req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
 	req.Header.Set("Accept-Language", "es-MX,es;q=0.9,en;q=0.8")
+	req.Header.Set("Sec-Ch-Ua", `"Chromium";v="140", "Not=A?Brand";v="24", "Google Chrome";v="140"`)
+	req.Header.Set("Sec-Ch-Ua-Mobile", "?0")
+	req.Header.Set("Sec-Ch-Ua-Platform", `"Linux"`)
+	req.Header.Set("Sec-Fetch-Dest", "document")
+	req.Header.Set("Sec-Fetch-Mode", "navigate")
+	req.Header.Set("Sec-Fetch-Site", "none")
+	req.Header.Set("Sec-Fetch-User", "?1")
+	req.Header.Set("Upgrade-Insecure-Requests", "1")
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -177,7 +236,11 @@ func fetch(client *http.Client, url string) ([]byte, error) {
 		return nil, errBlocked
 	}
 	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status %s", res.Status)
+		// Name the final URL too, since redirects may have landed elsewhere.
+		if final := res.Request.URL.String(); final != rawURL {
+			return nil, fmt.Errorf("unexpected status %s for %s (redirected to %s)", res.Status, rawURL, final)
+		}
+		return nil, fmt.Errorf("unexpected status %s for %s", res.Status, rawURL)
 	}
 	return io.ReadAll(res.Body)
 }
