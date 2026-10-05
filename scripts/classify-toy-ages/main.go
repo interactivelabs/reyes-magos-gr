@@ -13,24 +13,20 @@
 package main
 
 import (
-	"bytes"
+	"cmp"
 	"encoding/json"
-	"errors"
 	"flag"
 	"fmt"
-	"io"
 	"log"
-	"net/http"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 	"sync"
 	"text/tabwriter"
-	"time"
-)
 
-const endpoint = "https://api.typesafe.ai/v1/systemone"
+	"reyes-magos-gr/scripts/internal/typesafe"
+)
 
 type ToyFile struct {
 	ToyID    int64    `json:"toy_id"`
@@ -68,16 +64,63 @@ type stage struct {
 	desc any
 }
 
+// youngestStages, like oldestStages, describe each floor by the skills the
+// toy demands and the kind of toy, so options differ in meaning, not number.
 var youngestStages = []stage{
-	{"newborn", 0, "Safe and engaging for babies from birth to 12 months: rattles, teethers, soft toys, crib or tummy-time toys, large pieces that cannot be swallowed."},
-	{"one_year", 1, "Needs a child who can sit, crawl or start walking (around 1 year): push/pull toys, simple cause-and-effect buttons, stacking rings, chunky blocks."},
-	{"two_years", 2, "Needs a toddler around 2 years: simple pretend play, ride-ons, chunky puzzles, toys with a few big buttons, still nothing small enough to swallow."},
-	{"three_years", 3, "Needs a preschooler around 3 years: small pieces become acceptable, simple role play (kitchen, tools, dolls with accessories), toy vehicles with small parts, basic crafts."},
-	{"four_years", 4, "Needs a child around 4 to 5 years: follows simple rules, uses basic electronics with a screen or remote control, dress-up and makeup sets, simple board games."},
-	{"six_years", 6, "Needs a school-age child around 6 to 7 years: reads a little, builds multi-step constructions, aims and shoots foam darts, more complex electronic toys."},
-	{"eight_years", 8, "Needs a child around 8 to 9 years: detailed building kits, strategy games, toys that require reading instructions and fine motor precision."},
-	{"ten_years", 10, "Needs a preteen around 10 years or older: advanced kits, real-tool art or science sets, hobby-grade gadgets."},
-	{"teen", 13, "Meant for teenagers 13 and up; not appropriate for younger children."},
+	{"newborn", 0, map[string]string{
+		"suitable_from":   "Birth, babies under 12 months.",
+		"skills_needed":   "None beyond looking, grasping, shaking or mouthing.",
+		"typical_toys":    "Rattles, teethers, soft cloth books, crib mobiles, tummy-time mats, baby toys labelled 'desde 0 meses' or 'recién nacido'.",
+		"too_hard_before": "Nothing: it is built for newborns and safe to put in the mouth.",
+	}},
+	{"one_year", 1, map[string]string{
+		"suitable_from":   "About 1 year, once a baby sits steadily, crawls or starts walking.",
+		"skills_needed":   "Pressing big buttons, pushing, pulling, banging; no pretend play or rules.",
+		"typical_toys":    "Baby laptops and phones with lights and songs, activity cubes, push walkers, stacking rings, chunky blocks, 'mi primer' toys for 6 to 12 months and up.",
+		"too_hard_before": "A baby who cannot yet sit up or grab deliberately gets nothing from it.",
+	}},
+	{"two_years", 2, map[string]string{
+		"suitable_from":   "About 2 years, a walking toddler.",
+		"skills_needed":   "Simple imitation and pretend play, carrying and pushing toys around, working buckles or big knobs; still mouths things.",
+		"typical_toys":    "Plush dolls with Montessori buckles, toy wagons and big push vehicles, chunky puzzles, toddler ride-ons, simple shakers and drums.",
+		"too_hard_before": "A 1 year old cannot yet use it on purpose or walk with it.",
+	}},
+	{"three_years", 3, map[string]string{
+		"suitable_from":   "About 3 years, a preschooler who no longer puts toys in the mouth.",
+		"skills_needed":   "Role play with small accessories, taking turns, simple on/off electronics, assembling a few pieces with an adult.",
+		"typical_toys":    "Play tents and castles, toy vehicle sets with small cars, styling heads, dinosaur sets, magnetic fishing games, kids' cameras and phones with simple menus, karaoke microphones.",
+		"too_hard_before": "It has small loose pieces or needs pretend play and hand control that a 2 year old does not have yet.",
+	}},
+	{"four_years", 4, map[string]string{
+		"suitable_from":   "About 4 to 5 years.",
+		"skills_needed":   "Following simple rules, aiming, steering with a remote control, careful use of cosmetics or art materials.",
+		"typical_toys":    "Washable kids' makeup kits, remote-control animals, sports games with goals and scoring, toy drum kits with stool and sticks.",
+		"too_hard_before": "A 3 year old cannot follow its rules, aim, or use the materials without making a mess or misusing them.",
+	}},
+	{"six_years", 6, map[string]string{
+		"suitable_from":   "About 6 years, a school-age child.",
+		"skills_needed":   "Multi-step building, reading a little, shooting foam darts safely, using a screwdriver tool.",
+		"typical_toys":    "Magnetic rod-and-ball building kits, take-apart dinosaur kits with screwdriver, foam dart blasters and electronic targets, vanity sets with many small cosmetics.",
+		"too_hard_before": "Younger children cannot follow the steps or are at risk with the small or projectile parts.",
+	}},
+	{"eight_years", 8, map[string]string{
+		"suitable_from":   "About 8 years.",
+		"skills_needed":   "Reading instructions independently, fine motor precision, patience for detailed projects.",
+		"typical_toys":    "Detailed construction models, strategy board games, science kits, art sets with acrylic paint, brushes and many media.",
+		"too_hard_before": "A 6 or 7 year old would need an adult to do most of it.",
+	}},
+	{"ten_years", 10, map[string]string{
+		"suitable_from":   "About 10 years, a preteen.",
+		"skills_needed":   "Using real tools and materials responsibly with little supervision.",
+		"typical_toys":    "Hobby-grade gadgets, advanced electronics or coding kits, professional-grade art sets.",
+		"too_hard_before": "Younger children would misuse or be frustrated by real tools and materials.",
+	}},
+	{"teen", 13, map[string]string{
+		"suitable_from":   "13 years and older.",
+		"skills_needed":   "Adult-level judgment.",
+		"typical_toys":    "Products meant for teens and adults, not designed for children at all.",
+		"too_hard_before": "It is unsafe or inappropriate for children under 13.",
+	}},
 }
 
 // oldestStages describe each ceiling by the kind of toy and why older kids
@@ -131,16 +174,15 @@ func main() {
 	workers := flag.Int("workers", 4, "concurrent requests")
 	flag.Parse()
 
-	apiKey := os.Getenv("TYPESAFE_API_KEY")
-	if apiKey == "" {
-		log.Fatal("TYPESAFE_API_KEY is not set")
+	client, err := typesafe.NewFromEnv()
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	paths, err := filepath.Glob(filepath.Join(*inDir, "toy-*.json"))
 	if err != nil {
 		log.Fatal(err)
 	}
-	client := &http.Client{Timeout: 60 * time.Second}
 
 	results := make([]Result, len(paths))
 	errs := make([]error, len(paths))
@@ -149,7 +191,7 @@ func main() {
 	for range *workers {
 		wg.Go(func() {
 			for i := range jobs {
-				results[i], errs[i] = classify(client, apiKey, paths[i], *minConfidence)
+				results[i], errs[i] = classify(client, paths[i], *minConfidence)
 			}
 		})
 	}
@@ -178,19 +220,21 @@ func main() {
 	}
 
 	tw := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(tw, "ID\tRANGE\tFABRICANTE\tREVIEW\tTOY")
+	fmt.Fprintln(tw, "ID\tRANGE\tMIN CONF\tMAX CONF\tSMALL PARTS\tFABRICANTE\tFAB OK\tREVIEW\tTOY")
 	for _, r := range ok {
-		review := ""
-		if r.NeedsReview {
-			review = strings.Join(r.ReviewReasons, "; ")
+		manufacturerOK := "-"
+		if r.ManufacturerOK != nil {
+			manufacturerOK = fmt.Sprintf("%.2f", *r.ManufacturerOK)
 		}
-		fmt.Fprintf(tw, "%d\t%d-%d\t%s\t%s\t%s\n", r.ToyID, r.AgeMin, r.AgeMax, r.ManufacturerAge, review, truncate(r.ToyName, 60))
+		fmt.Fprintf(tw, "%d\t%d-%d\t%.2f\t%.2f\t%.2f\t%s\t%s\t%s\t%s\n",
+			r.ToyID, r.AgeMin, r.AgeMax, r.YoungestConfidence, r.OldestConfidence, r.SmallParts,
+			cmp.Or(r.ManufacturerAge, "-"), manufacturerOK, strings.Join(r.ReviewReasons, "; "), truncate(r.ToyName, 50))
 	}
 	tw.Flush()
 	log.Printf("classified %d/%d toys → %s", len(ok), len(paths), *out)
 }
 
-func classify(client *http.Client, apiKey, path string, minConfidence float64) (Result, error) {
+func classify(client *typesafe.Client, path string, minConfidence float64) (Result, error) {
 	raw, err := os.ReadFile(path)
 	if err != nil {
 		return Result{}, err
@@ -204,10 +248,15 @@ func classify(client *http.Client, apiKey, path string, minConfidence float64) (
 	questions := map[string]any{
 		"youngest": map[string]any{
 			"type": "choice",
-			"instructions": "Based on what this toy is and how it is played with (`title`, `features`, `attributes`), " +
-				"what is the youngest developmental stage at which a typical child can safely play with it and enjoy it? " +
-				"Ages written in `title` or `features` for children (e.g. \"niños de 3 a 12 años\") are good evidence. " +
-				"`manufacturer_age` is often wrong: ignore it when it contradicts the kind of toy.",
+			"instructions": map[string]any{
+				"question": "What is the youngest age group that can safely play with this toy and get its intended play out of it, judging by what the toy is and the skills it demands (`title`, `features`, `attributes`)?",
+				"evidence_rules": []string{
+					"Match the toy to the option whose `skills_needed` and `typical_toys` describe it best.",
+					"A lower age written for children in `title` or `features` (e.g. \"desde 6 meses\", \"niños de 3 a 12 años\") is good evidence for the floor, unless the toy clearly demands more skill than that.",
+					"`manufacturer_age` is often wrong (e.g. \"5 meses y más\" on a remote-control toy); ignore it when it contradicts the kind of toy.",
+					"Small loose pieces, magnets, darts and cosmetics need a child who no longer puts things in the mouth; big buttons, lights and songs point to babies.",
+				},
+			},
 			"criteria": stageCriteria(youngestStages),
 		},
 		"oldest": map[string]any{
@@ -225,10 +274,10 @@ func classify(client *http.Client, apiKey, path string, minConfidence float64) (
 		},
 		"small_parts": map[string]any{
 			"type":         "noul",
-			"instructions": "Does this toy include small pieces, magnets, small balls, darts, beads, cosmetics or button batteries that a child under 3 could swallow or choke on?",
+			"instructions": "Does this toy come with loose small pieces that a child under 3 could swallow or choke on, such as small cars, beads, magnets, small balls, darts or cosmetics?",
 			"criteria": map[string]string{
-				"true":  "At least one included item is small enough to be a choking or swallowing hazard, or is something a toddler must not put in the mouth.",
-				"false": "Every included piece is large, soft or fixed in place, with nothing a toddler could swallow.",
+				"true":  "At least one loose item included in the box is small enough to fit in a toddler's mouth, or is a cosmetic a toddler must not eat.",
+				"false": "Every piece is large, soft or permanently attached. Batteries inside a closed compartment and buttons built into the toy do not count.",
 			},
 		},
 	}
@@ -243,7 +292,7 @@ func classify(client *http.Client, apiKey, path string, minConfidence float64) (
 		}
 	}
 
-	resp, err := ask(client, apiKey, map[string]any{"model": "jev-latest", "state": state, "questions": questions})
+	resp, err := client.Ask(state, questions)
 	if err != nil {
 		return Result{}, err
 	}
@@ -351,63 +400,6 @@ func stageAge(stages []stage, key string) int64 {
 		}
 	}
 	return 0
-}
-
-type answer struct {
-	Choice        string             `json:"choice"`
-	Probabilities map[string]float64 `json:"probabilities"`
-	Confidence    float64            `json:"confidence"`
-	Noul          float64            `json:"noul"`
-}
-
-type response struct {
-	Answers map[string]answer `json:"answers"`
-}
-
-var errRetryable = errors.New("retryable")
-
-// ask posts one request, backing off on 429/529 as the API docs recommend.
-func ask(client *http.Client, apiKey string, body map[string]any) (response, error) {
-	payload, err := json.Marshal(body)
-	if err != nil {
-		return response{}, err
-	}
-	backoff := time.Second
-	for attempt := 0; ; attempt++ {
-		resp, err := post(client, apiKey, payload)
-		if !errors.Is(err, errRetryable) || attempt == 4 {
-			return resp, err
-		}
-		time.Sleep(backoff)
-		backoff *= 2
-	}
-}
-
-func post(client *http.Client, apiKey string, payload []byte) (response, error) {
-	req, err := http.NewRequest(http.MethodPost, endpoint, bytes.NewReader(payload))
-	if err != nil {
-		return response{}, err
-	}
-	req.Header.Set("Authorization", "Bearer "+apiKey)
-	req.Header.Set("Content-Type", "application/json")
-
-	res, err := client.Do(req)
-	if err != nil {
-		return response{}, err
-	}
-	defer res.Body.Close()
-	data, err := io.ReadAll(res.Body)
-	if err != nil {
-		return response{}, err
-	}
-	switch {
-	case res.StatusCode == http.StatusTooManyRequests || res.StatusCode == 529:
-		return response{}, fmt.Errorf("%w: %s", errRetryable, res.Status)
-	case res.StatusCode != http.StatusOK:
-		return response{}, fmt.Errorf("%s: %s", res.Status, data)
-	}
-	var r response
-	return r, json.Unmarshal(data, &r)
 }
 
 func truncate(s string, n int) string {
