@@ -9,8 +9,12 @@
 // It uses the same TURSO_* environment variables as the app to read the
 // current categories; nothing is written to the database.
 //
+// The category descriptions, candidates and questions live in rules.json,
+// next to this file, so they can evolve without touching the code; pass
+// -rules to try another file.
+//
 // Jev picks from options, it doesn't invent names, so new categories come
-// from candidateCategories below:
+// from candidate_categories in the rules:
 //  1. One request aligns every candidate with the existing categories and
 //     drops those the catalog already covers ("Vehículos" vs "Carros").
 //  2. One request per toy asks a yes/no question per existing category and
@@ -21,6 +25,7 @@ package main
 
 import (
 	"cmp"
+	_ "embed"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -40,63 +45,48 @@ import (
 	"reyes-magos-gr/store"
 )
 
-// existingDescriptions explains the categories already in the database, so
-// the model doesn't have to guess from terse (or misspelled) names. The keys
-// must match the database exactly because the catalog filters with LIKE.
-// Categories missing here are sent with their name only.
-var existingDescriptions = map[string]string{
-	"Arte":         "Art and crafts: drawing, painting, coloring, tracing projectors, art supply sets.",
-	"Carros":       "Toy cars, trucks and other vehicles, including vehicle sets and transporters.",
-	"Construction": "Building and assembling (blocks, magnetic kits, take-apart toys) or construction-site vehicles such as dump trucks and excavators.",
-	"Dinosaurio":   "Dinosaur-themed toys of any kind.",
-	"Electronico":  "Toys powered by batteries or USB charging whose play depends on electronics: lights, sounds, screens, remote control, cameras.",
-	"Maquillahe":   "Kids' makeup, nail polish, cosmetics, beauty and vanity sets.",
-	"Muneca":       "Dolls, plush dolls, dollhouses and doll styling heads.",
-	"Musica":       "Musical instruments, karaoke and other toys made for making music.",
-	"Video Juegos": "Video games, consoles and handheld devices whose main use includes playing digital games.",
+//go:embed rules.json
+var defaultRules []byte
+
+// Rules is the content of rules.json.
+type Rules struct {
+	// ExistingDescriptions explains the categories already in the database,
+	// so the model doesn't have to guess from terse (or misspelled) names.
+	// The keys must match the database exactly because the catalog filters
+	// with LIKE. Categories missing here are sent with their name only.
+	ExistingDescriptions map[string]string `json:"existing_descriptions"`
+	// Placeholders are values stored in the category column that aren't
+	// real categories.
+	Placeholders []string `json:"placeholders"`
+	// CandidateCategories are names the script may suggest. Add freely: the
+	// alignment step drops any that an existing category already covers.
+	CandidateCategories map[string]string `json:"candidate_categories"`
+	// RelevantAttributes are the scraped attributes that say what kind of
+	// toy it is.
+	RelevantAttributes []string `json:"relevant_attributes"`
+	// RankingAttribute holds Amazon's bestseller rankings; RootRankings are
+	// its top-level departments, too broad to say anything.
+	RankingAttribute string   `json:"ranking_attribute"`
+	RootRankings     []string `json:"root_rankings"`
+	// AlignQuestion is asked once per candidate, with the candidate added to
+	// its instructions and the existing categories to its criteria.
+	AlignQuestion typesafe.Question `json:"align_question"`
+	// BelongsQuestion is asked per toy for every category, with the category
+	// added to its instructions.
+	BelongsQuestion typesafe.Question `json:"belongs_question"`
 }
 
-// placeholders are values stored in the category column that aren't real
-// categories.
-var placeholders = []string{"Nuevo"}
-
-// candidateCategories are names the script may suggest. Add freely: the
-// alignment step drops any that an existing category already covers.
-var candidateCategories = map[string]string{
-	"Deportes":            "Sports and active play: balls, goals, hoops, rackets, hockey, sports games for kids.",
-	"Aire Libre":          "Outdoor play: tents for the garden, water toys, bubbles, sandbox toys, ride-ons for outside.",
-	"Peluches":            "Plush and stuffed animals or characters made to cuddle.",
-	"Juegos de Mesa":      "Board games, card games and tabletop games with rules for several players.",
-	"Ciencia":             "Science, experiments, coding and STEM kits that teach how things work.",
-	"Bebés":               "Toys made for babies and toddlers under 2: rattles, activity toys, baby laptops.",
-	"Disfraces":           "Costumes, dress-up clothes and role play accessories like crowns and wands.",
-	"Juego de Rol":        "Pretend play sets that imitate adult life: kitchens, tools, doctor kits, shops.",
-	"Casitas y Carpas":    "Play tents, castles, play houses and structures children get inside.",
-	"Figuras de Acción":   "Action figures and character figurines from shows, movies or games.",
-	"Rompecabezas":        "Puzzles and brain teasers.",
-	"Lanzadores":          "Foam dart blasters, targets and other aiming or shooting toys.",
-	"Cámaras":             "Kids' cameras and video recorders for taking photos and videos.",
-	"Animales":            "Toys about animals other than dinosaurs: farm, ocean, fishing games, pets.",
-	"Princesas":           "Princess-themed toys and characters such as Disney princesses.",
-	"Vehículos":           "Toy cars, trucks and other vehicles.",
-	"Manualidades":        "Crafts and art activities.",
-	"Belleza":             "Makeup, nail polish and beauty sets.",
-	"Bloques":             "Building blocks and construction sets.",
-	"Instrumentos":        "Musical instruments for kids.",
-	"Teléfonos y Tablets": "Kids' phones, tablets and smartwatches with games and apps.",
+func loadRules(path string) (Rules, error) {
+	data := defaultRules
+	if path != "" {
+		var err error
+		if data, err = os.ReadFile(path); err != nil {
+			return Rules{}, err
+		}
+	}
+	var r Rules
+	return r, json.Unmarshal(data, &r)
 }
-
-// relevantAttrs are the scraped attributes that say what kind of toy it is.
-var relevantAttrs = []string{
-	"Nombre Tipo Artículo", "Componentes Incluidos", "Objetivo educativo",
-	"Características especiales", "Tema", "Personaje", "Material",
-	"Tipo de fuente de alimentación", "¿Requiere pilas?", "Descripción del rango de edad",
-}
-
-const rankingAttr = "Clasificación en los más vendidos de Amazon"
-
-// rootRankings are Amazon's top-level departments, too broad to say anything.
-var rootRankings = []string{"Juguetes y Juegos", "Hogar y Cocina"}
 
 // rankingCategory pulls "Excavadoras Infantiles" out of "nº3 en Excavadoras Infantiles".
 var rankingCategory = regexp.MustCompile(`^nº[\d,.]+ en (.+?)(?: \(.*\))?$`)
@@ -142,21 +132,42 @@ type Output struct {
 func main() {
 	inDir := flag.String("in", "scraped", "directory with the toy-*.json files from scrape-toys")
 	out := flag.String("out", "scraped/categories.json", "where to write the results")
-	assignAt := flag.Float64("assign", 0.6, "assign a category when its probability is at least this")
-	uncertainAt := flag.Float64("uncertain", 0.4, "list a category as uncertain when its probability is at least this")
-	minToys := flag.Int("min-toys", 2, "recommend a new category when at least this many toys need it")
-	alignAt := flag.Float64("align", 0.6, "treat a candidate as covered when an existing category matches with at least this probability")
+	rulesPath := flag.String("rules", "", "rules file to use instead of the embedded rules.json")
+	assignAt := flag.Float64(
+		"assign",
+		0.6,
+		"assign a category when its probability is at least this",
+	)
+	uncertainAt := flag.Float64(
+		"uncertain",
+		0.4,
+		"list a category as uncertain when its probability is at least this",
+	)
+	minToys := flag.Int(
+		"min-toys",
+		2,
+		"recommend a new category when at least this many toys need it",
+	)
+	alignAt := flag.Float64(
+		"align",
+		0.6,
+		"treat a candidate as covered when an existing category matches with at least this probability",
+	)
 	workers := flag.Int("workers", 4, "concurrent requests")
 	flag.Parse()
 
+	rules, err := loadRules(*rulesPath)
+	if err != nil {
+		log.Fatal("Error loading rules: ", err)
+	}
 	client, err := typesafe.NewFromEnv()
 	if err != nil {
 		log.Fatal(err)
 	}
-	existing, current := loadCatalog()
+	existing, current := loadCatalog(rules)
 	log.Printf("existing categories: %s", strings.Join(existing, ", "))
 
-	candidates, duplicates, err := alignCandidates(client, existing, *alignAt)
+	candidates, duplicates, err := alignCandidates(client, rules, existing, *alignAt)
 	if err != nil {
 		log.Fatal("Error aligning candidates: ", err)
 	}
@@ -175,7 +186,7 @@ func main() {
 	for range *workers {
 		wg.Go(func() {
 			for i := range jobs {
-				results[i], errs[i] = classify(client, paths[i], existing, candidates)
+				results[i], errs[i] = classify(client, rules, paths[i], existing, candidates)
 			}
 		})
 	}
@@ -216,7 +227,7 @@ func main() {
 
 // loadCatalog returns the real categories in the database and each toy's
 // current category value.
-func loadCatalog() ([]string, map[int64]string) {
+func loadCatalog(rules Rules) ([]string, map[int64]string) {
 	db, connector, dir, err := database.New()
 	if err != nil {
 		log.Fatal(err)
@@ -234,7 +245,7 @@ func loadCatalog() ([]string, map[int64]string) {
 		log.Fatal("Error reading categories: ", err)
 	}
 	categories = slices.DeleteFunc(categories, func(c string) bool {
-		return c == "" || slices.Contains(placeholders, c)
+		return c == "" || slices.Contains(rules.Placeholders, c)
 	})
 
 	toys, err := toysStore.GetToys()
@@ -254,29 +265,27 @@ func describe(name string, descriptions map[string]string) string {
 
 // alignCandidates asks, for every candidate, which existing category already
 // covers the same kind of toy, and returns the candidates that are new.
-func alignCandidates(client *typesafe.Client, existing []string, alignAt float64) (map[string]string, map[string]string, error) {
-	criteria := map[string]any{
-		"none": "No existing category covers this kind of toy; it would be a genuinely new category.",
-	}
+func alignCandidates(
+	client *typesafe.Client,
+	rules Rules,
+	existing []string,
+	alignAt float64,
+) (map[string]string, map[string]string, error) {
 	existingState := map[string]string{}
+	criteria := map[string]any{}
 	for _, e := range existing {
-		criteria[e] = describe(e, existingDescriptions)
-		existingState[e] = describe(e, existingDescriptions)
+		existingState[e] = describe(e, rules.ExistingDescriptions)
+		criteria[e] = existingState[e]
 	}
+	align := rules.AlignQuestion.WithCriteria(criteria)
 
-	names := slices.Sorted(maps.Keys(candidateCategories))
-	questions := map[string]any{}
+	names := slices.Sorted(maps.Keys(rules.CandidateCategories))
+	questions := map[string]typesafe.Question{}
 	for i, name := range names {
-		questions[fmt.Sprint(i)] = map[string]any{
-			"type": "choice",
-			"instructions": map[string]any{
-				"candidate": map[string]string{"name": name, "description": candidateCategories[name]},
-				"question": "Which category in `existing_categories` already groups the same kind of toys as `candidate`, " +
-					"so a shopper looking for `candidate` toys would find them there? " +
-					"Pick one only if it covers most of the same toys, not if it merely overlaps with a few.",
-			},
-			"criteria": criteria,
-		}
+		questions[fmt.Sprint(i)] = align.With("candidate", map[string]string{
+			"name":        name,
+			"description": rules.CandidateCategories[name],
+		})
 	}
 
 	resp, err := client.Ask(map[string]any{"existing_categories": existingState}, questions)
@@ -291,12 +300,18 @@ func alignCandidates(client *typesafe.Client, existing []string, alignAt float64
 			duplicates[name] = a.Choice
 			continue
 		}
-		candidates[name] = candidateCategories[name]
+		candidates[name] = rules.CandidateCategories[name]
 	}
 	return candidates, duplicates, nil
 }
 
-func classify(client *typesafe.Client, path string, existing []string, candidates map[string]string) (ToyResult, error) {
+func classify(
+	client *typesafe.Client,
+	rules Rules,
+	path string,
+	existing []string,
+	candidates map[string]string,
+) (ToyResult, error) {
 	raw, err := os.ReadFile(path)
 	if err != nil {
 		return ToyResult{}, err
@@ -307,16 +322,20 @@ func classify(client *typesafe.Client, path string, existing []string, candidate
 	}
 
 	// Question ids are only for code; each question carries its full meaning.
-	questions := map[string]any{}
+	questions := map[string]typesafe.Question{}
 	for i, name := range existing {
-		questions[fmt.Sprintf("existing_%d", i)] = belongsQuestion(name, describe(name, existingDescriptions))
+		questions[fmt.Sprintf("existing_%d", i)] = belongsQuestion(
+			rules,
+			name,
+			describe(name, rules.ExistingDescriptions),
+		)
 	}
 	candidateNames := slices.Sorted(maps.Keys(candidates))
 	for i, name := range candidateNames {
-		questions[fmt.Sprintf("candidate_%d", i)] = belongsQuestion(name, candidates[name])
+		questions[fmt.Sprintf("candidate_%d", i)] = belongsQuestion(rules, name, candidates[name])
 	}
 
-	resp, err := client.Ask(buildState(toy), questions)
+	resp, err := client.Ask(buildState(rules, toy), questions)
 	if err != nil {
 		return ToyResult{}, err
 	}
@@ -336,35 +355,26 @@ func classify(client *typesafe.Client, path string, existing []string, candidate
 	return r, nil
 }
 
-func belongsQuestion(name, description string) map[string]any {
-	return map[string]any{
-		"type": "noul",
-		"instructions": map[string]any{
-			"category": map[string]string{"name": name, "description": description},
-			"question": "Would a parent browsing a toy catalog expect to find this toy under `category`?",
-		},
-		"criteria": map[string]string{
-			"true":  "What the toy is, its theme or its main way of playing matches `category.description`.",
-			"false": "The toy only shares a minor detail with `category` (e.g. a small light on a toy that isn't electronic), or nothing at all.",
-		},
-	}
+func belongsQuestion(rules Rules, name, description string) typesafe.Question {
+	return rules.BelongsQuestion.With("category", map[string]string{"name": name, "description": description})
 }
 
 // buildState keeps the fields that say what kind of toy it is, including
 // Amazon's own bestseller categories.
-func buildState(toy ToyFile) map[string]any {
+func buildState(rules Rules, toy ToyFile) map[string]any {
 	attrs := map[string]any{}
 	var amazonCategories []string
 	for _, d := range toy.Details {
-		for _, k := range relevantAttrs {
+		for _, k := range rules.RelevantAttributes {
 			if v, ok := d.Attributes[k]; ok {
 				attrs[k] = v
 			}
 		}
-		if ranks, ok := d.Attributes[rankingAttr].([]any); ok {
+		if ranks, ok := d.Attributes[rules.RankingAttribute].([]any); ok {
 			for _, rank := range ranks {
 				s, _ := rank.(string)
-				if m := rankingCategory.FindStringSubmatch(strings.TrimSpace(s)); m != nil && !slices.Contains(rootRankings, m[1]) {
+				if m := rankingCategory.FindStringSubmatch(strings.TrimSpace(s)); m != nil &&
+					!slices.Contains(rules.RootRankings, m[1]) {
 					amazonCategories = append(amazonCategories, m[1])
 				}
 			}
@@ -445,9 +455,19 @@ func printToys(toys []ToyResult) {
 	tw := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
 	fmt.Fprintln(tw, "ID\tACTUAL\tPROPUESTA\tDUDOSAS\tNUEVAS\tTOY")
 	for _, t := range toys {
-		fmt.Fprintf(tw, "%d\t%s\t%s\t%s\t%s\t%s\n",
-			t.ToyID, cmp.Or(t.Current, "-"), cmp.Or(t.Proposed, "(ninguna)"),
-			scores(t.Uncertain, t.Existing), scores(t.Suggested, t.Candidates), truncate(t.ToyName, 45))
+		fmt.Fprintf(
+			tw,
+			"%d\t%s\t%s\t%s\t%s\t%s\n",
+			t.ToyID,
+			cmp.Or(t.Current, "-"),
+			cmp.Or(t.Proposed, "(ninguna)"),
+			scores(
+				t.Uncertain,
+				t.Existing,
+			),
+			scores(t.Suggested, t.Candidates),
+			truncate(t.ToyName, 45),
+		)
 	}
 	tw.Flush()
 }
@@ -460,7 +480,14 @@ func printSuggestions(suggestions []Suggestion) {
 	tw := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
 	fmt.Fprintln(tw, "NUEVA CATEGORÍA\tTOYS\tSIN CATEGORÍA\tRECOMENDADA")
 	for _, s := range suggestions {
-		fmt.Fprintf(tw, "%s\t%s\t%s\t%v\n", s.Category, ids(s.Toys), ids(s.Uncovered), s.Recommended)
+		fmt.Fprintf(
+			tw,
+			"%s\t%s\t%s\t%v\n",
+			s.Category,
+			ids(s.Toys),
+			ids(s.Uncovered),
+			s.Recommended,
+		)
 	}
 	tw.Flush()
 }

@@ -8,12 +8,47 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"maps"
 	"net/http"
 	"os"
 	"time"
 )
 
 const endpoint = "https://api.typesafe.ai/v1/systemone"
+
+// Question is one entry of the request's questions, as the scripts keep them
+// in their rules.json files.
+type Question struct {
+	Type         string         `json:"type"`
+	Instructions any            `json:"instructions"`
+	Criteria     map[string]any `json:"criteria,omitempty"`
+}
+
+// With returns a copy of q whose instructions also carry key: value. Plain
+// string instructions become {"question": ...}.
+func (q Question) With(key string, value any) Question {
+	instructions := map[string]any{}
+	switch v := q.Instructions.(type) {
+	case map[string]any:
+		instructions = maps.Clone(v)
+	case string:
+		instructions["question"] = v
+	}
+	instructions[key] = value
+	q.Instructions = instructions
+	return q
+}
+
+// WithCriteria returns a copy of q with extra criteria added to its own.
+func (q Question) WithCriteria(extra map[string]any) Question {
+	criteria := maps.Clone(q.Criteria)
+	if criteria == nil {
+		criteria = map[string]any{}
+	}
+	maps.Copy(criteria, extra)
+	q.Criteria = criteria
+	return q
+}
 
 type Answer struct {
 	Choice        string             `json:"choice"`
@@ -44,7 +79,7 @@ var errRetryable = errors.New("retryable")
 
 // Ask evaluates questions against state with jev-latest, backing off on
 // 429/529 as the API docs recommend.
-func (c *Client) Ask(state any, questions map[string]any) (Response, error) {
+func (c *Client) Ask(state any, questions map[string]Question) (Response, error) {
 	payload, err := json.Marshal(map[string]any{"model": "jev-latest", "state": state, "questions": questions})
 	if err != nil {
 		return Response{}, err

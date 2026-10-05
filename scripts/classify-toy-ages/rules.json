@@ -1,0 +1,225 @@
+{
+  "manufacturer_age_attribute": "Edad recomendada por el fabricante",
+  "noisy_attributes": [
+    "ASIN",
+    "UPC",
+    "EAN",
+    "Núm. de identificación",
+    "Número Modelo",
+    "Número de pieza",
+    "Número de paquetes",
+    "Número de productos",
+    "Clasificación",
+    "Opinión",
+    "Fabricante",
+    "Marca",
+    "marca",
+    "Modelo",
+    "embalaje",
+    "Total del paquete",
+    "Peso",
+    "Dimensiones",
+    "Medidas"
+  ],
+  "youngest_stages": [
+    {
+      "key": "newborn",
+      "age": 0,
+      "description": {
+        "suitable_from": "Birth, babies under 12 months.",
+        "skills_needed": "None beyond looking, grasping, shaking or mouthing.",
+        "typical_toys": "Rattles, teethers, soft cloth books, crib mobiles, tummy-time mats, baby toys labelled 'desde 0 meses' or 'recién nacido'.",
+        "too_hard_before": "Nothing: it is built for newborns and safe to put in the mouth."
+      }
+    },
+    {
+      "key": "one_year",
+      "age": 1,
+      "description": {
+        "suitable_from": "About 1 year, once a baby sits steadily, crawls or starts walking.",
+        "skills_needed": "Pressing big buttons, pushing, pulling, banging; no pretend play or rules.",
+        "typical_toys": "Baby laptops and phones with lights and songs, activity cubes, push walkers, stacking rings, chunky blocks, 'mi primer' toys for 6 to 12 months and up.",
+        "too_hard_before": "A baby who cannot yet sit up or grab deliberately gets nothing from it."
+      }
+    },
+    {
+      "key": "two_years",
+      "age": 2,
+      "description": {
+        "suitable_from": "About 2 years, a walking toddler.",
+        "skills_needed": "Simple imitation and pretend play, carrying and pushing toys around, working buckles or big knobs; still mouths things.",
+        "typical_toys": "Plush dolls with Montessori buckles, toy wagons and big push vehicles, chunky puzzles, toddler ride-ons, simple shakers and drums.",
+        "too_hard_before": "A 1 year old cannot yet use it on purpose or walk with it."
+      }
+    },
+    {
+      "key": "three_years",
+      "age": 3,
+      "description": {
+        "suitable_from": "About 3 years, a preschooler who no longer puts toys in the mouth.",
+        "skills_needed": "Role play with small accessories, taking turns, simple on/off electronics, assembling a few pieces with an adult.",
+        "typical_toys": "Play tents and castles, toy vehicle sets with small cars, styling heads, dinosaur sets, magnetic fishing games, kids' cameras and phones with simple menus, karaoke microphones.",
+        "too_hard_before": "It has small loose pieces or needs pretend play and hand control that a 2 year old does not have yet."
+      }
+    },
+    {
+      "key": "four_years",
+      "age": 4,
+      "description": {
+        "suitable_from": "About 4 to 5 years.",
+        "skills_needed": "Following simple rules, aiming, steering with a remote control, careful use of cosmetics or art materials.",
+        "typical_toys": "Washable kids' makeup kits, remote-control animals, sports games with goals and scoring, toy drum kits with stool and sticks.",
+        "too_hard_before": "A 3 year old cannot follow its rules, aim, or use the materials without making a mess or misusing them."
+      }
+    },
+    {
+      "key": "six_years",
+      "age": 6,
+      "description": {
+        "suitable_from": "About 6 years, a school-age child.",
+        "skills_needed": "Multi-step building, reading a little, shooting foam darts safely, using a screwdriver tool.",
+        "typical_toys": "Magnetic rod-and-ball building kits, take-apart dinosaur kits with screwdriver, foam dart blasters and electronic targets, vanity sets with many small cosmetics.",
+        "too_hard_before": "Younger children cannot follow the steps or are at risk with the small or projectile parts."
+      }
+    },
+    {
+      "key": "eight_years",
+      "age": 8,
+      "description": {
+        "suitable_from": "About 8 years.",
+        "skills_needed": "Reading instructions independently, fine motor precision, patience for detailed projects.",
+        "typical_toys": "Detailed construction models, strategy board games, science kits, art sets with acrylic paint, brushes and many media.",
+        "too_hard_before": "A 6 or 7 year old would need an adult to do most of it."
+      }
+    },
+    {
+      "key": "ten_years",
+      "age": 10,
+      "description": {
+        "suitable_from": "About 10 years, a preteen.",
+        "skills_needed": "Using real tools and materials responsibly with little supervision.",
+        "typical_toys": "Hobby-grade gadgets, advanced electronics or coding kits, professional-grade art sets.",
+        "too_hard_before": "Younger children would misuse or be frustrated by real tools and materials."
+      }
+    },
+    {
+      "key": "teen",
+      "age": 13,
+      "description": {
+        "suitable_from": "13 years and older.",
+        "skills_needed": "Adult-level judgment.",
+        "typical_toys": "Products meant for teens and adults, not designed for children at all.",
+        "too_hard_before": "It is unsafe or inappropriate for children under 13."
+      }
+    }
+  ],
+  "oldest_stages": [
+    {
+      "key": "toddlers",
+      "age": 2,
+      "description": {
+        "designed_for": "Babies and toddlers up to about 2 years.",
+        "typical_toys": "Rattles, teethers, baby laptops and phones with big buttons, activity cubes, crib and stroller toys, first-words toys, anything named 'bebé' or 'mi primer'.",
+        "outgrown_when": "A 3 year old already finds it babyish: it only offers lights, sounds and pressing big buttons."
+      }
+    },
+    {
+      "key": "preschool_early",
+      "age": 3,
+      "description": {
+        "designed_for": "Toddlers and young preschoolers up to about 3 years.",
+        "typical_toys": "Soft plush dolls with Montessori buckles and zippers, chunky shape sorters, large simple puzzles, pull-along toys, ride-ons for toddlers.",
+        "outgrown_when": "Once a child can do pretend play with storylines and small accessories, these feel too simple."
+      }
+    },
+    {
+      "key": "preschool",
+      "age": 5,
+      "description": {
+        "designed_for": "Preschoolers, about 3 to 5 years.",
+        "typical_toys": "Push vehicles and construction trucks without remote control, simple percussion and musical instrument sets, magnetic fishing games, simple dinosaur and car sets, toy wagons.",
+        "outgrown_when": "Children starting primary school want rules, challenge, electronics or more realistic detail; the toy has a single simple action repeated over and over."
+      }
+    },
+    {
+      "key": "early_school",
+      "age": 7,
+      "description": {
+        "designed_for": "Kindergarten and first school years, about 5 to 7 years.",
+        "typical_toys": "Princess play tents and castles, dress-up sets, styling heads, simple remote-control animals, toy drum kits, drawing and tracing projectors, simple sports games for kids.",
+        "outgrown_when": "Pretend play is centered on characters or make-believe that 8 year olds consider childish."
+      }
+    },
+    {
+      "key": "middle_childhood",
+      "age": 10,
+      "description": {
+        "designed_for": "School-age children, about 6 to 10 years.",
+        "typical_toys": "Large dollhouses with furniture and many accessories, magnetic and take-apart building kits, kids' basketball hoops with scoreboards, karaoke microphones, kids' makeup and vanity sets.",
+        "outgrown_when": "Preteens prefer real-looking gadgets or hobby gear; this still looks like a children's toy."
+      }
+    },
+    {
+      "key": "preteen",
+      "age": 12,
+      "description": {
+        "designed_for": "Older children and preteens, up to about 12 years.",
+        "typical_toys": "Kids' digital cameras and phones with real functions, foam dart blasters and electronic targets, detailed construction kits, games that require reading and strategy.",
+        "outgrown_when": "Teenagers want the real adult version instead of a product branded for kids."
+      }
+    },
+    {
+      "key": "teen",
+      "age": 16,
+      "description": {
+        "designed_for": "Teenagers as well as children, 13 years and older.",
+        "typical_toys": "Professional art supply sets (acrylics, watercolors, markers), real sports equipment, hobby-grade gadgets that adults also use.",
+        "outgrown_when": "Not outgrown in childhood: it is a real tool, not a toy for kids."
+      }
+    }
+  ],
+  "questions": {
+    "youngest": {
+      "type": "choice",
+      "instructions": {
+        "question": "What is the youngest age group that can safely play with this toy and get its intended play out of it, judging by what the toy is and the skills it demands (`title`, `features`, `attributes`)?",
+        "evidence_rules": [
+          "Match the toy to the option whose `skills_needed` and `typical_toys` describe it best.",
+          "A lower age written for children in `title` or `features` (e.g. \"desde 6 meses\", \"niños de 3 a 12 años\") is good evidence for the floor, unless the toy clearly demands more skill than that.",
+          "`manufacturer_age` is often wrong (e.g. \"5 meses y más\" on a remote-control toy); ignore it when it contradicts the kind of toy.",
+          "Small loose pieces, magnets, darts and cosmetics need a child who no longer puts things in the mouth; big buttons, lights and songs point to babies."
+        ]
+      }
+    },
+    "oldest": {
+      "type": "choice",
+      "instructions": {
+        "question": "What is the oldest age group this toy is designed for, judging by what the toy is and the kind of play it offers (`title`, `features`, `attributes`)?",
+        "evidence_rules": [
+          "Match the toy to the option whose `typical_toys` and `outgrown_when` describe it best.",
+          "Sellers stretch the upper age in titles for marketing (e.g. a toddler tracing toy sold \"para niños de 3 a 12 años\"); trust the kind of play over the stated number.",
+          "`manufacturer_age` is often wrong (e.g. \"100 años y más\"); ignore it when it contradicts the kind of toy.",
+          "Words like \"niños pequeños\", \"bebé\" or \"preescolar\" point to younger groups; real functions (camera, Bluetooth, scoreboard) and many small detailed pieces point to older groups."
+        ]
+      }
+    },
+    "small_parts": {
+      "type": "noul",
+      "instructions": "Does this toy come with loose small pieces that a child under 3 could swallow or choke on, such as small cars, beads, magnets, small balls, darts or cosmetics?",
+      "criteria": {
+        "true": "At least one loose item included in the box is small enough to fit in a toddler's mouth, or is a cosmetic a toddler must not eat.",
+        "false": "Every piece is large, soft or permanently attached. Batteries inside a closed compartment and buttons built into the toy do not count."
+      }
+    }
+  },
+  "manufacturer_questions": {
+    "manufacturer_plausible": {
+      "type": "noul",
+      "instructions": "Is `manufacturer_age` a realistic description of the ages of children this toy is designed for?",
+      "criteria": {
+        "true": "The stated age matches the kind of toy, its complexity and its safety.",
+        "false": "The stated age is absurd (e.g. 60 or 100 years for a children's toy) or clearly too young or too old for this toy."
+      }
+    }
+  }
+}

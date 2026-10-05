@@ -1,0 +1,75 @@
+{
+  "existing_descriptions": {
+    "Arte": "Art and crafts: drawing, painting, coloring, tracing projectors, art supply sets.",
+    "Carros": "Toy cars, trucks and other vehicles, including vehicle sets and transporters.",
+    "Construction": "Building and assembling (blocks, magnetic kits, take-apart toys) or construction-site vehicles such as dump trucks and excavators.",
+    "Dinosaurio": "Dinosaur-themed toys of any kind.",
+    "Electronico": "Toys powered by batteries or USB charging whose play depends on electronics: lights, sounds, screens, remote control, cameras.",
+    "Maquillaje": "Kids' makeup, nail polish, cosmetics, beauty and vanity sets.",
+    "Muneca": "Dolls, plush dolls, dollhouses and doll styling heads.",
+    "Musica": "Musical instruments, karaoke and other toys made for making music.",
+    "Video Juegos": "Video games, consoles and handheld devices whose main use includes playing digital games."
+  },
+  "placeholders": [
+    "Nuevo"
+  ],
+  "candidate_categories": {
+    "Deportes": "Sports and active play: balls, goals, hoops, rackets, hockey, sports games for kids.",
+    "Aire Libre": "Outdoor play: tents for the garden, water toys, bubbles, sandbox toys, ride-ons for outside.",
+    "Peluches": "Plush and stuffed animals or characters made to cuddle.",
+    "Juegos de Mesa": "Board games, card games and tabletop games with rules for several players.",
+    "Ciencia": "Science, experiments, coding and STEM kits that teach how things work.",
+    "Bebés": "Toys made for babies and toddlers under 2: rattles, activity toys, baby laptops.",
+    "Disfraces": "Costumes, dress-up clothes and role play accessories like crowns and wands.",
+    "Juego de Rol": "Pretend play sets that imitate adult life: kitchens, tools, doctor kits, shops.",
+    "Casitas y Carpas": "Play tents, castles, play houses and structures children get inside.",
+    "Figuras de Acción": "Action figures and character figurines from shows, movies or games.",
+    "Rompecabezas": "Puzzles and brain teasers.",
+    "Lanzadores": "Foam dart blasters, targets and other aiming or shooting toys.",
+    "Cámaras": "Kids' cameras and video recorders for taking photos and videos.",
+    "Animales": "Toys about animals other than dinosaurs: farm, ocean, fishing games, pets.",
+    "Princesas": "Princess-themed toys and characters such as Disney princesses.",
+    "Vehículos": "Toy cars, trucks and other vehicles.",
+    "Manualidades": "Crafts and art activities.",
+    "Belleza": "Makeup, nail polish and beauty sets.",
+    "Bloques": "Building blocks and construction sets.",
+    "Instrumentos": "Musical instruments for kids.",
+    "Teléfonos y Tablets": "Kids' phones, tablets and smartwatches with games and apps."
+  },
+  "relevant_attributes": [
+    "Nombre Tipo Artículo",
+    "Componentes Incluidos",
+    "Objetivo educativo",
+    "Características especiales",
+    "Tema",
+    "Personaje",
+    "Material",
+    "Tipo de fuente de alimentación",
+    "¿Requiere pilas?",
+    "Descripción del rango de edad"
+  ],
+  "ranking_attribute": "Clasificación en los más vendidos de Amazon",
+  "root_rankings": [
+    "Juguetes y Juegos",
+    "Hogar y Cocina"
+  ],
+  "align_question": {
+    "type": "choice",
+    "instructions": {
+      "question": "Which category in `existing_categories` already groups the same kind of toys as `candidate`, so a shopper looking for `candidate` toys would find them there? Pick one only if it covers most of the same toys, not if it merely overlaps with a few."
+    },
+    "criteria": {
+      "none": "No existing category covers this kind of toy; it would be a genuinely new category."
+    }
+  },
+  "belongs_question": {
+    "type": "noul",
+    "instructions": {
+      "question": "Would a parent browsing a toy catalog expect to find this toy under `category`?"
+    },
+    "criteria": {
+      "true": "What the toy is, its theme or its main way of playing matches `category.description`.",
+      "false": "The toy only shares a minor detail with `category` (e.g. a small light on a toy that isn't electronic), or nothing at all."
+    }
+  }
+}
