@@ -29,6 +29,11 @@ templ MyCodeItem(code models.Code) {
 			<div class="w-full p-2 text-center bg-chip text-muted text-sm font-sans font-semibold">
 				Regalado
 			</div>
+			if code.Note != "" {
+				<div class="px-4 py-2 font-sans text-sm text-ink">
+					<span class="text-muted">Nota:</span> { code.Note }
+				</div>
+			}
 			<div class="flex divide-x divide-border">
 				<button
 					type="button"
@@ -48,11 +53,23 @@ templ MyCodeItem(code models.Code) {
 				</button>
 			</div>
 		} else {
+			<div class="w-full p-2 text-center bg-chip text-muted text-sm font-sans font-semibold">
+				<label for={ fmt.Sprintf("code-note-%d", code.CodeID) } class={ components.DSLabel }>Notas:</label>
+				<input
+					id={ fmt.Sprintf("code-note-%d", code.CodeID) }
+					type="text"
+					name="note"
+					maxlength="200"
+					placeholder="Para la persona del parque"
+					class={ components.DSInput }
+				/>
+			</div>
 			<button
 				type="button"
 				class="w-full inline-flex items-center justify-center gap-2 px-3 py-3 font-sans text-sm font-bold text-white bg-primary hover:opacity-90"
 				hx-post={ lib.GetSafeIdUrl("/volunteer/mycodes/give/%d", code.CodeID) }
 				hx-target={ fmt.Sprintf("#volunteer-code-%d", code.CodeID) }
+				hx-include={ fmt.Sprintf("#code-note-%d", code.CodeID) }
 			>
 				Regalar
 				@svg.Gift("h-4 w-4 fill-current")

@@ -198,6 +198,7 @@ func scanAllCode(s utils.Scanner) (code models.Code, err error) {
 		&code.Cancelled,
 		&code.Deleted,
 		&code.Given,
+		&code.Note,
 	)
 
 	if err != nil {

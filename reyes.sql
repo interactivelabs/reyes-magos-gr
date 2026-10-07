@@ -8,7 +8,8 @@ create table codes
     used       integer default 0 not null,
     cancelled  integer default 0 not null,
     deleted    integer default 0 not null,
-    given      integer default 0
+    given      integer default 0,
+    note       TEXT    default '' not null
 );
 
 create unique index codes_code_uindex

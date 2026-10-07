@@ -98,7 +98,11 @@ func SetupRouter(
 
 	vg.Use(reyes_middleware.IsAuthenticated())
 
-	myCodesHandler := volunteers.NewMyCodesHandler(app.CodesStore, app.VolunteersService)
+	myCodesHandler := volunteers.NewMyCodesHandler(
+		app.CodesStore,
+		app.CodesService,
+		app.VolunteersService,
+	)
 	vg.GET("/mycodes", myCodesHandler.MyCodesViewHandler)
 	vg.POST("/mycodes/give/:code_id", myCodesHandler.GiveCode)
 	vg.POST("/mycodes/give_codes", myCodesHandler.GiveCodes)
