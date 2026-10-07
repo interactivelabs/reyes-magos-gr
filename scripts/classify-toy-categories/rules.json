@@ -1,40 +1,38 @@
 {
-  "existing_descriptions": {
-    "Arte": "Art and crafts: drawing, painting, coloring, tracing projectors, art supply sets.",
-    "Carros": "Toy cars, trucks and other vehicles, including vehicle sets and transporters.",
+  "existing_categories": {
+    "Animales": "Toys about animals other than dinosaurs: farm, ocean, fishing games, pets.",
+    "Aire Libre": "Outdoor play: tents for the garden, water toys, bubbles, sandbox toys, ride-ons for outside.",
+    "Arte y Manualidades": "Art and crafts: drawing, painting, coloring, tracing projectors, art supply sets.",
+    "Bebés": "Toys made for babies and toddlers under 2: rattles, activity toys, baby laptops.",
+    "Bloques": "Building blocks and construction sets.",
+    "Casitas y Carpas": "Play tents, castles, play houses and structures children get inside.",
+    "Ciencia": "Science, experiments, coding and STEM kits that teach how things work.",
     "Construction": "Building and assembling (blocks, magnetic kits, take-apart toys) or construction-site vehicles such as dump trucks and excavators.",
+    "Deportes": "Sports and active play: balls, goals, hoops, rackets, hockey, sports games for kids.",
     "Dinosaurio": "Dinosaur-themed toys of any kind.",
-    "Electronico": "Toys powered by batteries or USB charging whose play depends on electronics: lights, sounds, screens, remote control, cameras.",
+    "Electronico": "Toys powered by batteries or USB charging whose play depends on electronics: lights, sounds, screens.",
     "Maquillaje": "Kids' makeup, nail polish, cosmetics, beauty and vanity sets.",
-    "Muneca": "Dolls, plush dolls, dollhouses and doll styling heads.",
+    "Muñeca": "Dolls, dollhouses and doll styling heads.",
     "Musica": "Musical instruments, karaoke and other toys made for making music.",
-    "Video Juegos": "Video games, consoles and handheld devices whose main use includes playing digital games."
+    "Vehículos": "Toy cars, trucks and other vehicles, including vehicle sets and transporters.",
+    "Video Juegos": "Video games, consoles and handheld devices whose main use includes playing digital games.",
+    "Peluches": "Plush and stuffed animals or characters made to cuddle.",
+    "Disfraces": "Costumes, dress-up clothes and role play accessories like crowns and wands.",
+    "Figuras de Acción": "Action figures and character figurines from shows, movies or games.",
+    "Juegos de Mesa": "Board games, card games and tabletop games with rules for several players.",
+    "Rompecabezas": "Puzzles and brain teasers.",
+    "Cámaras": "Kids' cameras that take real photos or video. Not toy phones, tablets or laptops.",
+    "Celulares": "Kids' or toy cell phones for calling, texting or pretend calls. Not cameras, tablets or laptops.",
+    "Control Remoto": "Cars, trucks, robots, animals or other toys the kid drives or moves with a remote control.",
+    "Robots": "Robot toys: robots to build, program or control, and robot figures that move or talk.",
+    "Tiro al Blanco": "Toys for aiming and shooting: dart blasters, bows and arrows, targets. Not ball sports like basketball or soccer.",
+    "Princesas": "Princess-themed toys: princess dolls, castles, crowns and dresses, and characters like Elsa or Cinderella."
   },
   "placeholders": [
     "Nuevo"
   ],
   "candidate_categories": {
-    "Deportes": "Sports and active play: balls, goals, hoops, rackets, hockey, sports games for kids.",
-    "Aire Libre": "Outdoor play: tents for the garden, water toys, bubbles, sandbox toys, ride-ons for outside.",
-    "Peluches": "Plush and stuffed animals or characters made to cuddle.",
-    "Juegos de Mesa": "Board games, card games and tabletop games with rules for several players.",
-    "Ciencia": "Science, experiments, coding and STEM kits that teach how things work.",
-    "Bebés": "Toys made for babies and toddlers under 2: rattles, activity toys, baby laptops.",
-    "Disfraces": "Costumes, dress-up clothes and role play accessories like crowns and wands.",
-    "Juego de Rol": "Pretend play sets that imitate adult life: kitchens, tools, doctor kits, shops.",
-    "Casitas y Carpas": "Play tents, castles, play houses and structures children get inside.",
-    "Figuras de Acción": "Action figures and character figurines from shows, movies or games.",
-    "Rompecabezas": "Puzzles and brain teasers.",
-    "Lanzadores": "Foam dart blasters, targets and other aiming or shooting toys.",
-    "Cámaras": "Kids' cameras and video recorders for taking photos and videos.",
-    "Animales": "Toys about animals other than dinosaurs: farm, ocean, fishing games, pets.",
-    "Princesas": "Princess-themed toys and characters such as Disney princesses.",
-    "Vehículos": "Toy cars, trucks and other vehicles.",
-    "Manualidades": "Crafts and art activities.",
-    "Belleza": "Makeup, nail polish and beauty sets.",
-    "Bloques": "Building blocks and construction sets.",
-    "Instrumentos": "Musical instruments for kids.",
-    "Teléfonos y Tablets": "Kids' phones, tablets and smartwatches with games and apps."
+    "Juegos para adultos": "Games that would not be enjoyed by kids, with themes like alcohol and drug use, sex and other things that are not approppiate for kdis"
   },
   "relevant_attributes": [
     "Nombre Tipo Artículo",
@@ -68,8 +66,8 @@
       "question": "Would a parent browsing a toy catalog expect to find this toy under `category`?"
     },
     "criteria": {
-      "true": "What the toy is, its theme or its main way of playing matches `category.description`.",
-      "false": "The toy only shares a minor detail with `category` (e.g. a small light on a toy that isn't electronic), or nothing at all."
+      "false": "The toy only shares a minor detail with `category` (e.g. a small light on a toy that isn't electronic), or nothing at all.",
+      "true": "What the toy is, its theme or its main way of playing matches `category.description`."
     }
   }
 }

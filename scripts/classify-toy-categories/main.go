@@ -21,9 +21,18 @@
 //     per remaining candidate; a toy can belong to several.
 //  3. Code assigns existing categories over the threshold and suggests a
 //     candidate when enough toys need it.
+//  4. The same alignment maps database categories missing from
+//     existing_categories ("Carros") to the rules category that covers them
+//     ("Vehículos"). Per toy, the database one is flagged when it clearly
+//     scores higher, so a rule can be added, and dropped otherwise; when
+//     both fit about equally well, the drop is flagged too.
+//  5. Candidates that enough toys need with high confidence are promoted:
+//     they move from candidate_categories to existing_categories in the
+//     rules file and are assigned like any existing category.
 package main
 
 import (
+	"bytes"
 	"cmp"
 	_ "embed"
 	"encoding/json"
@@ -31,6 +40,7 @@ import (
 	"fmt"
 	"log"
 	"maps"
+	"math"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -48,13 +58,19 @@ import (
 //go:embed rules.json
 var defaultRules []byte
 
+// defaultRulesPath is where promotions are saved when -rules isn't given,
+// relative to the repository root like the usage above.
+const defaultRulesPath = "scripts/classify-toy-categories/rules.json"
+
 // Rules is the content of rules.json.
 type Rules struct {
 	// ExistingDescriptions explains the categories already in the database,
 	// so the model doesn't have to guess from terse (or misspelled) names.
 	// The keys must match the database exactly because the catalog filters
-	// with LIKE. Categories missing here are sent with their name only.
-	ExistingDescriptions map[string]string `json:"existing_descriptions"`
+	// with LIKE. Categories missing here are sent with their name only, and
+	// keys missing from the database are promoted candidates still waiting
+	// for their toys to be updated.
+	ExistingDescriptions map[string]string `json:"existing_categories"`
 	// Placeholders are values stored in the category column that aren't
 	// real categories.
 	Placeholders []string `json:"placeholders"`
@@ -85,7 +101,24 @@ func loadRules(path string) (Rules, error) {
 		}
 	}
 	var r Rules
-	return r, json.Unmarshal(data, &r)
+	if err := json.Unmarshal(data, &r); err != nil {
+		return Rules{}, err
+	}
+	if r.ExistingDescriptions == nil {
+		r.ExistingDescriptions = map[string]string{}
+	}
+	return r, nil
+}
+
+func saveRules(path string, rules Rules) error {
+	var buf bytes.Buffer
+	enc := json.NewEncoder(&buf)
+	enc.SetEscapeHTML(false)
+	enc.SetIndent("", "  ")
+	if err := enc.Encode(rules); err != nil {
+		return err
+	}
+	return os.WriteFile(path, buf.Bytes(), 0o644)
 }
 
 // rankingCategory pulls "Excavadoras Infantiles" out of "nº3 en Excavadoras Infantiles".
@@ -102,16 +135,55 @@ type ToyFile struct {
 }
 
 type ToyResult struct {
-	ToyID      int64              `json:"toy_id"`
-	ToyName    string             `json:"toy_name"`
-	Current    string             `json:"current_category"`
-	Proposed   string             `json:"proposed_category"`
-	Assigned   []string           `json:"assigned"`
-	Uncertain  []string           `json:"uncertain,omitempty"`
-	Suggested  []string           `json:"suggested_new,omitempty"`
-	Uncovered  bool               `json:"uncovered"`
-	Existing   map[string]float64 `json:"existing_scores"`
-	Candidates map[string]float64 `json:"candidate_scores"`
+	ToyID     int64    `json:"toy_id"`
+	ToyName   string   `json:"toy_name"`
+	Current   string   `json:"current_category"`
+	Proposed  string   `json:"proposed_category"`
+	Assigned  []string `json:"assigned"`
+	Uncertain []string `json:"uncertain,omitempty"`
+	Suggested []string `json:"suggested_new,omitempty"`
+	Uncovered bool     `json:"uncovered"`
+	// Outscoring maps an unruled database category to the rules category
+	// that covers the same toys but scored lower for this toy: a hint that
+	// the database one may deserve an existing_categories entry.
+	Outscoring map[string]string `json:"unruled_outscoring,omitempty"`
+	// Similar maps an unruled database category to the rules category that
+	// covers the same toys when both fit this toy about equally well. The
+	// rules one is kept, but the pair is worth a look.
+	Similar    map[string]string `json:"unruled_similar,omitempty"`
+	Existing   Scores            `json:"existing_scores"`
+	Candidates Scores            `json:"candidate_scores"`
+}
+
+// Scores maps a category to its probability. It is written highest first, so
+// the best fits lead each toy in the output.
+type Scores map[string]float64
+
+func (s Scores) MarshalJSON() ([]byte, error) {
+	names := slices.Collect(maps.Keys(s))
+	slices.SortFunc(names, func(a, b string) int {
+		return cmp.Or(cmp.Compare(s[b], s[a]), strings.Compare(a, b))
+	})
+	var buf bytes.Buffer
+	buf.WriteByte('{')
+	for i, name := range names {
+		if i > 0 {
+			buf.WriteByte(',')
+		}
+		key, err := json.Marshal(name)
+		if err != nil {
+			return nil, err
+		}
+		value, err := json.Marshal(s[name])
+		if err != nil {
+			return nil, err
+		}
+		buf.Write(key)
+		buf.WriteByte(':')
+		buf.Write(value)
+	}
+	buf.WriteByte('}')
+	return buf.Bytes(), nil
 }
 
 type Suggestion struct {
@@ -125,6 +197,8 @@ type Suggestion struct {
 type Output struct {
 	Existing    []string          `json:"existing_categories"`
 	Duplicates  map[string]string `json:"candidates_already_covered"`
+	Unruled     map[string]string `json:"unruled_already_covered"`
+	Promoted    []string          `json:"promoted,omitempty"`
 	Suggestions []Suggestion      `json:"suggestions"`
 	Toys        []ToyResult       `json:"toys"`
 }
@@ -153,6 +227,21 @@ func main() {
 		0.6,
 		"treat a candidate as covered when an existing category matches with at least this probability",
 	)
+	promoteAt := flag.Float64(
+		"promote",
+		0.75,
+		"promote a candidate to an existing category when at least -min-toys toys belong to it with this probability (0 disables)",
+	)
+	outscoreAt := flag.Float64(
+		"outscore",
+		0.5,
+		"flag a database category without a rule only when it scores above this",
+	)
+	outscoreBy := flag.Float64(
+		"outscore-by",
+		0.1,
+		"flag a database category without a rule only when it beats the rules category covering it by more than this",
+	)
 	workers := flag.Int("workers", 4, "concurrent requests")
 	flag.Parse()
 
@@ -173,6 +262,14 @@ func main() {
 	}
 	for c, e := range duplicates {
 		log.Printf("candidate %q is already covered by %q", c, e)
+	}
+
+	unruled, err := alignUnruled(client, rules, existing, *alignAt)
+	if err != nil {
+		log.Fatal("Error aligning database categories: ", err)
+	}
+	for u, e := range unruled {
+		log.Printf("database category %q is covered by %q", u, e)
 	}
 
 	paths, err := filepath.Glob(filepath.Join(*inDir, "toy-*.json"))
@@ -196,19 +293,54 @@ func main() {
 	close(jobs)
 	wg.Wait()
 
-	var toys []ToyResult
+	var raw []ToyResult
 	for i, err := range errs {
 		if err != nil {
 			log.Printf("%s: %v", paths[i], err)
 			continue
 		}
-		toys = append(toys, decide(results[i], current, *assignAt, *uncertainAt))
+		raw = append(raw, results[i])
 	}
-	sort.Slice(toys, func(i, j int) bool { return toys[i].ToyID < toys[j].ToyID })
+	sort.Slice(raw, func(i, j int) bool { return raw[i].ToyID < raw[j].ToyID })
+	decideAll := func() []ToyResult {
+		toys := make([]ToyResult, len(raw))
+		for i, r := range raw {
+			toys[i] = decide(r, current, unruled, *assignAt, *uncertainAt, *outscoreAt, *outscoreBy)
+		}
+		return toys
+	}
+	toys := decideAll()
+
+	var promoted []string
+	if *promoteAt > 0 {
+		promoted = promote(toys, candidates, *promoteAt, *minToys)
+	}
+	if len(promoted) > 0 {
+		for _, name := range promoted {
+			rules.ExistingDescriptions[name] = candidates[name]
+			delete(rules.CandidateCategories, name)
+			delete(candidates, name)
+			existing = append(existing, name)
+			// The belongs question is the same for both kinds, so the
+			// candidate scores count as existing ones.
+			for _, r := range raw {
+				r.Existing[name] = r.Candidates[name]
+				delete(r.Candidates, name)
+			}
+		}
+		toys = decideAll()
+		path := cmp.Or(*rulesPath, defaultRulesPath)
+		if err := saveRules(path, rules); err != nil {
+			log.Fatal("Error saving rules: ", err)
+		}
+		log.Printf("promoted %s → %s", strings.Join(promoted, ", "), path)
+	}
 
 	output := Output{
 		Existing:    existing,
 		Duplicates:  duplicates,
+		Unruled:     unruled,
+		Promoted:    promoted,
 		Suggestions: suggest(toys, candidates, *minToys),
 		Toys:        toys,
 	}
@@ -220,13 +352,29 @@ func main() {
 		log.Fatal(err)
 	}
 
+	for _, t := range toys {
+		for _, u := range slices.Sorted(maps.Keys(t.Outscoring)) {
+			name := t.Outscoring[u]
+			log.Printf(
+				"toy %d: %q (%.2f) scores below %q (%.2f), which has no existing_categories entry",
+				t.ToyID, name, t.Existing[name], u, t.Existing[u],
+			)
+		}
+		for _, u := range slices.Sorted(maps.Keys(t.Similar)) {
+			name := t.Similar[u]
+			log.Printf(
+				"toy %d: %q (%.2f) and %q fit about equally well; kept %q, %q has no existing_categories entry",
+				t.ToyID, name, t.Existing[name], u, name, u,
+			)
+		}
+	}
 	printToys(toys)
 	printSuggestions(output.Suggestions)
 	log.Printf("classified %d/%d toys → %s", len(toys), len(paths), *out)
 }
 
-// loadCatalog returns the real categories in the database and each toy's
-// current category value.
+// loadCatalog returns the real categories in the database, plus promoted ones
+// not stored yet, and each toy's current category value.
 func loadCatalog(rules Rules) ([]string, map[int64]string) {
 	db, connector, dir, err := database.New()
 	if err != nil {
@@ -247,6 +395,11 @@ func loadCatalog(rules Rules) ([]string, map[int64]string) {
 	categories = slices.DeleteFunc(categories, func(c string) bool {
 		return c == "" || slices.Contains(rules.Placeholders, c)
 	})
+	for _, name := range slices.Sorted(maps.Keys(rules.ExistingDescriptions)) {
+		if !slices.Contains(categories, name) {
+			categories = append(categories, name)
+		}
+	}
 
 	toys, err := toysStore.GetToys()
 	if err != nil {
@@ -271,38 +424,84 @@ func alignCandidates(
 	existing []string,
 	alignAt float64,
 ) (map[string]string, map[string]string, error) {
-	existingState := map[string]string{}
-	criteria := map[string]any{}
-	for _, e := range existing {
-		existingState[e] = describe(e, rules.ExistingDescriptions)
-		criteria[e] = existingState[e]
-	}
-	align := rules.AlignQuestion.WithCriteria(criteria)
-
-	names := slices.Sorted(maps.Keys(rules.CandidateCategories))
-	questions := map[string]typesafe.Question{}
-	for i, name := range names {
-		questions[fmt.Sprint(i)] = align.With("candidate", map[string]string{
-			"name":        name,
-			"description": rules.CandidateCategories[name],
-		})
-	}
-
-	resp, err := client.Ask(map[string]any{"existing_categories": existingState}, questions)
+	duplicates, err := align(client, rules, existing, rules.CandidateCategories, alignAt)
 	if err != nil {
 		return nil, nil, err
 	}
+	candidates := map[string]string{}
+	for name, description := range rules.CandidateCategories {
+		if _, ok := duplicates[name]; !ok {
+			candidates[name] = description
+		}
+	}
+	return candidates, duplicates, nil
+}
 
-	candidates, duplicates := map[string]string{}, map[string]string{}
+// alignUnruled maps the database categories missing from existing_categories
+// to the rules category that covers the same kind of toy, if any.
+func alignUnruled(
+	client *typesafe.Client,
+	rules Rules,
+	existing []string,
+	alignAt float64,
+) (map[string]string, error) {
+	unruled := map[string]string{}
+	for _, e := range existing {
+		if _, ok := rules.ExistingDescriptions[e]; !ok {
+			unruled[e] = e
+		}
+	}
+	if len(unruled) == 0 {
+		return map[string]string{}, nil
+	}
+	return align(
+		client,
+		rules,
+		slices.Sorted(maps.Keys(rules.ExistingDescriptions)),
+		unruled,
+		alignAt,
+	)
+}
+
+// align asks, for every item, which of the targets already groups the same
+// kind of toys, and returns the items that matched with their target.
+func align(
+	client *typesafe.Client,
+	rules Rules,
+	targets []string,
+	items map[string]string,
+	alignAt float64,
+) (map[string]string, error) {
+	targetState := map[string]string{}
+	criteria := map[string]any{}
+	for _, t := range targets {
+		targetState[t] = describe(t, rules.ExistingDescriptions)
+		criteria[t] = targetState[t]
+	}
+	question := rules.AlignQuestion.WithCriteria(criteria)
+
+	names := slices.Sorted(maps.Keys(items))
+	questions := map[string]typesafe.Question{}
+	for i, name := range names {
+		questions[fmt.Sprint(i)] = question.With("candidate", map[string]string{
+			"name":        name,
+			"description": items[name],
+		})
+	}
+
+	resp, err := client.Ask(map[string]any{"existing_categories": targetState}, questions)
+	if err != nil {
+		return nil, err
+	}
+
+	matches := map[string]string{}
 	for i, name := range names {
 		a := resp.Answers[fmt.Sprint(i)]
 		if a.Choice != "none" && a.Probabilities[a.Choice] >= alignAt {
-			duplicates[name] = a.Choice
-			continue
+			matches[name] = a.Choice
 		}
-		candidates[name] = rules.CandidateCategories[name]
 	}
-	return candidates, duplicates, nil
+	return matches, nil
 }
 
 func classify(
@@ -343,8 +542,8 @@ func classify(
 	r := ToyResult{
 		ToyID:      toy.ToyID,
 		ToyName:    toy.ToyName,
-		Existing:   map[string]float64{},
-		Candidates: map[string]float64{},
+		Existing:   Scores{},
+		Candidates: Scores{},
 	}
 	for i, name := range existing {
 		r.Existing[name] = resp.Answers[fmt.Sprintf("existing_%d", i)].Noul
@@ -356,7 +555,10 @@ func classify(
 }
 
 func belongsQuestion(rules Rules, name, description string) typesafe.Question {
-	return rules.BelongsQuestion.With("category", map[string]string{"name": name, "description": description})
+	return rules.BelongsQuestion.With(
+		"category",
+		map[string]string{"name": name, "description": description},
+	)
 }
 
 // buildState keeps the fields that say what kind of toy it is, including
@@ -392,9 +594,38 @@ func buildState(rules Rules, toy ToyFile) map[string]any {
 	return state
 }
 
-// decide applies the thresholds to the raw scores.
-func decide(r ToyResult, current map[int64]string, assignAt, uncertainAt float64) ToyResult {
+// decide resolves the unruled database categories against the rules ones
+// that cover them and applies the thresholds to the raw scores. An unruled
+// category is kept and flagged only when it clearly beats its rules category:
+// above outscoreAt and by more than outscoreBy. Otherwise the rules category
+// wins, and when the unruled one is still above outscoreAt and within
+// outscoreBy of it, the pair is flagged as similar.
+func decide(
+	r ToyResult,
+	current map[int64]string,
+	unruled map[string]string,
+	assignAt, uncertainAt, outscoreAt, outscoreBy float64,
+) ToyResult {
 	r.Current = current[r.ToyID]
+	// The raw scores are shared between decide calls, so drop from a copy.
+	r.Existing = maps.Clone(r.Existing)
+	for u, name := range unruled {
+		p, diff := r.Existing[u], r.Existing[u]-r.Existing[name]
+		if p <= outscoreAt || diff <= outscoreBy {
+			if p > outscoreAt && math.Abs(diff) <= outscoreBy {
+				if r.Similar == nil {
+					r.Similar = map[string]string{}
+				}
+				r.Similar[u] = name
+			}
+			delete(r.Existing, u)
+			continue
+		}
+		if r.Outscoring == nil {
+			r.Outscoring = map[string]string{}
+		}
+		r.Outscoring[u] = name
+	}
 	for _, name := range slices.Sorted(maps.Keys(r.Existing)) {
 		switch p := r.Existing[name]; {
 		case p >= assignAt:
@@ -412,6 +643,29 @@ func decide(r ToyResult, current map[int64]string, assignAt, uncertainAt float64
 	// Same format the app stores: comma-separated, no spaces.
 	r.Proposed = strings.Join(r.Assigned, ",")
 	return r
+}
+
+// promote returns the candidates that at least minToys toys belong to with
+// probability promoteAt or more.
+func promote(
+	toys []ToyResult,
+	candidates map[string]string,
+	promoteAt float64,
+	minToys int,
+) []string {
+	var promoted []string
+	for _, name := range slices.Sorted(maps.Keys(candidates)) {
+		sure := 0
+		for _, t := range toys {
+			if t.Candidates[name] >= promoteAt {
+				sure++
+			}
+		}
+		if sure >= minToys {
+			promoted = append(promoted, name)
+		}
+	}
+	return promoted
 }
 
 // suggest groups the toys by candidate category. A candidate is recommended

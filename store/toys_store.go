@@ -19,6 +19,8 @@ func NewToysStore(db *sql.DB) *LibSQLToysStore {
 type ToysStore interface {
 	CreateToy(toy models.Toy) (id int64, err error)
 	UpdateToy(toy models.Toy) error
+	UpdateToyAges(toyID int64, ageMin int64, ageMax int64) error
+	UpdateToyCategory(toyID int64, category string) error
 	DeleteToy(toyID int64) error
 	GetToys() (toys []models.Toy, err error)
 	GetToysWithFiltersPaged(
@@ -57,6 +59,27 @@ func (r *LibSQLToysStore) UpdateToy(toy models.Toy) error {
 		return err
 	}
 	return nil
+}
+
+func (r *LibSQLToysStore) UpdateToyAges(toyID int64, ageMin int64, ageMax int64) error {
+	_, err := utils.ExecuteMutationQuery(
+		r.DB,
+		`UPDATE toys SET age_min = ?, age_max = ? WHERE toy_id = ?`,
+		ageMin,
+		ageMax,
+		toyID,
+	)
+	return err
+}
+
+func (r *LibSQLToysStore) UpdateToyCategory(toyID int64, category string) error {
+	_, err := utils.ExecuteMutationQuery(
+		r.DB,
+		`UPDATE toys SET category = ? WHERE toy_id = ?`,
+		category,
+		toyID,
+	)
+	return err
 }
 
 func (r *LibSQLToysStore) DeleteToy(toyID int64) error {
