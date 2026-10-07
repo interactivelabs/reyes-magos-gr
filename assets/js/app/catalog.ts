@@ -117,6 +117,7 @@ const handleBackToTopScroll = () => {
   backToTopBtn?.classList.toggle("opacity-0", !isScrolled);
   backToTopBtn?.classList.toggle("pointer-events-none", !isScrolled);
   backToTopBtn?.classList.toggle("opacity-100", isScrolled);
+  backToTopBtn?.toggleAttribute("inert", !isScrolled);
 };
 
 const scrollHandler = debounce(handleBackToTopScroll, 250);

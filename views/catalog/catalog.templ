@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/store/models"
+	"strings"
 
 	"reyes-magos-gr/lib"
 	layout "reyes-magos-gr/views"
@@ -69,6 +70,41 @@ templ FilterPill(filter_label string, filter_value string) {
 			</button>
 		</span>
 	</div>
+}
+
+templ CategoryChips(category string, max int) {
+	{{ cats := strings.Split(category, ",") }}
+	<div class="flex min-w-0 items-center gap-1.5">
+		for i, c := range cats {
+			if i < max {
+				<span class="min-w-0 truncate rounded-pill bg-chip px-2.5 py-1 font-sans text-xs text-ink">{ strings.TrimSpace(c) }</span>
+			}
+		}
+		if len(cats) > max {
+			<span class="shrink-0 px-1 py-1 font-sans text-xs text-muted">{ fmt.Sprintf("+%d", len(cats)-max) }</span>
+		}
+	</div>
+}
+
+templ ToyCard(toy models.Toy, code string) {
+	<a
+		href={ templ.URL(getCheckoutToyLink(toy.ToyID, code)) }
+		class="group flex flex-col overflow-hidden rounded-image border border-border bg-surface text-ink shadow-[0_2px_10px_rgba(74,63,77,0.06)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(74,63,77,0.12)] focus-visible:outline-none focus-visible:shadow-focus"
+	>
+		<div class="relative aspect-4/3 overflow-hidden border-b border-border bg-surface sm:aspect-square">
+			<img src={ toy.Image1 } alt={ toy.ToyName } loading="lazy" class="absolute inset-0 size-full object-contain p-5 transition duration-200 group-hover:scale-[1.03] sm:p-6"/>
+			<span class="absolute left-3 top-3 z-10 rounded-pill border border-border bg-surface/95 px-3 py-1 shadow-[0_2px_8px_rgba(74,63,77,0.18)] backdrop-blur-sm font-heading text-xs font-bold text-ink sm:left-3.5 sm:top-3.5">
+				{ fmt.Sprintf("%d–%d años", toy.AgeMin, toy.AgeMax) }
+			</span>
+		</div>
+		<div class="flex flex-1 flex-col gap-3 px-4.5 pb-4.5 pt-4 sm:px-5 sm:pb-5">
+			<h3 class="font-heading text-[17px] font-bold leading-[1.35] text-ink line-clamp-2 sm:min-h-[2lh]">{ toy.ToyName }</h3>
+			@CategoryChips(toy.Category, 2)
+			<span class="mt-auto flex items-center justify-center rounded-button border-2 border-primary px-4 py-2.75 font-heading text-sm font-bold text-accent transition group-hover:bg-primary group-hover:text-white sm:py-2.25">
+				Elegir
+			</span>
+		</div>
+	</a>
 }
 
 templ Catalog(
@@ -138,7 +174,7 @@ templ Catalog(
 			<el-popover
 				id="filters-popover"
 				anchor="bottom"
-				class="!left-0 mt-0 w-screen border-t border-b border-border bg-surface shadow-lg py-8 px-4 sm:px-6 lg:left-1/2! lg:w-full lg:max-w-7xl lg:-translate-x-1/2 lg:px-8 transition transition-discrete data-closed:-translate-y-2 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
+				class="left-0! mt-0 w-screen border-t border-b border-border bg-surface shadow-lg py-8 px-4 sm:px-6 lg:left-1/2! lg:w-full lg:max-w-7xl lg:-translate-x-1/2 lg:px-8 transition transition-discrete data-closed:-translate-y-2 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
 			>
 				<form id="filters-form" onsubmit="event.preventDefault();updateFilters();">
 					<div class="mx-auto max-w-7xl gap-x-6 text-sm sm:flex md:gap-x-8">
@@ -183,31 +219,9 @@ templ Catalog(
 						<p class={ components.DSBody }>Actualiza los filtros o limpa los filtros para ver mas resultados</p>
 					</div>
 				} else {
-					<div class="columns md:columns-4 gap-12 space-y-12 my-8">
+					<div class="my-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-7">
 						for _, toy := range toys {
-							<a class="inline-block mt-8" href={ templ.URL(getCheckoutToyLink(toy.ToyID, code)) }>
-								<div class="group relative flex flex-col overflow-hidden">
-									<div class="group-hover:opacity-75">
-										<img src={ toy.Image1 } alt={ toy.ToyDescription } class={ components.DSImageFrame + " w-full" }/>
-									</div>
-									<div class="flex flex-1 flex-col mt-6">
-										<h3 class={ components.DSHeading3 + " line-clamp-2" }>
-											<span aria-hidden="true" class="absolute inset-0"></span>
-											{ toy.ToyName }
-										</h3>
-										<div class="flex-1 flex justify-between mt-4">
-											<div class="text-center">
-												<div class="text-xs font-sans text-muted">Categoria</div>
-												<div class="font-sans text-ink">{ toy.Category }</div>
-											</div>
-											<div class="text-center">
-												<div class="text-xs font-sans text-muted">Edades</div>
-												<div class="font-sans text-ink">{ fmt.Sprint(toy.AgeMin) } a { fmt.Sprint(toy.AgeMax) } años</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</a>
+							@ToyCard(toy, code)
 						}
 					</div>
 				}
@@ -286,9 +300,9 @@ templ Catalog(
 			<div
 				id="back-to-top-btn"
 				class="fixed bottom-6 right-2 md:right-6 z-10 opacity-0 pointer-events-none transition-opacity duration-200"
+				inert
 			>
 				<button
-					aria-hidden="true"
 					class="p-4 bg-secondary text-white rounded-button shadow-secondary font-heading font-bold text-center text-xs flex flex-col justify-center items-center"
 					onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
 					title="Arriba"

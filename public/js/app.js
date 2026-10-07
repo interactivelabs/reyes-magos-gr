@@ -148,6 +148,7 @@ var handleBackToTopScroll = () => {
   backToTopBtn?.classList.toggle("opacity-0", !isScrolled);
   backToTopBtn?.classList.toggle("pointer-events-none", !isScrolled);
   backToTopBtn?.classList.toggle("opacity-100", isScrolled);
+  backToTopBtn?.toggleAttribute("inert", !isScrolled);
 };
 var scrollHandler = debounce_default(handleBackToTopScroll, 250);
 window.addEventListener("scroll", scrollHandler);
