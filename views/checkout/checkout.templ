@@ -16,21 +16,6 @@ type toyHighlight struct {
 	Paragraphs []string
 }
 
-// toSentenceCase turns all-caps titles ("CARACTERÍSTICAS DEL VAGÓN") into "Características del vagón".
-func toSentenceCase(title string) string {
-	if strings.ToUpper(title) != title {
-		return title
-	}
-	runes := []rune(strings.ToLower(title))
-	for i, r := range runes {
-		if unicode.IsLetter(r) {
-			runes[i] = unicode.ToUpper(r)
-			break
-		}
-	}
-	return string(runes)
-}
-
 // parseHighlightTitle extracts a title from description lines shaped like
 // "🦖【Title】: body" or "UPPERCASE TITLE: body".
 func parseHighlightTitle(line string) (string, string, bool) {
@@ -56,7 +41,7 @@ func getToyHighlights(toy models.Toy) []toyHighlight {
 			continue
 		}
 		if title, body, ok := parseHighlightTitle(line); ok {
-			titled = append(titled, toyHighlight{Title: toSentenceCase(title), Paragraphs: []string{body}})
+			titled = append(titled, toyHighlight{Title: title, Paragraphs: []string{body}})
 		} else {
 			general.Paragraphs = append(general.Paragraphs, line)
 		}
@@ -164,7 +149,7 @@ templ ToyHighlights(toy models.Toy) {
 			for i, h := range highlights {
 				<details class="group border-b border-border" open?={ i == 0 }>
 					<summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-3.5 font-heading text-[15px] font-semibold text-ink select-none lg:py-4 lg:text-base [&::-webkit-details-marker]:hidden">
-						{ h.Title }
+						<span class={ templ.KV("lowercase first-letter:uppercase", strings.ToUpper(h.Title) == h.Title) }>{ h.Title }</span>
 						<span aria-hidden="true" class="text-lg leading-none text-muted transition duration-200 group-open:rotate-45">+</span>
 					</summary>
 					<div class="mb-3.5 flex flex-col gap-3 lg:mb-4">
