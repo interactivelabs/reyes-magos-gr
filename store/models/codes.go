@@ -8,4 +8,5 @@ type Code struct {
 	Used       int64  `json:"used"`
 	Cancelled  int64  `json:"cancelled"`
 	Deleted    int64  `json:"deleted"`
+	Note       string `json:"note"`
 }

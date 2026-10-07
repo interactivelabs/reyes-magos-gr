@@ -8,21 +8,26 @@ import (
 	"reyes-magos-gr/store/dtos"
 	volunteer "reyes-magos-gr/views/volunteer"
 	"strconv"
+	"strings"
+	"unicode/utf8"
 
 	"github.com/labstack/echo/v4"
 )
 
 type MyCodesHandler struct {
 	CodesStore        store.CodesStore
+	CodesService      services.CodesService
 	VolunteersService services.VolunteersService
 }
 
 func NewMyCodesHandler(
 	codesStore store.CodesStore,
+	codesService services.CodesService,
 	volunteersService services.VolunteersService,
 ) *MyCodesHandler {
 	return &MyCodesHandler{
 		CodesStore:        codesStore,
+		CodesService:      codesService,
 		VolunteersService: volunteersService,
 	}
 }
@@ -44,6 +49,8 @@ func (h *MyCodesHandler) MyCodesViewHandler(ctx echo.Context) error {
 	return lib.Render(ctx, volunteer.MyCodes(codes, givenCodes))
 }
 
+const maxCodeNoteLength = 200
+
 func (h *MyCodesHandler) GiveCode(ctx echo.Context) error {
 	codeIDStr := ctx.Param("code_id")
 	codeID, err := strconv.ParseInt(codeIDStr, 10, 64)
@@ -51,14 +58,12 @@ func (h *MyCodesHandler) GiveCode(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid code ID")
 	}
 
-	code, err := h.CodesStore.GetCodeByID(codeID)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	note := strings.TrimSpace(ctx.FormValue("note"))
+	if utf8.RuneCountInString(note) > maxCodeNoteLength {
+		return echo.NewHTTPError(http.StatusBadRequest, "Note is too long")
 	}
 
-	code.Given = 1
-
-	err = h.CodesStore.UpdateCode(code)
+	code, err := h.CodesService.GiveCode(codeID, note)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

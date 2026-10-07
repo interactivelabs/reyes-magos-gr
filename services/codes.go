@@ -21,6 +21,7 @@ func NewCodesService(codesStore store.CodesStore) *CodesServiceApp {
 type CodesService interface {
 	CreateCode() (code models.Code, err error)
 	CreateCodeBatch(Count int64) (codes []models.Code, err error)
+	GiveCode(codeID int64, note string) (code models.Code, err error)
 }
 
 func newCode() models.Code {
@@ -50,6 +51,22 @@ func (s *CodesServiceApp) CreateCodeBatch(Count int64) (codes []models.Code, err
 		codes = append(codes, codeRow)
 	}
 	return codes, nil
+}
+
+func (s *CodesServiceApp) GiveCode(codeID int64, note string) (code models.Code, err error) {
+	code, err = s.CodesStore.GetCodeByID(codeID)
+	if err != nil {
+		return models.Code{}, err
+	}
+
+	code.Given = 1
+	code.Note = note
+
+	if err := s.CodesStore.UpdateCode(code); err != nil {
+		return models.Code{}, err
+	}
+
+	return code, nil
 }
 
 func generateRandomString(length int) string {
