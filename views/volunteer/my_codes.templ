@@ -53,27 +53,35 @@ templ MyCodeItem(code models.Code) {
 				</button>
 			</div>
 		} else {
-			<div class="w-full p-2 text-center bg-chip text-muted text-sm font-sans font-semibold">
-				<label for={ fmt.Sprintf("code-note-%d", code.CodeID) } class={ components.DSLabel }>Notas:</label>
-				<input
-					id={ fmt.Sprintf("code-note-%d", code.CodeID) }
-					type="text"
-					name="note"
-					maxlength="200"
-					placeholder="Para la persona del parque"
-					class={ components.DSInput }
-				/>
-			</div>
-			<button
-				type="button"
-				class="w-full inline-flex items-center justify-center gap-2 px-3 py-3 font-sans text-sm font-bold text-white bg-primary hover:opacity-90"
+			<form
+				class="divide-y divide-border"
 				hx-post={ lib.GetSafeIdUrl("/volunteer/mycodes/give/%d", code.CodeID) }
 				hx-target={ fmt.Sprintf("#volunteer-code-%d", code.CodeID) }
-				hx-include={ fmt.Sprintf("#code-note-%d", code.CodeID) }
+				hx-swap="outerHTML"
 			>
-				Regalar
-				@svg.Gift("h-4 w-4 fill-current")
-			</button>
+				<div class="w-full p-2 bg-chip text-muted text-sm font-sans font-semibold">
+					<label for={ fmt.Sprintf("code-note-%d", code.CodeID) } class={ components.DSLabel + " ml-2 mb-2" }>Notas:</label>
+					<input
+						class={ components.DSInput }
+						id={ fmt.Sprintf("code-note-%d", code.CodeID) }
+						maxlength="200"
+						name="note"
+						pattern=".*\S.*"
+						placeholder="Para la persona del parque"
+						required
+						title="Escribe una nota"
+						type="text"
+					/>
+					<span class="inline-block ml-2 mt-2 text-xs italic">* NO incluir nombre/correo/telefono o ningun dato personal</span>
+				</div>
+				<button
+					type="submit"
+					class="w-full inline-flex items-center justify-center gap-2 px-3 py-3 font-sans text-sm font-bold text-white bg-primary hover:opacity-90"
+				>
+					Regalar
+					@svg.Gift("h-4 w-4 fill-current")
+				</button>
+			</form>
 		}
 	</li>
 }
@@ -101,14 +109,30 @@ templ MyCodes(codes []models.Code, givenCodes []models.Code) {
 							hx-post={ string(templ.URL("/volunteer/mycodes/give_codes")) }
 							hx-indicator="#loading-spinner"
 						>
-							<div class="mt-4">
+							<div class="mt-4 ml-2">
 								<label for="codes_number" class={ components.DSLabel }>Numero de codigos</label>
 							</div>
 							<div class="mt-2">
 								<input type="number" id="codes_number" name="codes_number" max={ len(codes) } class={ components.DSInput }/>
 							</div>
+							<div class="mt-4 ml-2">
+								<label for="give-codes-note" class={ components.DSLabel }>Notas</label>
+							</div>
+							<div class="mt-2">
+								<input
+									id="give-codes-note"
+									type="text"
+									name="note"
+									maxlength="200"
+									placeholder="Para la persona del parque"
+									required
+									pattern=".*\S.*"
+									title="Escribe una nota"
+									class={ components.DSInput }
+								/>
+							</div>
 							<div class="mt-4 text-right">
-								<button class={ components.DSButtonPrimary + " inline-flex" }>
+								<button class={ components.DSButtonPrimary }>
 									<div id="loading-spinner" class="htmx-indicator">
 										@svg.Spinner()
 									</div>

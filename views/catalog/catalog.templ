@@ -180,12 +180,12 @@ templ Catalog(
 					<div class="mx-auto max-w-7xl gap-x-6 text-sm sm:flex md:gap-x-8">
 						<div class="w-full sm:w-auto">
 							<div class="space-y-6 mb-8 sm:space-y-4 relative">
-								<label for="age_min" class={ components.DSLabel + " mb-2" }>Edad Minima</label>
-								@AgeRangeFields("age_min", ageMin)
-							</div>
-							<div class="space-y-6 mb-8 sm:space-y-4 relative">
 								<label for="age_max" class={ components.DSLabel + " mb-2" }>Edad Maxima</label>
 								@AgeRangeFields("age_max", ageMax)
+							</div>
+							<div class="space-y-6 mb-8 sm:space-y-4 relative">
+								<label for="age_min" class={ components.DSLabel + " mb-2" }>Edad Minima</label>
+								@AgeRangeFields("age_min", ageMin)
 							</div>
 						</div>
 						<div class="mt-12 sm:mt-0">
