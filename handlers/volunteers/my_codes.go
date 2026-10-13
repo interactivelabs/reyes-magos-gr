@@ -59,6 +59,9 @@ func (h *MyCodesHandler) GiveCode(ctx echo.Context) error {
 	}
 
 	note := strings.TrimSpace(ctx.FormValue("note"))
+	if note == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "Note is required")
+	}
 	if utf8.RuneCountInString(note) > maxCodeNoteLength {
 		return echo.NewHTTPError(http.StatusBadRequest, "Note is too long")
 	}
@@ -72,7 +75,8 @@ func (h *MyCodesHandler) GiveCode(ctx echo.Context) error {
 }
 
 type GiveCodesRequest struct {
-	CodesNumber int `form:"codes_number" validate:"required"`
+	CodesNumber int    `form:"codes_number" validate:"required"`
+	Note        string `form:"note" validate:"required"`
 }
 
 func (h *MyCodesHandler) GiveCodes(ctx echo.Context) error {
@@ -82,6 +86,14 @@ func (h *MyCodesHandler) GiveCodes(ctx echo.Context) error {
 	}
 	if err := ctx.Validate(acr); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	note := strings.TrimSpace(acr.Note)
+	if note == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "Note is required")
+	}
+	if utf8.RuneCountInString(note) > maxCodeNoteLength {
+		return echo.NewHTTPError(http.StatusBadRequest, "Note is too long")
 	}
 
 	profile, err := GetProfileHandler(ctx, h.VolunteersService)
@@ -107,6 +119,7 @@ func (h *MyCodesHandler) GiveCodes(ctx echo.Context) error {
 	// Mark all selected codes as given
 	for i := range codesToGive {
 		codesToGive[i].Given = 1
+		codesToGive[i].Note = note
 	}
 
 	// Update all codes in a batch
