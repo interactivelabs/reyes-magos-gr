@@ -114,6 +114,7 @@ func SetupRouter(
 	myCartHandler := volunteers.NewCartHandler(app.CartsStore, app.VolunteersService)
 	vg.GET("/mycart", myCartHandler.CartViewHandler)
 	vg.POST("/mycart", myCartHandler.CreateCartItemHandler)
+	vg.POST("/mycart/:cart_id/duplicate", myCartHandler.DuplicateCartItemHandler)
 	vg.DELETE("/mycart/:cart_id", myCartHandler.DeleteCartItemHandler)
 
 	volunteerOrder := volunteers.NewVolunteerOrderHandler(app.OrderService, app.VolunteersService)
@@ -139,7 +140,7 @@ func SetupRouter(
 		app.OrdersStore,
 		app.ToysStore,
 		app.VolunteersStore,
-		app.CodesStore,
+		app.OrderService,
 	)
 	ag.GET("/orders", adminOrdersHandler.OrdersViewHandler)
 	ag.GET("/order/:order_id", adminOrdersHandler.OrderCardViewHandler)

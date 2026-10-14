@@ -72,7 +72,7 @@ templ MyCodeItem(code models.Code) {
 						title="Escribe una nota"
 						type="text"
 					/>
-					<span class="inline-block ml-2 mt-2 text-xs italic">* NO incluir nombre/correo/telefono o ningun dato personal</span>
+					<span class="inline-block ml-2 mt-2 text-xs italic">* NO incluir nombre completo/correo/telefono o ningun dato personal</span>
 				</div>
 				<button
 					type="submit"
@@ -130,6 +130,7 @@ templ MyCodes(codes []models.Code, givenCodes []models.Code) {
 									title="Escribe una nota"
 									class={ components.DSInput }
 								/>
+								<span class="inline-block ml-2 mt-2 text-xs italic">* NO incluir nombre completo/correo/telefono o ningun dato personal</span>
 							</div>
 							<div class="mt-4 text-right">
 								<button class={ components.DSButtonPrimary }>

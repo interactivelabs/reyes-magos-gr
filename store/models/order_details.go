@@ -5,4 +5,5 @@ type OrderDetails struct {
 	ToyName      string
 	ToySourceURL string
 	Code         string
+	Note         string
 }
