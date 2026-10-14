@@ -275,7 +275,7 @@ func MyCodeItem(code models.Code) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "\" maxlength=\"200\" name=\"note\" pattern=\".*\\S.*\" placeholder=\"Para la persona del parque\" required title=\"Escribe una nota\" type=\"text\"> <span class=\"inline-block ml-2 mt-2 text-xs italic\">* NO incluir nombre/correo/telefono o ningun dato personal</span></div><button type=\"submit\" class=\"w-full inline-flex items-center justify-center gap-2 px-3 py-3 font-sans text-sm font-bold text-white bg-primary hover:opacity-90\">Regalar")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "\" maxlength=\"200\" name=\"note\" pattern=\".*\\S.*\" placeholder=\"Para la persona del parque\" required title=\"Escribe una nota\" type=\"text\"> <span class=\"inline-block ml-2 mt-2 text-xs italic\">* NO incluir nombre completo/correo/telefono o ningun dato personal</span></div><button type=\"submit\" class=\"w-full inline-flex items-center justify-center gap-2 px-3 py-3 font-sans text-sm font-bold text-white bg-primary hover:opacity-90\">Regalar")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -562,7 +562,7 @@ func MyCodes(codes []models.Code, givenCodes []models.Code) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 47, "\"></div><div class=\"mt-4 text-right\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 47, "\"> <span class=\"inline-block ml-2 mt-2 text-xs italic\">* NO incluir nombre completo/correo/telefono o ningun dato personal</span></div><div class=\"mt-4 text-right\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

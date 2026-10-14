@@ -31,6 +31,11 @@ templ orderCardBody(details models.OrderDetails) {
 			<span class="text-muted shrink-0">Código:</span>
 			<span class="font-semibold text-ink">{ details.Code }</span>
 		</p>
+		<p class="flex items-center gap-2 text-[13px]">
+			@svg.Clipboard("h-3.5 w-3.5 shrink-0 fill-muted")
+			<span class="text-muted shrink-0">Nota:</span>
+			<span class="font-semibold text-ink">{ details.Note }</span>
+		</p>
 		<p class="flex items-center gap-2 text-[13px] min-w-0">
 			@svg.Gift("h-3.5 w-3.5 shrink-0 fill-muted")
 			<span class="text-muted shrink-0">Juguete:</span>

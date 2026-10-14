@@ -5,100 +5,254 @@ import (
 	"reyes-magos-gr/lib"
 	"reyes-magos-gr/store/dtos"
 	"reyes-magos-gr/views/components"
+	svg "reyes-magos-gr/views/components/svg"
+	"strings"
 )
 
 templ Cart(cartItems []dtos.CartItem, numCodes int) {
 	@VolunteerLayout() {
-		<main class="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
-			<h1 class="text-4xl font-extralight tracking-tight mb-20">Carrito</h1>
-			if len(cartItems) > 0 {
-				<form
-					class="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16"
-					hx-post={ string(templ.URL("/volunteer/order")) }
-					hx-target="closest"
-				>
-					<section aria-labelledby="cart-heading" class="lg:col-span-7">
-						<h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
-						<ul role="list" class="divide-y divide-gray-200 border-t border-b border-gray-200">
-							for _, item := range cartItems {
-								<li
-									class="flex py-6 sm:py-10"
-									id={ fmt.Sprintf("volunteer-car-row-%d", item.CartID) }
-								>
-									<div class="shrink-0">
-										<img
-											src={ item.Image1 }
-											alt={ item.ToyName }
-											class="size-24 rounded-md object-cover sm:size-48"
-										/>
-									</div>
-									<div class="ml-4 flex flex-1 justify-between sm:ml-6">
-										<div class="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-											<div>
-												<div class="flex justify-between">
-													<h3 class="text-sm">
-														<a
-															href={ fmt.Sprintf("checkout/%d", item.ToyID) }
-															class="font-medium text-gray-700 hover:text-gray-800 line-clamp-5"
-														>{ item.ToyName }</a>
-													</h3>
-												</div>
-												<div class="mt-1 flex text-sm">
-													<p class="text-gray-500">{ item.Category }</p>
-												</div>
-											</div>
-										</div>
-										<div class="mt-4 sm:mt-0 text-center">
-											<div class="w-full">
-												<input type="hidden" name="cart_id" value={ fmt.Sprint(item.CartID) }/>
-												<select
-													name="quantity"
-													aria-label="Quantity"
-													class="mt-2 sm:mt-0 rounded-md border-0 py-1.5 px-2 ring-1 ring-inset ring-gray-300"
-												>
-													for i := 1; i <= 10; i++ {
-														<option value={ fmt.Sprint(i) }>{ fmt.Sprint(i) }</option>
-													}
-												</select>
-												<a
-													type="button"
-													hx-params="none"
-													hx-delete={ lib.GetSafeIdUrl("/volunteer/mycart/%d", item.CartID) }
-													hx-target={ fmt.Sprintf("#volunteer-car-row-%d", item.CartID) }
-													class="underline cursor-pointer text-sm font-semibold leading-6 text-brand-orange"
-												>Borar</a>
-											</div>
-										</div>
-									</div>
-								</li>
-							}
-						</ul>
-					</section>
-					<section
-						aria-labelledby="summary-heading"
-						class="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
-					>
-						<h2 id="summary-heading" class="text-lg font-medium text-gray-900">Detalles</h2>
-						<dl class="mt-6 space-y-4">
-							<div class="flex items-center justify-between">
-								<dt class="">Numero de Articulos</dt>
-								<dd class="font-medium text-gray-900">{ fmt.Sprint(len(cartItems)) }</dd>
-							</div>
-							<div class="flex items-center justify-between border-t border-gray-200 pt-4">
-								<dt class="">Numero de codigos disponibles</dt>
-								<dd class="font-medium text-gray-900">{ fmt.Sprint(numCodes) }</dd>
-							</div>
-						</dl>
-						<div class="mt-6">
-							<button type="submit" class={ components.DSButtonPrimary + " w-full" }>Completar Orden</button>
-						</div>
-					</section>
-				</form>
-			} else {
-				<p class="text-center text-gray-500">Your cart is empty.</p>
-			}
+		<main class="min-h-screen bg-background">
+			<div class="mx-auto max-w-6xl px-4 pt-12 pb-24 sm:px-6 lg:px-8">
+				<header>
+					<h1 class={ components.DSHeading1 }>Carrito</h1>
+					<p class={ components.DSBody + " mt-2 text-muted" }>
+						Cada artículo usa uno de tus códigos. Agrega una nota para recordar a quién se lo regalas.
+					</p>
+				</header>
+				@CartContent(cartItems, numCodes, "")
+			</div>
 		</main>
 	}
+}
+
+// CartContent is re-rendered as a whole after every add/remove/checkout so the
+// summary counts and the add buttons stay in sync. Note inputs use hx-preserve
+// so notes already typed survive those swaps.
+templ CartContent(cartItems []dtos.CartItem, numCodes int, errorMsg string) {
+	{{
+		numItems := len(cartItems)
+		canAdd := numItems < numCodes
+		overLimit := numItems > numCodes
+	}}
+	<div id="cart-content" class="mt-10">
+		if numItems == 0 {
+			<div class="rounded-image border border-border bg-surface px-6 py-16 text-center">
+				<div class="mx-auto mb-4 inline-flex size-16 items-center justify-center rounded-full bg-chip">
+					@svg.Cart("size-8 fill-primary")
+				</div>
+				<h2 class={ components.DSHeading3 }>Tu carrito está vacío</h2>
+				<p class={ components.DSBody + " mt-1 text-muted" }>Explora el catálogo y agrega los regalos que quieras entregar.</p>
+				<a href="/catalog" class={ components.DSButtonPrimary + " mt-6" }>Ir al catálogo</a>
+			</div>
+		} else {
+			<form
+				id="cart-form"
+				class="lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-10"
+				hx-post={ string(templ.URL("/volunteer/order")) }
+				hx-target="#cart-content"
+				hx-swap="outerHTML"
+				hx-disabled-elt="#checkout-confirm-submit"
+			>
+				<section aria-labelledby="cart-heading" class="lg:col-span-7">
+					<h2 id="cart-heading" class="sr-only">Artículos en tu carrito</h2>
+					<ul role="list" class="flex flex-col gap-4">
+						for _, item := range cartItems {
+							@CartRow(item, canAdd)
+						}
+					</ul>
+				</section>
+				<aside
+					aria-labelledby="summary-heading"
+					class="mt-10 rounded-image border border-border bg-surface p-6 sm:p-7 lg:sticky lg:top-8 lg:col-span-5 lg:mt-0"
+				>
+					<h2 id="summary-heading" class="font-heading text-lg font-bold text-ink">Detalles</h2>
+					<dl class="mt-5 flex flex-col gap-4 font-sans text-sm">
+						<div class="flex items-center justify-between">
+							<dt class="text-muted">Artículos en el carrito</dt>
+							<dd class="font-heading text-base font-bold text-ink">{ fmt.Sprint(numItems) }</dd>
+						</div>
+						<div class="flex items-center justify-between border-t border-border pt-4">
+							<dt class="text-muted">Códigos disponibles</dt>
+							<dd class="font-heading text-base font-bold text-ink">{ fmt.Sprint(numCodes) }</dd>
+						</div>
+						if !overLimit {
+							<div class="flex items-center justify-between border-t border-border pt-4">
+								<dt class="text-muted">Códigos restantes después de la orden</dt>
+								<dd class="font-heading text-base font-bold text-ink">{ fmt.Sprint(numCodes - numItems) }</dd>
+							</div>
+						}
+					</dl>
+					if overLimit {
+						<p class="mt-5 rounded-chip bg-chip px-4 py-3 font-sans text-sm text-accent">
+							{ fmt.Sprintf("Tienes más artículos que códigos. Elimina %d artículo(s) para continuar.", numItems-numCodes) }
+						</p>
+					} else if !canAdd {
+						<p class="mt-5 rounded-chip bg-chip px-4 py-3 font-sans text-sm text-muted">
+							Ya usaste todos tus códigos disponibles en este carrito.
+						</p>
+					}
+					if errorMsg != "" {
+						<div class="mt-5 flex gap-3 rounded-chip bg-red-50 px-4 py-3" role="alert">
+							@svg.ErrorIcon("size-5 shrink-0 text-red-400")
+							<p class="font-sans text-sm text-red-800">{ errorMsg }</p>
+						</div>
+					}
+					<div class="mt-6">
+						if overLimit {
+							<button type="button" class={ components.DSButtonDisabled + " w-full" } disabled>Completar orden</button>
+						} else {
+							<button
+								type="button"
+								class={ components.DSButtonPrimary + " w-full" }
+								onclick="if (this.form.reportValidity()) document.getElementById('checkout-confirm').showModal()"
+							>
+								Completar orden
+								@svg.Gift("size-4 fill-current")
+							</button>
+						}
+					</div>
+				</aside>
+				@CheckoutConfirmDialog(numItems, numCodes)
+			</form>
+		}
+	</div>
+}
+
+templ CartRow(item dtos.CartItem, canAdd bool) {
+	{{
+		noteID := fmt.Sprintf("cart-note-%d", item.CartID)
+		addTitle := "Agregar otro"
+		if !canAdd {
+			addTitle = "Ya no tienes códigos disponibles"
+		}
+	}}
+	<li
+		id={ fmt.Sprintf("volunteer-cart-row-%d", item.CartID) }
+		class="flex gap-4 rounded-image border border-border bg-surface p-4 sm:gap-5 sm:p-5"
+	>
+		<img
+			src={ item.Image1 }
+			alt={ item.ToyName }
+			class="size-20 shrink-0 rounded-chip border border-border bg-surface object-contain sm:size-28"
+		/>
+		<div class="flex min-w-0 flex-1 flex-col gap-3">
+			<div class="flex items-start justify-between gap-3">
+				<div class="min-w-0">
+					<a
+						href={ templ.SafeURL(fmt.Sprintf("/checkout/%d", item.ToyID)) }
+						class="line-clamp-2 font-heading text-[15px] font-bold text-ink hover:text-accent"
+					>{ item.ToyName }</a>
+					if item.Category != "" {
+						@CategoryChips(item.Category, 4)
+					}
+				</div>
+				<div class="flex shrink-0 items-center gap-1">
+					<button
+						type="button"
+						title={ addTitle }
+						aria-label={ addTitle }
+						class={ "inline-flex size-9 items-center justify-center rounded-pill",
+							templ.KV("text-accent hover:bg-chip cursor-pointer", canAdd),
+							templ.KV("text-disabled-text cursor-not-allowed", !canAdd) }
+						disabled?={ !canAdd }
+						hx-post={ lib.GetSafeIdUrl("/volunteer/mycart/%d/duplicate", item.CartID) }
+						hx-target="#cart-content"
+						hx-swap="outerHTML"
+						hx-params="none"
+					>
+						@svg.Plus("size-5")
+					</button>
+					<button
+						type="button"
+						title="Eliminar"
+						aria-label="Eliminar"
+						class="inline-flex size-9 cursor-pointer items-center justify-center rounded-pill text-muted hover:bg-chip hover:text-accent"
+						hx-delete={ lib.GetSafeIdUrl("/volunteer/mycart/%d", item.CartID) }
+						hx-target="#cart-content"
+						hx-swap="outerHTML"
+						hx-params="none"
+					>
+						@svg.Trash("size-5")
+					</button>
+				</div>
+			</div>
+			<input type="hidden" name="cart_id" value={ fmt.Sprint(item.CartID) }/>
+			<div>
+				<label for={ noteID } class="mb-1.5 block font-sans text-[13px] font-semibold text-ink">Nota</label>
+				<input
+					id={ noteID }
+					type="text"
+					name="note"
+					maxlength="200"
+					placeholder="Para la persona del parque"
+					required
+					pattern=".*\S.*"
+					title="Escribe una nota"
+					hx-preserve
+					class={ components.DSInput }
+				/>
+				<span class="inline-block ml-2 mt-2 text-xs italic">* NO incluir nombre completo/correo/telefono o ningun dato personal</span>
+			</div>
+		</div>
+	</li>
+}
+
+templ CategoryChips(category string, max int) {
+	{{ cats := strings.Split(category, ",") }}
+	<div class="flex min-w-0 items-center gap-1.5">
+		for i, c := range cats {
+			if i < max {
+				<span class="min-w-0 truncate rounded-pill bg-chip px-2.5 py-1 font-sans text-xs text-ink">{ strings.TrimSpace(c) }</span>
+			}
+		}
+		if len(cats) > max {
+			<span class="shrink-0 px-1 py-1 font-sans text-xs text-muted">{ fmt.Sprintf("+%d", len(cats)-max) }</span>
+		}
+	</div>
+}
+
+templ CheckoutConfirmDialog(numItems, numCodes int) {
+	<dialog
+		id="checkout-confirm"
+		aria-labelledby="checkout-confirm-title"
+		class="m-auto w-[calc(100%-2rem)] max-w-md rounded-image border border-border bg-surface p-6 text-left shadow-xl backdrop:bg-ink/50 sm:p-8"
+	>
+		<div class="mb-4 inline-flex size-12 items-center justify-center rounded-full bg-chip">
+			@svg.Gift("size-6 fill-primary")
+		</div>
+		<h2 id="checkout-confirm-title" class={ components.DSHeading3 }>¿Completar la orden?</h2>
+		<p class={ components.DSBody + " mt-2 text-muted" }>
+			{ fmt.Sprintf("Se crearán %d orden(es) y se usarán %d de tus %d códigos. Esta acción no se puede deshacer.", numItems, numItems, numCodes) }
+		</p>
+		<div class="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+			<button
+				type="button"
+				class={ components.DSButtonOutline }
+				onclick="this.closest('dialog').close()"
+			>Cancelar</button>
+			<button id="checkout-confirm-submit" type="submit" class={ components.DSButtonPrimary }>
+				Confirmar
+			</button>
+		</div>
+	</dialog>
+}
+
+templ CartCheckoutSuccess(numOrders int) {
+	<div id="cart-content" class="mt-10">
+		<div class="rounded-image border border-border bg-surface px-6 py-14 text-center">
+			<div class="mx-auto mb-4 inline-flex size-16 items-center justify-center rounded-full bg-chip">
+				@svg.Gift("size-8 fill-primary")
+			</div>
+			<h2 class={ components.DSHeading2 }>¡Orden completada!</h2>
+			<p class={ components.DSBody + " mt-2 text-muted" }>
+				{ fmt.Sprintf("Se crearon %d orden(es). Puedes darles seguimiento en tus órdenes.", numOrders) }
+			</p>
+			<div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+				<a href="/volunteer/myorders" class={ components.DSButtonPrimary }>Ver mis órdenes</a>
+				<a href="/catalog" class={ components.DSButtonOutline }>Seguir en el catálogo</a>
+			</div>
+		</div>
+	</div>
 }
 
 templ CartItemCreated() {

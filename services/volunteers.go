@@ -54,6 +54,8 @@ type VolunteersService interface {
 	EnrichOrder(order models.Order) (models.OrderDetails, error)
 	GetVolunteerCartByEmail(email string) (cartItems []dtos.CartItem, err error)
 	CreateVolunteerCartItem(email string, toyID int64) (CartID int64, err error)
+	DuplicateVolunteerCartItem(email string, cartID int64) error
+	DeleteVolunteerCartItem(email string, cartID int64) error
 	GetActiveVolunteersGrupedByLocation() (groupedVolunteers map[string][]models.Volunteer, err error)
 	GetActiveVolunteersWithStatsGroupedByLocation() (groups []dtos.VolunteerLocationGroup, err error)
 	CreateAndGetVolunteer(volunteer models.Volunteer) (models.Volunteer, error)
@@ -90,34 +92,7 @@ func (s *VolunteersServiceApp) GetVolunteerCodesByEmail(
 }
 
 func (s *VolunteersServiceApp) EnrichOrder(order models.Order) (models.OrderDetails, error) {
-	toy, err := s.ToysStore.GetToyByID(order.ToyID)
-	if err != nil && !errors.Is(err, sql.ErrNoRows) {
-		return models.OrderDetails{}, err
-	}
-
-	code, err := s.CodesStore.GetCodeByID(order.CodeID)
-	if err != nil && !errors.Is(err, sql.ErrNoRows) {
-		return models.OrderDetails{}, err
-	}
-
-	return models.OrderDetails{
-		Order:        order,
-		ToyName:      toy.ToyName,
-		ToySourceURL: toy.SourceURL,
-		Code:         code.Code,
-	}, nil
-}
-
-func (s *VolunteersServiceApp) enrichOrders(orders []models.Order) ([]models.OrderDetails, error) {
-	details := make([]models.OrderDetails, 0, len(orders))
-	for _, order := range orders {
-		detail, err := s.EnrichOrder(order)
-		if err != nil {
-			return nil, err
-		}
-		details = append(details, detail)
-	}
-	return details, nil
+	return enrichOrder(s.ToysStore, s.CodesStore, order)
 }
 
 func (s *VolunteersServiceApp) GetVolunteerOrdersByEmail(
@@ -133,7 +108,7 @@ func (s *VolunteersServiceApp) GetVolunteerOrdersByEmail(
 		return nil, err
 	}
 
-	return s.enrichOrders(pendingOrders)
+	return enrichOrders(s.ToysStore, s.CodesStore, pendingOrders)
 }
 
 func (s *VolunteersServiceApp) GetRecentlyCompletedVolunteerOrdersByEmail(
@@ -146,12 +121,16 @@ func (s *VolunteersServiceApp) GetRecentlyCompletedVolunteerOrdersByEmail(
 		return nil, err
 	}
 
-	completedOrders, err := s.OrdersStore.GetRecentlyCompletedOrdersByVolunteerID(volunteer.VolunteerID, since, limit)
+	completedOrders, err := s.OrdersStore.GetRecentlyCompletedOrdersByVolunteerID(
+		volunteer.VolunteerID,
+		since,
+		limit,
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	return s.enrichOrders(completedOrders)
+	return enrichOrders(s.ToysStore, s.CodesStore, completedOrders)
 }
 
 func (s *VolunteersServiceApp) GetVolunteerCartByEmail(
@@ -187,6 +166,77 @@ func (s *VolunteersServiceApp) CreateVolunteerCartItem(
 	}
 
 	return s.CartsStore.CreateCartItem(item)
+}
+
+var (
+	ErrCartItemNotFound = errors.New("cart item not found")
+	ErrNotEnoughCodes   = errors.New("not enough codes available")
+)
+
+// getOwnedCartItem returns the cart item only when it belongs to the volunteer,
+// so a volunteer can't act on someone else's cart by guessing IDs.
+func (s *VolunteersServiceApp) getOwnedCartItem(
+	volunteerID int64,
+	cartID int64,
+) (models.CartItem, error) {
+	item, err := s.CartsStore.GetCartItemByID(cartID)
+	if errors.Is(err, sql.ErrNoRows) {
+		return models.CartItem{}, ErrCartItemNotFound
+	}
+	if err != nil {
+		return models.CartItem{}, err
+	}
+	if item.VolunteerID != volunteerID {
+		return models.CartItem{}, ErrCartItemNotFound
+	}
+	return item, nil
+}
+
+// DuplicateVolunteerCartItem adds another entry for the same toy, as long as
+// the volunteer still has an available code to cover it.
+func (s *VolunteersServiceApp) DuplicateVolunteerCartItem(email string, cartID int64) error {
+	volunteer, err := s.VolunteersStore.GetVolunteerByEmail(email)
+	if err != nil {
+		return err
+	}
+
+	item, err := s.getOwnedCartItem(volunteer.VolunteerID, cartID)
+	if err != nil {
+		return err
+	}
+
+	cartItems, err := s.CartsStore.GetCartToys(volunteer.VolunteerID)
+	if err != nil {
+		return err
+	}
+
+	codes, err := s.VolunteerCodesStore.GetActiveVolunteerCodesByVolunteerID(volunteer.VolunteerID)
+	if err != nil {
+		return err
+	}
+
+	if len(cartItems) >= len(codes) {
+		return ErrNotEnoughCodes
+	}
+
+	_, err = s.CartsStore.CreateCartItem(models.CartItem{
+		ToyID:       item.ToyID,
+		VolunteerID: volunteer.VolunteerID,
+	})
+	return err
+}
+
+func (s *VolunteersServiceApp) DeleteVolunteerCartItem(email string, cartID int64) error {
+	volunteer, err := s.VolunteersStore.GetVolunteerByEmail(email)
+	if err != nil {
+		return err
+	}
+
+	if _, err := s.getOwnedCartItem(volunteer.VolunteerID, cartID); err != nil {
+		return err
+	}
+
+	return s.CartsStore.DeleteCartItem(cartID)
 }
 
 func (s *VolunteersServiceApp) GetActiveVolunteersGrupedByLocation() (groupedVolunteers map[string][]models.Volunteer, err error) {
@@ -253,7 +303,9 @@ func groupVolunteersByLocation(
 	return groupedVolunteers
 }
 
-func groupVolunteerListItemsByLocation(items []dtos.VolunteerListItem) []dtos.VolunteerLocationGroup {
+func groupVolunteerListItemsByLocation(
+	items []dtos.VolunteerListItem,
+) []dtos.VolunteerLocationGroup {
 	byLocation := make(map[string][]dtos.VolunteerListItem)
 	for _, item := range items {
 		location := item.State + ", " + item.City
