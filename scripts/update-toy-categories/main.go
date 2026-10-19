@@ -5,11 +5,17 @@
 //
 //	go run ./scripts/update-toy-categories               # dev, from TURSO_*
 //	go run ./scripts/update-toy-categories -production   # prod, from PROD_TURSO_*
+//	go run ./scripts/update-toy-categories -production -name_matching
 //
 // By default it uses the same TURSO_* environment variables as the app. With
 // -production every one of them must be overridden by its PROD_ counterpart
 // (PROD_TURSO_DATABASE_URL, ...), so prod is never reached by accident with
 // the dev settings.
+//
+// Results are matched to toys by ID. The IDs are the ones of the database
+// that was classified, so to write results classified from dev to prod use
+// -name_matching, which matches by toy name instead (ignoring case and
+// spacing). Names shared by several toys are skipped.
 //
 // Each toy's category is replaced, not added to, with its assigned
 // categories. When classify-toy-categories flagged a database category
@@ -36,6 +42,7 @@ import (
 	"text/tabwriter"
 
 	"reyes-magos-gr/platform/database"
+	"reyes-magos-gr/scripts/internal/toymatch"
 	"reyes-magos-gr/store"
 	"reyes-magos-gr/store/models"
 )
@@ -71,6 +78,7 @@ type Update struct {
 func main() {
 	in := flag.String("in", "scraped/categories.json", "categories written by classify-toy-categories")
 	production := flag.Bool("production", false, "write to prod, reading the TURSO_* settings from PROD_TURSO_*")
+	nameMatching := flag.Bool("name_matching", false, "match toys by name instead of ID, for results classified from another database")
 	flag.Parse()
 
 	if *production {
@@ -106,17 +114,14 @@ func main() {
 	if err != nil {
 		log.Fatal("Error reading toys: ", err)
 	}
-	current := make(map[int64]models.Toy, len(toys))
-	for _, t := range toys {
-		current[t.ToyID] = t
-	}
+	matcher := toymatch.New(toys, *nameMatching)
 
 	input := bufio.NewScanner(os.Stdin)
 	var updates []Update
 	for _, r := range results {
-		toy, ok := current[r.ToyID]
-		if !ok {
-			log.Printf("toy %d is not in the database, skipping", r.ToyID)
+		toy, err := matcher.Find(r.ToyID, r.ToyName)
+		if err != nil {
+			log.Printf("%v, skipping", err)
 			continue
 		}
 		u := Update{Toy: toy, Categories: slices.Clone(r.Assigned)}
@@ -130,7 +135,7 @@ func main() {
 			u.Reviewed = true
 		}
 		if len(u.Categories) == 0 {
-			log.Printf("toy %d has no category to assign, skipping", r.ToyID)
+			log.Printf("toy %d has no category to assign, skipping", toy.ToyID)
 			continue
 		}
 		slices.Sort(u.Categories)
@@ -139,6 +144,8 @@ func main() {
 			updates = append(updates, u)
 		}
 	}
+
+	printUnmatched(matcher.Unmatched())
 
 	if len(updates) == 0 {
 		log.Print("nothing to update")
@@ -208,7 +215,7 @@ func split(category string) []string {
 // present shows what the model concluded so the categories can be decided by
 // hand.
 func present(r Result, toy models.Toy) {
-	fmt.Printf("\n#%d %s\n", r.ToyID, truncate(r.ToyName, 100))
+	fmt.Printf("\n#%d %s\n", toy.ToyID, truncate(toy.ToyName, 100))
 	if toy.SourceURL != "" {
 		fmt.Printf("  link:       %s\n", toy.SourceURL)
 	}
@@ -315,6 +322,21 @@ func confirm(input *bufio.Scanner, prompt string) bool {
 	}
 	answer := strings.ToLower(strings.TrimSpace(input.Text()))
 	return answer == "y" || answer == "yes"
+}
+
+// printUnmatched lists the database toys no result was found for, so they
+// aren't mistaken for being up to date.
+func printUnmatched(toys []models.Toy) {
+	if len(toys) == 0 {
+		return
+	}
+	fmt.Printf("\n%d toys in the database have no result:\n", len(toys))
+	tw := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
+	fmt.Fprintln(tw, "ID\tTOY")
+	for _, t := range toys {
+		fmt.Fprintf(tw, "%d\t%s\n", t.ToyID, truncate(t.ToyName, 80))
+	}
+	tw.Flush()
 }
 
 func printUpdates(updates []Update) {
