@@ -70,10 +70,22 @@ var updateUrlFilters = (params) => {
   const newQueryString = params.toString();
   window.location.replace(`${window.location.pathname}?${newQueryString}`);
 };
+var getAgeInputs = () => ({
+  ageMin: document.getElementsByName("age_min")[0],
+  ageMax: document.getElementsByName("age_max")[0]
+});
 var getAgeFilters = () => {
-  const ageMin = document.getElementsByName("age_min")[0];
-  const ageMax = document.getElementsByName("age_max")[0];
-  return { ageMin: ageMin.value, ageMax: ageMax.value };
+  const { ageMin, ageMax } = getAgeInputs();
+  return { ageMin: ageMin?.value ?? "0", ageMax: ageMax?.value ?? "0" };
+};
+var syncAgeRange = () => {
+  const { ageMin, ageMax } = getAgeInputs();
+  if (!ageMin || !ageMax) return;
+  const min = parseInt(ageMin.value, 10);
+  const max = parseInt(ageMax.value, 10);
+  if (max > 1 && max < min) {
+    ageMax.value = ageMin.value;
+  }
 };
 var updateFilters = () => {
   const filters = getFilters();
@@ -90,6 +102,7 @@ var updateFilters = () => {
       params.append("category", filter);
     }
   }
+  syncAgeRange();
   const { ageMin, ageMax } = getAgeFilters();
   if (parseInt(ageMin, 10) > 1) {
     params.set("age_min", ageMin);
@@ -112,11 +125,10 @@ var clearFilters = () => {
 };
 var removeFilter = (filterValue) => {
   const filters = getFilters();
-  if (filterValue === "age_min") {
-    const ageMin = document.getElementsByName("age_min")[0];
+  const { ageMin, ageMax } = getAgeInputs();
+  if (filterValue === "age_min" && ageMin) {
     ageMin.value = "0";
-  } else if (filterValue === "age_max") {
-    const ageMax = document.getElementsByName("age_max")[0];
+  } else if (filterValue === "age_max" && ageMax) {
     ageMax.value = "0";
   }
   for (const filter of filters) {
@@ -142,6 +154,9 @@ globalThis.updateFilters = updateFilters;
 globalThis.clearFilters = clearFilters;
 globalThis.removeFilter = removeFilter;
 setUrlFilters();
+var ageInputs = getAgeInputs();
+ageInputs.ageMin?.addEventListener("input", syncAgeRange);
+ageInputs.ageMax?.addEventListener("input", syncAgeRange);
 var backToTopBtn = document.getElementById("back-to-top-btn");
 var handleBackToTopScroll = () => {
   const isScrolled = document.body.scrollTop > 300 || document.documentElement.scrollTop > 300;

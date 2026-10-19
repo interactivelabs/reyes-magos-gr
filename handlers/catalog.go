@@ -39,6 +39,10 @@ func (h *CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
+	if cr.AgeMax > 0 && cr.AgeMax < cr.AgeMin {
+		cr.AgeMax = cr.AgeMin
+	}
+
 	page := max(cr.Page, 1)
 
 	pageSize := PageSize
@@ -89,7 +93,7 @@ func (h *CatalogHandler) CatalogViewHandler(ctx echo.Context) error {
 	for _, size := range pageSizes {
 		pageSizeLinks = append(pageSizeLinks, dtos.CatalogLink{
 			Text:  fmt.Sprintf("%d", size),
-			Url:   lib.GetPaginationLink(currentQuery, int(page), size),
+			Url:   lib.GetPaginationLink(currentQuery, 1, size),
 			Label: fmt.Sprintf("Mostrar %d juguetes por pagina", size),
 		})
 	}
